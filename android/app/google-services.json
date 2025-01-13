@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "406830226277",
+    "project_id": "zenunni-dac3d",
+    "storage_bucket": "zenunni-dac3d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406830226277:android:4a15262d8780488d069f8c",
+        "android_client_info": {
+          "package_name": "com.zenunni.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1fFJaJY44B3BEleM-IXNfZww3OyNY1H8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
