@@ -1,36 +1,92 @@
 import 'package:flutter/material.dart';
+import 'homepage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(Myapp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Myapp extends StatelessWidget {
+  const Myapp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
+      debugShowCheckedModeBanner: false,
+      home: Loginpage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class Loginpage extends StatefulWidget {
+  const Loginpage({super.key});
 
   @override
+  State<Loginpage> createState() => _LoginpageState();
+}
+
+class _LoginpageState extends State<Loginpage> {
+  @override
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: Text("Login"),
+        backgroundColor: Colors.blue,
       ),
-      body: const Center(
-        child: Text('Hello, World!'),
-      ),
+      body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  String username = _usernameController.text;
+                  String password = _passwordController.text;
+                  if (username == "admin" && password == "password") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Login successful")),
+                    );
+                    //navigation to homepage
+                    // ignore: non_constant_identifier_names
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuilderContext) => const Homepage()),
+                    );
+                  } else if (username.isEmpty || password.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please fill in the details')),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Invalid details')),
+                    );
+                  }
+                  _usernameController.clear();
+                  _passwordController.clear();
+                },
+                child: Text('Login'),
+              )
+            ],
+          )),
     );
   }
 }
