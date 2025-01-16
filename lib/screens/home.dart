@@ -1,13 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/auth_pages/auth_page.dart';
 
 class LandPage extends StatelessWidget {
   const LandPage({super.key});
 
+  // Function to log out the user
   void logoutUser(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+    if (context.mounted) {
+      // Navigate to the root page after logging out
+      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+    }
   }
 
   @override
@@ -15,6 +18,7 @@ class LandPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          // Logout button in the app bar
           IconButton(
               onPressed: () => logoutUser(context),
               icon: const Icon(Icons.logout_outlined))
@@ -27,6 +31,7 @@ class LandPage extends StatelessWidget {
       )),
       floatingActionButton: Stack(
         children: [
+          // Floating Action Button for TodoPage
           Positioned(
             bottom: 10,
             right: 90,
@@ -38,6 +43,7 @@ class LandPage extends StatelessWidget {
               child: const Icon(Icons.edit),
             ),
           ),
+          // Floating Action Button for MoodPage
           Positioned(
             bottom: 10,
             right: 10,
