@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const AuthPage(),
       initialRoute: '/',
       routes: {
+        '/': (context) => const AuthPage(),
         '/home': (context) => const LandPage(),
         '/mood': (context) => const MoodPage(),
         '/todo': (context) => const TodoPage(),

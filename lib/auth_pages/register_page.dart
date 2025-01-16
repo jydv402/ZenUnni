@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/auth_pages/home_page.dart';
 import 'package:zen/auth_pages/login_page.dart';
+import 'package:zen/screens/home.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -55,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
         //navigate to home page
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => const LandPage()),
         );
       } on FirebaseAuthException catch (e) {
         //pop loading circle
