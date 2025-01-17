@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/auth_pages/login_page.dart';
-import 'package:zen/screens/home.dart';
+import 'package:zen/pages/home_page.dart';
+import 'package:zen/pages/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -55,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
         //navigate to home page
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const LandPage()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } on FirebaseAuthException catch (e) {
         //pop loading circle
@@ -101,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               obscureText: true,
             ),
-            const SizedBox(height: 16),
+            const  SizedBox(height: 16),
             TextFormField(
               controller: _confirmPasswordController,
               decoration: const InputDecoration(
@@ -121,16 +121,16 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 FocusScope.of(context).unfocus();
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.lightBlue,
-              ),
-              child: const Text(
+              child: Text(
                 'Register',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightBlue,
               ),
             ),
             const SizedBox(

@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/auth_pages/register_page.dart';
-import 'package:zen/screens/home.dart';
+import 'package:zen/pages/home_page.dart';
+import 'package:zen/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       //navigate to home page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LandPage()),
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } on FirebaseAuthException catch (e) {
       //pop loading circle
@@ -100,14 +100,14 @@ class _LoginPageState extends State<LoginPage> {
                   _emailController.clear();
                   _passwordController.clear();
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                ),
-                child: const Text('Login',
-                    style: TextStyle(
+                child: Text('Login',
+                    style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,
+                ),
               ),
               const SizedBox(
                 height: 10,
