@@ -20,30 +20,30 @@ class _TodoState extends State<Todo> {
           return SimpleDialog(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            contentPadding: EdgeInsets.all(30),
-            title: Text(
+            contentPadding: const EdgeInsets.all(30),
+            title: const Text(
               "Add a new task",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             children: [
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     label: Text(
                       "Task name",
                       style: TextStyle(fontSize: 20),
                     ),
                     hintText: "Enter a name for your task"),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
-                decoration: InputDecoration(
+                decoration:const  InputDecoration(
                     label: Text(
                       "Task description",
                       style: TextStyle(fontSize: 20),
                     ),
                     hintText: "Enter a name for your task"),
               ),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
               //picking a date
               ElevatedButton(
                   onPressed: () {
@@ -52,21 +52,21 @@ class _TodoState extends State<Todo> {
                         firstDate: DateTime.now(),
                         lastDate: DateTime(2100));
                   },
-                  child: Text("Select a date")),
-              SizedBox(height: 25),
+                  child:const  Text("Select a date")),
+              const SizedBox(height: 25),
               //picking a time
               ElevatedButton(
                   onPressed: () {
                     showTimePicker(
                         context: context, initialTime: TimeOfDay.now());
                   },
-                  child: Text("Select a time")),
-              SizedBox(height: 20),
+                  child: const Text("Select a time")),
+              const SizedBox(height: 20),
               //to select priority of the task
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Select priority"),
+                  const Text("Select priority"),
                   DropdownButton(
                       iconSize: 30,
                       menuWidth: 100,
@@ -78,7 +78,7 @@ class _TodoState extends State<Todo> {
                           value: value,
                           child: Text(
                             value,
-                            style: TextStyle(fontSize: 15),
+                            style:const  TextStyle(fontSize: 15),
                           ),
                         );
                       }).toList(),
@@ -90,7 +90,7 @@ class _TodoState extends State<Todo> {
                       underline: Container()),
                 ],
               ),
-              SizedBox(height: 90),
+              const SizedBox(height: 90),
               //to add buttons which confirms creation of a task or to discards
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -99,7 +99,7 @@ class _TodoState extends State<Todo> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Icon(
+                    child:const Icon(
                       Icons.close,
                       size: 25,
                       color: Colors.red,
@@ -109,7 +109,7 @@ class _TodoState extends State<Todo> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Icon(Icons.check, size: 25, color: Colors.green),
+                    child: const Icon(Icons.check, size: 25, color: Colors.green),
                   ),
                 ],
               )
@@ -126,7 +126,7 @@ class _TodoState extends State<Todo> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("To-Do list",
+          title: const Text("To-Do list",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 26,
@@ -136,18 +136,18 @@ class _TodoState extends State<Todo> {
             IconButton(
                 onPressed: () {
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                      MaterialPageRoute(builder: (context) => const HomePage()));
                 },
-                icon: Icon(Icons.arrow_back)),
+                icon: const Icon(Icons.arrow_back)),
           ],
         ),
         //to add details....
-        body: Column(
+        body: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [],
         ),
         bottomNavigationBar: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -158,7 +158,7 @@ class _TodoState extends State<Todo> {
                   onPressed: () {
                     _showTask(context);
                   },
-                  child: Icon(Icons.add),
+                  child: const Icon(Icons.add),
                 ),
               )
             ],
