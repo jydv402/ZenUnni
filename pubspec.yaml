@@ -38,6 +38,7 @@ dependencies:
   firebase_core: ^3.10.0
   firebase_auth: ^5.4.0
   change_app_package_name: ^1.4.0
+  glassmorphism_widgets: ^0.2.2
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
 import 'package:zen/screens/todo.dart';
+import 'package:zen/theme/light.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: lightTheme,
       initialRoute: '/', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
