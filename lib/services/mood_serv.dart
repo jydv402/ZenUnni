@@ -28,3 +28,37 @@ Future<void> addMoodToFirestore(String mood) async {
     });
   }
 }
+
+Future<String> getMoodFromFirestore() async {
+  final moodDoc =
+      FirebaseFirestore.instance.collection('mood'); //Get the mood collection
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+
+  // Check if a document for today already exists
+  final query = await moodDoc
+      .where('updatedOn', isGreaterThanOrEqualTo: today)
+      .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
+      .limit(1)
+      .get();
+
+  //Return the mood if the document exists
+  return query.docs.first.data()['mood'];
+}
+
+Future<bool> checkMoodStatus() async {
+  final moodDoc =
+      FirebaseFirestore.instance.collection('mood'); //Get the mood collection
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+
+  // Check if a document for today already exists
+  final query = await moodDoc
+      .where('updatedOn', isGreaterThanOrEqualTo: today)
+      .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
+      .limit(1)
+      .get();
+
+  //Return true if the document exists
+  return query.docs.isNotEmpty;
+}
