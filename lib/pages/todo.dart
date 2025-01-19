@@ -9,6 +9,31 @@ class Todo extends StatefulWidget {
 }
 
 class _TodoState extends State<Todo> {
+
+
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2100));
+    if (pickedDate != null && pickedDate != selectedDate)
+      setState(() {
+        selectedDate = pickedDate;
+      });
+  }
+
+  Future<void> selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime =
+        await showTimePicker(context: context, initialTime: selectedTime);
+    if (pickedTime != null && pickedTime != selectedTime)
+      setState(() {
+        selectedTime = pickedTime;
+      });
+  }
   //function for displaying creation of a new task
   void _showTask(BuildContext context) {
     showDialog(
@@ -27,6 +52,7 @@ class _TodoState extends State<Todo> {
             ),
             children: [
               TextFormField(
+                controller: nameController,
                 decoration: const InputDecoration(
                     label: Text(
                       "Task name",
@@ -36,7 +62,8 @@ class _TodoState extends State<Todo> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                decoration:const  InputDecoration(
+                controller: descController,
+                decoration: const InputDecoration(
                     label: Text(
                       "Task description",
                       style: TextStyle(fontSize: 20),
@@ -47,18 +74,14 @@ class _TodoState extends State<Todo> {
               //picking a date
               ElevatedButton(
                   onPressed: () {
-                    showDatePicker(
-                        context: context,
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2100));
+                    selectDate(context);
                   },
-                  child:const  Text("Select a date")),
+                  child: const Text("Select a date")),
               const SizedBox(height: 25),
               //picking a time
               ElevatedButton(
                   onPressed: () {
-                    showTimePicker(
-                        context: context, initialTime: TimeOfDay.now());
+                    selectTime(context);
                   },
                   child: const Text("Select a time")),
               const SizedBox(height: 20),
@@ -78,7 +101,7 @@ class _TodoState extends State<Todo> {
                           value: value,
                           child: Text(
                             value,
-                            style:const  TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         );
                       }).toList(),
@@ -99,7 +122,7 @@ class _TodoState extends State<Todo> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child:const Icon(
+                    child: const Icon(
                       Icons.close,
                       size: 25,
                       color: Colors.red,
@@ -109,7 +132,8 @@ class _TodoState extends State<Todo> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Icon(Icons.check, size: 25, color: Colors.green),
+                    child:
+                        const Icon(Icons.check, size: 25, color: Colors.green),
                   ),
                 ],
               )
@@ -122,6 +146,9 @@ class _TodoState extends State<Todo> {
   final TextEditingController descController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController priorityController = TextEditingController();
+
+  List<Map<String, String>> _taskList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,8 +162,10 @@ class _TodoState extends State<Todo> {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const HomePage()));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
                 },
                 icon: const Icon(Icons.arrow_back)),
           ],
