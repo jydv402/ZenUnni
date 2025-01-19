@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glassmorphism_widgets/glassmorphism_widgets.dart';
+import 'package:zen/services/mood_serv.dart';
 
 class MoodPage extends StatelessWidget {
   const MoodPage({super.key});
@@ -19,28 +20,33 @@ class MoodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _moodScreen(context),
-      //floatingActionButton: _fab(),
+      body: _moodSelectionScreen(context), //Mood Selection Screen
+      // body: DateTime.now().day == DateTime.parse(todaysMood["updatedOn"]!).day
+      //     ? _moodScreen(context)
+      //     : _moodSelectionScreen(context),
     );
   }
 
-  Widget _moodScreen(context) {
+  Widget _moodSelectionScreen(context) {
     return Container(
-        decoration: _gradientDeco(),
+        decoration: _gradientDeco(), //Gradient background
         padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
         child: SizedBox(
+            // SizedBox to fill the entire screen
             width: double.infinity,
             height: double.infinity,
             child: ListView.builder(
               itemCount: moodList.length + 1,
               itemBuilder: (context, index) {
                 if (index == 0) {
+                  // Title
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                     child: Text("How are you\nfeeling today?",
                         style: Theme.of(context).textTheme.headlineLarge),
                   );
                 } else {
+                  // Mood Cards
                   return _moodCard(context, moodList.keys.elementAt(index - 1),
                       moodList.values.elementAt(index - 1));
                 }
@@ -48,12 +54,9 @@ class MoodPage extends StatelessWidget {
             )));
   }
 
-  Widget _fab() {
-    return FloatingActionButton.large(
-      onPressed: () {
-        // Add your code here
-      },
-      child: const Icon(Icons.add),
+  Widget _moodScreen(context) {
+    return const Center(
+      child: Text("Mood Screen"),
     );
   }
 
@@ -72,20 +75,25 @@ class MoodPage extends StatelessWidget {
   }
 
   Widget _moodCard(context, String emoji, String mood) {
-    return GlassContainer(
-        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-        borderRadius: const BorderRadius.all(Radius.circular(36)),
-        blur: 75,
-        border: 1,
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Row(
-            children: [
-              Text(emoji, style: const TextStyle(fontSize: 40)),
-              const SizedBox(width: 20),
-              Text(mood, style: Theme.of(context).textTheme.headlineMedium),
-            ],
-          ),
-        ));
+    return GestureDetector(
+      onTap: () {
+        addMoodToFirestore(mood);
+      },
+      child: GlassContainer(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          borderRadius: const BorderRadius.all(Radius.circular(36)),
+          blur: 75,
+          border: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Row(
+              children: [
+                Text(emoji, style: const TextStyle(fontSize: 40)),
+                const SizedBox(width: 20),
+                Text(mood, style: Theme.of(context).textTheme.headlineMedium),
+              ],
+            ),
+          )),
+    );
   }
 }
