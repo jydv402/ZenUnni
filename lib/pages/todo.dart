@@ -218,7 +218,7 @@ class _TodoState extends State<Todo> {
                                     description: descController.text,
                                     date: dateTime,
                                     priority: _prior);
-                                tasks.add(task);
+                                addTaskCallback(task);
                                 //setting the global variables to null
                                 _date = null;
                                 _time = null;
@@ -273,9 +273,23 @@ class _TodoState extends State<Todo> {
           ],
         ),
         //to add details....
-        body: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [],
+        body: Column(
+          children: [
+            Expanded(
+                  child: ListView.builder(
+                   shrinkWrap: true,
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 4,
+                        child:ListTile(
+                        title: Text(tasks[index].name),
+                        subtitle: Text(tasks[index].description),
+                      ),
+                      );
+                    },),
+                ),
+          ],
         ),
 
        
@@ -289,7 +303,12 @@ class _TodoState extends State<Todo> {
                 height: 75,
                 child: FloatingActionButton(
                   onPressed: () {
-                    _showTask(context);
+                    _showTask(context ,(Task task)
+                    {
+                      setState(() {
+                        tasks.add(task);
+                      });
+                    });
                   },
                   child: const Icon(Icons.add),
                 ),
