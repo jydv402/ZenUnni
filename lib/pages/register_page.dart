@@ -55,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
         //navigate to home page
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } on FirebaseAuthException catch (e) {
         //pop loading circle
@@ -121,6 +121,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 FocusScope.of(context).unfocus();
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightBlue,
+              ),
               child: Text(
                 'Register',
                 style: const TextStyle(
@@ -128,9 +131,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.lightBlue,
               ),
             ),
             const SizedBox(

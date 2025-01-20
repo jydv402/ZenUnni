@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       //navigate to home page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } on FirebaseAuthException catch (e) {
       //pop loading circle
@@ -100,14 +100,14 @@ class _LoginPageState extends State<LoginPage> {
                   _emailController.clear();
                   _passwordController.clear();
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,
+                ),
                 child: Text('Login',
                     style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                ),
               ),
               const SizedBox(
                 height: 10,
