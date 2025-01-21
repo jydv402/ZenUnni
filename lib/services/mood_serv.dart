@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> addMoodToFirestore(String mood) async {
-  final moodDoc =
-      FirebaseFirestore.instance.collection('mood'); //Get the mood collection
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
+final moodDoc =
+    FirebaseFirestore.instance.collection('mood'); //Get the mood collection
+final now = DateTime.now();
+final today = DateTime(now.year, now.month, now.day);
 
+Future<void> addMoodToFirestore(String mood) async {
   // Check if a document for today already exists
   final query = await moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)
@@ -30,11 +30,6 @@ Future<void> addMoodToFirestore(String mood) async {
 }
 
 Future<String> getMoodFromFirestore() async {
-  final moodDoc =
-      FirebaseFirestore.instance.collection('mood'); //Get the mood collection
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-
   // Check if a document for today already exists
   final query = await moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)
@@ -47,11 +42,6 @@ Future<String> getMoodFromFirestore() async {
 }
 
 Future<bool> checkMoodStatus() async {
-  final moodDoc =
-      FirebaseFirestore.instance.collection('mood'); //Get the mood collection
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-
   // Check if a document for today already exists
   final query = await moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)

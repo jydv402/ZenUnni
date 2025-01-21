@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:glassmorphism_widgets/glassmorphism_widgets.dart';
 import 'package:zen/services/mood_serv.dart';
 
-class MoodPage extends StatelessWidget {
+class MoodPage extends StatefulWidget {
   const MoodPage({super.key});
 
   static const moodList = {
@@ -18,12 +18,43 @@ class MoodPage extends StatelessWidget {
   };
 
   @override
+  State<MoodPage> createState() => _MoodPageState();
+}
+
+class _MoodPageState extends State<MoodPage> {
+  late Future<String?> currMood;
+  late Future<bool> hasSelectedMood;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeMood();
+  }
+
+  Future<void> _initializeMood() async {
+    //Check if the user has already selected a mood today
+    hasSelectedMood = checkMoodStatus();
+    if (await hasSelectedMood) {
+      currMood = getMoodFromFirestore();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _moodSelectionScreen(context), //Mood Selection Screen
-      // body: DateTime.now().day == DateTime.parse(todaysMood["updatedOn"]!).day
-      //     ? _moodScreen(context)
-      //     : _moodSelectionScreen(context),
+      //body: _moodSelectionScreen(context), //Mood Selection Screen
+      body: FutureBuilder<bool>(
+        future: hasSelectedMood,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && snapshot.data == true) {
+            return _moodScreen(context);
+          } else {
+            return _moodSelectionScreen(context);
+          }
+        },
+      ),
     );
   }
 
@@ -36,7 +67,7 @@ class MoodPage extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             child: ListView.builder(
-              itemCount: moodList.length + 1,
+              itemCount: MoodPage.moodList.length + 1,
               itemBuilder: (context, index) {
                 if (index == 0) {
                   // Title
@@ -47,8 +78,10 @@ class MoodPage extends StatelessWidget {
                   );
                 } else {
                   // Mood Cards
-                  return _moodCard(context, moodList.keys.elementAt(index - 1),
-                      moodList.values.elementAt(index - 1));
+                  return _moodCard(
+                      context,
+                      MoodPage.moodList.keys.elementAt(index - 1),
+                      MoodPage.moodList.values.elementAt(index - 1));
                 }
               },
             )));
@@ -56,7 +89,7 @@ class MoodPage extends StatelessWidget {
 
   Widget _moodScreen(context) {
     return const Center(
-      child: Text("Mood Screen"),
+      child: Text("You have already selected the mood"),
     );
   }
 
@@ -78,6 +111,8 @@ class MoodPage extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         addMoodToFirestore(mood);
+        _initializeMood();
+        setState(() {});
       },
       child: GlassContainer(
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
