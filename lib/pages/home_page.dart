@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
   void logoutUser(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => AuthPage()));
+        context, MaterialPageRoute(builder: (context) => const AuthPage()));
   }
 
   @override
@@ -19,23 +19,23 @@ class HomePage extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () => logoutUser(context),
-                icon: Icon(Icons.logout_outlined))
+                icon: const Icon(Icons.logout_outlined))
           ],
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "WELCOME TO ZENUNNI",
                 style: TextStyle(fontSize: 24, color: Colors.amber),
               ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => Todo()));
+                      context, MaterialPageRoute(builder: (context) => const Todo()));
                 },
-                child: Text("Go to to-do list page"),
+                child: const Text("Go to to-do list page"),
               ),
             ],
           ),
