@@ -265,7 +265,7 @@ class _TodoState extends State<Todo> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                          builder: (context) => const LandPage()));
                 },
                 icon: const Icon(Icons.arrow_back)),
           ],

@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       //navigate to home page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const LandPage()),
       );
     } on FirebaseAuthException catch (e) {
       //pop loading circle

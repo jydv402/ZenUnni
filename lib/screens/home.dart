@@ -1,43 +1,47 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/auth_pages/auth_page.dart';
-import 'package:zen/screens/todo.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class LandPage extends StatelessWidget {
+  const LandPage({super.key});
 
+  // Function to log out the user
   void logoutUser(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const AuthPage()));
+    if (context.mounted) {
+      // Navigate to the root page after logging out
+      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () => logoutUser(context),
-                icon: const Icon(Icons.logout_outlined))
-          ],
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "WELCOME TO ZENUNNI",
-                style: TextStyle(fontSize: 24, color: Colors.amber),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const Todo()));
-                },
-                child: const Text("Go to to-do list page"),
-              ),
-            ],
+      appBar: AppBar(
+        actions: [
+          // Logout button in the app bar
+          IconButton(
+              onPressed: () => logoutUser(context),
+              icon: const Icon(Icons.logout_outlined))
+        ],
+      ),
+      body: const Center(
+          child: Text(
+        "WELCOME TO ZENUNNI",
+        style: TextStyle(fontSize: 24, color: Colors.amber),
+      )),
+      floatingActionButton: Stack(
+        children: [
+          // Floating Action Button for TodoPage
+          Positioned(
+            bottom: 10,
+            right: 90,
+            child: FloatingActionButton(
+              heroTag: 'todo',
+              onPressed: () {
+                Navigator.pushNamed(context, '/todo');
+              },
+              child: const Icon(Icons.edit),
+            ),
           ),
           // Floating Action Button for MoodPage
           Positioned(

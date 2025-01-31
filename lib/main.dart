@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       initialRoute: '/', //Specifies the initial page route
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const LandPage(),
         '/mood2': (context) => const MoodPage(),
         '/mood1': (context) => const CurrentMood(),
-        '/todo': (context) => const TodoPage(),
+        '/todo': (context) => const Todo(),
       },
     );
   }
