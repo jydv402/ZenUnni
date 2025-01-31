@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zen/pages/home_page.dart';
+import 'package:zen/screens/home.dart';
 
 //where data of each task is stored when user is selecting options
 class Task {
@@ -22,7 +22,7 @@ class Todo extends StatefulWidget {
   @override
   State<Todo> createState() => _TodoState();
 }
- 
+
 class _TodoState extends State<Todo> {
   //variables to store data
   DateTime? _date; //save date
@@ -40,7 +40,7 @@ class _TodoState extends State<Todo> {
   }
 
   //function that displays dialog box to select task details
-  void _showTask(BuildContext context,Function addTaskCallback) {
+  void _showTask(BuildContext context, Function addTaskCallback) {
     //clearing controllers so that dialog box looks new
     nameController.clear();
     descController.clear();
@@ -196,13 +196,11 @@ class _TodoState extends State<Todo> {
                       ),
                       FloatingActionButton(
                         onPressed: () {
-                          if (
-                            nameController.text.isNotEmpty &&
+                          if (nameController.text.isNotEmpty &&
                               descController.text.isNotEmpty &&
                               _date != null &&
                               _time != null &&
-                              _prior.isNotEmpty
-                              ) {
+                              _prior.isNotEmpty) {
                             setState(
                               () {
                                 //this will combine both date and time into date_time
@@ -267,7 +265,7 @@ class _TodoState extends State<Todo> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomePage()));
+                          builder: (context) => const LandPage()));
                 },
                 icon: const Icon(Icons.arrow_back)),
           ],
@@ -276,23 +274,22 @@ class _TodoState extends State<Todo> {
         body: Column(
           children: [
             Expanded(
-                  child: ListView.builder(
-                   shrinkWrap: true,
-                    itemCount: tasks.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 4,
-                        child:ListTile(
-                        title: Text(tasks[index].name),
-                        subtitle: Text(tasks[index].description),
-                      ),
-                      );
-                    },),
-                ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 4,
+                    child: ListTile(
+                      title: Text(tasks[index].name),
+                      subtitle: Text(tasks[index].description),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
-
-       
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(20),
           child: Row(
@@ -303,8 +300,7 @@ class _TodoState extends State<Todo> {
                 height: 75,
                 child: FloatingActionButton(
                   onPressed: () {
-                    _showTask(context ,(Task task)
-                    {
+                    _showTask(context, (Task task) {
                       setState(() {
                         tasks.add(task);
                       });

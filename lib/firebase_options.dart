@@ -60,11 +60,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBGN7YAc97QMSDkhwsj7d-Lr7OjRb32CD0',
-    appId: '1:406830226277:ios:f84498ba9a231e9c069f8c',
+    appId: '1:406830226277:ios:badb5bd3486f2718069f8c',
     messagingSenderId: '406830226277',
     projectId: 'zenunni-dac3d',
     storageBucket: 'zenunni-dac3d.firebasestorage.app',
-    iosBundleId: 'com.example.zen',
+    iosBundleId: 'com.zenunni.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'zenunni-dac3d.firebasestorage.app',
     measurementId: 'G-3ST94ELQ27',
   );
+
 }

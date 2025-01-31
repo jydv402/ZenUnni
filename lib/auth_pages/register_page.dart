@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/pages/home_page.dart';
-import 'package:zen/pages/login_page.dart';
+import 'package:zen/screens/home.dart';
+import 'package:zen/auth_pages/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:zen/pages/username.dart';
+import 'package:zen/screens/username.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -128,9 +128,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.lightBlue,
                 ),
-                child: Text(
+                child: const Text(
                   'Register',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,

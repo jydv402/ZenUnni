@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:zen/pages/home_page.dart';
+import 'package:zen/screens/home.dart';
 
 class Username extends StatelessWidget {
   const Username({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _userNameController = TextEditingController();
+    final userNameController = TextEditingController();
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -16,19 +16,19 @@ class Username extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "WHAT SHOULD WE CALL YOU ? ",
                 style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
-                controller: _userNameController,
+                controller: userNameController,
                 decoration: const InputDecoration(
                   labelText: '',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -37,11 +37,11 @@ class Username extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                          builder: (context) => const LandPage(),
                         ),
                       );
                     },
-                    icon: Icon(Icons.arrow_forward),
+                    icon: const Icon(Icons.arrow_forward),
                   ),
                 ],
               ),
