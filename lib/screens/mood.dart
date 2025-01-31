@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:glassmorphism_widgets/glassmorphism_widgets.dart';
+import 'package:lottie/lottie.dart';
 import 'package:zen/services/mood_serv.dart';
 
 class MoodPage extends StatefulWidget {
   const MoodPage({super.key});
 
   static const moodList = {
-    "😄": "Happy",
-    "😇": "Under control",
-    "😭": "Sad",
-    "🤯": "Overwhelmed",
-    "🤬": "Angry",
-    "😴": "Tired",
-    "😐": "Neutral",
-    "🤔": "Confused",
-    "😷": "Sick",
+    "assets/emoji/chill.json": "Relaxed",
+    "assets/emoji/happy.json": "Happy",
+    "assets/emoji/halo.json": "Under Control",
+    "assets/emoji/nerdy.json": "Study Mode",
+    "assets/emoji/neutral.json": "Neutral",
+    "assets/emoji/sad.json": "Sad",
+    "assets/emoji/angry.json": "Angry",
+    "assets/emoji/anxious.json": "Anxious",
+    "assets/emoji/overwhelmed.json": "Overwhelmed",
+    "assets/emoji/tired.json": "Tired",
+    "assets/emoji/sick.json": "Sick",
   };
 
   @override
@@ -22,34 +25,17 @@ class MoodPage extends StatefulWidget {
 }
 
 class _MoodPageState extends State<MoodPage> {
-  late Future<String?> currMood;
-  late Future<bool> hasSelectedMood;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeMood();
-  }
-
-  Future<void> _initializeMood() async {
-    //Check if the user has already selected a mood today
-    hasSelectedMood = checkMoodStatus();
-    if (await hasSelectedMood) {
-      currMood = getMoodFromFirestore();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //body: _moodSelectionScreen(context), //Mood Selection Screen
-      body: FutureBuilder<bool>(
-        future: hasSelectedMood,
+      body: FutureBuilder<String?>(
+        future: getMoodFromFirestore(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasData && snapshot.data == true) {
-            return _moodScreen(context);
+          } else if (snapshot.hasData && snapshot.data != null) {
+            return _moodScreen(context, snapshot.data!);
           } else {
             return _moodSelectionScreen(context);
           }
@@ -74,7 +60,10 @@ class _MoodPageState extends State<MoodPage> {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                     child: Text("How are you\nfeeling today?",
-                        style: Theme.of(context).textTheme.headlineLarge),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge
+                            ?.copyWith(color: Colors.white)),
                   );
                 } else {
                   // Mood Cards
@@ -87,9 +76,11 @@ class _MoodPageState extends State<MoodPage> {
             )));
   }
 
-  Widget _moodScreen(context) {
-    return const Center(
-      child: Text("You have already selected the mood"),
+  Widget _moodScreen(context, mood) {
+    return Center(
+      child: Text(
+        "You have already selected the mood -> $mood",
+      ),
     );
   }
 
@@ -109,9 +100,9 @@ class _MoodPageState extends State<MoodPage> {
 
   Widget _moodCard(context, String emoji, String mood) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         addMoodToFirestore(mood);
-        _initializeMood();
+        await Future.delayed(const Duration(seconds: 2));
         setState(() {});
       },
       child: GlassContainer(
@@ -123,9 +114,13 @@ class _MoodPageState extends State<MoodPage> {
             padding: const EdgeInsets.all(24),
             child: Row(
               children: [
-                Text(emoji, style: const TextStyle(fontSize: 40)),
+                Lottie.asset(emoji, height: 60, width: 60),
                 const SizedBox(width: 20),
-                Text(mood, style: Theme.of(context).textTheme.headlineMedium),
+                Text(mood,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(color: Colors.white)),
               ],
             ),
           )),

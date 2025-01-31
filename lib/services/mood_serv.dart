@@ -29,7 +29,7 @@ Future<void> addMoodToFirestore(String mood) async {
   }
 }
 
-Future<String> getMoodFromFirestore() async {
+Future<String?> getMoodFromFirestore() async {
   // Check if a document for today already exists
   final query = await moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)
@@ -37,18 +37,10 @@ Future<String> getMoodFromFirestore() async {
       .limit(1)
       .get();
 
-  //Return the mood if the document exists
-  return query.docs.first.data()['mood'];
-}
-
-Future<bool> checkMoodStatus() async {
-  // Check if a document for today already exists
-  final query = await moodDoc
-      .where('updatedOn', isGreaterThanOrEqualTo: today)
-      .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
-      .limit(1)
-      .get();
-
-  //Return true if the document exists
-  return query.docs.isNotEmpty;
+  // Return the mood if the document exists, otherwise return null
+  if (query.docs.isNotEmpty) {
+    return query.docs.first.data()['mood'];
+  } else {
+    return null;
+  }
 }
