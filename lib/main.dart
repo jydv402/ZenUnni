@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const LandPage(),
         '/mood2': (context) => const MoodPage(),
         '/mood1': (context) => const CurrentMood(),
-        '/todo': (context) => const TodoPage(),
+        '/todo': (context) => const Todo(),
       },
     );
   }
