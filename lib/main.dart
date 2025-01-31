@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const AuthPage(),
         '/home': (context) => const LandPage(),
-        '/mood2': (context) => const MoodPage(),
         '/mood1': (context) => const CurrentMood(),
+        '/mood2': (context) => const MoodPage(),
         '/todo': (context) => const Todo(),
       },
     );

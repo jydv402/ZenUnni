@@ -2,24 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:glassmorphism_widgets/glassmorphism_widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/services/mood_serv.dart';
+import 'package:zen/theme/consts/moodlist.dart';
 import 'package:zen/theme/light.dart';
 
 class MoodPage extends StatelessWidget {
   const MoodPage({super.key});
-
-  static const moodList = {
-    "assets/emoji/chill.json": "Relaxed",
-    "assets/emoji/happy.json": "Happy",
-    "assets/emoji/halo.json": "Under Control",
-    "assets/emoji/nerdy.json": "Study Mode",
-    "assets/emoji/neutral.json": "Neutral",
-    "assets/emoji/sad.json": "Sad",
-    "assets/emoji/angry.json": "Angry",
-    "assets/emoji/anxious.json": "Anxious",
-    "assets/emoji/overwhelmed.json": "Overwhelmed",
-    "assets/emoji/tired.json": "Tired",
-    "assets/emoji/sick.json": "Sick",
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +61,7 @@ class MoodPage extends StatelessWidget {
             child: Row(
               children: [
                 Lottie.asset(emoji, height: 70, width: 70),
-                const SizedBox(width: 35),
+                const SizedBox(width: 24),
                 Text(mood,
                     style: Theme.of(context)
                         .textTheme
