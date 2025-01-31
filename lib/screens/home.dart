@@ -50,7 +50,7 @@ class LandPage extends StatelessWidget {
             child: FloatingActionButton(
               heroTag: 'mood',
               onPressed: () {
-                Navigator.pushNamed(context, '/mood');
+                Navigator.pushNamed(context, '/mood1');
               },
               child: const Icon(Icons.emoji_emotions_rounded),
             ),

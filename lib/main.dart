@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zen/auth_pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zen/screens/currMood.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
 import 'package:zen/screens/todo.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const AuthPage(),
         '/home': (context) => const LandPage(),
-        '/mood': (context) => const MoodPage(),
+        '/mood2': (context) => const MoodPage(),
+        '/mood1': (context) => const CurrentMood(),
         '/todo': (context) => const TodoPage(),
       },
     );
