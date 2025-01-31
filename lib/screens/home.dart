@@ -39,6 +39,20 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
-        ));
+          // Floating Action Button for MoodPage
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: FloatingActionButton(
+              heroTag: 'mood',
+              onPressed: () {
+                Navigator.pushNamed(context, '/mood1');
+              },
+              child: const Icon(Icons.emoji_emotions_rounded),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
