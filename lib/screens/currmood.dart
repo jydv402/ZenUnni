@@ -5,9 +5,14 @@ import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
 import 'package:zen/theme/consts/moodlist.dart';
 
-class CurrentMood extends StatelessWidget {
+class CurrentMood extends StatefulWidget {
   const CurrentMood({super.key});
 
+  @override
+  State<CurrentMood> createState() => _CurrentMoodState();
+}
+
+class _CurrentMoodState extends State<CurrentMood> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +29,13 @@ class CurrentMood extends StatelessWidget {
         } else if (snapshot.hasError) {
           return const Center(child: Text('Error fetching mood data'));
         } else {
-          return currentMoodContainer(context, snapshot.data);
+          return currentMoodContainer(snapshot.data);
         }
       },
     );
   }
 
-  Widget currentMoodContainer(context, String? mood) {
+  Widget currentMoodContainer(String? mood) {
     return Container(
       decoration: gradientDeco(),
       padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
@@ -74,7 +79,7 @@ class CurrentMood extends StatelessWidget {
                   const SizedBox(height: 24),
                   Column(
                     children: [
-                      currMoodCard(context, mood),
+                      currMoodCard(mood),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
@@ -90,7 +95,7 @@ class CurrentMood extends StatelessWidget {
     );
   }
 
-  Widget currMoodCard(context, String mood) {
+  Widget currMoodCard(String mood) {
     return Stack(
       children: [
         GlassContainer(

@@ -5,17 +5,22 @@ import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/consts/moodlist.dart';
 import 'package:zen/theme/light.dart';
 
-class MoodPage extends StatelessWidget {
+class MoodPage extends StatefulWidget {
   const MoodPage({super.key});
 
   @override
+  State<MoodPage> createState() => _MoodPageState();
+}
+
+class _MoodPageState extends State<MoodPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _moodSelectionScreen(context),
+      body: _moodSelectionScreen(),
     );
   }
 
-  Widget _moodSelectionScreen(context) {
+  Widget _moodSelectionScreen() {
     return Container(
         decoration: gradientDeco(), //Gradient background
         padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
@@ -38,14 +43,14 @@ class MoodPage extends StatelessWidget {
                   );
                 } else {
                   // Mood Cards
-                  return _moodCard(context, moodList.keys.elementAt(index - 1),
+                  return _moodCard(moodList.keys.elementAt(index - 1),
                       moodList.values.elementAt(index - 1));
                 }
               },
             )));
   }
 
-  Widget _moodCard(context, String emoji, String mood) {
+  Widget _moodCard(String emoji, String mood) {
     return GestureDetector(
       onTap: () async {
         addMoodToFirestore(mood);
