@@ -13,16 +13,12 @@ class CurrentMood extends StatefulWidget {
 }
 
 class _CurrentMoodState extends State<CurrentMood> {
-  String? mood = ""; //String to store the mood for the day
+  late Future<String?> moodFuture;
 
   @override
   void initState() {
     super.initState();
-    _loadMood();
-  }
-
-  Future<void> _loadMood() async {
-    mood = await getMoodFromFirestore();
+    moodFuture = getMoodFromFirestore();
   }
 
   @override
@@ -33,75 +29,88 @@ class _CurrentMoodState extends State<CurrentMood> {
   }
 
   Widget _moodDisplay() {
-    return Container(
-      decoration: gradientDeco(),
-      child: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
-          child: ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                child: Text(
-                  "Mood",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineLarge
-                      ?.copyWith(color: Colors.white),
-                ),
-              ),
-              currMoodCard()
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget currMoodCard() {
-    return Stack(
-      children: [
-        GlassContainer(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            borderRadius: const BorderRadius.all(Radius.circular(36)),
-            blur: 75,
-            border: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return FutureBuilder<String?>(
+      future: moodFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (!snapshot.hasData || snapshot.data == null) {
+          return const Center(child: Text('No mood data available'));
+        } else {
+          return Container(
+            decoration: gradientDeco(),
+            child: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
+                child: ListView(
                   children: [
-                    Text(
-                      "Current mood...",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 32),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                      child: Text(
+                        "Mood",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge
+                            ?.copyWith(color: Colors.white),
+                      ),
                     ),
-                    const SizedBox(height: 30),
-                    Row(
-                      children: [
-                        Lottie.asset(reversedMoodList[mood!]!,
-                            height: 70, width: 70),
-                        const SizedBox(width: 24),
-                        Text(mood!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(color: Colors.white)),
-                      ],
-                    ),
+                    currMoodCard(snapshot.data!)
                   ],
                 ),
               ),
-            )),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget currMoodCard(String mood) {
+    return Stack(
+      children: [
+        GlassContainer(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          borderRadius: const BorderRadius.all(Radius.circular(36)),
+          blur: 75,
+          border: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Current mood...",
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: Colors.white,
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Lottie.asset(reversedMoodList[mood]!,
+                          height: 70, width: 70),
+                      const SizedBox(width: 24),
+                      Text(
+                        mood,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                              color: Colors.white,
+                            ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
