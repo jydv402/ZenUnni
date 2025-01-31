@@ -11,3 +11,17 @@ ThemeData get lightTheme {
         headlineSmall: TextStyle(fontSize: 14.0),
       ));
 }
+
+BoxDecoration gradientDeco() {
+  return const BoxDecoration(
+      gradient: LinearGradient(
+          transform: GradientRotation(0.4),
+          stops: [0.005, 0.3, 0.9],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            Color.fromARGB(240, 255, 86, 34),
+            Color.fromARGB(240, 56, 50, 109),
+            Color.fromARGB(240, 155, 39, 176)
+          ]));
+}
