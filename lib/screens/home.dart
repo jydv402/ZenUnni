@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/pages/auth_page.dart';
-import 'package:zen/pages/todo.dart';
+import 'package:zen/auth_pages/auth_page.dart';
+import 'package:zen/screens/todo.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -32,8 +32,8 @@ class HomePage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => const Todo()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => const Todo()));
                 },
                 child: const Text("Go to to-do list page"),
               ),
