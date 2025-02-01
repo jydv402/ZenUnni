@@ -12,6 +12,20 @@ class CurrentMood extends StatefulWidget {
 }
 
 class _CurrentMoodState extends State<CurrentMood> {
+  Future<String?>? moodFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshMood();
+  }
+
+  void _refreshMood() {
+    setState(() {
+      moodFuture = getMoodFromFirestore();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +35,7 @@ class _CurrentMoodState extends State<CurrentMood> {
 
   Widget _moodDisplay() {
     return FutureBuilder<String?>(
-      future: getMoodFromFirestore(),
+      future: moodFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -45,22 +59,19 @@ class _CurrentMoodState extends State<CurrentMood> {
             ? ListView(
                 children: [
                   Text("Mood",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge
-                          ?.copyWith(color: Colors.white)),
+                      style: Theme.of(context).textTheme.headlineLarge),
                   const SizedBox(height: 24),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
                         "No mood data available",
-                        style: TextStyle(color: Colors.white),
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/mood2');
+                        onPressed: () async {
+                          await Navigator.pushNamed(context, '/mood2');
+                          _refreshMood();
                         },
                         child: const Text('Add Mood'),
                       )
@@ -78,8 +89,9 @@ class _CurrentMoodState extends State<CurrentMood> {
                       currMoodCard(mood),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/mood2');
+                        onPressed: () async {
+                          await Navigator.pushNamed(context, '/mood2');
+                          _refreshMood();
                         },
                         child: const Text('Update Mood'),
                       )
