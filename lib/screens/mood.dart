@@ -36,10 +36,7 @@ class _MoodPageState extends State<MoodPage> {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                     child: Text("How are you\nfeeling today?",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge
-                            ?.copyWith(color: Colors.white)),
+                        style: Theme.of(context).textTheme.headlineLarge),
                   );
                 } else {
                   // Mood Cards
@@ -52,26 +49,24 @@ class _MoodPageState extends State<MoodPage> {
 
   Widget _moodCard(String emoji, String mood) {
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         addMoodToFirestore(mood);
-        await Future.delayed(const Duration(seconds: 2));
+        Navigator.pop(context);
       },
-      child: GlassContainer(
+      child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withAlpha(150),
+            borderRadius: BorderRadius.circular(36),
+          ),
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          borderRadius: const BorderRadius.all(Radius.circular(36)),
-          blur: 75,
-          border: 1,
+          margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Row(
               children: [
                 Lottie.asset(emoji, height: 70, width: 70),
                 const SizedBox(width: 24),
-                Text(mood,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium
-                        ?.copyWith(color: Colors.white)),
+                Text(mood, style: Theme.of(context).textTheme.headlineMedium),
               ],
             ),
           )),

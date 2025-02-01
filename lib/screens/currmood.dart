@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:glassmorphism_widgets/glassmorphism_widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
@@ -61,7 +60,7 @@ class _CurrentMoodState extends State<CurrentMood> {
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/mood2');
+                          Navigator.pushNamed(context, '/mood2');
                         },
                         child: const Text('Add Mood'),
                       )
@@ -72,21 +71,11 @@ class _CurrentMoodState extends State<CurrentMood> {
             : ListView(
                 children: [
                   Text("Mood",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge
-                          ?.copyWith(color: Colors.white)),
+                      style: Theme.of(context).textTheme.headlineLarge),
                   const SizedBox(height: 24),
                   Column(
                     children: [
                       currMoodCard(mood),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/mood2');
-                        },
-                        child: const Text('Change Mood'),
-                      )
                     ],
                   ),
                 ],
@@ -97,25 +86,29 @@ class _CurrentMoodState extends State<CurrentMood> {
 
   Widget currMoodCard(String mood) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
-        GlassContainer(
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withAlpha(150),
+            borderRadius: BorderRadius.circular(36),
+          ),
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          borderRadius: const BorderRadius.all(Radius.circular(36)),
-          blur: 75,
-          border: 1,
+          margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: SizedBox(
               width: double.infinity,
+              height: 180,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Current mood...",
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Colors.white,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 24),
                   Row(
@@ -123,15 +116,8 @@ class _CurrentMoodState extends State<CurrentMood> {
                       Lottie.asset(reversedMoodList[mood]!,
                           height: 70, width: 70),
                       const SizedBox(width: 24),
-                      Text(
-                        mood,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(
-                              color: Colors.white,
-                            ),
-                      )
+                      Text(mood,
+                          style: Theme.of(context).textTheme.headlineMedium)
                     ],
                   )
                 ],
@@ -139,6 +125,15 @@ class _CurrentMoodState extends State<CurrentMood> {
             ),
           ),
         ),
+        Positioned(
+            right: 10,
+            bottom: 20,
+            child: FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/mood2');
+                },
+                label: const Text('Select Mood'),
+                icon: const Icon(Icons.arrow_outward_rounded)))
       ],
     );
   }
