@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:zen/auth_pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zen/screens/currMood.dart';
@@ -8,10 +9,12 @@ import 'package:zen/screens/todo.dart';
 import 'package:zen/theme/light.dart';
 import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   //to ensure firebase plugins are correctly intialised before using it
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await dotenv.load(fileName: ".env"); //load the .env file
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
   runApp(const MyApp());
 }
 

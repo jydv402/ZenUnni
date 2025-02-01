@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
 import 'package:zen/theme/consts/moodlist.dart';
+import 'package:zen/services/ai.dart';
 
 class CurrentMood extends StatefulWidget {
   const CurrentMood({super.key});
@@ -13,6 +14,7 @@ class CurrentMood extends StatefulWidget {
 
 class _CurrentMoodState extends State<CurrentMood> {
   Future<String?>? moodFuture;
+  Future<String>? motivation;
 
   @override
   void initState() {
@@ -84,19 +86,16 @@ class _CurrentMoodState extends State<CurrentMood> {
                   Text("Mood",
                       style: Theme.of(context).textTheme.headlineLarge),
                   const SizedBox(height: 24),
-                  Column(
-                    children: [
-                      currMoodCard(mood),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await Navigator.pushNamed(context, '/mood2');
-                          _refreshMood();
-                        },
-                        child: const Text('Update Mood'),
-                      )
-                    ],
+                  currMoodCard(mood),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await Navigator.pushNamed(context, '/mood2');
+                      _refreshMood();
+                    },
+                    child: const Text('Update Mood'),
                   ),
+                  const SizedBox(height: 30),
+                  motivationContainer(mood),
                 ],
               ),
       ),
@@ -133,6 +132,59 @@ class _CurrentMoodState extends State<CurrentMood> {
                   Text(mood, style: Theme.of(context).textTheme.headlineMedium)
                 ],
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget motivationContainer(String mood) {
+    return FutureBuilder<String>(
+      future: AIService().getMotivationalMessage(mood),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error fetching motivation data'));
+        } else {
+          return motivationCard(snapshot.data!);
+        }
+      },
+    );
+  }
+
+  Widget motivationCard(String motivation) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withAlpha(150),
+        borderRadius: BorderRadius.circular(36),
+      ),
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+      margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Motivation...",
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(fontSize: 32, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                  motivation
+                      .replaceAll(
+                          RegExp(
+                              r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
+                          '')
+                      .trim(),
+                  style: Theme.of(context).textTheme.headlineSmall)
             ],
           ),
         ),

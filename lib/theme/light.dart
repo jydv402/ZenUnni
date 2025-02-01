@@ -10,7 +10,7 @@ ThemeData get lightTheme {
       textTheme: const TextTheme(
         headlineLarge: TextStyle(fontSize: 48.0, fontWeight: FontWeight.w500),
         headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
-        headlineSmall: TextStyle(fontSize: 14.0),
+        headlineSmall: TextStyle(fontSize: 18.0),
       ));
 }
 
