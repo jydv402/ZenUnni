@@ -34,16 +34,14 @@ class _RegisterPageState extends State<RegisterPage> {
         child: CircularProgressIndicator(),
       ),
     );
-
-    //make sure passwords match
+    //if passwords dont match
     if (_passwordController.text != _confirmPasswordController.text) {
       //pop loading circle
       Navigator.pop(context);
       //display error message
       displayMessageToUser("Passwords don't match!", context);
-
-      //if passwords do match
     } else {
+      //if passwords do match
       //try creating the user
       try {
         //create the user
@@ -54,6 +52,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
         //pop loading circle
         Navigator.pop(context);
+
+        // Clear fields after successful registration
+        _emailController.clear();
+        _passwordController.clear();
+        _confirmPasswordController.clear();
 
         //navigate to home page
         Navigator.pushReplacement(
@@ -118,11 +121,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 onPressed: () {
                   registerUser();
-                  // Clear fields after successful registration
-                  _emailController.clear();
-                  _passwordController.clear();
-                  _confirmPasswordController.clear();
-
                   FocusScope.of(context).unfocus();
                 },
                 style: ElevatedButton.styleFrom(

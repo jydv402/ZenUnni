@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:zen/screens/home.dart';
 
@@ -6,7 +8,15 @@ class Username extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userNameController = TextEditingController();
+  
+    Future createUserDoc(String username) async {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(username)
+          .set({'username': username});
+    }
+
+    final _userNameController = TextEditingController();
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -22,7 +32,7 @@ class Username extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: userNameController,
+                controller: _userNameController,
                 decoration: const InputDecoration(
                   labelText: '',
                   border: OutlineInputBorder(),
@@ -33,13 +43,10 @@ class Username extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LandPage(),
-                        ),
-                      );
+                    onPressed: () async {
+                      String username = _userNameController.text.trim();
+                      createUserDoc(username);
+                      Navigator.pushNamed(context, '/home');
                     },
                     icon: const Icon(Icons.arrow_forward),
                   ),
