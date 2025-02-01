@@ -50,10 +50,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 email: _emailController.text,
                 password: _passwordController.text);
 
-        print('Email: ${_emailController.text}');
-        //add user's email to firestore
-        await addUserDetailsToFirestore(_emailController.text);
-
         //pop loading circle
         Navigator.pop(context);
 
@@ -74,10 +70,6 @@ class _RegisterPageState extends State<RegisterPage> {
         displayMessageToUser(e.code, context);
       }
     }
-  }
-
-  Future addUserDetailsToFirestore(String email) async {
-    await FirebaseFirestore.instance.collection('users').add({'email': email});
   }
 
   @override
@@ -129,7 +121,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 onPressed: () {
                   registerUser();
-
                   FocusScope.of(context).unfocus();
                 },
                 style: ElevatedButton.styleFrom(

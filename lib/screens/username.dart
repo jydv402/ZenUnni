@@ -8,25 +8,12 @@ class Username extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //function to add username to firestore
-    Future addUsernameToFirestore(String username) async {
-      // Get the current users email
-      String email = FirebaseAuth.instance.currentUser!.email!;
-      // Find the document for this user in Firestore
-      QuerySnapshot userDoc = await FirebaseFirestore.instance
+  
+    Future createUserDoc(String username) async {
+      await FirebaseFirestore.instance
           .collection('users')
-          .where('email', isEqualTo: email)
-          .get();
-
-      if (userDoc.docs.isNotEmpty) {
-         // Get the document ID
-        String docId = userDoc.docs.first.id;
-        //add username
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(docId)
-            .update({'username': username});
-      }
+          .doc(username)
+          .set({'username': username});
     }
 
     final _userNameController = TextEditingController();
@@ -58,17 +45,7 @@ class Username extends StatelessWidget {
                   IconButton(
                     onPressed: () async {
                       String username = _userNameController.text.trim();
-                      if (username.isNotEmpty) {
-                        await addUsernameToFirestore(username);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('username added')),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('please enter a username')),
-                        );
-                      }
+                      createUserDoc(username);
                       Navigator.pushNamed(context, '/home');
                     },
                     icon: const Icon(Icons.arrow_forward),
