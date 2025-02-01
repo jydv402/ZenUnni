@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:zen/screens/home.dart';
 
@@ -6,7 +8,28 @@ class Username extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userNameController = TextEditingController();
+    //function to add username to firestore
+    Future addUsernameToFirestore(String username) async {
+      // Get the current users email
+      String email = FirebaseAuth.instance.currentUser!.email!;
+      // Find the document for this user in Firestore
+      QuerySnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (userDoc.docs.isNotEmpty) {
+         // Get the document ID
+        String docId = userDoc.docs.first.id;
+        //add username
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(docId)
+            .update({'username': username});
+      }
+    }
+
+    final _userNameController = TextEditingController();
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -22,7 +45,7 @@ class Username extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: userNameController,
+                controller: _userNameController,
                 decoration: const InputDecoration(
                   labelText: '',
                   border: OutlineInputBorder(),
@@ -33,13 +56,20 @@ class Username extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LandPage(),
-                        ),
-                      );
+                    onPressed: () async {
+                      String username = _userNameController.text.trim();
+                      if (username.isNotEmpty) {
+                        await addUsernameToFirestore(username);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('username added')),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('please enter a username')),
+                        );
+                      }
+                      Navigator.pushNamed(context, '/home');
                     },
                     icon: const Icon(Icons.arrow_forward),
                   ),

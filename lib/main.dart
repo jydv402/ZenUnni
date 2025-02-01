@@ -5,6 +5,7 @@ import 'package:zen/screens/currMood.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
 import 'package:zen/screens/todo.dart';
+import 'package:zen/screens/username.dart';
 import 'package:zen/theme/light.dart';
 import 'firebase_options.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/mood2': (context) => const MoodPage(),
         '/mood1': (context) => const CurrentMood(),
         '/todo': (context) => const Todo(),
+        '/username':(context)=> const Username(),
       },
     );
   }

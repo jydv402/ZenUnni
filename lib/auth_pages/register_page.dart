@@ -34,16 +34,14 @@ class _RegisterPageState extends State<RegisterPage> {
         child: CircularProgressIndicator(),
       ),
     );
-
-    //make sure passwords match
+    //if passwords dont match
     if (_passwordController.text != _confirmPasswordController.text) {
       //pop loading circle
       Navigator.pop(context);
       //display error message
       displayMessageToUser("Passwords don't match!", context);
-
-      //if passwords do match
     } else {
+      //if passwords do match
       //try creating the user
       try {
         //create the user
@@ -52,8 +50,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 email: _emailController.text,
                 password: _passwordController.text);
 
+        print('Email: ${_emailController.text}');
+        //add user's email to firestore
+        await addUserDetailsToFirestore(_emailController.text);
+
         //pop loading circle
         Navigator.pop(context);
+
+        // Clear fields after successful registration
+        _emailController.clear();
+        _passwordController.clear();
+        _confirmPasswordController.clear();
 
         //navigate to home page
         Navigator.pushReplacement(
@@ -67,6 +74,10 @@ class _RegisterPageState extends State<RegisterPage> {
         displayMessageToUser(e.code, context);
       }
     }
+  }
+
+  Future addUserDetailsToFirestore(String email) async {
+    await FirebaseFirestore.instance.collection('users').add({'email': email});
   }
 
   @override
@@ -118,10 +129,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 onPressed: () {
                   registerUser();
-                  // Clear fields after successful registration
-                  _emailController.clear();
-                  _passwordController.clear();
-                  _confirmPasswordController.clear();
 
                   FocusScope.of(context).unfocus();
                 },
