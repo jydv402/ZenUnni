@@ -49,9 +49,12 @@ class _MoodPageState extends State<MoodPage> {
 
   Widget _moodCard(String emoji, String mood) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         addMoodToFirestore(mood);
-        Navigator.pop(context);
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (mounted) {
+          Navigator.pop(context);
+        }
       },
       child: Container(
           decoration: BoxDecoration(
