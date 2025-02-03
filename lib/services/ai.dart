@@ -27,12 +27,6 @@ class AIService {
 
     final chain = LLMChain(llm: llm, prompt: prompt);
     final response = await chain.run(mood);
-    // String cleanContent = response
-    //     .replaceAll('AIChatMessage{content: ', '')
-    //     .replaceAll(', toolCalls : [],}', '')
-    //     .trim();
-    // print(cleanContent);
-    // return cleanContent;
     return response;
   }
 }

@@ -17,14 +17,14 @@ class CurrentMood extends ConsumerWidget {
     return Scaffold(
       body: mood.when(
         // Handle AsyncValue
-        data: (moodData) => currentMoodContainer(context, moodData),
+        data: (moodData) => currentMoodContainer(context, moodData, ref),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
   }
 
-  Widget currentMoodContainer(context, String? mood) {
+  Widget currentMoodContainer(context, String? mood, WidgetRef ref) {
     return Container(
       decoration: gradientDeco(),
       padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
@@ -47,7 +47,7 @@ class CurrentMood extends ConsumerWidget {
                     child: const Text('Update Mood'),
                   ),
                   const SizedBox(height: 30),
-                  motivationContainer(mood),
+                  motivationContainer(context, mood, ref),
                 ],
               ),
       ),
@@ -115,18 +115,15 @@ class CurrentMood extends ConsumerWidget {
     );
   }
 
-  Widget motivationContainer(String mood) {
-    return FutureBuilder<String>(
-      future: AIService().getMotivationalMessage(mood),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching motivation data'));
-        } else {
-          return motivationCard(context, snapshot.data!);
-        }
-      },
+  Widget motivationContainer(BuildContext context, String mood, WidgetRef ref) {
+    final motivation = ref.watch(motivationalMessageProvider(mood));
+
+    return motivation.when(
+      data: (motivationData) => motivationCard(context, motivationData),
+      error: (error, stackTrace) => Center(
+          child: Text(
+              'Error: $error')), //TODO - Build an AI not available at the moment error card
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/services/ai.dart';
 
 final moodProvider = StreamProvider<String?>((ref) async* {
   final moodDoc = FirebaseFirestore.instance.collection('mood');
@@ -43,3 +44,8 @@ final moodAddProvider = FutureProvider.autoDispose.family<void, String>(
     }
   },
 );
+
+final motivationalMessageProvider =
+    FutureProvider.family<String, String>((ref, mood) async {
+  return await AIService().getMotivationalMessage(mood);
+});
