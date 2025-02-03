@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final moodDoc =
     FirebaseFirestore.instance.collection('mood'); //Get the mood collection
+final userRef = FirebaseFirestore.instance.collection('users').doc('username');//get the current users username for referencing that doc
 final now = DateTime.now();
 final today = DateTime(now.year, now.month, now.day);
 
@@ -25,6 +26,7 @@ Future<void> addMoodToFirestore(String mood) async {
     await moodDoc.add({
       'mood': mood,
       'updatedOn': now,
+      'userRef':userRef
     });
   }
 }
