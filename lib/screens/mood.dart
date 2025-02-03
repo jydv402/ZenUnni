@@ -1,58 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:glassmorphism_widgets/glassmorphism_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/consts/moodlist.dart';
 import 'package:zen/theme/light.dart';
 
-class MoodPage extends StatefulWidget {
+class MoodPage extends ConsumerWidget {
   const MoodPage({super.key});
 
   @override
-  State<MoodPage> createState() => _MoodPageState();
-}
-
-class _MoodPageState extends State<MoodPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: _moodSelectionScreen(),
-    );
-  }
-
-  Widget _moodSelectionScreen() {
-    return Container(
+      body: Container(
         decoration: gradientDeco(), //Gradient background
         padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
         child: SizedBox(
-            // SizedBox to fill the entire screen
-            width: double.infinity,
-            height: double.infinity,
-            child: ListView.builder(
-              itemCount: moodList.length + 1,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  // Title
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    child: Text("How are you\nfeeling today?",
-                        style: Theme.of(context).textTheme.headlineLarge),
-                  );
-                } else {
-                  // Mood Cards
-                  return _moodCard(moodList.keys.elementAt(index - 1),
-                      moodList.values.elementAt(index - 1));
-                }
-              },
-            )));
+          // SizedBox to fill the entire screen
+          width: double.infinity,
+          height: double.infinity,
+          child: ListView.builder(
+            itemCount: moodList.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                // Title
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                  child: Text("How are you\nfeeling today?",
+                      style: Theme.of(context).textTheme.headlineLarge),
+                );
+              } else {
+                // Mood Cards
+                return _moodCard(context, moodList.keys.elementAt(index - 1),
+                    moodList.values.elementAt(index - 1), ref);
+              }
+            },
+          ),
+        ),
+      ),
+    );
   }
 
-  Widget _moodCard(String emoji, String mood) {
+  Widget _moodCard(
+      BuildContext context, String emoji, String mood, WidgetRef ref) {
     return GestureDetector(
       onTap: () async {
-        addMoodToFirestore(mood);
-        await Future.delayed(const Duration(milliseconds: 500));
-        if (mounted) {
+        await ref.read(moodAddProvider(mood).future);
+        if (context.mounted) {
           Navigator.pop(context);
         }
       },

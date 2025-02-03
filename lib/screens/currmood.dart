@@ -1,56 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
 import 'package:zen/theme/consts/moodlist.dart';
 import 'package:zen/services/ai.dart';
 
-class CurrentMood extends StatefulWidget {
+class CurrentMood extends ConsumerWidget {
+  // Changed to ConsumerWidget
   const CurrentMood({super.key});
 
   @override
-  State<CurrentMood> createState() => _CurrentMoodState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mood = ref.watch(moodProvider); // Watch the provider
 
-class _CurrentMoodState extends State<CurrentMood> {
-  Future<String?>? moodFuture;
-  Future<String>? motivation;
-
-  @override
-  void initState() {
-    super.initState();
-    _refreshMood();
-  }
-
-  void _refreshMood() {
-    setState(() {
-      moodFuture = getMoodFromFirestore();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-      body: _moodDisplay(),
+      body: mood.when(
+        // Handle AsyncValue
+        data: (moodData) => currentMoodContainer(context, moodData),
+        error: (error, stackTrace) => Center(child: Text('Error: $error')),
+        loading: () => const Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 
-  Widget _moodDisplay() {
-    return FutureBuilder<String?>(
-      future: moodFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error fetching mood data'));
-        } else {
-          return currentMoodContainer(snapshot.data);
-        }
-      },
-    );
-  }
-
-  Widget currentMoodContainer(String? mood) {
+  Widget currentMoodContainer(context, String? mood) {
     return Container(
       decoration: gradientDeco(),
       padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
@@ -58,39 +32,17 @@ class _CurrentMoodState extends State<CurrentMood> {
         width: double.infinity,
         height: double.infinity,
         child: mood == null
-            ? ListView(
-                children: [
-                  Text("Mood",
-                      style: Theme.of(context).textTheme.headlineLarge),
-                  const SizedBox(height: 24),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "No mood data available",
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await Navigator.pushNamed(context, '/mood2');
-                          _refreshMood();
-                        },
-                        child: const Text('Add Mood'),
-                      )
-                    ],
-                  ),
-                ],
-              )
+            ? _noMoodMessage(context)
             : ListView(
                 children: [
                   Text("Mood",
                       style: Theme.of(context).textTheme.headlineLarge),
                   const SizedBox(height: 24),
-                  currMoodCard(mood),
+                  currMoodCard(context, mood),
                   ElevatedButton(
                     onPressed: () async {
+                      // Navigate to update mood screen
                       await Navigator.pushNamed(context, '/mood2');
-                      _refreshMood();
                     },
                     child: const Text('Update Mood'),
                   ),
@@ -102,7 +54,31 @@ class _CurrentMoodState extends State<CurrentMood> {
     );
   }
 
-  Widget currMoodCard(String mood) {
+  Widget _noMoodMessage(BuildContext context) {
+    return ListView(
+      children: [
+        Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
+        const SizedBox(height: 24),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "No mood data available",
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await Navigator.pushNamed(context, '/mood2');
+              },
+              child: const Text('Add Mood'),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget currMoodCard(BuildContext context, String mood) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withAlpha(150),
@@ -148,13 +124,13 @@ class _CurrentMoodState extends State<CurrentMood> {
         } else if (snapshot.hasError) {
           return const Center(child: Text('Error fetching motivation data'));
         } else {
-          return motivationCard(snapshot.data!);
+          return motivationCard(context, snapshot.data!);
         }
       },
     );
   }
 
-  Widget motivationCard(String motivation) {
+  Widget motivationCard(BuildContext context, String motivation) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white.withAlpha(150),

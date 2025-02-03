@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/auth_pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zen/screens/currMood.dart';
@@ -16,7 +17,7 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         '/mood1': (context) => const CurrentMood(),
         '/mood2': (context) => const MoodPage(),
         '/todo': (context) => const Todo(),
-        '/username':(context)=> const Username(),
+        '/username': (context) => const Username(),
       },
     );
   }
