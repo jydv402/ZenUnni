@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism_widgets/glassmorphism_widgets.dart';
 import 'package:lottie/lottie.dart';
@@ -5,7 +6,10 @@ import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
 
 class MoodPage extends StatelessWidget {
-  const MoodPage({super.key});
+   MoodPage({super.key});
+
+  //get the current users username for referencing that doc
+  final DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc('username');
 
   static const moodList = {
     "assets/emoji/chill.json": "Relaxed",
@@ -61,7 +65,7 @@ class MoodPage extends StatelessWidget {
   Widget _moodCard(context, String emoji, String mood) {
     return GestureDetector(
       onTap: () async {
-        addMoodToFirestore(mood);
+        addMoodToFirestore(mood,userRef);
         await Future.delayed(const Duration(seconds: 2));
       },
       child: GlassContainer(

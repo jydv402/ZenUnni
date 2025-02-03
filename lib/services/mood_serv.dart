@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final moodDoc =
     FirebaseFirestore.instance.collection('mood'); //Get the mood collection
-final userRef = FirebaseFirestore.instance.collection('users').doc('username');//get the current users username for referencing that doc
 final now = DateTime.now();
 final today = DateTime(now.year, now.month, now.day);
 
-Future<void> addMoodToFirestore(String mood) async {
+Future<void> addMoodToFirestore(String mood,DocumentReference userRef) async {
   // Check if a document for today already exists
   final query = await moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)
