@@ -5,9 +5,10 @@ final moodDoc =
 final now = DateTime.now();
 final today = DateTime(now.year, now.month, now.day);
 
-Future<void> addMoodToFirestore(String mood,DocumentReference userRef) async {
+Future<void> addMoodToFirestore(String mood, DocumentReference userRef) async {
   // Check if a document for today already exists
   final query = await moodDoc
+      .where('userRef', isEqualTo: userRef)
       .where('updatedOn', isGreaterThanOrEqualTo: today)
       .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
       .limit(1)
@@ -22,17 +23,14 @@ Future<void> addMoodToFirestore(String mood,DocumentReference userRef) async {
     }); //Update the mood and updatedOn fields
   } else {
     // Document doesn't exist, create a new one
-    await moodDoc.add({
-      'mood': mood,
-      'updatedOn': now,
-      'userRef':userRef
-    });
+    await moodDoc.add({'mood': mood, 'updatedOn': now, 'userRef': userRef});
   }
 }
 
-Future<String?> getMoodFromFirestore() async {
+Future<String?> getMoodFromFirestore(DocumentReference userRef) async {
   // Check if a document for today already exists
   final query = await moodDoc
+      .where('userRef', isEqualTo: userRef)
       .where('updatedOn', isGreaterThanOrEqualTo: today)
       .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
       .limit(1)

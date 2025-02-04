@@ -6,10 +6,13 @@ import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
 
 class MoodPage extends StatelessWidget {
-   MoodPage({super.key});
+  MoodPage({super.key});
 
   //get the current users username for referencing that doc
-  final DocumentReference userRef = FirebaseFirestore.instance.collection('users').doc('username');
+
+  //ToDo :pass the actual username as docId
+  final DocumentReference userRef =
+      FirebaseFirestore.instance.collection('users').doc('username');
 
   static const moodList = {
     "assets/emoji/chill.json": "Relaxed",
@@ -65,7 +68,7 @@ class MoodPage extends StatelessWidget {
   Widget _moodCard(context, String emoji, String mood) {
     return GestureDetector(
       onTap: () async {
-        addMoodToFirestore(mood,userRef);
+        addMoodToFirestore(mood, userRef);
         await Future.delayed(const Duration(seconds: 2));
       },
       child: GlassContainer(
