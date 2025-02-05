@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/providers/username_provider.dart';
 import 'package:zen/screens/home.dart';
 
-class Username extends StatelessWidget {
+class Username extends ConsumerWidget {
   const Username({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
   
     Future createUserDoc(String username) async {
       await FirebaseFirestore.instance
@@ -45,8 +47,15 @@ class Username extends StatelessWidget {
                   IconButton(
                     onPressed: () async {
                       String username = _userNameController.text.trim();
-                      createUserDoc(username);
-                      Navigator.pushNamed(context, '/home');
+                      await createUserDoc(username);
+
+                    //   if (username.isNotEmpty) {
+                    //   
+                    //   // Set the username in the Riverpod state
+                    //   ref.read(usernameProvider.notifier).state = username;
+
+                    // }
+                    Navigator.pushNamed(context, '/home');
                     },
                     icon: const Icon(Icons.arrow_forward),
                   ),
