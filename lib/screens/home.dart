@@ -55,6 +55,18 @@ class LandPage extends StatelessWidget {
               child: const Icon(Icons.emoji_emotions_rounded),
             ),
           ),
+          //FAB for chat page
+          Positioned(
+            bottom: 10,
+            right: 175,
+            child: FloatingActionButton(
+              heroTag: 'chat',
+              onPressed: () {
+                Navigator.pushNamed(context, '/chat');
+              },
+              child: const Icon(Icons.content_paste_go_rounded),
+            ),
+          ),
         ],
       ),
     );

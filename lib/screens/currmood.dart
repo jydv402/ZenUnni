@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
-import 'package:zen/theme/consts/moodlist.dart';
+import 'package:zen/consts/moodlist.dart';
 import 'package:zen/services/ai.dart';
 
 class CurrentMood extends ConsumerWidget {

@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/auth_pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zen/screens/chat_page.dart';
 import 'package:zen/screens/currMood.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
@@ -31,11 +32,12 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
+        '/username': (context) => const Username(),
         '/home': (context) => const LandPage(),
+        '/chat': (context) => const ChatPage(),
         '/mood1': (context) => const CurrentMood(),
         '/mood2': (context) => const MoodPage(),
         '/todo': (context) => const Todo(),
-        '/username': (context) => const Username(),
       },
     );
   }

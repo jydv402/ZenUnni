@@ -29,4 +29,8 @@ class AIService {
     final response = await chain.run(mood);
     return response;
   }
+
+  Future<String> chat(String message) async {
+    return '';
+  }
 }
