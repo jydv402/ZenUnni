@@ -1,5 +1,6 @@
 //Message class with text and isUser bool with Riverpod
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/services/ai.dart';
 
 class Message {
   final String text;
@@ -19,4 +20,21 @@ class MessageNotifier extends StateNotifier<List<Message>> {
   void addMessage(Message message) {
     state = [...state, message];
   }
+
+  void clearMessages() {
+    state = [];
+  }
 }
+
+final aiResponseAdder = FutureProvider.family<Message, String>(
+  (ref, msg) async {
+    final aiResponse = await AIService().chat(msg);
+
+    return Message(
+        text: aiResponse
+            .replaceAll(
+                RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'), '')
+            .trim(),
+        isUser: false);
+  },
+);

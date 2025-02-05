@@ -31,6 +31,25 @@ class AIService {
   }
 
   Future<String> chat(String message) async {
-    return '';
+    const systemPrompt = '''
+    You are ZenUnni, a helpful and informative AI assistant.
+    Provide positive, fun, and encouraging messages
+    Limit to short messages
+    '''; // Define your system prompt here
+
+    final promptTemplate = '''
+    System: $systemPrompt
+    User: {message}
+    AI:
+    ''';
+
+    final prompt = PromptTemplate(
+      inputVariables: const {'message'},
+      template: promptTemplate,
+    );
+
+    final chain = LLMChain(llm: llm, prompt: prompt);
+    final response = await chain.run({'message': message});
+    return response;
   }
 }

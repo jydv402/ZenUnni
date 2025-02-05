@@ -2,6 +2,7 @@
 *.class
 *.txt
 *.env
+*.md
 *.log
 *.pyc
 *.swp

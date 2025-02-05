@@ -11,6 +11,7 @@ ThemeData get lightTheme {
         headlineLarge: TextStyle(fontSize: 48.0, fontWeight: FontWeight.w500),
         headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
         headlineSmall: TextStyle(fontSize: 18.0),
+        bodySmall: TextStyle(fontSize: 14.0),
       ));
 }
 
