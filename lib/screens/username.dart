@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/providers/username_provider.dart';
 import 'package:zen/screens/home.dart';
+import 'package:zen/services/user_serv.dart';
 
 class Username extends ConsumerWidget {
   const Username({super.key});
@@ -11,12 +12,7 @@ class Username extends ConsumerWidget {
   @override
   Widget build(BuildContext context,WidgetRef ref) {
   
-    Future createUserDoc(String username) async {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(username)
-          .set({'username': username});
-    }
+    
 
     final _userNameController = TextEditingController();
     return Scaffold(

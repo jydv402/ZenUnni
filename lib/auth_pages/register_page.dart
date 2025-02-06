@@ -1,21 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/providers/email_provider.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/auth_pages/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zen/screens/username.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class RegisterPage extends ConsumerWidget {
+  RegisterPage({super.key});
 
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
+
   final _passwordController = TextEditingController();
+
   final _confirmPasswordController = TextEditingController();
 
   void displayMessageToUser(String message, BuildContext context) {
@@ -26,7 +25,9 @@ class _RegisterPageState extends State<RegisterPage> {
             ));
   }
 
-  void registerUser() async {
+  void registerUser(BuildContext context) async {
+
+    
     //show loading circle
     showDialog(
       context: context,
@@ -47,8 +48,8 @@ class _RegisterPageState extends State<RegisterPage> {
         //create the user
         UserCredential? userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-                email: _emailController.text,
-                password: _passwordController.text);
+                email: _emailController.text.trim(),
+                password: _passwordController.text.trim());
 
         //pop loading circle
         Navigator.pop(context);
@@ -73,7 +74,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register to ZENUNNI",
@@ -120,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  registerUser();
+                  registerUser(context);
                   FocusScope.of(context).unfocus();
                 },
                 style: ElevatedButton.styleFrom(
