@@ -28,7 +28,8 @@ class MessageNotifier extends StateNotifier<List<Message>> {
 
 final aiResponseAdder = FutureProvider.family<Message, String>(
   (ref, msg) async {
-    final aiResponse = await AIService().chat(msg);
+    final chatMsgs = ref.watch(msgProvider);
+    final aiResponse = await AIService().chat(msg, chatMsgs);
 
     return Message(
         text: aiResponse
