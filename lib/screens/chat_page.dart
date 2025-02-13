@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:langchain/langchain.dart' as langchain;
 import 'package:zen/services/chat_serv.dart';
 import 'package:zen/theme/light.dart';
+import 'package:dash_chat_2/dash_chat_2.dart';
 
 class ChatPage extends ConsumerWidget {
   const ChatPage({super.key});
@@ -10,6 +12,7 @@ class ChatPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final chatMsgs = ref.watch(msgProvider);
     final controller = TextEditingController();
+    final scrollCntrl = ScrollController();
 
     return Scaffold(
       appBar: AppBar(
@@ -34,6 +37,7 @@ class ChatPage extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.fromLTRB(0, 32, 0, 150),
+                controller: scrollCntrl,
                 itemCount: chatMsgs.length,
                 itemBuilder: (context, index) {
                   final msg = chatMsgs[index];
@@ -74,13 +78,13 @@ class ChatPage extends ConsumerWidget {
           ],
         ),
       ),
-      floatingActionButton: fabField(context, ref, controller),
+      floatingActionButton: fabField(context, ref, controller, scrollCntrl),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget fabField(
-      BuildContext context, WidgetRef ref, TextEditingController controller) {
+  Widget fabField(BuildContext context, WidgetRef ref,
+      TextEditingController controller, ScrollController scrollCntrl) {
     return Container(
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -112,12 +116,17 @@ class ChatPage extends ConsumerWidget {
           IconButton(
               onPressed: () async {
                 if (controller.text.isNotEmpty) {
+                  //Add the message to the state
                   final userMsg = Message(text: controller.text, isUser: true);
                   ref.read(msgProvider.notifier).addMessage(userMsg);
+                  //Get the AI response
                   final aiMsg =
                       await ref.read(aiResponseAdder(controller.text).future);
                   ref.read(msgProvider.notifier).addMessage(aiMsg);
                 }
+                scrollCntrl.animateTo(scrollCntrl.position.maxScrollExtent,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeIn);
                 controller.clear();
               },
               icon: Icon(Icons.send_rounded))
@@ -126,5 +135,3 @@ class ChatPage extends ConsumerWidget {
     );
   }
 }
-
-// TODO - Fix the ai chat function. currently has no memory. worried if it will burn off the API limit.

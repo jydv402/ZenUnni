@@ -6,15 +6,16 @@ import 'package:zen/services/chat_serv.dart';
 
 class AIService {
   final ChatGoogleGenerativeAI llm;
+  final DateTime now = DateTime.now();
 
   AIService() : llm = ChatGoogleGenerativeAI(apiKey: dotenv.env['KEY']!);
 
   Future<String> getMotivationalMessage(String mood) async {
     const systemPrompt = '''
-    You are ZenUnni, a motivational assistant. 
+    You are Unni, a motivational assistant. 
     Provide positive, fun, and encouraging messages 
-    (under 200 words) based on the user's mood. 
-    Include quotes, advice, and affirmations. 
+    (under 200 words) based on the user's mood.
+    Include quotes, advice, and affirmations.
     Guide the user on taking action to improve their mood.
     ''';
 
@@ -32,18 +33,20 @@ class AIService {
   }
 
   Future<String> chat(String message, List history) async {
+    final DateTime now = DateTime.now();
     final historyString = history
         .map((msg) => '${msg.isUser ? 'User' : 'AI'}: ${msg.text}')
         .join('\n');
 
     const systemPrompt = '''
-    You are ZenUnni, a helpful and informative AI assistant.
+    You are Unni, a helpful and informative AI assistant.
     Provide positive, fun, and encouraging messages.
-    Limit to concise responses, Longer only if necessary.
+    Limit to concise responses, Longer if necessary.
     '''; // Define your system prompt here
 
     final promptTemplate = '''
     System: $systemPrompt
+    Time: $now
     History: $historyString
     User: {message}
     AI:
