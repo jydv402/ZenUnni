@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:langchain/langchain.dart' as langchain;
 import 'package:zen/services/chat_serv.dart';
 import 'package:zen/theme/light.dart';
-import 'package:dash_chat_2/dash_chat_2.dart';
 
 class ChatPage extends ConsumerWidget {
   const ChatPage({super.key});

@@ -32,48 +32,28 @@ class CurrentMood extends ConsumerWidget {
         width: double.infinity,
         height: double.infinity,
         child: mood == null
-            ? _noMoodMessage(context)
-            : ListView(
-                children: [
-                  Text("Mood",
-                      style: Theme.of(context).textTheme.headlineLarge),
-                  const SizedBox(height: 24),
-                  currMoodCard(context, mood),
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Navigate to update mood screen
-                      await Navigator.pushNamed(context, '/mood2');
-                    },
-                    child: const Text('Update Mood'),
-                  ),
-                  const SizedBox(height: 30),
-                  motivationContainer(context, mood, ref),
-                ],
-              ),
+            ? moodPage(context, ref, "Empty", "Add mood", false)
+            : moodPage(context, ref, mood, "Update mood", true),
       ),
     );
   }
 
-  Widget _noMoodMessage(BuildContext context) {
+  Widget moodPage(BuildContext context, WidgetRef ref, String mood,
+      String label, bool moodExists) {
     return ListView(
       children: [
         Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(height: 24),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "No mood data available",
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                await Navigator.pushNamed(context, '/mood2');
-              },
-              child: const Text('Add Mood'),
-            )
-          ],
+        currMoodCard(context, mood),
+        ElevatedButton(
+          onPressed: () async {
+            // Navigate to update mood screen
+            await Navigator.pushNamed(context, '/mood2');
+          },
+          child: Text(label),
         ),
+        const SizedBox(height: 30),
+        if (moodExists) motivationContainer(context, mood, ref),
       ],
     );
   }
@@ -94,7 +74,7 @@ class CurrentMood extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Current mood...",
+                mood == "Empty" ? "No mood added..." : "Current mood...",
                 style: Theme.of(context)
                     .textTheme
                     .headlineMedium
@@ -105,7 +85,8 @@ class CurrentMood extends ConsumerWidget {
                 children: [
                   Lottie.asset(reversedMoodList[mood]!, height: 70, width: 70),
                   const SizedBox(width: 24),
-                  Text(mood, style: Theme.of(context).textTheme.headlineMedium)
+                  Text(mood == "Empty" ? "Log mood?" : mood,
+                      style: Theme.of(context).textTheme.headlineMedium)
                 ],
               )
             ],
