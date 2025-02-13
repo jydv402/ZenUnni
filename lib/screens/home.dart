@@ -27,7 +27,8 @@ class LandPage extends StatelessWidget {
       body: const Center(
           child: Text(
         "WELCOME TO ZENUNNI",
-        style: TextStyle(fontSize: 24, color: Colors.amber),
+        style:
+            TextStyle(fontSize: 24, color: Color.fromARGB(255, 28, 224, 246)),
       )),
       floatingActionButton: Stack(
         children: [
