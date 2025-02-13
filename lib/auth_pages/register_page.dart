@@ -2,10 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/providers/email_provider.dart';
-import 'package:zen/screens/home.dart';
 import 'package:zen/auth_pages/login_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zen/screens/username.dart';
 
 class RegisterPage extends ConsumerWidget {
@@ -46,7 +43,7 @@ class RegisterPage extends ConsumerWidget {
       //try creating the user
       try {
         //create the user
-        UserCredential? userCredential = await FirebaseAuth.instance
+      await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: _emailController.text.trim(),
                 password: _passwordController.text.trim());

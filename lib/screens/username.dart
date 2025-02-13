@@ -11,10 +11,10 @@ class Username extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context,WidgetRef ref) {
-  
-    
 
     final _userNameController = TextEditingController();
+
+    
     return Scaffold(
       body: SafeArea(
           child: Container(
