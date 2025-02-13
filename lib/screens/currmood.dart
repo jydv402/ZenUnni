@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/services/mood_serv.dart';
@@ -131,14 +132,26 @@ class CurrentMood extends ConsumerWidget {
                     ?.copyWith(fontSize: 32, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
-              Text(
-                  motivation
-                      .replaceAll(
-                          RegExp(
-                              r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
-                          '')
-                      .trim(),
-                  style: Theme.of(context).textTheme.headlineSmall)
+              MarkdownBody(
+                data: motivation
+                    .replaceAll(
+                        RegExp(
+                            r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
+                        '')
+                    .trim(),
+                styleSheet:
+                    MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                  p: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ),
+              // Text(
+              //     motivation
+              //         .replaceAll(
+              //             RegExp(
+              //                 r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
+              //             '')
+              //         .trim(),
+              //     style: Theme.of(context).textTheme.headlineSmall)
             ],
           ),
         ),

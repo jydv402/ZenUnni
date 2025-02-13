@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/services/chat_serv.dart';
 import 'package:zen/theme/light.dart';
@@ -44,31 +45,40 @@ class ChatPage extends ConsumerWidget {
                         ? Alignment.centerRight
                         : Alignment.centerLeft,
                     child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.75,
-                      ),
-                      decoration: BoxDecoration(
-                        color: msg.isUser
-                            ? Color.fromARGB(40, 0, 17, 255)
-                            : Color.fromARGB(40, 255, 0, 200),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(28),
-                          bottomRight: Radius.circular(28),
-                          topLeft: msg.isUser
-                              ? Radius.circular(28)
-                              : Radius.circular(2),
-                          topRight: msg.isUser
-                              ? Radius.circular(2)
-                              : Radius.circular(28),
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.75,
                         ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 16),
-                      child: Text(
-                        msg.text,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
+                        decoration: BoxDecoration(
+                          color: msg.isUser
+                              ? Color.fromARGB(40, 0, 17, 255)
+                              : Color.fromARGB(40, 255, 0, 200),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(28),
+                            bottomRight: Radius.circular(28),
+                            topLeft: msg.isUser
+                                ? Radius.circular(28)
+                                : Radius.circular(2),
+                            topRight: msg.isUser
+                                ? Radius.circular(2)
+                                : Radius.circular(28),
+                          ),
+                        ),
+                        padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+                        margin:
+                            EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+                        child: MarkdownBody(
+                          data: msg.text,
+                          styleSheet:
+                              MarkdownStyleSheet.fromTheme(Theme.of(context))
+                                  .copyWith(
+                            p: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        )
+                        // Text(
+                        //   msg.text,
+                        //   style: Theme.of(context).textTheme.bodySmall,
+                        // ),
+                        ),
                   );
                 },
               ),
