@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zen/screens/home.dart';
+import 'package:zen/services/task_serv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //where data of each task is stored when user is selecting options
@@ -17,16 +18,13 @@ class Task {
   });
 }
 
-class Todo extends StatefulWidget {
 class Todo extends ConsumerStatefulWidget {
   const Todo({super.key});
 
   @override
-  State<Todo> createState() => _TodoState();
   ConsumerState<Todo> createState() => _TodoState();
 }
 
-class _TodoState extends State<Todo> {
 class _TodoState extends ConsumerState<Todo> {
   //variables to store data
   DateTime? _date; //save date
@@ -199,15 +197,16 @@ class _TodoState extends ConsumerState<Todo> {
                         ),
                       ),
                       FloatingActionButton(
-                        onPressed: () {
+                        onPressed: (){
+
                           if (nameController.text.isNotEmpty &&
                               descController.text.isNotEmpty &&
                               _date != null &&
                               _time != null &&
                               _prior.isNotEmpty) {
                             setState(
-                              () {
-                                //this will combine both date and time into date_time
+                              () async{
+              //this will combine both date and time into date_time
                                 DateTime dateTime = DateTime(
                                     _date!.year,
                                     _date!.month,
@@ -221,6 +220,8 @@ class _TodoState extends ConsumerState<Todo> {
                                     date: dateTime,
                                     priority: _prior);
                                 addTaskCallback(task);
+                                
+                                ref.read(taskAddProvider(task));
                                 //setting the global variables to null
                                 _date = null;
                                 _time = null;
