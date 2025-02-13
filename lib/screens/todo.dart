@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zen/screens/home.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //where data of each task is stored when user is selecting options
 class Task {
@@ -17,13 +18,16 @@ class Task {
 }
 
 class Todo extends StatefulWidget {
+class Todo extends ConsumerStatefulWidget {
   const Todo({super.key});
 
   @override
   State<Todo> createState() => _TodoState();
+  ConsumerState<Todo> createState() => _TodoState();
 }
 
 class _TodoState extends State<Todo> {
+class _TodoState extends ConsumerState<Todo> {
   //variables to store data
   DateTime? _date; //save date
   TimeOfDay? _time; //save time
