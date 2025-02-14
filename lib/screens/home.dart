@@ -32,43 +32,34 @@ class LandPage extends StatelessWidget {
       )),
       floatingActionButton: Stack(
         children: [
-          // Floating Action Button for TodoPage
-          Positioned(
-            bottom: 10,
-            right: 90,
-            child: FloatingActionButton(
-              heroTag: 'todo',
-              onPressed: () {
-                Navigator.pushNamed(context, '/todo');
-              },
-              child: const Icon(Icons.edit),
-            ),
-          ),
           // Floating Action Button for MoodPage
-          Positioned(
-            bottom: 10,
-            right: 10,
-            child: FloatingActionButton(
-              heroTag: 'mood',
-              onPressed: () {
-                Navigator.pushNamed(context, '/mood1');
-              },
-              child: const Icon(Icons.emoji_emotions_rounded),
-            ),
-          ),
+          pageButtons(context, 'mood', '/mood1',
+              Icon(Icons.emoji_emotions_rounded), 10, 10),
+          // Floating Action Button for TodoPage
+          pageButtons(
+              context, 'todo', '/todo', Icon(Icons.edit_rounded), 10, 90),
           //FAB for chat page
-          Positioned(
-            bottom: 10,
-            right: 175,
-            child: FloatingActionButton(
-              heroTag: 'chat',
-              onPressed: () {
-                Navigator.pushNamed(context, '/chat');
-              },
-              child: const Icon(Icons.content_paste_go_rounded),
-            ),
-          ),
+          pageButtons(context, 'chat', '/chat',
+              Icon(Icons.content_paste_go_rounded), 90, 90),
+          //Pomodoro Button
+          pageButtons(
+              context, 'pomo', '/pomo', Icon(Icons.timer_rounded), 90, 10),
         ],
+      ),
+    );
+  }
+
+  Widget pageButtons(BuildContext context, String heroTag, String route,
+      Icon icon, double bottom, double right) {
+    return Positioned(
+      bottom: bottom,
+      right: right,
+      child: FloatingActionButton(
+        heroTag: heroTag,
+        onPressed: () {
+          Navigator.pushNamed(context, route);
+        },
+        child: icon,
       ),
     );
   }
