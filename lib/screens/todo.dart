@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zen/screens/home.dart';
+import 'package:zen/services/task_serv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 
 //where data of each task is stored when user is selecting options
 class Task {
@@ -7,32 +10,46 @@ class Task {
   String description;
   DateTime date;
   String priority;
+  bool isDone;
+  final Function(bool?)? onChanged;
   //constructor
   Task({
     required this.name,
     required this.description,
     required this.date,
     required this.priority,
+    required this.isDone,
+    this.onChanged
   });
 }
 
-class Todo extends StatefulWidget {
+class Todo extends ConsumerStatefulWidget {
   const Todo({super.key});
 
   @override
-  State<Todo> createState() => _TodoState();
+  ConsumerState<Todo> createState() => _TodoState();
 }
 
-class _TodoState extends State<Todo> {
+class _TodoState extends ConsumerState<Todo> {
   //variables to store data
   DateTime? _date; //save date
   TimeOfDay? _time; //save time
   String _prior = ""; //save current prior
   List<Task> tasks = []; //to store the tasks in a list
+  bool isDone = false;
   //controllers to pick up the info to be stored
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
+
+  void onChanged(bool? value) {
+    setState(() {
+      isDone = value ?? false;
+    });
+  }
   @override
+  
+ 
+
   void dispose() {
     nameController.dispose();
     descController.dispose();
@@ -201,44 +218,41 @@ class _TodoState extends State<Todo> {
                               _date != null &&
                               _time != null &&
                               _prior.isNotEmpty) {
-                            setState(
-                              () {
-                                //this will combine both date and time into date_time
-                                DateTime dateTime = DateTime(
-                                    _date!.year,
-                                    _date!.month,
-                                    _date!.day,
-                                    _time!.hour,
-                                    _time!.minute);
-                                //adding details to task model
-                                Task task = Task(
-                                    name: nameController.text,
-                                    description: descController.text,
-                                    date: dateTime,
-                                    priority: _prior);
-                                addTaskCallback(task);
-                                //setting the global variables to null
-                                _date = null;
-                                _time = null;
-                                _prior = "";
-                                nameController.text = "";
-                                descController.text = "";
-                                //debugging stuff can be removed later
-                                print("new task has been added successfully");
-                                for (var t in tasks) {
-                                  print(
-                                      "Task: ${t.name}, Description: ${t.description}, "
-                                      "Date: ${t.date}, Priority: ${t.priority}");
-                                }
-                              },
+                            // Create dateTime object
+                            DateTime dateTime = DateTime(
+                                _date!.year,
+                                _date!.month,
+                                _date!.day,
+                                _time!.hour,
+                                _time!.minute);
+                            
+                            // Create task object
+                            Task task = Task(
+                                name: nameController.text,
+                                description: descController.text,
+                                date: dateTime,
+                                priority: _prior,
+                                isDone: isDone
                             );
+                            
+                            // Add task to local state and Firebase
+                            addTaskCallback(task);
+                            ref.read(taskAddProvider(task));
+                            
+                            // Reset form fields
+                            _date = null;
+                            _time = null;
+                            _prior = "";
+                            nameController.text = "";
+                            descController.text = "";
+                            
+                            // Close dialog
                             Navigator.pop(context);
                           } else {
                             print("error fields must be null");
                           }
                         },
-                        child: const Icon(Icons.check,
-                            size: 25, color: Colors.green),
+                        child: const Icon(Icons.check, size: 25, color: Colors.green),
                       ),
                     ],
                   )
@@ -274,16 +288,42 @@ class _TodoState extends State<Todo> {
         body: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 4,
-                    child: ListTile(
-                      title: Text(tasks[index].name),
-                      subtitle: Text(tasks[index].description),
-                    ),
+              child: Consumer(
+                builder: (context, ref, child) {
+                  final tasksAsync = ref.watch(taskProvider);
+                  
+                  return tasksAsync.when(
+                    data: (tasks) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: tasks.length,
+                        itemBuilder: (context, index) {
+                          final task = tasks[index];
+                          return Card(
+                            elevation: 4,
+                            child: ListTile(
+                              leading: Checkbox(
+                                value: task.isDone,
+                                onChanged: (bool? value) {
+                                  final updatedTask = Task(
+                                    name: task.name,
+                                    description: task.description,
+                                    date: task.date,
+                                    priority: task.priority,
+                                    isDone: value ?? false,
+                                  );
+                                  ref.read(taskUpdateProvider(updatedTask));
+                                },
+                              ),
+                              title: Text(task.name),
+                              subtitle: Text(task.description),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (error, stack) => Center(child: Text('Error: $error')),
                   );
                 },
               ),
