@@ -1,11 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/services/ai.dart';
 
 final moodProvider = StreamProvider<String?>((ref) async* {
-  final moodDoc = FirebaseFirestore.instance.collection('mood');
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final moodDoc = FirebaseFirestore.instance
+      .collection('users')
+      .doc(auth.currentUser?.uid)
+      .collection('mood');
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
+
+  //  final uid = FirebaseAuth.instance.currentUser?.uid;
+  //  if (uid == null) {
+  //   yield null;
+  //   return;
+  // }
 
   final querySnapshot = moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)
@@ -24,10 +36,18 @@ final moodProvider = StreamProvider<String?>((ref) async* {
 
 final moodAddProvider = FutureProvider.autoDispose.family<void, String>(
   (ref, newMood) async {
-    final moodDoc = FirebaseFirestore.instance.collection('mood');
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final moodDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('mood');
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
+    // final uid = FirebaseAuth.instance.currentUser?.uid;
+    // if (uid == null) {
+    //   throw Exception("No user is signed in");
+    // }
     final query = await moodDoc
         .where('updatedOn', isGreaterThanOrEqualTo: today)
         .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
