@@ -47,13 +47,13 @@ class PomodoroPage extends ConsumerWidget {
             ElevatedButton(
                 onPressed: () {
                   pomoNotifier.startTimer();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CountdownScreen()),
+                  );
                 },
                 child: Text('Start Timer')),
-            ElevatedButton(
-                onPressed: () {
-                  pomoNotifier.stopTimer();
-                },
-                child: Text('Stop Timer')),
           ],
         ),
       ),
@@ -129,5 +129,53 @@ class PomodoroPage extends ConsumerWidget {
         child: const Icon(Icons.add_alarm_rounded),
       ),
     );
+  }
+}
+
+class CountdownScreen extends ConsumerWidget {
+  const CountdownScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pomo = ref.watch(pomoProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Countdown'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              _formatTime(pomo.timeRemaining), // Display time remaining
+              style: const TextStyle(fontSize: 48),
+            ),
+            const SizedBox(height: 20),
+            if (pomo.isRunning)
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(pomoProvider.notifier).stopTimer();
+                  Navigator.pop(context);
+                },
+                child: const Text('Stop'),
+              )
+            else
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(pomoProvider.notifier).startTimer();
+                },
+                child: const Text('Start'),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _formatTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 }

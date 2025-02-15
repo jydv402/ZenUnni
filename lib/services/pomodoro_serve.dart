@@ -1,88 +1,107 @@
+// lib/services/pomodoro_notifier.dart
 import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Pomodoro {
+class PomodoroState {
   final int duration;
   final int breakDuration;
   final int rounds;
-  final bool isRunning;
+  final int currentRound;
+  bool isRunning;
+  int timeRemaining;
+  bool isBreak;
 
-  Pomodoro copyWith({
+  PomodoroState({
+    this.duration = 25,
+    this.breakDuration = 5,
+    this.rounds = 4,
+    this.currentRound = 1,
+    this.isRunning = false,
+    this.timeRemaining = 25 * 60,
+    this.isBreak = false,
+  });
+
+  PomodoroState copyWith({
     int? duration,
     int? breakDuration,
     int? rounds,
+    int? currentRound,
     bool? isRunning,
+    int? timeRemaining,
+    bool? isBreak,
   }) {
-    return Pomodoro(
+    return PomodoroState(
       duration: duration ?? this.duration,
       breakDuration: breakDuration ?? this.breakDuration,
       rounds: rounds ?? this.rounds,
+      currentRound: currentRound ?? this.currentRound,
       isRunning: isRunning ?? this.isRunning,
+      timeRemaining: timeRemaining ?? this.timeRemaining,
+      isBreak: isBreak ?? this.isBreak,
     );
   }
-
-  Pomodoro({
-    required this.duration,
-    required this.breakDuration,
-    required this.rounds,
-    required this.isRunning,
-  });
 }
 
-final pomoProvider = StateNotifierProvider<PomodoroNotifier, Pomodoro>((ref) {
-  return PomodoroNotifier();
-});
-
-class PomodoroNotifier extends StateNotifier<Pomodoro> {
-  PomodoroNotifier()
-      : super(Pomodoro(
-            duration: 0, breakDuration: 0, rounds: 0, isRunning: false));
+class PomodoroNotifier extends StateNotifier<PomodoroState> {
   Timer? _timer;
-  int _currentRound = 0;
-  bool _isBreak = false;
-  int _timeRemaining = 0;
+
+  PomodoroNotifier() : super(PomodoroState());
 
   void setTimer(int duration, int breakDuration, int rounds) {
-    state = Pomodoro(
+    state = state.copyWith(
+        // Update state immutably
         duration: duration,
         breakDuration: breakDuration,
         rounds: rounds,
+        timeRemaining: duration * 60, //Convert to seconds
+        currentRound: 1,
+        isBreak: false,
         isRunning: false);
+    _timer?.cancel();
   }
 
   void startTimer() {
-    if (state.isRunning) return;
-
-    _currentRound = 0;
-    _isBreak = false;
-    _startPomo();
-  }
-
-  _startPomo() {
-    if (_currentRound >= state.rounds) {
-      stopTimer();
-      return;
-    }
-
-    _timeRemaining = _isBreak ? state.breakDuration * 60 : state.duration * 60;
-    state = state.copyWith(isRunning: true);
-
+    state = state.copyWith(isRunning: true); // Update isRunning state
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_timeRemaining > 0) {
-        _timeRemaining--;
+      if (state.timeRemaining > 0) {
+        state = state.copyWith(timeRemaining: state.timeRemaining - 1);
       } else {
-        _timer?.cancel();
-        _isBreak = !_isBreak;
-        if (!_isBreak) _currentRound++;
-        _startPomo();
+        _switchSession(); //switch between focus and break
       }
     });
   }
 
   void stopTimer() {
     _timer?.cancel();
-    state = state.copyWith(
-        duration: 0, breakDuration: 0, rounds: 0, isRunning: false);
+    state = state.copyWith(isRunning: false); //set to timer not running
+  }
+
+  void _switchSession() {
+    // Check if it was a break
+    if (state.isBreak) {
+      // Check if more rounds left
+      if (state.currentRound < state.rounds) {
+        //Change state to the next round
+        state = state.copyWith(
+            isBreak: false,
+            timeRemaining: state.duration * 60,
+            currentRound: state.currentRound + 1);
+      } else {
+        stopTimer(); // All rounds complete
+      }
+    } else {
+      state = state.copyWith(
+          isBreak: true, timeRemaining: state.breakDuration * 60);
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 }
+
+final pomoProvider = StateNotifierProvider<PomodoroNotifier, PomodoroState>(
+  (ref) => PomodoroNotifier(),
+);
