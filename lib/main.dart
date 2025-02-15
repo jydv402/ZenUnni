@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/auth_pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:zen/screens/currMood.dart';
+import 'package:zen/screens/habit.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
 import 'package:zen/screens/todo.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/mood2': (context) => const MoodPage(),
         '/todo': (context) => const Todo(),
         '/username': (context) => const Username(),
+        '/habit':(context) =>const Habit(),
       },
     );
   }

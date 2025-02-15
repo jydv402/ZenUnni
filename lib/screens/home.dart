@@ -55,6 +55,17 @@ class LandPage extends StatelessWidget {
               child: const Icon(Icons.emoji_emotions_rounded),
             ),
           ),
+          Positioned(
+            bottom:10,
+            right: 170,
+            child: FloatingActionButton(
+            heroTag: 'mood',
+            onPressed: () {
+              Navigator.pushNamed(context,'/habit');
+              },
+              child: const Icon(Icons.track_changes),
+            )
+          )
         ],
       ),
     );
