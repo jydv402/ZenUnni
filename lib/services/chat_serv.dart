@@ -1,6 +1,7 @@
 //Message class with text and isUser bool with Riverpod
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/services/ai.dart';
+import 'package:zen/services/user_serv.dart';
 
 class Message {
   final String text;
@@ -29,7 +30,10 @@ class MessageNotifier extends StateNotifier<List<Message>> {
 final aiResponseAdder = FutureProvider.family<Message, String>(
   (ref, msg) async {
     final chatMsgs = ref.watch(msgProvider);
-    final aiResponse = await AIService().chat(msg, chatMsgs);
+    final userName = ref.watch(userNameProvider);
+
+    final aiResponse =
+        await AIService().chat(msg, chatMsgs, userName.value ?? '');
 
     return Message(
         text: aiResponse

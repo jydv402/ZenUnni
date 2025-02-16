@@ -31,10 +31,10 @@ class AIService {
     return response;
   }
 
-  Future<String> chat(String message, List history) async {
+  Future<String> chat(String message, List history, String username) async {
     final DateTime now = DateTime.now();
     final historyString = history
-        .map((msg) => '${msg.isUser ? 'User' : 'AI'}: ${msg.text}')
+        .map((msg) => '${msg.isUser ? username : 'AI'}: ${msg.text}')
         .join('\n');
 
     const systemPrompt = '''
@@ -47,9 +47,11 @@ class AIService {
     System: $systemPrompt
     Time: $now
     History: $historyString
-    User: {message}
+    $username : {message}
     AI:
     ''';
+
+    print(promptTemplate);
 
     final prompt = PromptTemplate(
       inputVariables: const {'message'},
