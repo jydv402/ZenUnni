@@ -10,25 +10,22 @@ final taskProvider = StreamProvider<List<Task>>((ref) async* {
       .doc(auth.currentUser?.uid)
       .collection('task');
 
-
-  final querySnapshot = todoDoc.where('isDone', isEqualTo: false).snapshots();
+  //final querySnapshot = todoDoc.where('isDone', isEqualTo: false).snapshots();
 
   await for (final snapshot in todoDoc.snapshots()) {
     final tasks = snapshot.docs.map((doc) {
       final data = doc.data();
       return Task(
-        name: data['task']??'',
-        description: data['description']??'',
+        name: data['task'] ?? '',
+        description: data['description'] ?? '',
         date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
-        priority: data['priority'] ??'',
-        isDone: data['isDone']?? false,
+        priority: data['priority'] ?? '',
+        isDone: data['isDone'] ?? false,
       );
     }).toList();
     yield tasks;
   }
 });
-
-
 
 final taskAddProvider =
     FutureProvider.autoDispose.family<void, Task>((ref, task) async {
@@ -62,7 +59,7 @@ final taskUpdateProvider = FutureProvider.family<void, Task>((ref, task) async {
 
   // Query to find the document with matching task name
   final querySnapshot = await taskDoc.where('task', isEqualTo: task.name).get();
-  
+
   if (querySnapshot.docs.isNotEmpty) {
     final docId = querySnapshot.docs.first.id;
     await taskDoc.doc(docId).update({

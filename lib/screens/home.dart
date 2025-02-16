@@ -99,8 +99,8 @@ class HomePage extends ConsumerWidget {
             ? 'Good Afternoon'
             : 'Good Evening';
 
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width - 32;
+    // final height = MediaQuery.of(context).size.height;
+    // final width = MediaQuery.of(context).size.width - 32;
 
     // return Center(
     //   child: Text("Welcome, ${user.value}"),

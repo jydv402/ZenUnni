@@ -23,8 +23,6 @@ class RegisterPage extends ConsumerWidget {
   }
 
   void registerUser(BuildContext context) async {
-
-    
     //show loading circle
     showDialog(
       context: context,
@@ -43,36 +41,37 @@ class RegisterPage extends ConsumerWidget {
       //try creating the user
       try {
         //create the user
-      await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: _emailController.text.trim(),
-                password: _passwordController.text.trim());
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim());
 
-        //pop loading circle
-        Navigator.pop(context);
+        if (context.mounted) {
+          //pop loading circle
+          Navigator.pop(context);
 
+          //navigate to home page
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Username()),
+          );
+        }
         // Clear fields after successful registration
         _emailController.clear();
         _passwordController.clear();
         _confirmPasswordController.clear();
-
-        //navigate to home page
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Username()),
-        );
       } on FirebaseAuthException catch (e) {
-        //pop loading circle
-        Navigator.pop(context);
-        //display error message
-        displayMessageToUser(e.code, context);
+        if (context.mounted) {
+          //pop loading circle
+          Navigator.pop(context);
+          //display error message
+          displayMessageToUser(e.code, context);
+        }
       }
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register to ZENUNNI",
