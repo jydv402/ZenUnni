@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:zen/components/fab_button.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
 import 'package:zen/consts/moodlist.dart';
@@ -34,54 +35,33 @@ class CurrentMood extends ConsumerWidget {
         Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(height: 24),
         currMoodCard(context, mood),
-        ElevatedButton(
-          onPressed: () async {
-            // Navigate to update mood screen
-            await Navigator.pushNamed(context, '/mood2');
-          },
-          child: Text(label),
-        ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 24),
+        fabButton(() {
+          Navigator.pushNamed(context, '/mood2');
+        }, 'Update Mood', 0),
+        const SizedBox(height: 24),
         if (moodExists) motivationContainer(context, mood, ref),
       ],
     );
   }
 
   Widget currMoodCard(BuildContext context, String mood) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withAlpha(150),
-        borderRadius: BorderRadius.circular(36),
-      ),
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                mood == "Empty" ? "No mood added..." : "Current mood...",
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  Lottie.asset(reversedMoodList[mood]!, height: 70, width: 70),
-                  const SizedBox(width: 24),
-                  Text(mood == "Empty" ? "Log mood?" : mood,
-                      style: Theme.of(context).textTheme.headlineMedium)
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 50),
+        Center(
+            child:
+                Lottie.asset(reversedMoodList[mood]!, height: 200, width: 200)),
+        const SizedBox(height: 50),
+        Center(
+          child: Text(
+              mood == "Empty"
+                  ? "You haven't added a mood yet\nAdd one now?"
+                  : mood,
+              style: Theme.of(context).textTheme.headlineMedium),
+        )
+      ],
     );
   }
 
@@ -93,57 +73,32 @@ class CurrentMood extends ConsumerWidget {
       error: (error, stackTrace) => Center(
           child: Text(
               'Error: $error')), //TODO - Build an AI not available at the moment error card
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(
+          child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 75, 0, 0),
+        child: CircularProgressIndicator(),
+      )),
     );
   }
 
   Widget motivationCard(BuildContext context, String motivation) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withAlpha(150),
-        borderRadius: BorderRadius.circular(36),
-      ),
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      margin: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Motivation...",
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              MarkdownBody(
-                data: motivation
-                    .replaceAll(
-                        RegExp(
-                            r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
-                        '')
-                    .trim(),
-                styleSheet:
-                    MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-                  p: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-              // Text(
-              //     motivation
-              //         .replaceAll(
-              //             RegExp(
-              //                 r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
-              //             '')
-              //         .trim(),
-              //     style: Theme.of(context).textTheme.headlineSmall)
-            ],
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 50),
+        Text("From Unni...", style: Theme.of(context).textTheme.headlineMedium),
+        const SizedBox(height: 24),
+        MarkdownBody(
+          data: motivation
+              .replaceAll(
+                  RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
+                  '')
+              .trim(),
+          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+              p: Theme.of(context).textTheme.bodySmall, blockSpacing: 26),
         ),
-      ),
+        const SizedBox(height: 50),
+      ],
     );
   }
 }
