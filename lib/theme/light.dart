@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // Light theme for the app
 ThemeData get lightTheme {
@@ -21,9 +22,9 @@ ThemeData get lightTheme {
           elevation: 1,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(36))),
-      textTheme: const TextTheme(
-        headlineLarge: TextStyle(
-            fontSize: 48.0, fontWeight: FontWeight.w500, color: Colors.white),
+      textTheme: TextTheme(
+        headlineLarge: GoogleFonts.poppins(
+            fontSize: 38, fontWeight: FontWeight.w600, color: Colors.white),
         headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
         headlineSmall: TextStyle(fontSize: 18.0),
         bodySmall: TextStyle(fontSize: 14.0),
