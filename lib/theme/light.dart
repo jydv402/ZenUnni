@@ -1,17 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Light theme for the app
 ThemeData get lightTheme {
   return ThemeData(
+      colorScheme: ColorScheme(
+        brightness: Brightness.dark,
+        primary: const Color(0xFF121212), // Dark gray/black - adjust as needed
+        onPrimary: Colors.white, // White/light gray text and icons
+        secondary:
+            const Color(0xFF9575CD), // Lavender/purple - adjust as needed
+        onSecondary: Colors.white, // White text on secondary buttons
+        surface: const Color(
+            0xFF202124), // Lighter gray for surface elements - adjust as needed
+        onSurface: Colors.black, // Dark text on surface elements
+        error: Colors.red, // Standard red for errors
+        onError: Colors.white, // White text on background
+      ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
           elevation: 1,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(36))),
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(fontSize: 48.0, fontWeight: FontWeight.w500),
+        headlineLarge: TextStyle(
+            fontSize: 48.0, fontWeight: FontWeight.w500, color: Colors.white),
         headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
         headlineSmall: TextStyle(fontSize: 18.0),
         bodySmall: TextStyle(fontSize: 14.0),
+      ),
+      appBarTheme: AppBarTheme(
+        surfaceTintColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          //Define the status bar parameters
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        ),
       ));
 }
 

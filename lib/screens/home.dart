@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/services/user_serv.dart';
 
 class LandPage extends StatelessWidget {
   const LandPage({super.key});
@@ -44,6 +46,8 @@ class LandPage extends StatelessWidget {
           //Pomodoro Button
           pageButtons(
               context, 'pomo', '/pomo', Icon(Icons.timer_rounded), 90, 10),
+          pageButtons(
+              context, 'home', '/home1', Icon(Icons.home_rounded), 10, 170),
         ],
       ),
     );
@@ -62,5 +66,59 @@ class LandPage extends StatelessWidget {
         child: icon,
       ),
     );
+  }
+}
+
+class HomePage extends ConsumerWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user =
+        ref.watch(userNameProvider); //USE: ${user.value} to obtain the value
+
+    return Scaffold(
+        body: user.when(
+      data: (data) {
+        return homeScreen(context, user);
+      },
+      error: (error, stackTrace) {
+        return Center(child: Text('Error: $error'));
+      },
+      loading: () {
+        return const Center(child: CircularProgressIndicator());
+      },
+    ));
+  }
+
+  Widget homeScreen(BuildContext context, user) {
+    final now = DateTime.now().hour;
+    final greeting = now < 12
+        ? 'Good Morning'
+        : now < 17
+            ? 'Good Afternoon'
+            : 'Good Evening';
+
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width - 32;
+
+    // return Center(
+    //   child: Text("Welcome, ${user.value}"),
+    // );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
+      child: ListView(
+        children: [
+          _showGreeting(greeting, user, context),
+          const SizedBox(height: 24),
+          //_bentoBoxes(),
+        ],
+      ),
+    );
+  }
+
+  Text _showGreeting(String greeting, user, BuildContext context) {
+    return Text("$greeting, \n${user.value}",
+        style: Theme.of(context).textTheme.headlineLarge);
   }
 }

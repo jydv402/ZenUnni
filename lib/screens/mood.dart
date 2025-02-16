@@ -12,6 +12,11 @@ class MoodPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Container(
         decoration: gradientDeco(), //Gradient background
         padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
