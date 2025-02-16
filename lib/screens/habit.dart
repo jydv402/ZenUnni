@@ -17,8 +17,11 @@ class _HabitState extends ConsumerState<Habit> {
         body: SafeArea(
       child: Column(
         children: [
-          heatmap(),
-          addnewbutton(),
+          Expanded(child: heatmaplistview()),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: addnewbutton(),
+          ),
         ],
       ),
     ));
@@ -26,6 +29,7 @@ class _HabitState extends ConsumerState<Habit> {
 
   Widget addnewbutton() {
     return ElevatedButton(
+        style: ButtonStyle(), //Todo: fil in later
         onPressed: () {
           showDialog(
               context: context,
@@ -36,17 +40,15 @@ class _HabitState extends ConsumerState<Habit> {
 
   Widget newHabitDialog(BuildContext context) {
     List<Color> colorOptions = [
-      Colors.black,
-      Colors.red,
       Colors.green,
+      Colors.pinkAccent,
       Colors.blue,
       Colors.yellow,
       Colors.deepPurple,
       Colors.orange,
-      Colors.brown,
     ];
 
-    Color selectedColor = Colors.black;
+    Color selectedColor = Colors.green;
     final TextEditingController habitNameController = TextEditingController();
     return SimpleDialog(
       children: [
@@ -57,8 +59,11 @@ class _HabitState extends ConsumerState<Habit> {
               children: [
                 TextField(
                     controller: habitNameController,
-                    decoration: InputDecoration(hintText: 'Enter habit name',border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)))),
-                    SizedBox(height:30),
+                    decoration: InputDecoration(
+                        hintText: 'Enter habit name',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)))),
+                SizedBox(height: 30),
                 Text('Choose a color'),
                 SizedBox(
                   height:
@@ -76,6 +81,21 @@ class _HabitState extends ConsumerState<Habit> {
     );
   }
 
+  Widget heatmaplistview() {
+    return ListView.builder(
+        itemCount: 5, //Todo: change later get count after adding to firestore
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(width: 1, color: Colors.black12)),
+                child: heatmap()),
+          );
+        });
+  }
+
   Widget heatmap() {
     return HeatMap(
       datasets: {
@@ -86,8 +106,10 @@ class _HabitState extends ConsumerState<Habit> {
         DateTime(2025, 2, 23): 6,
       },
       startDate: DateTime.now(),
-      endDate: DateTime.now().add(Duration(days: 90)),
+      endDate: DateTime.now().add(Duration(days: 120)),
       colorMode: ColorMode.opacity,
+      size: 15,
+      showColorTip: false,
       showText: false,
       scrollable: true,
       defaultColor: const Color.fromARGB(255, 226, 220, 220),
