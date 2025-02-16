@@ -18,23 +18,11 @@ class CurrentMood extends ConsumerWidget {
     return Scaffold(
       body: mood.when(
         // Handle AsyncValue
-        data: (moodData) => currentMoodContainer(context, moodData, ref),
+        data: (moodData) => moodData == null
+            ? moodPage(context, ref, "Empty", "Add mood", false)
+            : moodPage(context, ref, moodData, "Update mood", true),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),
         loading: () => const Center(child: CircularProgressIndicator()),
-      ),
-    );
-  }
-
-  Widget currentMoodContainer(context, String? mood, WidgetRef ref) {
-    return Container(
-      decoration: gradientDeco(),
-      padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
-      child: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: mood == null
-            ? moodPage(context, ref, "Empty", "Add mood", false)
-            : moodPage(context, ref, mood, "Update mood", true),
       ),
     );
   }
@@ -42,6 +30,7 @@ class CurrentMood extends ConsumerWidget {
   Widget moodPage(BuildContext context, WidgetRef ref, String mood,
       String label, bool moodExists) {
     return ListView(
+      padding: pagePadding,
       children: [
         Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(height: 24),
