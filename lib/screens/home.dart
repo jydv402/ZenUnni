@@ -123,15 +123,15 @@ class HomePage extends ConsumerWidget {
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
-            child: _bentoBoxLarge(Colors.red, 416)),
+            child: _bentoBoxLarge(Color(0xFF7F5EDF), 416)),
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
             child: Column(
               spacing: 16,
               children: [
-                _bentoBoxSmall(Colors.red, 200),
-                _bentoBoxSmall(Colors.red, 200),
+                _bentoBoxSmall(Color(0xFF339DF0), 200),
+                _bentoBoxSmall(Color(0xFF2BBC87), 200),
               ],
             )),
       ],
