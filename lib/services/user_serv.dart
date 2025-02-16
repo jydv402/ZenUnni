@@ -17,11 +17,27 @@ Future<void> createUserDoc(String username) async {
   }
 }
 
-final userNameProvider = FutureProvider<String?>((ref) async {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null) return null;
-
-  final doc =
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-  return doc.data()?['username'] as String?;
+final userNameProvider =
+    StateNotifierProvider<UserNameNotifier, AsyncValue<String?>>((ref) {
+  return UserNameNotifier(ref);
 });
+
+class UserNameNotifier extends StateNotifier<AsyncValue<String?>> {
+  UserNameNotifier(Ref ref) : super(const AsyncValue.loading()) {
+    loadUserName();
+  }
+  Future<void> loadUserName() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      state = const AsyncValue.data(null);
+      return;
+    }
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+    //The user name is loaded into the app state
+    //Why? To be passed to the AI chat
+    state = AsyncValue.data(doc.data()?['username'] as String?);
+  }
+}
