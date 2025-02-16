@@ -49,7 +49,7 @@ ThemeData get lightTheme {
       ));
 }
 
-var pagePadding = const EdgeInsets.fromLTRB(16, 56, 16, 26);
+var pagePadding = const EdgeInsets.fromLTRB(26, 120, 26, 26);
 
 BoxDecoration gradientDeco() {
   return const BoxDecoration(

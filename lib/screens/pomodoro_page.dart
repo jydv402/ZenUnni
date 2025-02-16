@@ -110,7 +110,7 @@ class PomodoroPage extends ConsumerWidget {
                 );
               },
             );
-          }, 'Edit')
+          }, 'Edit', 26)
         ],
       ),
       floatingActionButton: fabButton(() {
@@ -119,7 +119,7 @@ class PomodoroPage extends ConsumerWidget {
           context,
           MaterialPageRoute(builder: (context) => const CountdownScreen()),
         );
-      }, 'Start Timer'),
+      }, 'Start Timer', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
