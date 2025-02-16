@@ -29,7 +29,7 @@ class CurrentMood extends ConsumerWidget {
   Widget moodPage(BuildContext context, WidgetRef ref, String mood,
       String label, bool moodExists) {
     return ListView(
-      padding: EdgeInsets.fromLTRB(16, 56, 16, 26),
+      padding: pagePadding,
       children: [
         Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(height: 24),

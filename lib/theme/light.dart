@@ -23,10 +23,10 @@ ThemeData get lightTheme {
       textTheme: TextTheme(
         headlineLarge: GoogleFonts.poppins(
             fontSize: 38, fontWeight: FontWeight.w600, color: Colors.white),
-        headlineMedium:
-            GoogleFonts.poppins(fontSize: 24.0, fontWeight: FontWeight.w400),
-        headlineSmall: GoogleFonts.poppins(fontSize: 18.0),
-        bodySmall: GoogleFonts.poppins(fontSize: 14.0),
+        headlineMedium: GoogleFonts.poppins(
+            fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
+        headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
+        bodySmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.white),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -48,6 +48,8 @@ ThemeData get lightTheme {
         ),
       ));
 }
+
+var pagePadding = const EdgeInsets.fromLTRB(16, 56, 16, 26);
 
 BoxDecoration gradientDeco() {
   return const BoxDecoration(
