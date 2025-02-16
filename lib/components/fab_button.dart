@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-Padding fabButton(onPressed, String label) {
+Padding fabButton(onPressed, String label, double pad) {
   return Padding(
-    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+    padding: EdgeInsets.symmetric(horizontal: pad),
     child: SizedBox(
       width: double.infinity,
       child: ElevatedButton(
