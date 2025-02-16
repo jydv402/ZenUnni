@@ -118,36 +118,42 @@ class HomePage extends ConsumerWidget {
   Row _bentoBoxes(BuildContext context) {
     final width = MediaQuery.of(context).size.width - 32;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: 16,
       children: [
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
-            child: _bentoBox(Colors.red, width / 1.5, width / 1.5)),
-        const SizedBox(width: 16),
+            child: _bentoBoxLarge(Colors.red, 416)),
         Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: Column(
-            children: [
-              _bentoBox(Colors.green, width / 2, width / 3.2),
-              const SizedBox(height: 16),
-              _bentoBox(Colors.blue, width / 2, width / 3.2),
-            ],
-          ),
-        )
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Column(
+              spacing: 16,
+              children: [
+                _bentoBoxSmall(Colors.red, 200),
+                _bentoBoxSmall(Colors.red, 200),
+              ],
+            )),
       ],
     );
   }
 
-  Container _bentoBox(Color color, double width, double height) {
+  Container _bentoBoxLarge(Color color, double height) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         color: color,
       ),
-      width: width,
+      height: height,
+    );
+  }
+
+  Container _bentoBoxSmall(Color color, double height) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+        color: color,
+      ),
       height: height,
     );
   }
