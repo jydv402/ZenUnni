@@ -45,6 +45,7 @@ dependencies:
   langchain_google: ^0.6.4+2
   flutter_riverpod: ^2.6.1
   flutter_heatmap_calendar: ^1.0.5
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:
