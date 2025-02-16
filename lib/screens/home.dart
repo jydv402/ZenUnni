@@ -102,7 +102,10 @@ class HomePage extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       child: ListView(
         children: [
-          _showGreeting(context, greeting, user),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: _showGreeting(context, greeting, user),
+          ),
           const SizedBox(height: 16),
           _bentoBoxes(context),
         ],

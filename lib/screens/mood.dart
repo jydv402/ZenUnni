@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/components/fab_button.dart';
-import 'package:zen/services/mood_serv.dart'; // Import your provider
+import 'package:zen/services/mood_serv.dart';
 import 'package:zen/consts/moodlist.dart';
-import 'package:zen/theme/light.dart'; // Import your mood list
+import 'package:zen/theme/light.dart';
 
 class MoodPage extends ConsumerStatefulWidget {
-  // Use StatefulWidget
   const MoodPage({super.key});
 
   @override
@@ -27,7 +26,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 56, 0, 20),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: Text(
                 "How are you\nfeeling today?",
                 style: Theme.of(context).textTheme.headlineLarge,
@@ -38,14 +37,13 @@ class _MoodPageState extends ConsumerState<MoodPage> {
             Center(
               child: Lottie.asset(
                 moodList.keys.elementAt(_currentMoodIndex),
-                height: 200, // Adjust size as needed
+                height: 200,
                 width: 200,
               ),
             ),
             const SizedBox(height: 80),
             // Mood Name Display
             Center(
-              // Center the mood name
               child: Text(
                 moodList.values.elementAt(_currentMoodIndex),
                 style: Theme.of(context)
@@ -93,7 +91,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         if (context.mounted) {
           Navigator.pop(context);
         }
-      }, "Add Mood"),
+      }, "Add Mood", 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
