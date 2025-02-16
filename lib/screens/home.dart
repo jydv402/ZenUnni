@@ -122,67 +122,96 @@ class HomePage extends ConsumerWidget {
     final double bentoHeight = 150;
     final double bentoWidth = MediaQuery.of(context).size.width;
     return Row(
-      spacing: 8,
+      spacing: 10,
       children: [
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
             child: _bentoBox(
-              Colors.lightGreenAccent,
+              context,
+              '/chat',
+              Color(0xFF7F5EDF),
               bentoHeight * 2 + 8,
               bentoWidth,
+              "Talk to\nUnni",
             )),
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
             child: Column(
-              spacing: 8,
+              spacing: 10,
               children: [
-                _bentoBox(Colors.red, bentoHeight, bentoWidth),
-                _bentoBox(Colors.red, bentoHeight, bentoWidth),
+                _bentoBox(
+                  context,
+                  '/mood1',
+                  Color(0xFF339DF0),
+                  bentoHeight,
+                  bentoWidth,
+                  "Mood",
+                ),
+                _bentoBox(
+                  context,
+                  '/todo',
+                  Color(0xFF2BBC87),
+                  bentoHeight,
+                  bentoWidth,
+                  "Todo",
+                ),
               ],
             )),
       ],
     );
   }
 
-  Container _bentoBox(Color color, double height, double width) {
+  GestureDetector _bentoBox(BuildContext context, String route, Color color,
+      double height, double width, String label) {
     const double pos = 16;
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(26),
-          color: color,
-          boxShadow: [
-            BoxShadow(
-              color: color.withValues(alpha: .1),
-              spreadRadius: 5,
-              blurRadius: 7,
-            )
-          ]),
-      height: height,
-      width: width,
-      child: Stack(
-        children: [
-          Positioned(
-            bottom: pos,
-            left: pos,
-            child: Text("Chat with \nUnni"),
-          ),
-          Positioned(
-              top: pos,
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, route);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(26),
+            color: color,
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: .2),
+                spreadRadius: 5,
+                blurRadius: 7,
+              )
+            ]),
+        height: height,
+        width: width,
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: pos,
               left: pos,
-              child: Icon(
-                Icons.chat_bubble_outline,
-                color: Colors.black,
-              )),
-          Positioned(
-              top: pos,
-              right: pos,
-              child: Icon(
-                Icons.arrow_outward_rounded,
-                color: Colors.black,
-              ))
-        ],
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+            ),
+            Positioned(
+                top: pos,
+                left: pos,
+                child: Icon(
+                  Icons.chat_bubble_outline,
+                  color: Colors.black,
+                )),
+            Positioned(
+                top: pos,
+                right: pos,
+                child: Icon(
+                  Icons.arrow_outward_rounded,
+                  color: Colors.black,
+                ))
+          ],
+        ),
       ),
     );
   }
