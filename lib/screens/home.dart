@@ -119,71 +119,45 @@ class HomePage extends ConsumerWidget {
   }
 
   Row _bentoBoxes(BuildContext context) {
-    final double bentoHeight = 150;
-    final double bentoWidth = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width - 32;
     return Row(
-      spacing: 8,
+      spacing: 16,
       children: [
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
-            child: _bentoBox(
-              Colors.lightGreenAccent,
-              bentoHeight * 2 + 8,
-              bentoWidth,
-            )),
+            child: _bentoBoxLarge(Color(0xFF7F5EDF), 416)),
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
             child: Column(
-              spacing: 8,
+              spacing: 16,
               children: [
-                _bentoBox(Colors.red, bentoHeight, bentoWidth),
-                _bentoBox(Colors.red, bentoHeight, bentoWidth),
+                _bentoBoxSmall(Color(0xFF339DF0), 200),
+                _bentoBoxSmall(Color(0xFF2BBC87), 200),
               ],
             )),
       ],
     );
   }
 
-  Container _bentoBox(Color color, double height, double width) {
-    const double pos = 16;
+  Container _bentoBoxLarge(Color color, double height) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(26),
-          color: color,
-          boxShadow: [
-            BoxShadow(
-              color: color.withValues(alpha: .1),
-              spreadRadius: 5,
-              blurRadius: 7,
-            )
-          ]),
-      height: height,
-      width: width,
-      child: Stack(
-        children: [
-          Positioned(
-            bottom: pos,
-            left: pos,
-            child: Text("Chat with \nUnni"),
-          ),
-          Positioned(
-              top: pos,
-              left: pos,
-              child: Icon(
-                Icons.chat_bubble_outline,
-                color: Colors.black,
-              )),
-          Positioned(
-              top: pos,
-              right: pos,
-              child: Icon(
-                Icons.arrow_outward_rounded,
-                color: Colors.black,
-              ))
-        ],
+        borderRadius: BorderRadius.circular(26),
+        color: color,
       ),
+      height: height,
+    );
+  }
+
+  Container _bentoBoxSmall(Color color, double height) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+        color: color,
+      ),
+      height: height,
     );
   }
 }

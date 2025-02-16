@@ -7,14 +7,16 @@ ThemeData get lightTheme {
   return ThemeData(
       colorScheme: ColorScheme(
         brightness: Brightness.dark,
-        primary: const Color(0xFF121212),
-        onPrimary: Colors.white,
-        secondary: const Color(0xFF9575CD),
-        onSecondary: Colors.white,
-        surface: const Color(0xFF202124),
-        onSurface: Colors.black,
-        error: Colors.red,
-        onError: Colors.white,
+        primary: const Color(0xFF121212), // Dark gray/black - adjust as needed
+        onPrimary: Colors.white, // White/light gray text and icons
+        secondary:
+            const Color(0xFF9575CD), // Lavender/purple - adjust as needed
+        onSecondary: Colors.white, // White text on secondary buttons
+        surface: const Color(
+            0xFF202124), // Lighter gray for surface elements - adjust as needed
+        onSurface: Colors.black, // Dark text on surface elements
+        error: Colors.red, // Standard red for errors
+        onError: Colors.white, // White text on background
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
           elevation: 1,
@@ -23,21 +25,9 @@ ThemeData get lightTheme {
       textTheme: TextTheme(
         headlineLarge: GoogleFonts.poppins(
             fontSize: 38, fontWeight: FontWeight.w600, color: Colors.white),
-        headlineMedium: GoogleFonts.poppins(
-            fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
-        headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
-        bodySmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.white),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white,
-          shadowColor: Colors.blue,
-          padding: EdgeInsets.all(26),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(26),
-          ),
-        ),
+        headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400),
+        headlineSmall: TextStyle(fontSize: 18.0),
+        bodySmall: TextStyle(fontSize: 14.0),
       ),
       appBarTheme: AppBarTheme(
         surfaceTintColor: Colors.transparent,

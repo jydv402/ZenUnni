@@ -29,57 +29,62 @@ class ChatPage extends ConsumerWidget {
               icon: Icon(Icons.cleaning_services_rounded))
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.fromLTRB(0, 32, 0, 150),
-              controller: scrollCntrl,
-              itemCount: chatMsgs.length,
-              itemBuilder: (context, index) {
-                final msg = chatMsgs[index];
-                return Align(
-                  alignment:
-                      msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.75,
-                      ),
-                      decoration: BoxDecoration(
-                        color: msg.isUser
-                            ? Color.fromARGB(40, 0, 17, 255)
-                            : Color.fromARGB(40, 255, 0, 200),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(28),
-                          bottomRight: Radius.circular(28),
-                          topLeft: msg.isUser
-                              ? Radius.circular(28)
-                              : Radius.circular(2),
-                          topRight: msg.isUser
-                              ? Radius.circular(2)
-                              : Radius.circular(28),
+      body: Container(
+        decoration: gradientDeco(),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.fromLTRB(0, 32, 0, 150),
+                controller: scrollCntrl,
+                itemCount: chatMsgs.length,
+                itemBuilder: (context, index) {
+                  final msg = chatMsgs[index];
+                  return Align(
+                    alignment: msg.isUser
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.75,
                         ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                      child: MarkdownBody(
-                        data: msg.text,
-                        styleSheet:
-                            MarkdownStyleSheet.fromTheme(Theme.of(context))
-                                .copyWith(
-                          p: Theme.of(context).textTheme.bodySmall,
+                        decoration: BoxDecoration(
+                          color: msg.isUser
+                              ? Color.fromARGB(40, 0, 17, 255)
+                              : Color.fromARGB(40, 255, 0, 200),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(28),
+                            bottomRight: Radius.circular(28),
+                            topLeft: msg.isUser
+                                ? Radius.circular(28)
+                                : Radius.circular(2),
+                            topRight: msg.isUser
+                                ? Radius.circular(2)
+                                : Radius.circular(28),
+                          ),
                         ),
-                      )
-                      // Text(
-                      //   msg.text,
-                      //   style: Theme.of(context).textTheme.bodySmall,
-                      // ),
-                      ),
-                );
-              },
+                        padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+                        margin:
+                            EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+                        child: MarkdownBody(
+                          data: msg.text,
+                          styleSheet:
+                              MarkdownStyleSheet.fromTheme(Theme.of(context))
+                                  .copyWith(
+                            p: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        )
+                        // Text(
+                        //   msg.text,
+                        //   style: Theme.of(context).textTheme.bodySmall,
+                        // ),
+                        ),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: fabField(context, ref, controller, scrollCntrl),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -107,7 +112,7 @@ class ChatPage extends ConsumerWidget {
               maxLines: null,
               minLines: 1,
               decoration: InputDecoration(
-                hintText: 'Chat with Unni...',
+                hintText: 'Write your message',
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(16),
               ),
