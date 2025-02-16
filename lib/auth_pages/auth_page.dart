@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/components/nav.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/auth_pages/login_page.dart';
 
@@ -15,7 +14,7 @@ class AuthPage extends StatelessWidget {
             builder: (context, snapshot) {
               //if user is logged in
               if (snapshot.hasData) {
-                return const ZenBar();
+                return const LandPage();
               }
               //if user is not logged in
               else {

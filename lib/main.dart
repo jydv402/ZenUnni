@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/auth_pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:zen/components/nav.dart';
 import 'package:zen/screens/chat_page.dart';
 import 'package:zen/screens/currMood.dart';
 import 'package:zen/screens/habit.dart';
@@ -35,7 +34,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
-        '/nav': (context) => const ZenBar(),
         '/username': (context) => const Username(),
         '/home': (context) => const LandPage(),
         '/chat': (context) => const ChatPage(),

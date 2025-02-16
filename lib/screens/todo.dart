@@ -3,6 +3,7 @@ import 'package:zen/screens/home.dart';
 import 'package:zen/services/task_serv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+
 //where data of each task is stored when user is selecting options
 class Task {
   String name;
@@ -12,13 +13,14 @@ class Task {
   bool isDone;
   final Function(bool?)? onChanged;
   //constructor
-  Task(
-      {required this.name,
-      required this.description,
-      required this.date,
-      required this.priority,
-      required this.isDone,
-      this.onChanged});
+  Task({
+    required this.name,
+    required this.description,
+    required this.date,
+    required this.priority,
+    required this.isDone,
+    this.onChanged
+  });
 }
 
 class Todo extends ConsumerStatefulWidget {
@@ -44,8 +46,10 @@ class _TodoState extends ConsumerState<Todo> {
       isDone = value ?? false;
     });
   }
-
   @override
+  
+ 
+
   void dispose() {
     nameController.dispose();
     descController.dispose();
@@ -221,34 +225,34 @@ class _TodoState extends ConsumerState<Todo> {
                                 _date!.day,
                                 _time!.hour,
                                 _time!.minute);
-
+                            
                             // Create task object
                             Task task = Task(
                                 name: nameController.text,
                                 description: descController.text,
                                 date: dateTime,
                                 priority: _prior,
-                                isDone: isDone);
-
+                                isDone: isDone
+                            );
+                            
                             // Add task to local state and Firebase
                             addTaskCallback(task);
                             ref.read(taskAddProvider(task));
-
+                            
                             // Reset form fields
                             _date = null;
                             _time = null;
                             _prior = "";
                             nameController.text = "";
                             descController.text = "";
-
+                            
                             // Close dialog
                             Navigator.pop(context);
                           } else {
                             print("error fields must be null");
                           }
                         },
-                        child: const Icon(Icons.check,
-                            size: 25, color: Colors.green),
+                        child: const Icon(Icons.check, size: 25, color: Colors.green),
                       ),
                     ],
                   )
@@ -287,7 +291,7 @@ class _TodoState extends ConsumerState<Todo> {
               child: Consumer(
                 builder: (context, ref, child) {
                   final tasksAsync = ref.watch(taskProvider);
-
+                  
                   return tasksAsync.when(
                     data: (tasks) {
                       return ListView.builder(
@@ -318,10 +322,8 @@ class _TodoState extends ConsumerState<Todo> {
                         },
                       );
                     },
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (error, stack) =>
-                        Center(child: Text('Error: $error')),
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (error, stack) => Center(child: Text('Error: $error')),
                   );
                 },
               ),
