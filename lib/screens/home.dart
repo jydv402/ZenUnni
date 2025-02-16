@@ -103,7 +103,7 @@ class HomePage extends ConsumerWidget {
       child: ListView(
         children: [
           _showGreeting(context, greeting, user),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           _bentoBoxes(context),
         ],
       ),
@@ -116,45 +116,71 @@ class HomePage extends ConsumerWidget {
   }
 
   Row _bentoBoxes(BuildContext context) {
-    final width = MediaQuery.of(context).size.width - 32;
+    final double bentoHeight = 150;
+    final double bentoWidth = MediaQuery.of(context).size.width;
     return Row(
-      spacing: 16,
+      spacing: 8,
       children: [
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
-            child: _bentoBoxLarge(Colors.red, 416)),
+            child: _bentoBox(
+              Colors.lightGreenAccent,
+              bentoHeight * 2 + 8,
+              bentoWidth,
+            )),
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
             child: Column(
-              spacing: 16,
+              spacing: 8,
               children: [
-                _bentoBoxSmall(Colors.red, 200),
-                _bentoBoxSmall(Colors.red, 200),
+                _bentoBox(Colors.red, bentoHeight, bentoWidth),
+                _bentoBox(Colors.red, bentoHeight, bentoWidth),
               ],
             )),
       ],
     );
   }
 
-  Container _bentoBoxLarge(Color color, double height) {
+  Container _bentoBox(Color color, double height, double width) {
+    const double pos = 16;
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(26),
-        color: color,
-      ),
+          borderRadius: BorderRadius.circular(26),
+          color: color,
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: .1),
+              spreadRadius: 5,
+              blurRadius: 7,
+            )
+          ]),
       height: height,
-    );
-  }
-
-  Container _bentoBoxSmall(Color color, double height) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(26),
-        color: color,
+      width: width,
+      child: Stack(
+        children: [
+          Positioned(
+            bottom: pos,
+            left: pos,
+            child: Text("Chat with \nUnni"),
+          ),
+          Positioned(
+              top: pos,
+              left: pos,
+              child: Icon(
+                Icons.chat_bubble_outline,
+                color: Colors.black,
+              )),
+          Positioned(
+              top: pos,
+              right: pos,
+              child: Icon(
+                Icons.arrow_outward_rounded,
+                color: Colors.black,
+              ))
+        ],
       ),
-      height: height,
     );
   }
 }
