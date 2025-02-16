@@ -80,7 +80,7 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
         body: user.when(
       data: (data) {
-        return homeScreen(context, user);
+        return homeScreen(context, user.value);
       },
       error: (error, stackTrace) {
         return Center(child: Text('Error: $error'));
@@ -91,34 +91,64 @@ class HomePage extends ConsumerWidget {
     ));
   }
 
-  Widget homeScreen(BuildContext context, user) {
+  Widget homeScreen(BuildContext context, String? user) {
     final now = DateTime.now().hour;
     final greeting = now < 12
         ? 'Good Morning'
         : now < 17
             ? 'Good Afternoon'
             : 'Good Evening';
-
-    // final height = MediaQuery.of(context).size.height;
-    // final width = MediaQuery.of(context).size.width - 32;
-
-    // return Center(
-    //   child: Text("Welcome, ${user.value}"),
-    // );
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       child: ListView(
         children: [
-          _showGreeting(greeting, user, context),
+          _showGreeting(context, greeting, user),
           const SizedBox(height: 24),
-          //_bentoBoxes(),
+          _bentoBoxes(context),
         ],
       ),
     );
   }
 
-  Text _showGreeting(String greeting, user, BuildContext context) {
-    return Text("$greeting, \n${user.value}",
+  Text _showGreeting(BuildContext context, String greeting, user) {
+    return Text("$greeting, \n$user",
         style: Theme.of(context).textTheme.headlineLarge);
+  }
+
+  Row _bentoBoxes(BuildContext context) {
+    final width = MediaQuery.of(context).size.width - 32;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: _bentoBox(Colors.red, width / 1.5, width / 1.5)),
+        const SizedBox(width: 16),
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Column(
+            children: [
+              _bentoBox(Colors.green, width / 2, width / 3.2),
+              const SizedBox(height: 16),
+              _bentoBox(Colors.blue, width / 2, width / 3.2),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Container _bentoBox(Color color, double width, double height) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+        color: color,
+      ),
+      width: width,
+      height: height,
+    );
   }
 }

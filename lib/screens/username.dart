@@ -37,13 +37,6 @@ class Username extends ConsumerWidget {
                   onPressed: () async {
                     String username = userNameController.text.trim();
                     await createUserDoc(username);
-
-                    //   if (username.isNotEmpty) {
-                    //
-                    //   // Set the username in the Riverpod state
-                    //   ref.read(usernameProvider.notifier).state = username;
-
-                    // }
                     if (context.mounted) {
                       Navigator.pushNamed(context, '/home');
                     }
