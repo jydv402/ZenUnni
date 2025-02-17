@@ -11,11 +11,15 @@ class Habit extends ConsumerStatefulWidget {
 }
 
 class _HabitState extends ConsumerState<Habit> {
+  final TextEditingController habitNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black12,
         body: SafeArea(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: heatmaplistview()),
           Padding(
@@ -29,7 +33,9 @@ class _HabitState extends ConsumerState<Habit> {
 
   Widget addnewbutton() {
     return ElevatedButton(
-        style: ButtonStyle(), //Todo: fil in later
+        style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15))), //Todo: fil in later
         onPressed: () {
           showDialog(
               context: context,
@@ -49,12 +55,13 @@ class _HabitState extends ConsumerState<Habit> {
     ];
 
     Color selectedColor = Colors.green;
-    final TextEditingController habitNameController = TextEditingController();
+
     return SimpleDialog(
       children: [
         Padding(
             padding: EdgeInsets.all(20),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
@@ -75,6 +82,13 @@ class _HabitState extends ConsumerState<Habit> {
                         selectedColor = color;
                       }),
                 ),
+                SizedBox(height: 8),
+                ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15))),
+                    child: Text('ADD'))
               ],
             ))
       ],
@@ -86,18 +100,37 @@ class _HabitState extends ConsumerState<Habit> {
         itemCount: 5, //Todo: change later get count after adding to firestore
         itemBuilder: (BuildContext context, int index) {
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(6.0),
             child: Container(
                 decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 49, 49, 49),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(width: 1, color: Colors.black12)),
-                child: heatmap()),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(habitNameController.text),
+                        IconButton(onPressed: () {},
+                         icon: Icon(Icons.check),
+                         color: Colors.white,)
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: heatmap(),
+                    ),
+                    
+                  ],
+                )),
           );
         });
   }
 
   Widget heatmap() {
     return HeatMap(
+
       datasets: {
         DateTime(2025, 2, 16): 3,
         DateTime(2025, 2, 17): 7,
@@ -106,13 +139,14 @@ class _HabitState extends ConsumerState<Habit> {
         DateTime(2025, 2, 23): 6,
       },
       startDate: DateTime.now(),
-      endDate: DateTime.now().add(Duration(days: 120)),
+      endDate: DateTime.now().add(Duration(days: 400)),
       colorMode: ColorMode.opacity,
-      size: 15,
+      size: 14,
       showColorTip: false,
       showText: false,
       scrollable: true,
-      defaultColor: const Color.fromARGB(255, 226, 220, 220),
+      textColor: Colors.white,
+      defaultColor: const Color.fromARGB(255, 75, 75, 75),
       colorsets: {
         1: Colors.red,
         3: Colors.orange,
