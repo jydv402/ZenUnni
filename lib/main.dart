@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/mood2': (context) => const MoodPage(),
         '/todo': (context) => const Todo(),
         '/pomo': (context) => const PomodoroPage(),
+        '/counter': (context) => const CountdownScreen(),
         '/habit': (context) => const Habit(),
       },
     );

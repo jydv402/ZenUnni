@@ -114,11 +114,10 @@ class PomodoroPage extends ConsumerWidget {
         ],
       ),
       floatingActionButton: fabButton(() {
+        // pomoNotifier.setTimer(int.parse(duration.text),
+        //     int.parse(breakDuration.text), int.parse(rounds.text));
         pomoNotifier.startTimer();
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const CountdownScreen()),
-        );
+        Navigator.pushNamed(context, '/counter');
       }, 'Start Timer', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -133,18 +132,22 @@ class CountdownScreen extends ConsumerWidget {
     final pomo = ref.watch(pomoProvider);
 
     return Scaffold(
-      body: Padding(
+      body: ListView(
         padding: pagePadding,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _showTime(context, pomo.timeRemaining ~/ 60), //Pass minutes
-              _showTime(context, pomo.timeRemaining % 60), //Pass seconds
-              const SizedBox(height: 100),
-            ],
+        children: [
+          Text(
+            pomo.isRunning
+                ? pomo.isBreak
+                    ? 'Break Session'
+                    : 'Focus Session'
+                : 'Session Ended',
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
-        ),
+          const SizedBox(height: 56),
+          _showTime(context, pomo.timeRemaining ~/ 60), //Pass minutes
+          _showTime(context, pomo.timeRemaining % 60), //Pass seconds
+          const SizedBox(height: 100),
+        ],
       ),
       floatingActionButton: fabButton(() {
         ref.read(pomoProvider.notifier).stopTimer();

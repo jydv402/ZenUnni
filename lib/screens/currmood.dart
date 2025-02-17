@@ -33,7 +33,7 @@ class CurrentMood extends ConsumerWidget {
       padding: pagePadding,
       children: [
         Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
-        const SizedBox(height: 50),
+        const SizedBox(height: 60),
         currMoodCard(context, mood),
         const SizedBox(height: 50),
         fabButton(() {
@@ -47,12 +47,12 @@ class CurrentMood extends ConsumerWidget {
 
   Widget currMoodCard(BuildContext context, String mood) {
     return Column(
-      spacing: 16,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
             child:
                 Lottie.asset(reversedMoodList[mood]!, height: 200, width: 200)),
+        const SizedBox(height: 40),
         Center(
           child: Text(
               mood == "Empty"
