@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/services/user_serv.dart';
 
-class LandPage extends StatelessWidget {
+class LandPage extends ConsumerWidget {
   const LandPage({super.key});
 
-  // Function to log out the user
   void logoutUser(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     if (context.mounted) {
@@ -16,7 +15,10 @@ class LandPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user =
+        ref.watch(userNameProvider); //USE: ${user.value} to obtain the value
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -26,12 +28,17 @@ class LandPage extends StatelessWidget {
               icon: const Icon(Icons.logout_outlined))
         ],
       ),
-      body: const Center(
-          child: Text(
-        "WELCOME TO ZENUNNI",
-        style:
-            TextStyle(fontSize: 24, color: Color.fromARGB(255, 28, 224, 246)),
-      )),
+      body: user.when(
+        data: (data) {
+          return homeScreen(context, user.value);
+        },
+        error: (error, stackTrace) {
+          return Center(child: Text('Error: $error'));
+        },
+        loading: () {
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
       floatingActionButton: Stack(
         children: [
           // Floating Action Button for MoodPage
@@ -53,44 +60,6 @@ class LandPage extends StatelessWidget {
     );
   }
 
-  Widget pageButtons(BuildContext context, String heroTag, String route,
-      Icon icon, double bottom, double right) {
-    return Positioned(
-      bottom: bottom,
-      right: right,
-      child: FloatingActionButton(
-        heroTag: heroTag,
-        onPressed: () {
-          Navigator.pushNamed(context, route);
-        },
-        child: icon,
-      ),
-    );
-  }
-}
-
-class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user =
-        ref.watch(userNameProvider); //USE: ${user.value} to obtain the value
-
-    return Scaffold(
-        body: user.when(
-      data: (data) {
-        return homeScreen(context, user.value);
-      },
-      error: (error, stackTrace) {
-        return Center(child: Text('Error: $error'));
-      },
-      loading: () {
-        return const Center(child: CircularProgressIndicator());
-      },
-    ));
-  }
-
   Widget homeScreen(BuildContext context, String? user) {
     final now = DateTime.now().hour;
     final greeting = now < 12
@@ -109,6 +78,21 @@ class HomePage extends ConsumerWidget {
           const SizedBox(height: 16),
           _bentoBoxes(context),
         ],
+      ),
+    );
+  }
+
+  Widget pageButtons(BuildContext context, String heroTag, String route,
+      Icon icon, double bottom, double right) {
+    return Positioned(
+      bottom: bottom,
+      right: right,
+      child: FloatingActionButton(
+        heroTag: heroTag,
+        onPressed: () {
+          Navigator.pushNamed(context, route);
+        },
+        child: icon,
       ),
     );
   }
