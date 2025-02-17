@@ -11,10 +11,18 @@ class PomodoroPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pomo = ref.watch(pomoProvider);
     final pomoNotifier = ref.read(pomoProvider.notifier);
+    const space8 = SizedBox(height: 8);
+    const space16 = SizedBox(height: 16);
+    const space32 = SizedBox(height: 32);
+    const space50 = SizedBox(height: 50);
 
     TextEditingController duration = TextEditingController();
     TextEditingController breakDuration = TextEditingController();
     TextEditingController rounds = TextEditingController();
+
+    duration.text = pomo.duration.toString();
+    breakDuration.text = pomo.breakDuration.toString();
+    rounds.text = pomo.rounds.toString();
 
     return Scaffold(
       body: ListView(
@@ -24,102 +32,118 @@ class PomodoroPage extends ConsumerWidget {
             'Pomodoro Timer',
             style: Theme.of(context).textTheme.headlineLarge,
           ),
-          const SizedBox(height: 24),
-          Text("Focus session : ${pomo.duration.toString()} minutes",
-              style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 24),
-          Text(
-            "Break : ${pomo.breakDuration.toString()} minutes",
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 24),
-          Text(
-            "Rounds : ${pomo.rounds.toString()}",
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 24),
-          Text(
-            "isRunning : ${pomo.isRunning.toString()}",
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 24),
-          fabButton(() {
-            duration.clear();
-            breakDuration.clear();
-            rounds.clear();
-
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Set Pomodoro Timer'),
-                  actions: [
-                    TextField(
-                        controller: duration,
-                        keyboardType: TextInputType.numberWithOptions(),
-                        decoration: const InputDecoration(
-                          labelText: 'Duration (minutes)',
-                        )),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: breakDuration,
-                      keyboardType: TextInputType.numberWithOptions(),
-                      decoration: const InputDecoration(
-                        labelText: 'Break Duration (minutes)',
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: rounds,
-                      keyboardType: TextInputType.numberWithOptions(),
-                      decoration: const InputDecoration(
-                        labelText: 'Number of Rounds',
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('Cancel'),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Flexible(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (duration.text.isNotEmpty &&
-                                  breakDuration.text.isNotEmpty &&
-                                  rounds.text.isNotEmpty) {
-                                pomoNotifier.setTimer(
-                                    int.parse(duration.text),
-                                    int.parse(breakDuration.text),
-                                    int.parse(rounds.text));
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: Text('Set Timer'),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                );
-              },
-            );
-          }, 'Edit', 26)
+          space50,
+          _text(context, "Focus duration : "),
+          space8,
+          _pomoField(context, duration),
+          space32,
+          _text(context, "Break duration : "),
+          space8,
+          _pomoField(context, breakDuration),
+          space32,
+          _text(context, "Number of rounds : "),
+          space8,
+          _pomoField(context, rounds),
+          // space50,
+          // fabButton(() {
+          //   if (duration.text.isNotEmpty &&
+          //       breakDuration.text.isNotEmpty &&
+          //       rounds.text.isNotEmpty) {
+          //     pomoNotifier.setTimer(int.parse(duration.text),
+          //         int.parse(breakDuration.text), int.parse(rounds.text));
+          //     pomoNotifier.startTimer();
+          //     Navigator.pushNamed(context, '/counter');
+          //   }
+          // }, 'Reset', 0),
+          // space16,
+          // fabButton(() {
+          //   if (duration.text.isNotEmpty &&
+          //       breakDuration.text.isNotEmpty &&
+          //       rounds.text.isNotEmpty) {
+          //     pomoNotifier.setTimer(int.parse(duration.text),
+          //         int.parse(breakDuration.text), int.parse(rounds.text));
+          //     pomoNotifier.startTimer();
+          //     Navigator.pushNamed(context, '/counter');
+          //   }
+          // }, 'Start Timer', 0),
+          space50,
+          Row(
+            spacing: 8,
+            children: [
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[400]),
+                    onPressed: () {},
+                    child: Text('Reset'),
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (duration.text.isNotEmpty &&
+                          breakDuration.text.isNotEmpty &&
+                          rounds.text.isNotEmpty) {
+                        pomoNotifier.setTimer(
+                            int.parse(duration.text),
+                            int.parse(breakDuration.text),
+                            int.parse(rounds.text));
+                        pomoNotifier.startTimer();
+                        Navigator.pushNamed(context, '/counter');
+                      }
+                    },
+                    child: Text('Start Timer'),
+                  ),
+                ),
+              ),
+            ],
+          )
         ],
       ),
-      floatingActionButton: fabButton(() {
-        // pomoNotifier.setTimer(int.parse(duration.text),
-        //     int.parse(breakDuration.text), int.parse(rounds.text));
-        pomoNotifier.startTimer();
-        Navigator.pushNamed(context, '/counter');
-      }, 'Start Timer', 26),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: fabButton(() {
+      //   if (duration.text.isNotEmpty &&
+      //       breakDuration.text.isNotEmpty &&
+      //       rounds.text.isNotEmpty) {
+      //     pomoNotifier.setTimer(int.parse(duration.text),
+      //         int.parse(breakDuration.text), int.parse(rounds.text));
+      //     pomoNotifier.startTimer();
+      //     Navigator.pushNamed(context, '/counter');
+      //   }
+      // }, 'Start Timer', 26),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  TextField _pomoField(BuildContext context, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            color: Colors.black,
+          ),
+      decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
+        contentPadding: EdgeInsets.all(26),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(26),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+
+  Text _text(context, label) {
+    return Text(
+      label,
+      style: Theme.of(context).textTheme.headlineMedium,
     );
   }
 }
@@ -138,8 +162,8 @@ class CountdownScreen extends ConsumerWidget {
           Text(
             pomo.isRunning
                 ? pomo.isBreak
-                    ? 'Break Session'
-                    : 'Focus Session'
+                    ? 'Break Session ${pomo.currentRound}'
+                    : 'Focus Session ${pomo.currentRound}'
                 : 'Session Ended',
             style: Theme.of(context).textTheme.headlineLarge,
           ),
