@@ -19,70 +19,72 @@ class _MoodPageState extends ConsumerState<MoodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body: ListView(
         padding: pagePadding,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-              child: Text(
-                "How are you\nfeeling today?",
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
+        children: [
+          Text(
+            "How are you\nfeeling today?",
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          const SizedBox(height: 80),
+          // Mood Icon
+          Center(
+            child: Lottie.asset(
+              moodList.keys.elementAt(_currentMoodIndex),
+              height: 200,
+              width: 200,
             ),
-            const SizedBox(height: 80),
-            // Mood Emoji Display
-            Center(
-              child: Lottie.asset(
-                moodList.keys.elementAt(_currentMoodIndex),
-                height: 200,
-                width: 200,
-              ),
+          ),
+          const SizedBox(height: 40),
+          // Mood Name Display
+          Center(
+            child: Text(
+              moodList.values.elementAt(_currentMoodIndex),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium
+                  ?.copyWith(color: Colors.white),
             ),
-            const SizedBox(height: 80),
-            // Mood Name Display
-            Center(
-              child: Text(
-                moodList.values.elementAt(_currentMoodIndex),
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(color: Colors.white),
-              ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text("${_currentMoodIndex + 1}/${moodList.length}",
+                  style: Theme.of(context).textTheme.bodySmall),
             ),
-            const SizedBox(height: 70),
-            SliderTheme(
-              data: SliderThemeData(
-                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                  trackHeight: 50,
-                  showValueIndicator: ShowValueIndicator.always,
-                  valueIndicatorColor: Colors.white,
-                  valueIndicatorTextStyle:
-                      Theme.of(context).textTheme.headlineSmall,
-                  activeTickMarkColor: Colors.black,
-                  inactiveTickMarkColor: Colors.white,
-                  activeTrackColor: Colors.white,
-                  inactiveTrackColor: Colors.black,
-                  thumbColor:
-                      _currentMoodIndex == 0 ? Colors.white : Colors.black),
-              child: Slider(
-                autofocus: true,
-                value: _currentMoodIndex.toDouble(),
-                min: 0,
-                max: moodList.length - 1.toDouble(),
-                divisions: moodList.length - 1,
-                label: (_currentMoodIndex + 1).toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _currentMoodIndex = value.toInt();
-                  });
-                },
-              ),
+          ),
+          const SizedBox(height: 80),
+          SliderTheme(
+            data: SliderThemeData(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                trackHeight: 50,
+                // showValueIndicator: ShowValueIndicator.always,
+                // valueIndicatorColor: Colors.black,
+                // valueIndicatorTextStyle:
+                //     Theme.of(context).textTheme.headlineSmall,
+                // valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+                activeTickMarkColor: Colors.black,
+                inactiveTickMarkColor: Colors.white,
+                activeTrackColor: Colors.white,
+                inactiveTrackColor: Colors.black,
+                thumbColor:
+                    _currentMoodIndex == 0 ? Colors.white : Colors.black),
+            child: Slider(
+              autofocus: true,
+              value: _currentMoodIndex.toDouble(),
+              min: 0,
+              max: moodList.length - 1.toDouble(),
+              divisions: moodList.length - 1,
+              //label: (_currentMoodIndex + 1).toString(),
+              onChanged: (double value) {
+                setState(() {
+                  _currentMoodIndex = value.toInt();
+                });
+              },
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 80),
+        ],
       ),
       floatingActionButton: fabButton(() async {
         await ref.read(

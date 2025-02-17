@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Light theme for the app
@@ -49,7 +50,63 @@ ThemeData get lightTheme {
       ));
 }
 
-var pagePadding = const EdgeInsets.fromLTRB(26, 120, 26, 26);
+var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
+
+var markdownStyleSheet = MarkdownStyleSheet(
+  h1: GoogleFonts.poppins(
+    // Heading 1
+    fontSize: 32.0,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  ),
+  h2: GoogleFonts.poppins(
+    // Heading 2
+    fontSize: 24.0,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  ),
+  h3: GoogleFonts.poppins(
+    // Heading 3
+    fontSize: 18.0,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  ),
+  p: GoogleFonts.poppins(
+    // Paragraph
+    fontSize: 14.0,
+    color: Colors.white,
+  ),
+  strong: const TextStyle(
+    // Bold text
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  ),
+  em: const TextStyle(
+    // Italic text
+    fontStyle: FontStyle.italic,
+    color: Colors.white,
+  ),
+  a: const TextStyle(
+    // Link
+    color: Colors.blue,
+    decoration: TextDecoration.underline,
+  ),
+  code: GoogleFonts.robotoMono(
+    // Code block
+    backgroundColor: Colors.grey[800],
+    color: Colors.white,
+  ),
+  blockquote: const TextStyle(
+    // Blockquote
+    color: Colors.grey,
+    fontStyle: FontStyle.italic,
+  ),
+  listBullet: const TextStyle(
+    // Unordered list
+    color: Colors.white,
+  ),
+  blockSpacing: 26.0, // Spacing between blocks
+);
 
 BoxDecoration gradientDeco() {
   return const BoxDecoration(

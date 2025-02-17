@@ -28,6 +28,8 @@ class AIService {
 
     final chain = LLMChain(llm: llm, prompt: prompt);
     final response = await chain.run(mood);
+
+    print(response);
     return response;
   }
 

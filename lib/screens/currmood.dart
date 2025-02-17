@@ -33,13 +33,13 @@ class CurrentMood extends ConsumerWidget {
       padding: pagePadding,
       children: [
         Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
-        const SizedBox(height: 24),
+        const SizedBox(height: 50),
         currMoodCard(context, mood),
-        const SizedBox(height: 24),
+        const SizedBox(height: 50),
         fabButton(() {
           Navigator.pushNamed(context, '/mood2');
         }, 'Update Mood', 0),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
         if (moodExists) motivationContainer(context, mood, ref),
       ],
     );
@@ -47,19 +47,19 @@ class CurrentMood extends ConsumerWidget {
 
   Widget currMoodCard(BuildContext context, String mood) {
     return Column(
+      spacing: 16,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 50),
         Center(
             child:
                 Lottie.asset(reversedMoodList[mood]!, height: 200, width: 200)),
-        const SizedBox(height: 50),
         Center(
           child: Text(
               mood == "Empty"
-                  ? "You haven't added a mood yet\nAdd one now?"
+                  ? "You haven't added\na mood yet.\nAdd one now?"
                   : mood,
-              style: Theme.of(context).textTheme.headlineMedium),
+              style: Theme.of(context).textTheme.headlineMedium,
+              textAlign: TextAlign.center),
         )
       ],
     );
@@ -94,8 +94,7 @@ class CurrentMood extends ConsumerWidget {
                   RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
                   '')
               .trim(),
-          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-              p: Theme.of(context).textTheme.bodySmall, blockSpacing: 26),
+          styleSheet: markdownStyleSheet,
         ),
         const SizedBox(height: 50),
       ],

@@ -94,10 +94,10 @@ class HomePage extends ConsumerWidget {
   Widget homeScreen(BuildContext context, String? user) {
     final now = DateTime.now().hour;
     final greeting = now < 12
-        ? 'Good Morning'
+        ? 'Morning'
         : now < 17
-            ? 'Good Afternoon'
-            : 'Good Evening';
+            ? 'Afternoon'
+            : 'Evening';
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       child: ListView(
@@ -114,7 +114,7 @@ class HomePage extends ConsumerWidget {
   }
 
   Text _showGreeting(BuildContext context, String greeting, user) {
-    return Text("$greeting, \n$user",
+    return Text("Good $greeting, \n$user",
         style: Theme.of(context).textTheme.headlineLarge);
   }
 

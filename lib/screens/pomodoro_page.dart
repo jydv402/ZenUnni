@@ -135,38 +135,33 @@ class CountdownScreen extends ConsumerWidget {
     return Scaffold(
       body: Padding(
         padding: pagePadding,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              _formatTime(pomo.timeRemaining), // Display time remaining
-              style: const TextStyle(fontSize: 48),
-            ),
-            const SizedBox(height: 20),
-            if (pomo.isRunning)
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(pomoProvider.notifier).stopTimer();
-                  Navigator.pop(context);
-                },
-                child: const Text('Stop'),
-              )
-            else
-              ElevatedButton(
-                onPressed: () {
-                  ref.read(pomoProvider.notifier).startTimer();
-                },
-                child: const Text('Start'),
-              ),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _showTime(context, pomo.timeRemaining ~/ 60), //Pass minutes
+              _showTime(context, pomo.timeRemaining % 60), //Pass seconds
+              const SizedBox(height: 100),
+            ],
+          ),
         ),
       ),
+      floatingActionButton: fabButton(() {
+        ref.read(pomoProvider.notifier).stopTimer();
+        Navigator.pop(context);
+      }, 'Stop Timer', 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  String _formatTime(int seconds) {
-    int minutes = seconds ~/ 60;
-    int remainingSeconds = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  Text _showTime(BuildContext context, int seconds) {
+    return Text(
+      seconds.toString().padLeft(2, '0'), // Display time remaining
+      style: Theme.of(context)
+          .textTheme
+          .headlineLarge
+          ?.copyWith(fontSize: MediaQuery.of(context).size.width * 0.5),
+      textAlign: TextAlign.center,
+    );
   }
 }

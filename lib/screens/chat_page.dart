@@ -42,39 +42,31 @@ class ChatPage extends ConsumerWidget {
                   alignment:
                       msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.75,
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.75,
+                    ),
+                    decoration: BoxDecoration(
+                      color: msg.isUser
+                          ? Color.fromARGB(40, 0, 17, 255)
+                          : Color.fromARGB(40, 255, 0, 200),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(28),
+                        bottomRight: Radius.circular(28),
+                        topLeft: msg.isUser
+                            ? Radius.circular(28)
+                            : Radius.circular(2),
+                        topRight: msg.isUser
+                            ? Radius.circular(2)
+                            : Radius.circular(28),
                       ),
-                      decoration: BoxDecoration(
-                        color: msg.isUser
-                            ? Color.fromARGB(40, 0, 17, 255)
-                            : Color.fromARGB(40, 255, 0, 200),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(28),
-                          bottomRight: Radius.circular(28),
-                          topLeft: msg.isUser
-                              ? Radius.circular(28)
-                              : Radius.circular(2),
-                          topRight: msg.isUser
-                              ? Radius.circular(2)
-                              : Radius.circular(28),
-                        ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                      child: MarkdownBody(
-                        data: msg.text,
-                        styleSheet:
-                            MarkdownStyleSheet.fromTheme(Theme.of(context))
-                                .copyWith(
-                          p: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      )
-                      // Text(
-                      //   msg.text,
-                      //   style: Theme.of(context).textTheme.bodySmall,
-                      // ),
-                      ),
+                    ),
+                    padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+                    margin: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                    child: MarkdownBody(
+                      data: msg.text,
+                      styleSheet: markdownStyleSheet,
+                    ),
+                  ),
                 );
               },
             ),
@@ -96,7 +88,9 @@ class ChatPage extends ConsumerWidget {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-              color: Colors.grey.withAlpha(80), spreadRadius: 2, blurRadius: 5)
+              color: Colors.grey.withValues(alpha: 0.25),
+              spreadRadius: 5,
+              blurRadius: 7)
         ],
       ),
       child: Row(
