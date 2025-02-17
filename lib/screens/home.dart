@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:zen/services/user_serv.dart';
 
 class LandPage extends ConsumerWidget {
@@ -109,16 +110,20 @@ class LandPage extends ConsumerWidget {
       spacing: 10,
       children: [
         Flexible(
-            flex: 1,
-            fit: FlexFit.tight,
-            child: _bentoBox(
-              context,
-              '/chat',
-              Color(0xFF7F5EDF),
-              bentoHeight * 2 + 8,
-              bentoWidth,
-              "Talk to\nUnni",
-            )),
+          flex: 1,
+          fit: FlexFit.tight,
+          child: _bentoBox(
+            context,
+            '/chat',
+            Color(0xFF7F5EDF),
+            bentoHeight * 2 + 8,
+            bentoWidth,
+            "Talk to\nUnni",
+            LineIcons.sms,
+            180,
+            40,
+          ),
+        ),
         Flexible(
             flex: 1,
             fit: FlexFit.tight,
@@ -132,6 +137,9 @@ class LandPage extends ConsumerWidget {
                   bentoHeight,
                   bentoWidth,
                   "Mood",
+                  LineIcons.beamingFaceWithSmilingEyes,
+                  135,
+                  35,
                 ),
                 _bentoBox(
                   context,
@@ -140,6 +148,9 @@ class LandPage extends ConsumerWidget {
                   bentoHeight,
                   bentoWidth,
                   "Todo",
+                  LineIcons.checkCircle,
+                  135,
+                  35,
                 ),
               ],
             )),
@@ -147,8 +158,16 @@ class LandPage extends ConsumerWidget {
     );
   }
 
-  GestureDetector _bentoBox(BuildContext context, String route, Color color,
-      double height, double width, String label) {
+  GestureDetector _bentoBox(
+      BuildContext context,
+      String route,
+      Color color,
+      double height,
+      double width,
+      String label,
+      IconData icon,
+      double iconSize,
+      double iconPos) {
     const double pos = 16;
     return GestureDetector(
       onTap: () {
@@ -181,11 +200,12 @@ class LandPage extends ConsumerWidget {
               ),
             ),
             Positioned(
-                top: pos,
-                left: pos,
+                top: -iconPos,
+                left: -iconPos,
                 child: Icon(
-                  Icons.chat_bubble_outline,
-                  color: Colors.black,
+                  icon,
+                  color: Colors.black26,
+                  size: iconSize,
                 )),
             Positioned(
                 top: pos,
@@ -193,6 +213,7 @@ class LandPage extends ConsumerWidget {
                 child: Icon(
                   Icons.arrow_outward_rounded,
                   color: Colors.black,
+                  size: 32,
                 ))
           ],
         ),
