@@ -84,6 +84,18 @@ class PomodoroNotifier extends StateNotifier<PomodoroState> {
     ); //set to timer not running
   }
 
+  void resetTimer() {
+    _timer?.cancel();
+    state = state.copyWith(
+        duration: 25,
+        breakDuration: 5,
+        rounds: 4,
+        currentRound: 1,
+        isRunning: false,
+        timeRemaining: 25 * 60,
+        isBreak: false); //set to timer not running
+  }
+
   void _switchSession() {
     // Check if it was a break
     if (state.isBreak) {

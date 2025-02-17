@@ -77,7 +77,9 @@ class PomodoroPage extends ConsumerWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red[400]),
-                    onPressed: () {},
+                    onPressed: () {
+                      pomoNotifier.resetTimer();
+                    },
                     child: Text('Reset'),
                   ),
                 ),
