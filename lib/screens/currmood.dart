@@ -3,6 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/components/fab_button.dart';
+import 'package:zen/services/chat_serv.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
 import 'package:zen/consts/moodlist.dart';
@@ -69,7 +70,7 @@ class CurrentMood extends ConsumerWidget {
     final motivation = ref.watch(motivationalMessageProvider(mood));
 
     return motivation.when(
-      data: (motivationData) => motivationCard(context, motivationData),
+      data: (motivationData) => motivationCard(context, motivationData, ref),
       error: (error, stackTrace) => Center(
           child: Text(
               'Error: $error')), //TODO - Build an AI not available at the moment error card
@@ -81,7 +82,12 @@ class CurrentMood extends ConsumerWidget {
     );
   }
 
-  Widget motivationCard(BuildContext context, String motivation) {
+  Widget motivationCard(
+      BuildContext context, String motivation, WidgetRef ref) {
+    final message = motivation
+        .replaceAll(
+            RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'), '')
+        .trim();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -89,13 +95,17 @@ class CurrentMood extends ConsumerWidget {
         Text("From Unni...", style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: 24),
         MarkdownBody(
-          data: motivation
-              .replaceAll(
-                  RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
-                  '')
-              .trim(),
+          data: message,
           styleSheet: markdownStyleSheet,
         ),
+        const SizedBox(height: 30),
+        fabButton(() {
+          ref.read(msgProvider.notifier).clearMessages();
+          ref
+              .read(msgProvider.notifier)
+              .addMessage(Message(text: message, isUser: false));
+          Navigator.pushNamed(context, '/chat');
+        }, 'Continue to chat with Unni', 0),
         const SizedBox(height: 50),
       ],
     );
