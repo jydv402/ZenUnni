@@ -108,7 +108,7 @@ var markdownStyleSheet = MarkdownStyleSheet(
     // Unordered list
     color: Colors.white,
   ),
-  blockSpacing: 26.0, // Spacing between blocks
+  blockSpacing: 24.0, // Spacing between blocks
 );
 
 BoxDecoration gradientDeco() {

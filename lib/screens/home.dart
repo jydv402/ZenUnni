@@ -22,14 +22,6 @@ class LandPage extends ConsumerWidget {
     final mood = ref.watch(moodProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          // Logout button in the app bar
-          IconButton(
-              onPressed: () => logoutUser(context),
-              icon: const Icon(Icons.logout_outlined))
-        ],
-      ),
       body: user.when(
         data: (data) {
           return homeScreen(context, user.value, mood.value);
@@ -41,13 +33,10 @@ class LandPage extends ConsumerWidget {
           return const Center(child: CircularProgressIndicator());
         },
       ),
-      // floatingActionButton: Stack(
-      //   children: [
-      //     //Pomodoro Button
-      //     pageButtons(
-      //         context, 'pomo', '/pomo', Icon(Icons.timer_rounded), 10, 10),
-      //   ],
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => logoutUser(context),
+        child: Icon(LineIcons.userMinus),
+      ),
     );
   }
 
