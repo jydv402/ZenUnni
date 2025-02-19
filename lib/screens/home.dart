@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/services/user_serv.dart';
-import 'package:zen/theme/light.dart';
 
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});
@@ -42,24 +41,13 @@ class LandPage extends ConsumerWidget {
           return const Center(child: CircularProgressIndicator());
         },
       ),
-      floatingActionButton: Stack(
-        children: [
-          // Floating Action Button for MoodPage
-          pageButtons(context, 'mood', '/mood1',
-              Icon(Icons.emoji_emotions_rounded), 10, 10),
-          // Floating Action Button for TodoPage
-          pageButtons(
-              context, 'todo', '/todo', Icon(Icons.edit_rounded), 10, 90),
-          //FAB for chat page
-          pageButtons(context, 'chat', '/chat',
-              Icon(Icons.content_paste_go_rounded), 90, 90),
-          //Pomodoro Button
-          pageButtons(
-              context, 'pomo', '/pomo', Icon(Icons.timer_rounded), 90, 10),
-          pageButtons(
-              context, 'home', '/home1', Icon(Icons.home_rounded), 10, 170),
-        ],
-      ),
+      // floatingActionButton: Stack(
+      //   children: [
+      //     //Pomodoro Button
+      //     pageButtons(
+      //         context, 'pomo', '/pomo', Icon(Icons.timer_rounded), 10, 10),
+      //   ],
+      // ),
     );
   }
 
@@ -88,21 +76,6 @@ class LandPage extends ConsumerWidget {
     );
   }
 
-  Widget pageButtons(BuildContext context, String heroTag, String route,
-      Icon icon, double bottom, double right) {
-    return Positioned(
-      bottom: bottom,
-      right: right,
-      child: FloatingActionButton(
-        heroTag: heroTag,
-        onPressed: () {
-          Navigator.pushNamed(context, route);
-        },
-        child: icon,
-      ),
-    );
-  }
-
   Text _showGreeting(BuildContext context, String greeting, user) {
     return Text("Good $greeting, \n$user",
         style: Theme.of(context).textTheme.headlineLarge);
@@ -118,8 +91,17 @@ class LandPage extends ConsumerWidget {
   }
 
   Column _bentoBoxes(BuildContext context) {
-    final double bentoHeight = 150;
+    //Centralized variables for easy fiddling
+    //defines height of the box
+    const double bentoHeight = 150;
+    //defines width of the box. Defaults to max occupyable space
     final double bentoWidth = MediaQuery.of(context).size.width;
+
+    //Size of the Icon within the _bento
+    const double iconSize = 135;
+    //Position of the Icon within the _bento
+    const double iconPos = 35;
+
     return Column(
       spacing: 8,
       children: [
@@ -137,8 +119,8 @@ class LandPage extends ConsumerWidget {
                 bentoWidth,
                 "Talk to\nUnni",
                 LineIcons.sms,
-                180,
-                40,
+                iconSize + 45,
+                iconPos + 5,
               ),
             ),
             Flexible(
@@ -155,8 +137,8 @@ class LandPage extends ConsumerWidget {
                     bentoWidth,
                     "Mood",
                     LineIcons.beamingFaceWithSmilingEyes,
-                    135,
-                    35,
+                    iconSize,
+                    iconPos,
                   ),
                   _bentoBox(
                     context,
@@ -166,16 +148,47 @@ class LandPage extends ConsumerWidget {
                     bentoWidth,
                     "Todo",
                     LineIcons.checkCircle,
-                    135,
-                    35,
+                    iconSize,
+                    iconPos,
                   ),
                 ],
               ),
             ),
           ],
         ),
-        _bentoBox(context, '/schedule', Colors.red, bentoHeight, bentoWidth,
-            "Schedule", LineIcons.calendar, 145, 35)
+        Row(
+          spacing: 8,
+          children: [
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: _bentoBox(
+                  context,
+                  '/pomo',
+                  Colors.teal,
+                  bentoHeight,
+                  bentoWidth,
+                  "Pomodoro",
+                  LineIcons.clock,
+                  iconSize + 10,
+                  iconPos),
+            ),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: _bentoBox(
+                  context,
+                  '/schedule',
+                  Colors.red,
+                  bentoHeight,
+                  bentoWidth,
+                  "Schedule",
+                  LineIcons.calendar,
+                  iconSize + 10,
+                  iconPos),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -243,4 +256,19 @@ class LandPage extends ConsumerWidget {
       ),
     );
   }
+}
+
+Widget pageButtons(BuildContext context, String heroTag, String route,
+    Icon icon, double bottom, double right) {
+  return Positioned(
+    bottom: bottom,
+    right: right,
+    child: FloatingActionButton(
+      heroTag: heroTag,
+      onPressed: () {
+        Navigator.pushNamed(context, route);
+      },
+      child: icon,
+    ),
+  );
 }
