@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:zen/services/mood_serv.dart';
 import 'package:zen/services/user_serv.dart';
+import 'package:zen/theme/light.dart';
 
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});
@@ -17,8 +19,8 @@ class LandPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user =
-        ref.watch(userNameProvider); //USE: ${user.value} to obtain the value
+    final user = ref.watch(userNameProvider);
+    final mood = ref.watch(moodProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,7 +33,7 @@ class LandPage extends ConsumerWidget {
       ),
       body: user.when(
         data: (data) {
-          return homeScreen(context, user.value);
+          return homeScreen(context, user.value, mood.value);
         },
         error: (error, stackTrace) {
           return Center(child: Text('Error: $error'));
@@ -61,7 +63,7 @@ class LandPage extends ConsumerWidget {
     );
   }
 
-  Widget homeScreen(BuildContext context, String? user) {
+  Widget homeScreen(BuildContext context, String? user, mood) {
     final now = DateTime.now().hour;
     final greeting = now < 12
         ? 'Morning'
@@ -76,7 +78,10 @@ class LandPage extends ConsumerWidget {
             padding: const EdgeInsets.all(10),
             child: _showGreeting(context, greeting, user),
           ),
-          const SizedBox(height: 16),
+          if (mood == null)
+            _msgContainer(
+                context, "You havent added a mood yet, add it now? 👀"),
+          const SizedBox(height: 8),
           _bentoBoxes(context),
         ],
       ),
@@ -103,57 +108,74 @@ class LandPage extends ConsumerWidget {
         style: Theme.of(context).textTheme.headlineLarge);
   }
 
-  Row _bentoBoxes(BuildContext context) {
+  Container _msgContainer(BuildContext context, String msg) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(26), color: Colors.white30),
+      child: Text(msg, style: Theme.of(context).textTheme.bodySmall),
+    );
+  }
+
+  Column _bentoBoxes(BuildContext context) {
     final double bentoHeight = 150;
     final double bentoWidth = MediaQuery.of(context).size.width;
-    return Row(
-      spacing: 10,
+    return Column(
+      spacing: 8,
       children: [
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: _bentoBox(
-            context,
-            '/chat',
-            Color(0xFF7F5EDF),
-            bentoHeight * 2 + 8,
-            bentoWidth,
-            "Talk to\nUnni",
-            LineIcons.sms,
-            180,
-            40,
-          ),
+        Row(
+          spacing: 8,
+          children: [
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: _bentoBox(
+                context,
+                '/chat',
+                Color(0xFF7F5EDF),
+                bentoHeight * 2 + 8,
+                bentoWidth,
+                "Talk to\nUnni",
+                LineIcons.sms,
+                180,
+                40,
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Column(
+                spacing: 8,
+                children: [
+                  _bentoBox(
+                    context,
+                    '/mood1',
+                    Color(0xFF339DF0),
+                    bentoHeight,
+                    bentoWidth,
+                    "Mood",
+                    LineIcons.beamingFaceWithSmilingEyes,
+                    135,
+                    35,
+                  ),
+                  _bentoBox(
+                    context,
+                    '/todo',
+                    Color(0xFF2BBC87),
+                    bentoHeight,
+                    bentoWidth,
+                    "Todo",
+                    LineIcons.checkCircle,
+                    135,
+                    35,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        Flexible(
-            flex: 1,
-            fit: FlexFit.tight,
-            child: Column(
-              spacing: 10,
-              children: [
-                _bentoBox(
-                  context,
-                  '/mood1',
-                  Color(0xFF339DF0),
-                  bentoHeight,
-                  bentoWidth,
-                  "Mood",
-                  LineIcons.beamingFaceWithSmilingEyes,
-                  135,
-                  35,
-                ),
-                _bentoBox(
-                  context,
-                  '/todo',
-                  Color(0xFF2BBC87),
-                  bentoHeight,
-                  bentoWidth,
-                  "Todo",
-                  LineIcons.checkCircle,
-                  135,
-                  35,
-                ),
-              ],
-            )),
+        _bentoBox(context, '/schedule', Colors.red, bentoHeight, bentoWidth,
+            "Schedule", LineIcons.calendar, 145, 35)
       ],
     );
   }
@@ -174,6 +196,7 @@ class LandPage extends ConsumerWidget {
         Navigator.pushNamed(context, route);
       },
       child: Container(
+        clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(26),
             color: color,

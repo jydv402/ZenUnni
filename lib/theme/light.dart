@@ -23,7 +23,10 @@ ThemeData get lightTheme {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(36))),
       textTheme: TextTheme(
         headlineLarge: GoogleFonts.poppins(
-            fontSize: 38, fontWeight: FontWeight.w600, color: Colors.white),
+          fontSize: 44,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
         headlineMedium: GoogleFonts.poppins(
             fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
         headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/services/pomodoro_serve.dart';
 import 'package:zen/theme/light.dart';
@@ -164,8 +165,8 @@ class CountdownScreen extends ConsumerWidget {
           Text(
             pomo.isRunning
                 ? pomo.isBreak
-                    ? 'Break Session ${pomo.currentRound}'
-                    : 'Focus Session ${pomo.currentRound}'
+                    ? 'Break Session ${pomo.rounds - pomo.currentRound + 1}'
+                    : 'Focus Session ${pomo.rounds - pomo.currentRound + 1}'
                 : 'Session Ended',
             style: Theme.of(context).textTheme.headlineLarge,
           ),
@@ -186,10 +187,10 @@ class CountdownScreen extends ConsumerWidget {
   Text _showTime(BuildContext context, int seconds) {
     return Text(
       seconds.toString().padLeft(2, '0'), // Display time remaining
-      style: Theme.of(context)
-          .textTheme
-          .headlineLarge
-          ?.copyWith(fontSize: MediaQuery.of(context).size.width * 0.5),
+      style: GoogleFonts.bebasNeue(
+          fontSize: MediaQuery.of(context).size.width * 0.75,
+          color: Colors.white,
+          height: 0.9),
       textAlign: TextAlign.center,
     );
   }
