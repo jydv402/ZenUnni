@@ -29,7 +29,7 @@ class _HabitState extends ConsumerState<Habit> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: heatmaplistview(habits), // Pass habits to the method
+                child: heatmaplistview(habits), 
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -47,8 +47,11 @@ class _HabitState extends ConsumerState<Habit> {
   Widget addnewbutton() {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.black,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15))), //Todo: fil in later
+                borderRadius: BorderRadius.circular(15))), 
+                
         onPressed: () {
           showDialog(
               context: context,
@@ -135,54 +138,58 @@ class _HabitState extends ConsumerState<Habit> {
                   border: Border.all(width: 1, color: Colors.black12)),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(habit.habitName),
-                      IconButton(
-                        onPressed: () async {
-                          final today = DateTime.now();
-                          final dateOnly =
-                              DateTime(today.year, today.month, today.day);
-
-                          final updatedCompletedDates =
-                              Map<DateTime, bool>.from(habit.completedDates);
-
-                          if (updatedCompletedDates.containsKey(dateOnly) &&
-                              updatedCompletedDates[dateOnly] == true) {
-                            updatedCompletedDates[dateOnly] = false;
-                          } else {
-                            updatedCompletedDates[dateOnly] = true;
-                          }
-
-                          final updatedHabit = habit.copyWith(
-                              completedDates: updatedCompletedDates);
-
-                          try {
-                            await ref
-                                .read(habitUpdateProvider(updatedHabit).future);
-                          } catch (e) {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text('Failed to update habit: $e')));
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(habit.habitName,
+                        style: TextStyle(fontSize: 20,color: Colors.white),),
+                        IconButton(
+                          onPressed: () async {
+                            final today = DateTime.now();
+                            final dateOnly =
+                                DateTime(today.year, today.month, today.day);
+                    
+                            final updatedCompletedDates =
+                                Map<DateTime, bool>.from(habit.completedDates);
+                    
+                            if (updatedCompletedDates.containsKey(dateOnly) &&
+                                updatedCompletedDates[dateOnly] == true) {
+                              updatedCompletedDates[dateOnly] = false;
+                            } else {
+                              updatedCompletedDates[dateOnly] = true;
                             }
-                          }
-                        },
-                        icon: Icon(habit.completedDates.containsKey(DateTime(
-                                    DateTime.now().year,
-                                    DateTime.now().month,
-                                    DateTime.now().day)) &&
-                                habit.completedDates[DateTime(
-                                    DateTime.now().year,
-                                    DateTime.now().month,
-                                    DateTime.now().day)]!
-                            ? Icons.check_circle
-                            : Icons.check),
-                        color: Colors.white,
-                      )
-                    ],
+                    
+                            final updatedHabit = habit.copyWith(
+                                completedDates: updatedCompletedDates);
+                    
+                            try {
+                              await ref
+                                  .read(habitUpdateProvider(updatedHabit).future);
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content:
+                                            Text('Failed to update habit: $e')));
+                              }
+                            }
+                          },
+                          icon: Icon(habit.completedDates.containsKey(DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day)) &&
+                                  habit.completedDates[DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day)]!
+                              ? Icons.check_circle
+                              : Icons.check),
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -214,7 +221,7 @@ class _HabitState extends ConsumerState<Habit> {
       return HeatMap(
         datasets: datasets,
         endDate: DateTime.now(),
-        startDate: DateTime.now().subtract(const Duration(days: 200)),
+        startDate: DateTime.now().subtract(const Duration(days: 128)),
         colorMode: ColorMode.color,
         size: 14,
         showColorTip: false,
@@ -223,7 +230,7 @@ class _HabitState extends ConsumerState<Habit> {
         textColor: Colors.white,
         defaultColor: const Color.fromARGB(255, 75, 75, 75),
         colorsets: {
-          1: habitColor.withOpacity(1.0),
+          1: habitColor.withAlpha(255),
         },
       );
     } catch (e) {
