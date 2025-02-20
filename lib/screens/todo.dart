@@ -290,7 +290,7 @@ class _TodoState extends ConsumerState<Todo> {
             Expanded(
               child: Consumer(
                 builder: (context, ref, child) {
-                  final tasksAsync = ref.watch(taskProvider);
+                  final tasksAsync = ref.watch(taskProvider);//Todo: change variable name for consistency
                   
                   return tasksAsync.when(
                     data: (tasks) {
