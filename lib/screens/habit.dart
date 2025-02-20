@@ -22,14 +22,14 @@ class _HabitState extends ConsumerState<Habit> {
     final habitsAsyncValue = ref.watch(habitProvider);
 
     return Scaffold(
-      backgroundColor: Colors.black12,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: habitsAsyncValue.when(
           data: (habits) => Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: heatmaplistview(habits), 
+                child: heatmaplistview(habits),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -47,11 +47,10 @@ class _HabitState extends ConsumerState<Habit> {
   Widget addnewbutton() {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.blue.shade200,
             foregroundColor: Colors.black,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15))), 
-                
+                borderRadius: BorderRadius.circular(15))),
         onPressed: () {
           showDialog(
               context: context,
@@ -62,64 +61,81 @@ class _HabitState extends ConsumerState<Habit> {
 
   Widget newHabitDialog(BuildContext context) {
     List<Color> colorOptions = [
-      Colors.green,
-      Colors.pinkAccent,
-      Colors.blue,
-      Colors.yellow,
-      Colors.deepPurple,
-      Colors.orange,
+      Colors.pink.shade100,
+      Colors.blue.shade100,
+      Colors.yellow.shade100,
+      Colors.purple.shade200,
+      Colors.green.shade200,
+      Colors.orange.shade100
     ];
 
     // Color selectedColor = Colors.green;
 
     return SimpleDialog(
+      backgroundColor: Colors.grey.shade900,
       children: [
         Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                    controller: habitNameController,
-                    decoration: InputDecoration(
-                        hintText: 'Enter habit name',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)))),
-                SizedBox(height: 30),
-                Text('Choose a color'),
-                SizedBox(
-                  height:
-                      150, //sizebox to get rid of the preset padding of block picker
-                  // Todo:update this
-                  child: BlockPicker(
-                      pickerColor: selectedColor,
-                      availableColors: colorOptions,
-                      onColorChanged: (Color color) {
-                        selectedColor = color;
-                      }),
-                ),
-                SizedBox(height: 8),
-                ElevatedButton(
-                    onPressed: () async {
-                      if (habitNameController.text.isNotEmpty) {
-                        final newHabit = HabitModel(
-                          habitName: habitNameController.text,
-                          color: selectedColor.value.toRadixString(16),
-                          createdAt: DateTime.now(),
-                          completedDates: {},
-                        );
-
-                        await ref.read(habitAddProvider(newHabit).future);
-                        habitNameController.clear();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15))),
-                    child: Text('ADD'))
-              ],
-            ))
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                  controller: habitNameController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter habit name',
+                      hintStyle: TextStyle(color: Colors.white54),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(20)),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(20)))),
+              SizedBox(height: 30),
+              Text(
+                'Choose a color',
+                style: TextStyle(color: Colors.white, fontSize: 17),
+              ),
+              SizedBox(height: 10),
+              SizedBox(
+                height:
+                    160, //sizebox to get rid of the preset padding of block picker
+                // Todo:update this
+                child: BlockPicker(
+                    pickerColor: selectedColor,
+                    availableColors: colorOptions,
+                    onColorChanged: (Color color) {
+                      selectedColor = color;
+                    }),
+              ),
+              SizedBox(height: 8),
+              ElevatedButton(
+                  onPressed: () async {
+                    if (habitNameController.text.isNotEmpty) {
+                      final newHabit = HabitModel(
+                        habitName: habitNameController.text,
+                        color: selectedColor.value
+                            .toRadixString(16)
+                            .padLeft(8, '0'),
+                        createdAt: DateTime.now(),
+                        completedDates: {},
+                      );
+                      await ref.read(habitAddProvider(newHabit).future);
+                      habitNameController.clear();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Enter habit name')));
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      backgroundColor: Colors.blue.shade100,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15))),
+                  child: Text('ADD'))
+            ],
+          ),
+        )
       ],
     );
   }
@@ -129,67 +145,70 @@ class _HabitState extends ConsumerState<Habit> {
       itemCount: habits.length,
       itemBuilder: (BuildContext context, int index) {
         final habit = habits[index];
+        Color habitColor = getColorFromHex(habit.color);
         return Padding(
           padding: const EdgeInsets.all(6.0),
           child: Container(
               decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 49, 49, 49),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey.shade900,
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(width: 1, color: Colors.black12)),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(habit.habitName,
-                        style: TextStyle(fontSize: 20,color: Colors.white),),
-                        IconButton(
-                          onPressed: () async {
-                            final today = DateTime.now();
-                            final dateOnly =
-                                DateTime(today.year, today.month, today.day);
-                    
-                            final updatedCompletedDates =
-                                Map<DateTime, bool>.from(habit.completedDates);
-                    
-                            if (updatedCompletedDates.containsKey(dateOnly) &&
-                                updatedCompletedDates[dateOnly] == true) {
-                              updatedCompletedDates[dateOnly] = false;
-                            } else {
-                              updatedCompletedDates[dateOnly] = true;
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 5),
+                        child: Text(
+                          habit.habitName,
+                          style: TextStyle(fontSize: 22, color: habitColor),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          final today = DateTime.now();
+                          final dateOnly =
+                              DateTime(today.year, today.month, today.day);
+
+                          final updatedCompletedDates =
+                              Map<DateTime, bool>.from(habit.completedDates);
+
+                          if (updatedCompletedDates.containsKey(dateOnly) &&
+                              updatedCompletedDates[dateOnly] == true) {
+                            updatedCompletedDates[dateOnly] = false;
+                          } else {
+                            updatedCompletedDates[dateOnly] = true;
+                          }
+
+                          final updatedHabit = habit.copyWith(
+                              completedDates: updatedCompletedDates);
+
+                          try {
+                            await ref
+                                .read(habitUpdateProvider(updatedHabit).future);
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text('Failed to update habit: $e')));
                             }
-                    
-                            final updatedHabit = habit.copyWith(
-                                completedDates: updatedCompletedDates);
-                    
-                            try {
-                              await ref
-                                  .read(habitUpdateProvider(updatedHabit).future);
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text('Failed to update habit: $e')));
-                              }
-                            }
-                          },
-                          icon: Icon(habit.completedDates.containsKey(DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day)) &&
-                                  habit.completedDates[DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day)]!
-                              ? Icons.check_circle
-                              : Icons.check),
-                          color: Colors.white,
-                        )
-                      ],
-                    ),
+                          }
+                        },
+                        icon: Icon(habit.completedDates.containsKey(DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day)) &&
+                                habit.completedDates[DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day)]!
+                            ? Icons.check
+                            : Icons.check_box_outline_blank_rounded),
+                        color: habitColor,
+                      )
+                    ],
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -221,20 +240,22 @@ class _HabitState extends ConsumerState<Habit> {
       return HeatMap(
         datasets: datasets,
         endDate: DateTime.now(),
-        startDate: DateTime.now().subtract(const Duration(days: 128)),
+        startDate: DateTime.now().subtract(const Duration(days: 135)),
         colorMode: ColorMode.color,
-        size: 14,
+        size: 13,
         showColorTip: false,
         showText: false,
         scrollable: true,
         textColor: Colors.white,
-        defaultColor: const Color.fromARGB(255, 75, 75, 75),
-        colorsets: {
-          1: habitColor.withAlpha(255),
+        // defaultColor: habitColor.withAlpha(10),
+        defaultColor: Colors.grey.shade800,
+        colorsets: {1: habitColor},
+        onClick: (value) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(value.toString())));
         },
       );
     } catch (e) {
-      print("Error rendering HeatMap: $e");
       return const SizedBox();
     }
   }
