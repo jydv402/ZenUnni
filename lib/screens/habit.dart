@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/components/fab_button.dart';
 import 'package:zen/models/habit_model.dart';
 import 'package:zen/services/habit_serv.dart';
 import 'package:zen/utils/color_utils.dart';
@@ -23,41 +24,45 @@ class _HabitState extends ConsumerState<Habit> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: habitsAsyncValue.when(
-          data: (habits) => Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: heatmaplistview(habits),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: addnewbutton(),
-              ),
-            ],
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Error: $error')),
+      body: habitsAsyncValue.when(
+        data: (habits) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: heatmaplistview(habits),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(16.0),
+            //   child: addnewbutton(),
+            // ),
+          ],
         ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
+      floatingActionButton: fabButton(context, () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => newHabitDialog(context));
+      }, 'Track new Habit', 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget addnewbutton() {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue.shade200,
-            foregroundColor: Colors.black,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15))),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) => newHabitDialog(context));
-        },
-        child: Text('track new habits'));
-  }
+  // Widget addnewbutton() {
+  //   return ElevatedButton(
+  //       style: ElevatedButton.styleFrom(
+  //           backgroundColor: Colors.blue.shade200,
+  //           foregroundColor: Colors.black,
+  //           shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(15))),
+  //       onPressed: () {
+  //         showDialog(
+  //             context: context,
+  //             builder: (BuildContext context) => newHabitDialog(context));
+  //       },
+  //       child: Text('track new habits'));
+  // }
 
   Widget newHabitDialog(BuildContext context) {
     List<Color> colorOptions = [

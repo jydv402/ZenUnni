@@ -30,11 +30,12 @@ ThemeData get lightTheme {
         headlineMedium: GoogleFonts.poppins(
             fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
         headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
-        bodySmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.white),
+        labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
+        bodySmall: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.blue.shade200,
           foregroundColor: Colors.white,
           shadowColor: Colors.blue,
           padding: EdgeInsets.all(26),
@@ -76,7 +77,7 @@ var markdownStyleSheet = MarkdownStyleSheet(
   ),
   p: GoogleFonts.poppins(
     // Paragraph
-    fontSize: 14.0,
+    fontSize: 16.0,
     color: Colors.white,
   ),
   strong: const TextStyle(

@@ -9,7 +9,7 @@ Padding fabButton(context, onPressed, String label, double pad) {
         onPressed: onPressed,
         child: Text(
           label,
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context).textTheme.labelMedium,
         ),
       ),
     ),
