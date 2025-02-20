@@ -3,7 +3,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/models/habit_model.dart';
-import 'package:zen/services/habit_serv.dart'; 
+import 'package:zen/services/habit_serv.dart';
+import 'package:zen/utils/color_utils.dart';
 
 class Habit extends ConsumerStatefulWidget {
   const Habit({super.key});
@@ -15,12 +16,11 @@ class Habit extends ConsumerStatefulWidget {
 class _HabitState extends ConsumerState<Habit> {
   final TextEditingController habitNameController = TextEditingController();
   Color selectedColor = Colors.green;
-  
+
   @override
   Widget build(BuildContext context) {
-  
     final habitsAsyncValue = ref.watch(habitProvider);
-    
+
     return Scaffold(
       backgroundColor: Colors.black12,
       body: SafeArea(
@@ -29,7 +29,7 @@ class _HabitState extends ConsumerState<Habit> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: heatmaplistview(habits),  // Pass habits to the method
+                child: heatmaplistview(habits), // Pass habits to the method
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -87,8 +87,8 @@ class _HabitState extends ConsumerState<Habit> {
                 Text('Choose a color'),
                 SizedBox(
                   height:
-                      150, //sizebox to get rid of the preset padding of block picker 
-                      // Todo:update this
+                      150, //sizebox to get rid of the preset padding of block picker
+                  // Todo:update this
                   child: BlockPicker(
                       pickerColor: selectedColor,
                       availableColors: colorOptions,
@@ -98,18 +98,18 @@ class _HabitState extends ConsumerState<Habit> {
                 ),
                 SizedBox(height: 8),
                 ElevatedButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       if (habitNameController.text.isNotEmpty) {
-                final newHabit = HabitModel(
-                  habitName: habitNameController.text,
-                  color: selectedColor.value.toRadixString(16),
-                  createdAt: DateTime.now(),
-                  completedDates: {},
-                );
-                
-                await ref.read(habitAddProvider(newHabit).future);
-                habitNameController.clear();
-              }
+                        final newHabit = HabitModel(
+                          habitName: habitNameController.text,
+                          color: selectedColor.value.toRadixString(16),
+                          createdAt: DateTime.now(),
+                          completedDates: {},
+                        );
+
+                        await ref.read(habitAddProvider(newHabit).future);
+                        habitNameController.clear();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -142,43 +142,44 @@ class _HabitState extends ConsumerState<Habit> {
                       IconButton(
                         onPressed: () async {
                           final today = DateTime.now();
-                          final dateOnly = DateTime(today.year, today.month, today.day);
-                          
-                          
-                          final updatedCompletedDates = Map<DateTime, bool>.from(habit.completedDates);
-                          
-                          
-                          if (updatedCompletedDates.containsKey(dateOnly)&& updatedCompletedDates[dateOnly]== true) {
+                          final dateOnly =
+                              DateTime(today.year, today.month, today.day);
+
+                          final updatedCompletedDates =
+                              Map<DateTime, bool>.from(habit.completedDates);
+
+                          if (updatedCompletedDates.containsKey(dateOnly) &&
+                              updatedCompletedDates[dateOnly] == true) {
                             updatedCompletedDates[dateOnly] = false;
                           } else {
                             updatedCompletedDates[dateOnly] = true;
                           }
-                          
+
                           final updatedHabit = habit.copyWith(
-                            completedDates: updatedCompletedDates
-                          );
-                          
+                              completedDates: updatedCompletedDates);
+
                           try {
-                            await ref.read(habitUpdateProvider(updatedHabit).future);
+                            await ref
+                                .read(habitUpdateProvider(updatedHabit).future);
                           } catch (e) {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Failed to update habit: $e'))
-                              );
+                                  SnackBar(
+                                      content:
+                                          Text('Failed to update habit: $e')));
                             }
                           }
                         },
-                        icon: Icon(
-                          habit.completedDates.containsKey(DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day
-                          )) && habit.completedDates[DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day
-                          )]! ? Icons.check_circle : Icons.check
-                        ),
+                        icon: Icon(habit.completedDates.containsKey(DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day)) &&
+                                habit.completedDates[DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day)]!
+                            ? Icons.check_circle
+                            : Icons.check),
                         color: Colors.white,
                       )
                     ],
@@ -187,7 +188,6 @@ class _HabitState extends ConsumerState<Habit> {
                     padding: const EdgeInsets.all(8.0),
                     child: heatmap(habit),
                   ),
-                  
                 ],
               )),
         );
@@ -196,29 +196,39 @@ class _HabitState extends ConsumerState<Habit> {
   }
 
   Widget heatmap(HabitModel habit) {
-     final datasets = habit.completedDates.map((date, completed) {
-    return MapEntry(DateTime(date.year, date.month, date.day), completed ? 1 : 0);
-  });
+    final datasets = habit.completedDates.map((date, completed) {
+      return MapEntry(
+          DateTime(date.year, date.month, date.day), completed ? 1 : 0);
+    });
 
-    return HeatMap(
-     
-      datasets: datasets,
-      endDate: DateTime.now(),
-      startDate: DateTime.now().subtract(Duration(days: 200)),
-      colorMode: ColorMode.opacity,
-      size: 14,
-      showColorTip: false,
-      showText: false,
-      scrollable: true,
-      textColor: Colors.white,
-      defaultColor: const Color.fromARGB(255, 75, 75, 75),
-      colorsets: {
-        1: Color(int.parse('0xff${habit.color}')),
-      },
-      // onClick: (value) {
-      //   ScaffoldMessenger.of(context)
-      //       .showSnackBar(SnackBar(content: Text(value.toString())));
-      // },
-    );
+    // Ensure color string is properly formatted with leading '0x' or '#'
+    String colorString = habit.color;
+    if (!colorString.startsWith('0x') && !colorString.startsWith('#')) {
+      colorString = '#$colorString';
+    }
+
+    Color habitColor;
+    habitColor = getColorFromHex(colorString);
+
+    try {
+      return HeatMap(
+        datasets: datasets,
+        endDate: DateTime.now(),
+        startDate: DateTime.now().subtract(const Duration(days: 200)),
+        colorMode: ColorMode.color,
+        size: 14,
+        showColorTip: false,
+        showText: false,
+        scrollable: true,
+        textColor: Colors.white,
+        defaultColor: const Color.fromARGB(255, 75, 75, 75),
+        colorsets: {
+          1: habitColor.withOpacity(1.0),
+        },
+      );
+    } catch (e) {
+      print("Error rendering HeatMap: $e");
+      return const SizedBox();
+    }
   }
 }

@@ -27,21 +27,18 @@ class HabitModel {
   }
 
   factory HabitModel.fromMap(Map<String, dynamic> map) {
-    return HabitModel(
-      habitName: map['habitName'] ?? '',
-      color: map['color'] ?? '',
-      createdAt: (map['createdAt'] as Timestamp).toDate(), 
-      completedDates: (map['completedDates'] as Map<String, dynamic>? ?? {}).map(
-        (key, value) {
-          final date = DateTime.parse(key);
-          return MapEntry(
-            DateTime(date.year, date.month, date.day),
-            value as bool
-          );
-        },
-      ),
-    );
-  }
+  return HabitModel(
+    habitName: map['habitName'] ?? '',
+    color: map['color'] ?? '',
+    createdAt: (map['createdAt'] as Timestamp).toDate(),
+    completedDates: (map['completedDates'] as Map<String, dynamic>? ?? {}).map(
+      (key, value) {
+        final date = DateTime.parse(key);
+        return MapEntry(DateTime(date.year, date.month, date.day), value as bool);
+      },
+    ),
+  );
+}
 
   HabitModel copyWith({String? habitName,String? color, DateTime? createdAt, Map<DateTime,bool>? completedDates})
   {
