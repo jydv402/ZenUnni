@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/models/habit_model.dart';
+import 'package:zen/services/habit_serv.dart'; 
 
 class Habit extends ConsumerStatefulWidget {
   const Habit({super.key});
@@ -12,23 +14,34 @@ class Habit extends ConsumerStatefulWidget {
 
 class _HabitState extends ConsumerState<Habit> {
   final TextEditingController habitNameController = TextEditingController();
-
+  Color selectedColor = Colors.green;
+  
   @override
   Widget build(BuildContext context) {
+  
+    final habitsAsyncValue = ref.watch(habitProvider);
+    
     return Scaffold(
       backgroundColor: Colors.black12,
-        body: SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(child: heatmaplistview()),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: addnewbutton(),
+      body: SafeArea(
+        child: habitsAsyncValue.when(
+          data: (habits) => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: heatmaplistview(habits),  // Pass habits to the method
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: addnewbutton(),
+              ),
+            ],
           ),
-        ],
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('Error: $error')),
+        ),
       ),
-    ));
+    );
   }
 
   Widget addnewbutton() {
@@ -54,7 +67,7 @@ class _HabitState extends ConsumerState<Habit> {
       Colors.orange,
     ];
 
-    Color selectedColor = Colors.green;
+    // Color selectedColor = Colors.green;
 
     return SimpleDialog(
       children: [
@@ -74,7 +87,8 @@ class _HabitState extends ConsumerState<Habit> {
                 Text('Choose a color'),
                 SizedBox(
                   height:
-                      150, //sizebox to get rid of the preset padding of block picker
+                      150, //sizebox to get rid of the preset padding of block picker 
+                      // Todo:update this
                   child: BlockPicker(
                       pickerColor: selectedColor,
                       availableColors: colorOptions,
@@ -84,7 +98,19 @@ class _HabitState extends ConsumerState<Habit> {
                 ),
                 SizedBox(height: 8),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async{
+                      if (habitNameController.text.isNotEmpty) {
+                final newHabit = HabitModel(
+                  habitName: habitNameController.text,
+                  color: selectedColor.value.toRadixString(16),
+                  createdAt: DateTime.now(),
+                  completedDates: {},
+                );
+                
+                await ref.read(habitAddProvider(newHabit).future);
+                habitNameController.clear();
+              }
+                    },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15))),
@@ -95,51 +121,90 @@ class _HabitState extends ConsumerState<Habit> {
     );
   }
 
-  Widget heatmaplistview() {
+  Widget heatmaplistview(List<HabitModel> habits) {
     return ListView.builder(
-        itemCount: 5, //Todo: change later get count after adding to firestore
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Container(
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 49, 49, 49),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1, color: Colors.black12)),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(habitNameController.text),
-                        IconButton(onPressed: () {},
-                         icon: Icon(Icons.check),
-                         color: Colors.white,)
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: heatmap(),
-                    ),
-                    
-                  ],
-                )),
-          );
-        });
+      itemCount: habits.length,
+      itemBuilder: (BuildContext context, int index) {
+        final habit = habits[index];
+        return Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Container(
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 49, 49, 49),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: 1, color: Colors.black12)),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(habit.habitName),
+                      IconButton(
+                        onPressed: () async {
+                          final today = DateTime.now();
+                          final dateOnly = DateTime(today.year, today.month, today.day);
+                          
+                          
+                          final updatedCompletedDates = Map<DateTime, bool>.from(habit.completedDates);
+                          
+                          
+                          if (updatedCompletedDates.containsKey(dateOnly)&& updatedCompletedDates[dateOnly]== true) {
+                            updatedCompletedDates[dateOnly] = false;
+                          } else {
+                            updatedCompletedDates[dateOnly] = true;
+                          }
+                          
+                          final updatedHabit = habit.copyWith(
+                            completedDates: updatedCompletedDates
+                          );
+                          
+                          try {
+                            await ref.read(habitUpdateProvider(updatedHabit).future);
+                          } catch (e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Failed to update habit: $e'))
+                              );
+                            }
+                          }
+                        },
+                        icon: Icon(
+                          habit.completedDates.containsKey(DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day
+                          )) && habit.completedDates[DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day
+                          )]! ? Icons.check_circle : Icons.check
+                        ),
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: heatmap(habit),
+                  ),
+                  
+                ],
+              )),
+        );
+      },
+    );
   }
 
-  Widget heatmap() {
-    return HeatMap(
+  Widget heatmap(HabitModel habit) {
+     final datasets = habit.completedDates.map((date, completed) {
+    return MapEntry(DateTime(date.year, date.month, date.day), completed ? 1 : 0);
+  });
 
-      datasets: {
-        DateTime(2025, 2, 16): 3,
-        DateTime(2025, 2, 17): 7,
-        DateTime(2025, 2, 18): 10,
-        DateTime(2025, 2, 19): 13,
-        DateTime(2025, 2, 23): 6,
-      },
-      startDate: DateTime.now(),
-      endDate: DateTime.now().add(Duration(days: 400)),
+    return HeatMap(
+     
+      datasets: datasets,
+      endDate: DateTime.now(),
+      startDate: DateTime.now().subtract(Duration(days: 200)),
       colorMode: ColorMode.opacity,
       size: 14,
       showColorTip: false,
@@ -148,18 +213,12 @@ class _HabitState extends ConsumerState<Habit> {
       textColor: Colors.white,
       defaultColor: const Color.fromARGB(255, 75, 75, 75),
       colorsets: {
-        1: Colors.red,
-        3: Colors.orange,
-        5: Colors.yellow,
-        7: Colors.green,
-        9: Colors.blue,
-        11: Colors.indigo,
-        13: Colors.purple,
+        1: Color(int.parse('0xff${habit.color}')),
       },
-      onClick: (value) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(value.toString())));
-      },
+      // onClick: (value) {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text(value.toString())));
+      // },
     );
   }
 }
