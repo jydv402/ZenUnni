@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:zen/screens/habit.dart';
 
 class HabitModel {
   final String habitName;
@@ -31,8 +32,24 @@ class HabitModel {
       color: map['color'] ?? '',
       createdAt: (map['createdAt'] as Timestamp).toDate(), 
       completedDates: (map['completedDates'] as Map<String, dynamic>? ?? {}).map(
-        (key, value) => MapEntry(DateTime.parse(key), value as bool),
+        (key, value) {
+          final date = DateTime.parse(key);
+          return MapEntry(
+            DateTime(date.year, date.month, date.day),
+            value as bool
+          );
+        },
       ),
+    );
+  }
+
+  HabitModel copyWith({String? habitName,String? color, DateTime? createdAt, Map<DateTime,bool>? completedDates})
+  {
+    return HabitModel(
+      habitName:habitName?? this.habitName,
+      color:color?? this.color,
+      createdAt: createdAt??this.createdAt,
+      completedDates: completedDates??this.completedDates
     );
   }
 }
