@@ -74,10 +74,11 @@ class CurrentMood extends ConsumerWidget {
       error: (error, stackTrace) => Center(
           child: Text(
               'Error: $error')), //TODO - Build an AI not available at the moment error card
-      loading: () => const Center(
+      loading: () => Center(
           child: Padding(
-        padding: EdgeInsets.fromLTRB(0, 75, 0, 0),
-        child: CircularProgressIndicator(),
+        padding: const EdgeInsets.only(top: 80),
+        child:
+            Lottie.asset("assets/loading/loading.json", height: 80, width: 80),
       )),
     );
   }
