@@ -8,14 +8,6 @@ import 'package:zen/services/user_serv.dart';
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});
 
-  void logoutUser(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    if (context.mounted) {
-      // Navigate to the root page after logging out
-      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userNameProvider);
@@ -39,6 +31,7 @@ class LandPage extends ConsumerWidget {
         },
         child: Icon(LineIcons.user),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 
@@ -62,6 +55,9 @@ class LandPage extends ConsumerWidget {
                 context, "You havent added a mood yet, add it now? 👀"),
           const SizedBox(height: 8),
           _bentoBoxes(context),
+          const SizedBox(
+            height: 500,
+          ),
         ],
       ),
     );
@@ -148,6 +144,24 @@ class LandPage extends ConsumerWidget {
           ],
         ),
         Row(
+          children: [
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: _bentoBox(
+                  context,
+                  '/schedule',
+                  Colors.amber,
+                  bentoHeight,
+                  bentoWidth,
+                  'Schedule',
+                  LineIcons.calendar,
+                  iconSize + 25,
+                  iconPos + 5),
+            ),
+          ],
+        ),
+        Row(
           spacing: 8,
           children: [
             Flexible(
@@ -161,7 +175,7 @@ class LandPage extends ConsumerWidget {
                   bentoWidth,
                   "Pomodoro",
                   LineIcons.clock,
-                  iconSize + 10,
+                  iconSize + 8,
                   iconPos),
             ),
             Flexible(
@@ -169,17 +183,18 @@ class LandPage extends ConsumerWidget {
               fit: FlexFit.tight,
               child: _bentoBox(
                   context,
-                  '/schedule',
+                  '/habit',
                   Colors.red,
                   bentoHeight,
                   bentoWidth,
-                  "Schedule",
-                  LineIcons.calendar,
-                  iconSize + 10,
+                  "Habit",
+                  LineIcons.splotch,
+                  //LineIcons.magic,
+                  iconSize + 12,
                   iconPos),
             ),
           ],
-        )
+        ),
       ],
     );
   }
