@@ -37,7 +37,7 @@ class CurrentMood extends ConsumerWidget {
         const SizedBox(height: 60),
         currMoodCard(context, mood),
         const SizedBox(height: 50),
-        fabButton(() {
+        fabButton(context, () {
           Navigator.pushNamed(context, '/mood2');
         }, 'Update Mood', 0),
         const SizedBox(height: 20),
@@ -99,7 +99,7 @@ class CurrentMood extends ConsumerWidget {
           styleSheet: markdownStyleSheet,
         ),
         const SizedBox(height: 30),
-        fabButton(() {
+        fabButton(context, () {
           ref.read(msgProvider.notifier).clearMessages();
           ref
               .read(msgProvider.notifier)

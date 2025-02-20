@@ -86,7 +86,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
           const SizedBox(height: 80),
         ],
       ),
-      floatingActionButton: fabButton(() async {
+      floatingActionButton: fabButton(context, () async {
         await ref.read(
             moodAddProvider(moodList.values.elementAt(_currentMoodIndex))
                 .future);

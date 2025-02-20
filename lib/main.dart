@@ -9,6 +9,8 @@ import 'package:zen/screens/habit.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
 import 'package:zen/screens/pomodoro_page.dart';
+import 'package:zen/screens/profile.dart';
+import 'package:zen/screens/schedule.dart';
 import 'package:zen/screens/todo.dart';
 import 'package:zen/screens/username.dart';
 import 'package:zen/theme/light.dart';
@@ -43,6 +45,8 @@ class MyApp extends StatelessWidget {
         '/pomo': (context) => const PomodoroPage(),
         '/counter': (context) => const CountdownScreen(),
         '/habit': (context) => const Habit(),
+        '/profile': (context) => const ProfilePage(),
+        '/schedule': (context) => const SchedPage(),
       },
     );
   }

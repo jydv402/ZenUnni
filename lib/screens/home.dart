@@ -34,8 +34,10 @@ class LandPage extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => logoutUser(context),
-        child: Icon(LineIcons.userMinus),
+        onPressed: () {
+          Navigator.pushNamed(context, '/profile');
+        },
+        child: Icon(LineIcons.user),
       ),
     );
   }

@@ -176,7 +176,7 @@ class CountdownScreen extends ConsumerWidget {
           const SizedBox(height: 100),
         ],
       ),
-      floatingActionButton: fabButton(() {
+      floatingActionButton: fabButton(context, () {
         ref.read(pomoProvider.notifier).stopTimer();
         Navigator.pop(context);
       }, 'Stop Timer', 26),
