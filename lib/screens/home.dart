@@ -179,6 +179,24 @@ class LandPage extends ConsumerWidget {
                   iconPos),
             ),
           ],
+        ),
+        //temp nav for habit tracker
+        Row(
+          children: [Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: _bentoBox(
+                context,
+                '/habit',
+                Colors.blueAccent,
+                bentoHeight-20,
+                bentoWidth,
+                "Habit Tracker",
+                LineIcons.checkSquare,
+                iconSize + 10,
+                iconPos + 10),
+          ),],
+
         )
       ],
     );
