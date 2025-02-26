@@ -2,26 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/services/task_serv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-
-//where data of each task is stored when user is selecting options
-class Task {
-  String name;
-  String description;
-  DateTime date;
-  String priority;
-  bool isDone;
-  final Function(bool?)? onChanged;
-  //constructor
-  Task({
-    required this.name,
-    required this.description,
-    required this.date,
-    required this.priority,
-    required this.isDone,
-    this.onChanged
-  });
-}
+import 'package:zen/models/todo_model.dart';
 
 class Todo extends ConsumerStatefulWidget {
   const Todo({super.key});
@@ -31,15 +12,17 @@ class Todo extends ConsumerStatefulWidget {
 }
 
 class _TodoState extends ConsumerState<Todo> {
+
+  //controllers to pick up the info to be stored
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
+
   //variables to store data
   DateTime? _date; //save date
   TimeOfDay? _time; //save time
   String _prior = ""; //save current prior
-  List<Task> tasks = []; //to store the tasks in a list
+  List<TaskModel> tasks = []; //to store the tasks in a list
   bool isDone = false;
-  //controllers to pick up the info to be stored
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController descController = TextEditingController();
 
   void onChanged(bool? value) {
     setState(() {
@@ -48,7 +31,6 @@ class _TodoState extends ConsumerState<Todo> {
   }
   @override
   
- 
 
   void dispose() {
     nameController.dispose();
@@ -227,7 +209,7 @@ class _TodoState extends ConsumerState<Todo> {
                                 _time!.minute);
                             
                             // Create task object
-                            Task task = Task(
+                            TaskModel task = TaskModel(
                                 name: nameController.text,
                                 description: descController.text,
                                 date: dateTime,
@@ -305,7 +287,7 @@ class _TodoState extends ConsumerState<Todo> {
                               leading: Checkbox(
                                 value: task.isDone,
                                 onChanged: (bool? value) {
-                                  final updatedTask = Task(
+                                  final updatedTask = TaskModel(
                                     name: task.name,
                                     description: task.description,
                                     date: task.date,
@@ -340,7 +322,7 @@ class _TodoState extends ConsumerState<Todo> {
                 height: 75,
                 child: FloatingActionButton(
                   onPressed: () {
-                    _showTask(context, (Task task) {
+                    _showTask(context, (TaskModel task) {
                       setState(() {
                         tasks.add(task);
                       });
