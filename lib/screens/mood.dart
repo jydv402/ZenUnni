@@ -56,7 +56,6 @@ class _MoodPageState extends ConsumerState<MoodPage> {
           const SizedBox(height: 80),
           SliderTheme(
             data: SliderThemeData(
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                 trackHeight: 50,
                 // showValueIndicator: ShowValueIndicator.always,
                 // valueIndicatorColor: Colors.black,
@@ -69,18 +68,21 @@ class _MoodPageState extends ConsumerState<MoodPage> {
                 inactiveTrackColor: Colors.black,
                 thumbColor:
                     _currentMoodIndex == 0 ? Colors.white : Colors.black),
-            child: Slider(
-              autofocus: true,
-              value: _currentMoodIndex.toDouble(),
-              min: 0,
-              max: moodList.length - 1.toDouble(),
-              divisions: moodList.length - 1,
-              //label: (_currentMoodIndex + 1).toString(),
-              onChanged: (double value) {
-                setState(() {
-                  _currentMoodIndex = value.toInt();
-                });
-              },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: Slider(
+                autofocus: true,
+                value: _currentMoodIndex.toDouble(),
+                min: 0,
+                max: moodList.length - 1.toDouble(),
+                divisions: moodList.length - 1,
+                //label: (_currentMoodIndex + 1).toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _currentMoodIndex = value.toInt();
+                  });
+                },
+              ),
             ),
           ),
           const SizedBox(height: 80),
