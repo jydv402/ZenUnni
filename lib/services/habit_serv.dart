@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/models/habit_model.dart';
-import 'package:zen/services/task_serv.dart';
+
 
 
 final habitProvider = StreamProvider<List<HabitModel>>((ref) async* {
