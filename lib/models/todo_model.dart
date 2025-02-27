@@ -1,6 +1,10 @@
 //where data of each task is stored when user is selecting options
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
+
+  final now = DateTime.now();
+
 class TaskModel {
   //todo :change name to taskName
   String name;

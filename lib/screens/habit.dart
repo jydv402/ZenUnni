@@ -17,6 +17,9 @@ class _HabitState extends ConsumerState<Habit> {
   final TextEditingController habitNameController = TextEditingController();
   Color selectedColor = Colors.green;
 
+  //Todo:create dispose method
+  //todo: rename widgets according  to convention
+
   @override
   Widget build(BuildContext context) {
     final habitsAsyncValue = ref.watch(habitProvider);

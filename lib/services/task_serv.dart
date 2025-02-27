@@ -36,9 +36,6 @@ final taskAddProvider =
       .doc(auth.currentUser?.uid)
       .collection('task');
 
-  final now = DateTime.now();
-
-
   // Add new document
   await taskDoc.add(task.toMap());
 });
