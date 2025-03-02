@@ -11,6 +11,7 @@ final taskProvider = StreamProvider<List<TaskModel>>((ref) async* {
       .collection('task');
 
   //final querySnapshot = todoDoc.where('isDone', isEqualTo: false).snapshots();
+  //maybe for reccuring tasks all we need is another stream provider with different querying condition
 
   await for (final snapshot in todoDoc.snapshots()) {
     final tasks = snapshot.docs.map((doc) {
@@ -39,7 +40,8 @@ final taskAddProvider =
   await taskDoc.add(task.toMap());
 });
 
-final taskUpdateProvider = FutureProvider.family<void, TaskModel>((ref, task) async {
+final taskUpdateProvider =
+    FutureProvider.family<void, TaskModel>((ref, task) async {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final taskDoc = FirebaseFirestore.instance
       .collection('users')
