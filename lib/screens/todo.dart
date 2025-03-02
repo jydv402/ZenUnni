@@ -12,6 +12,9 @@ class Todo extends ConsumerStatefulWidget {
 
 //Todo: change variable name for consistency
 //todo: remove print statements
+//todo: add comments
+//todo: datepicker takes in the theme colours do smthn to override it ?
+
 
 class _TodoState extends ConsumerState<Todo> {
   //controllers to pick up the info to be stored
