@@ -7,13 +7,13 @@ final userSearchProvider = StreamProvider.family<List<SearchModel>, String>((ref
     return Stream.value([]);
   }
 
-  
+  String lowerQuery = query.toLowerCase();
 
   return FirebaseFirestore.instance
       .collection('users')
-      .orderBy('username')
-      .startAt([query])
-      .endAt(["$query\uf8ff"])
+      .orderBy('usernameLower')
+      .startAt([lowerQuery])
+      .endAt(["$lowerQuery\uf8ff"])
       .snapshots()
       .map((snapshot) => snapshot.docs.map((doc) {
             return SearchModel.fromMap(doc.data());
