@@ -3,11 +3,11 @@ import 'package:zen/services/task_serv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/models/todo_model.dart';
 
-class Todo extends ConsumerStatefulWidget {
-  const Todo({super.key});
+class TodoPage extends ConsumerStatefulWidget {
+  const TodoPage({super.key});
 
   @override
-  ConsumerState<Todo> createState() => _TodoState();
+  ConsumerState<TodoPage> createState() => _TodoState();
 }
 
 //Todo: change variable name for consistency
@@ -16,7 +16,7 @@ class Todo extends ConsumerStatefulWidget {
 //todo: datepicker takes in the theme colours do smthn to override it ?
 
 
-class _TodoState extends ConsumerState<Todo> {
+class _TodoState extends ConsumerState<TodoPage> {
   //controllers to pick up the info to be stored
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();

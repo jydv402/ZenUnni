@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/services/user_serv.dart';
 
-class Username extends ConsumerWidget {
-  const Username({super.key});
+class UsernamePage extends ConsumerWidget {
+  const UsernamePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userNameController = TextEditingController();
-
+  //Todo: define methods to check if username already exist 
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -37,8 +37,7 @@ class Username extends ConsumerWidget {
                     borderSide: BorderSide(color: Colors.white)),
               ),
             ),
-
-            //to fix: if username is null then it shows previous users username?????
+      
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

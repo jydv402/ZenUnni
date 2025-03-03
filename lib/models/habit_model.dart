@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:zen/screens/habit.dart';
 
 class HabitModel {
   final String habitName;

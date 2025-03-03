@@ -6,14 +6,14 @@ import 'package:zen/models/habit_model.dart';
 import 'package:zen/services/habit_serv.dart';
 import 'package:zen/utils/color_utils.dart';
 
-class Habit extends ConsumerStatefulWidget {
-  const Habit({super.key});
+class HabitPage extends ConsumerStatefulWidget {
+  const HabitPage({super.key});
 
   @override
-  ConsumerState<Habit> createState() => _HabitState();
+  ConsumerState<HabitPage> createState() => _HabitState();
 }
 
-class _HabitState extends ConsumerState<Habit> {
+class _HabitState extends ConsumerState<HabitPage> {
   final TextEditingController habitNameController = TextEditingController();
   Color selectedColor = Colors.green;
 
