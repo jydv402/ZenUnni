@@ -10,6 +10,7 @@ class SearchPage extends ConsumerStatefulWidget {
 }
 
 class _SearchState extends ConsumerState<SearchPage> {
+  final searchNameController = TextEditingController();
   @override
 
 
@@ -17,7 +18,13 @@ class _SearchState extends ConsumerState<SearchPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
+         body: Column(
+          children: [
+            TextField(
+              controller: searchNameController,
+            )
+          ],
+         )
       ),
     );
   }

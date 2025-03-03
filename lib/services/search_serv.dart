@@ -1,9 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/models/search_model.dart';
 
-final searchProvider = StreamProvider((ref) async*
-{
-  FirebaseFirestore.instance.collection('users').snapshots();
+final userSearchProvider = StreamProvider.family<List<SearchModel>, String>((ref, query) {
+  if (query.isEmpty) {
+    return Stream.value([]);
+  }
+
   
+
+  return FirebaseFirestore.instance
+      .collection('users')
+      .orderBy('username')
+      .startAt([query])
+      .endAt(["$query\uf8ff"])
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((doc) {
+            return SearchModel.fromMap(doc.data());
+          }).toList());
 });

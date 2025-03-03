@@ -180,23 +180,40 @@ class LandPage extends ConsumerWidget {
             ),
           ],
         ),
-        //temp nav for habit tracker
+        //temp nav for habit tracker 
         Row(
-          children: [Flexible(
-            flex: 1,
-            fit: FlexFit.tight,
-            child: _bentoBox(
-                context,
-                '/habit',
-                Colors.blueAccent,
-                bentoHeight-20,
-                bentoWidth,
-                "Habit Tracker",
-                LineIcons.checkSquare,
-                iconSize + 10,
-                iconPos + 10),
-          ),],
-
+          spacing: 8,
+          children: [
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: _bentoBox(
+                  context,
+                  '/habit',
+                  Colors.blueAccent,
+                  bentoHeight ,
+                  bentoWidth,
+                  "Habit Tracker",
+                  LineIcons.checkSquare,
+                  iconSize + 10,
+                  iconPos + 10),
+            ),
+            //temp nav for search page
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: _bentoBox(
+                  context,
+                  '/search',
+                  Colors.deepPurple,
+                  bentoHeight,
+                  bentoWidth,
+                  "Connect",
+                  LineIcons.checkSquare,
+                  iconSize + 10,
+                  iconPos + 10),
+            ),
+          ],
         )
       ],
     );
