@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/auth_pages/login_page.dart';
-import 'package:zen/screens/username.dart';
 
 class RegisterPage extends ConsumerWidget {
   RegisterPage({super.key});
@@ -50,9 +48,9 @@ class RegisterPage extends ConsumerWidget {
           Navigator.pop(context);
 
           //navigate to home page
-          Navigator.pushReplacement(
+          Navigator.pushReplacementNamed(
             context,
-            MaterialPageRoute(builder: (context) => const Username()),
+            '/username'
           );
         }
         // Clear fields after successful registration
@@ -143,10 +141,9 @@ class RegisterPage extends ConsumerWidget {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         //navigate to login page
-                        Navigator.pushReplacement(
+                        Navigator.pushReplacementNamed(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginPage()));
+                           '/login');
                       })
               ])),
             ],

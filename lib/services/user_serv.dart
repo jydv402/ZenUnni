@@ -9,6 +9,7 @@ Future<void> createUserDoc(String username) async {
 
     await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
       'username': username,
+      'usernameLower':username.toLowerCase(),
       'email': user.email,
       'createdAt': FieldValue.serverTimestamp(),
     });

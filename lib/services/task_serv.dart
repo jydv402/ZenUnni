@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/screens/todo.dart';
+import 'package:zen/models/todo_model.dart';
 
-final taskProvider = StreamProvider<List<Task>>((ref) async* {
+final taskProvider = StreamProvider<List<TaskModel>>((ref) async* {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final todoDoc = FirebaseFirestore.instance
       .collection('users')
@@ -11,11 +11,12 @@ final taskProvider = StreamProvider<List<Task>>((ref) async* {
       .collection('task');
 
   //final querySnapshot = todoDoc.where('isDone', isEqualTo: false).snapshots();
+  //maybe for reccuring tasks all we need is another stream provider with different querying condition
 
   await for (final snapshot in todoDoc.snapshots()) {
     final tasks = snapshot.docs.map((doc) {
       final data = doc.data();
-      return Task(
+      return TaskModel(
         name: data['task'] ?? '',
         description: data['description'] ?? '',
         date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -28,29 +29,19 @@ final taskProvider = StreamProvider<List<Task>>((ref) async* {
 });
 
 final taskAddProvider =
-    FutureProvider.autoDispose.family<void, Task>((ref, task) async {
+    FutureProvider.autoDispose.family<void, TaskModel>((ref, task) async {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final taskDoc = FirebaseFirestore.instance
       .collection('users')
       .doc(auth.currentUser?.uid)
       .collection('task');
 
-  final now = DateTime.now();
-
-  final taskData = {
-    'task': task.name,
-    'description': task.description,
-    'date': task.date,
-    'priority': task.priority,
-    'isDone': task.isDone,
-    'updatedOn': now
-  };
-
   // Add new document
-  await taskDoc.add(taskData);
+  await taskDoc.add(task.toMap());
 });
 
-final taskUpdateProvider = FutureProvider.family<void, Task>((ref, task) async {
+final taskUpdateProvider =
+    FutureProvider.family<void, TaskModel>((ref, task) async {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final taskDoc = FirebaseFirestore.instance
       .collection('users')

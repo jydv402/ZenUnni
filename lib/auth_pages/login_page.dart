@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/screens/home.dart';
-import 'package:zen/auth_pages/register_page.dart';
 
+
+// why is loginpage stateful
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -39,9 +39,9 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         Navigator.pop(context);
         //navigate to home page
-        Navigator.pushReplacement(
+        Navigator.pushReplacementNamed(
           context,
-          MaterialPageRoute(builder: (context) => const LandPage()),
+         '/home',
         );
       }
     } on FirebaseAuthException catch (e) {
@@ -133,10 +133,9 @@ class _LoginPageState extends State<LoginPage> {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         //navigate to register page
-                        Navigator.pushReplacement(
+                        Navigator.pushReplacementNamed(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => RegisterPage()));
+                           '/register');
                       })
               ])),
             ],
