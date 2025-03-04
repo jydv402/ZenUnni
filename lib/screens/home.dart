@@ -39,6 +39,7 @@ class LandPage extends ConsumerWidget {
         },
         child: Icon(LineIcons.user),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
     );
   }
 
@@ -49,24 +50,22 @@ class LandPage extends ConsumerWidget {
         : now < 17
             ? 'Afternoon'
             : 'Evening';
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
-      child: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: _showGreeting(context, greeting, user),
-          ),
-          if (mood == null)
-            //Show add mood msg container
-            _msgContainer(context, "No mood added yet, add it now? 👀", () {
-              Navigator.pushNamed(context, '/mood2');
-            }),
-          const SizedBox(height: 8),
-          _bentoBoxes(context),
-          const SizedBox(height: 420),
-        ],
-      ),
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 100, 16, 0),
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: _showGreeting(context, greeting, user),
+        ),
+        if (mood == null)
+          //Show add mood msg
+          _msgContainer(context, "No mood added yet, add it now? 👀", () {
+            Navigator.pushNamed(context, '/mood2');
+          }),
+        const SizedBox(height: 8),
+        _bentoBoxes(context),
+        const SizedBox(height: 420),
+      ],
     );
   }
 
