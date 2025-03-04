@@ -58,10 +58,13 @@ class LandPage extends ConsumerWidget {
             child: _showGreeting(context, greeting, user),
           ),
           if (mood == null)
-            _msgContainer(
-                context, "You havent added a mood yet, add it now? 👀"),
+            //Show add mood msg container
+            _msgContainer(context, "No mood added yet, add it now? 👀", () {
+              Navigator.pushNamed(context, '/mood2');
+            }),
           const SizedBox(height: 8),
           _bentoBoxes(context),
+          const SizedBox(height: 420),
         ],
       ),
     );
@@ -72,12 +75,16 @@ class LandPage extends ConsumerWidget {
         style: Theme.of(context).textTheme.headlineLarge);
   }
 
-  Container _msgContainer(BuildContext context, String msg) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(26), color: Colors.white30),
-      child: Text(msg, style: Theme.of(context).textTheme.bodySmall),
+  GestureDetector _msgContainer(
+      BuildContext context, String msg, GestureTapCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(16, 26, 26, 26),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(26), color: Colors.white30),
+        child: Text(msg, style: Theme.of(context).textTheme.bodySmall),
+      ),
     );
   }
 
@@ -180,7 +187,7 @@ class LandPage extends ConsumerWidget {
             ),
           ],
         ),
-        //temp nav for habit tracker 
+        //temp nav for habit tracker
         Row(
           spacing: 8,
           children: [
@@ -191,7 +198,7 @@ class LandPage extends ConsumerWidget {
                   context,
                   '/habit',
                   Colors.blueAccent,
-                  bentoHeight ,
+                  bentoHeight,
                   bentoWidth,
                   "Habit Tracker",
                   LineIcons.checkSquare,
