@@ -82,65 +82,93 @@ class ChatPage extends ConsumerWidget {
 
   Widget fabField(BuildContext context, WidgetRef ref,
       TextEditingController controller, ScrollController scrollCntrl) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.25),
-              spreadRadius: 5,
-              blurRadius: 7)
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: controller,
-              maxLines: null,
-              minLines: 1,
-              decoration: InputDecoration(
-                hintText: 'Chat with Unni...',
-                hintStyle: Theme.of(context).textTheme.labelMedium,
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(16),
-              ),
+    return Row(
+      children: [
+        Flexible(
+          flex: 6,
+          fit: FlexFit.tight,
+          child: Container(
+            padding: EdgeInsets.all(8),
+            margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withValues(alpha: 0.25),
+                    spreadRadius: 5,
+                    blurRadius: 7)
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    maxLines: null,
+                    minLines: 1,
+                    decoration: InputDecoration(
+                      hintText: 'Chat with Unni...',
+                      hintStyle: Theme.of(context).textTheme.labelMedium,
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                IconButton(
+                    onPressed: () async {
+                      if (controller.text.isNotEmpty) {
+                        //Add the message to the state
+                        final userMsg =
+                            Message(text: controller.text, isUser: true);
+                        ref.read(msgProvider.notifier).addMessage(userMsg);
+                        //Get the AI response
+                        final aiMsg = await ref
+                            .read(aiResponseAdder(controller.text).future);
+                        ref.read(msgProvider.notifier).addMessage(aiMsg);
+                      }
+                      scrollCntrl.animateTo(
+                          scrollCntrl.position.maxScrollExtent,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                      controller.clear();
+                    },
+                    icon: Icon(
+                      LineIcons.share,
+                      size: 26,
+                    )),
+              ],
             ),
           ),
-          SizedBox(
-            width: 8,
+        ),
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            margin: EdgeInsets.fromLTRB(4, 0, 16, 0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withValues(alpha: 0.25),
+                    spreadRadius: 5,
+                    blurRadius: 7)
+              ],
+            ),
+            child: IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                icon: Icon(
+                  Icons.more_vert,
+                )),
           ),
-          IconButton(
-              onPressed: () async {
-                if (controller.text.isNotEmpty) {
-                  //Add the message to the state
-                  final userMsg = Message(text: controller.text, isUser: true);
-                  ref.read(msgProvider.notifier).addMessage(userMsg);
-                  //Get the AI response
-                  final aiMsg =
-                      await ref.read(aiResponseAdder(controller.text).future);
-                  ref.read(msgProvider.notifier).addMessage(aiMsg);
-                }
-                scrollCntrl.animateTo(scrollCntrl.position.maxScrollExtent,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeIn);
-                controller.clear();
-              },
-              icon: Icon(
-                LineIcons.share,
-                size: 26,
-              )),
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                LineIcons.horizontalEllipsis,
-                size: 26,
-              )),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
