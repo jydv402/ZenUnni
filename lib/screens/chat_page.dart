@@ -133,6 +133,12 @@ class ChatPage extends ConsumerWidget {
                 LineIcons.share,
                 size: 26,
               )),
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                LineIcons.horizontalEllipsis,
+                size: 26,
+              )),
         ],
       ),
     );
