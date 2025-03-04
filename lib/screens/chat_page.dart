@@ -85,14 +85,18 @@ class ChatPage extends ConsumerWidget {
     return Row(
       children: [
         Flexible(
-          flex: 6,
+          flex: 9,
           fit: FlexFit.tight,
           child: Container(
-            padding: EdgeInsets.all(8),
-            margin: EdgeInsets.fromLTRB(16, 0, 0, 0),
+            padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
+            margin: EdgeInsets.fromLTRB(16, 0, 5, 0),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32),
+                  topRight: Radius.circular(4),
+                  bottomLeft: Radius.circular(32),
+                  bottomRight: Radius.circular(4)),
               boxShadow: [
                 BoxShadow(
                     color: Colors.grey.withValues(alpha: 0.25),
@@ -119,40 +123,28 @@ class ChatPage extends ConsumerWidget {
                   width: 8,
                 ),
                 IconButton(
-                    onPressed: () async {
-                      if (controller.text.isNotEmpty) {
-                        //Add the message to the state
-                        final userMsg =
-                            Message(text: controller.text, isUser: true);
-                        ref.read(msgProvider.notifier).addMessage(userMsg);
-                        //Get the AI response
-                        final aiMsg = await ref
-                            .read(aiResponseAdder(controller.text).future);
-                        ref.read(msgProvider.notifier).addMessage(aiMsg);
-                      }
-                      scrollCntrl.animateTo(
-                          scrollCntrl.position.maxScrollExtent,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn);
-                      controller.clear();
-                    },
+                    padding: EdgeInsets.zero,
+                    onPressed: () {},
                     icon: Icon(
-                      LineIcons.share,
-                      size: 26,
+                      Icons.more_vert,
                     )),
               ],
             ),
           ),
         ),
         Flexible(
-          flex: 1,
+          flex: 2,
           fit: FlexFit.tight,
           child: Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-            margin: EdgeInsets.fromLTRB(4, 0, 16, 0),
+            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+            margin: EdgeInsets.fromLTRB(0, 0, 16, 0),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(32),
+                  topLeft: Radius.circular(4),
+                  bottomRight: Radius.circular(32),
+                  bottomLeft: Radius.circular(4)),
               boxShadow: [
                 BoxShadow(
                     color: Colors.grey.withValues(alpha: 0.25),
@@ -161,11 +153,26 @@ class ChatPage extends ConsumerWidget {
               ],
             ),
             child: IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.more_vert,
-                )),
+              onPressed: () async {
+                if (controller.text.isNotEmpty) {
+                  //Add the message to the state
+                  final userMsg = Message(text: controller.text, isUser: true);
+                  ref.read(msgProvider.notifier).addMessage(userMsg);
+                  //Get the AI response
+                  final aiMsg =
+                      await ref.read(aiResponseAdder(controller.text).future);
+                  ref.read(msgProvider.notifier).addMessage(aiMsg);
+                }
+                scrollCntrl.animateTo(scrollCntrl.position.maxScrollExtent,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeIn);
+                controller.clear();
+              },
+              icon: Icon(
+                LineIcons.share,
+                size: 26,
+              ),
+            ),
           ),
         ),
       ],

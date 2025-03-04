@@ -57,11 +57,6 @@ class _MoodPageState extends ConsumerState<MoodPage> {
           SliderTheme(
             data: SliderThemeData(
                 trackHeight: 50,
-                // showValueIndicator: ShowValueIndicator.always,
-                // valueIndicatorColor: Colors.black,
-                // valueIndicatorTextStyle:
-                //     Theme.of(context).textTheme.headlineSmall,
-                // valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
                 activeTickMarkColor: Colors.black,
                 inactiveTickMarkColor: Colors.white,
                 activeTrackColor: Colors.white,
@@ -76,7 +71,6 @@ class _MoodPageState extends ConsumerState<MoodPage> {
                 min: 0,
                 max: moodList.length - 1.toDouble(),
                 divisions: moodList.length - 1,
-                //label: (_currentMoodIndex + 1).toString(),
                 onChanged: (double value) {
                   setState(() {
                     _currentMoodIndex = value.toInt();

@@ -77,7 +77,7 @@ var markdownStyleSheetWhite = MarkdownStyleSheet(
   ),
   p: GoogleFonts.poppins(
     // Paragraph
-    fontSize: 16.0,
+    fontSize: 14.0,
     color: Colors.white,
   ),
   strong: const TextStyle(
