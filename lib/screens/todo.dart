@@ -155,79 +155,53 @@ class _TodoState extends ConsumerState<TodoPage> {
   }
 
   Widget _dialogDatePicker() {
-    return SizedBox(
-      width: 280,
-      height: 70,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.blue.shade300,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5))),
-          onPressed: () async {
-            DateTime? pickDate = await showDatePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2100));
-            if (pickDate != null) {
-              setState(() {
-                localDate = pickDate; //saves to local variable
-                _date = pickDate; //to save it to global variable
-                print("Selected date: $localDate");
-              });
-            }
-          },
-          child: const Text(
-            "Select a date",
-            style: TextStyle(fontSize: 16),
-          )),
-    );
+    return fabButton(context, () async {
+      DateTime? pickDate = await showDatePicker(
+          context: context,
+          firstDate: DateTime.now(),
+          lastDate: DateTime(2100));
+      if (pickDate != null) {
+        setState(() {
+          localDate = pickDate; //saves to local variable
+          _date = pickDate; //to save it to global variable
+          print("Selected date: $localDate");
+        });
+      }
+    }, "Select a date", 0);
   }
 
   Widget _dialogTimePicker() {
-    return SizedBox(
-      width: 280,
-      height: 70,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.blue.shade300,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-        onPressed: () async {
-          TimeOfDay? pickTime = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.now(),
-          );
-          if (pickTime != null) {
-            setState(() {
-              localTime = pickTime; // saves to local variable
-              _time = pickTime; // saves to global variable
-              print("Selected time: $localTime");
-            });
-          }
-        },
-        child: const Text(
-          "Select a time",
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    );
+    return fabButton(context, () async {
+      TimeOfDay? pickTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+      if (pickTime != null) {
+        setState(() {
+          localTime = pickTime; // saves to local variable
+          _time = pickTime; // saves to global variable
+          print("Selected time: $localTime");
+        });
+      }
+    }, "Select a time", 0);
   }
 
   Widget _dialogPrioritySelect(void Function(void Function()) setState) {
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Select Priority",
-          style: TextStyle(color: Colors.white, fontSize: 18),
+          style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 10,
+          spacing: 2,
           children: ['High', 'Medium', 'Low'].map((String value) {
             return ChoiceChip(
+              padding: EdgeInsets.fromLTRB(16, 24, 16, 24),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(26)),
               label: Text(value),
               selected: localPrior == value,
               onSelected: (bool selected) {
@@ -239,11 +213,12 @@ class _TodoState extends ConsumerState<TodoPage> {
                 });
               },
               showCheckmark: false,
-              selectedColor: Colors.blue.shade300,
+              selectedColor: Colors.blue.shade200,
               backgroundColor: Colors.grey,
-              labelStyle: TextStyle(
-                color: localPrior == value ? Colors.white : Colors.black,
-              ),
+              labelStyle: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: Colors.black),
             );
           }).toList(),
         )
