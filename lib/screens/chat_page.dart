@@ -92,11 +92,7 @@ class ChatPage extends ConsumerWidget {
             margin: EdgeInsets.fromLTRB(16, 0, 5, 0),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(32),
-                  topRight: Radius.circular(4),
-                  bottomLeft: Radius.circular(32),
-                  bottomRight: Radius.circular(4)),
+              borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
                     color: Colors.grey.withValues(alpha: 0.25),
@@ -140,11 +136,7 @@ class ChatPage extends ConsumerWidget {
             margin: EdgeInsets.fromLTRB(0, 0, 16, 0),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(32),
-                  topLeft: Radius.circular(4),
-                  bottomRight: Radius.circular(32),
-                  bottomLeft: Radius.circular(4)),
+              borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
                     color: Colors.grey.withValues(alpha: 0.25),
