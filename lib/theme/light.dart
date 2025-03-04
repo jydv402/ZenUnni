@@ -56,7 +56,7 @@ ThemeData get lightTheme {
 
 var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
 
-var markdownStyleSheet = MarkdownStyleSheet(
+var markdownStyleSheetWhite = MarkdownStyleSheet(
   h1: GoogleFonts.poppins(
     // Heading 1
     fontSize: 32.0,
@@ -108,6 +108,62 @@ var markdownStyleSheet = MarkdownStyleSheet(
   listBullet: const TextStyle(
     // Unordered list
     color: Colors.white,
+  ),
+  blockSpacing: 24.0, // Spacing between blocks
+);
+
+var markdownStyleSheetBlack = MarkdownStyleSheet(
+  h1: GoogleFonts.poppins(
+    // Heading 1
+    fontSize: 32.0,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  ),
+  h2: GoogleFonts.poppins(
+    // Heading 2
+    fontSize: 24.0,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  ),
+  h3: GoogleFonts.poppins(
+    // Heading 3
+    fontSize: 18.0,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  ),
+  p: GoogleFonts.poppins(
+    // Paragraph
+    fontSize: 14.0,
+    color: Colors.black,
+  ),
+  strong: const TextStyle(
+    // Bold text
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  ),
+  em: const TextStyle(
+    // Italic text
+    fontStyle: FontStyle.italic,
+    color: Colors.black,
+  ),
+  a: const TextStyle(
+    // Link
+    color: Colors.blue,
+    decoration: TextDecoration.underline,
+  ),
+  code: GoogleFonts.robotoMono(
+    // Code block
+    backgroundColor: Colors.grey[800],
+    color: Colors.black,
+  ),
+  blockquote: const TextStyle(
+    // Blockquote
+    color: Colors.grey,
+    fontStyle: FontStyle.italic,
+  ),
+  listBullet: const TextStyle(
+    // Unordered list
+    color: Colors.black,
   ),
   blockSpacing: 24.0, // Spacing between blocks
 );

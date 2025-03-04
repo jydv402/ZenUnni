@@ -97,7 +97,7 @@ class CurrentMood extends ConsumerWidget {
         const SizedBox(height: 24),
         MarkdownBody(
           data: message,
-          styleSheet: markdownStyleSheet,
+          styleSheet: markdownStyleSheetWhite,
         ),
         const SizedBox(height: 30),
         fabButton(context, () {

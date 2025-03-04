@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:zen/services/chat_serv.dart';
 import 'package:zen/theme/light.dart';
 
@@ -47,8 +49,8 @@ class ChatPage extends ConsumerWidget {
                     ),
                     decoration: BoxDecoration(
                       color: msg.isUser
-                          ? Color.fromARGB(40, 0, 17, 255)
-                          : Color.fromARGB(40, 255, 0, 200),
+                          ? Colors.green.shade200 //User msg pill
+                          : Colors.blue.shade200, //AI msg pill
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(28),
                         bottomRight: Radius.circular(28),
@@ -61,10 +63,10 @@ class ChatPage extends ConsumerWidget {
                       ),
                     ),
                     padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                    margin: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                    margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     child: MarkdownBody(
                       data: msg.text,
-                      styleSheet: markdownStyleSheet,
+                      styleSheet: markdownStyleSheetBlack,
                     ),
                   ),
                 );
@@ -102,6 +104,7 @@ class ChatPage extends ConsumerWidget {
               minLines: 1,
               decoration: InputDecoration(
                 hintText: 'Chat with Unni...',
+                hintStyle: Theme.of(context).textTheme.labelMedium,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(16),
               ),
@@ -126,7 +129,10 @@ class ChatPage extends ConsumerWidget {
                     curve: Curves.easeIn);
                 controller.clear();
               },
-              icon: Icon(Icons.send_rounded))
+              icon: Icon(
+                LineIcons.share,
+                size: 26,
+              )),
         ],
       ),
     );
