@@ -93,9 +93,14 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
               const SizedBox(height: 15),
-              const Text(
-                "Forgot Password?",
-                style: TextStyle(color: Colors.blue),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/pass_reset');
+                },
+                child: const Text(
+                  "Forgot Password?",
+                  style: TextStyle(color: Colors.blue),
+                ),
               ),
               const SizedBox(height: 10),
               ElevatedButton(

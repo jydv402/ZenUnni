@@ -134,7 +134,7 @@ class _TodoState extends ConsumerState<TodoPage> {
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.circular(10)),
-                border: OutlineInputBorder(
+                enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.circular(10)))),
         const SizedBox(height: 20),
@@ -146,7 +146,7 @@ class _TodoState extends ConsumerState<TodoPage> {
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.circular(10)),
-                border: OutlineInputBorder(
+                enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.circular(10)))),
       ],

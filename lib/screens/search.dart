@@ -57,7 +57,7 @@ class _SearchState extends ConsumerState<SearchPage> {
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(10)),
-            border: OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
                 borderRadius: BorderRadius.circular(10))));
   }

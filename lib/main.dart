@@ -10,6 +10,7 @@ import 'package:zen/screens/currMood.dart';
 import 'package:zen/screens/habit.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
+import 'package:zen/screens/pass_reset.dart';
 import 'package:zen/screens/pomodoro_page.dart';
 import 'package:zen/screens/profile.dart';
 import 'package:zen/screens/schedule.dart';
@@ -39,8 +40,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
-        '/login':(context)=>const LoginPage(),
-        '/register':(context)=> RegisterPage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => RegisterPage(),
         '/username': (context) => const UsernamePage(),
         '/home': (context) => const LandPage(),
         '/chat': (context) => const ChatPage(),
@@ -52,7 +53,8 @@ class MyApp extends StatelessWidget {
         '/habit': (context) => const HabitPage(),
         '/profile': (context) => const ProfilePage(),
         '/schedule': (context) => const SchedPage(),
-        '/search':(context)=> const SearchPage()
+        '/search': (context) => const SearchPage(),
+        '/pass_reset': (context) => const PassResetPage()
       },
     );
   }
