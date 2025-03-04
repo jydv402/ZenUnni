@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:zen/components/fab_button.dart';
 import 'package:zen/services/task_serv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/models/todo_model.dart';
+import 'package:zen/theme/light.dart';
 
 class TodoPage extends ConsumerStatefulWidget {
   const TodoPage({super.key});
@@ -14,7 +16,6 @@ class TodoPage extends ConsumerStatefulWidget {
 //todo: remove print statements
 //todo: add comments
 //todo: datepicker takes in the theme colours do smthn to override it ?
-
 
 class _TodoState extends ConsumerState<TodoPage> {
   //controllers to pick up the info to be stored
@@ -92,10 +93,10 @@ class _TodoState extends ConsumerState<TodoPage> {
       builder: (BuildContext context, void Function(void Function()) setState) {
         return SimpleDialog(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
           contentPadding: const EdgeInsets.all(20),
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
                 children: [
@@ -324,36 +325,42 @@ class _TodoState extends ConsumerState<TodoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            Text(
-              'ToDo',
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            Expanded(
-              child: Consumer(
-                builder: (context, ref, child) {
-                  final tasksAsync = ref.watch(taskProvider);
+    return Scaffold(
+      body: ListView(
+        padding: pagePadding,
+        children: [
+          Text(
+            'ToDo',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          Expanded(
+            child: Consumer(
+              builder: (context, ref, child) {
+                final tasksAsync = ref.watch(taskProvider);
 
-                  return tasksAsync.when(
-                    data: (tasks) {
-                      return _taskListView(tasks);
-                    },
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (error, stack) =>
-                        Center(child: Text('Error: $error')),
-                  );
-                },
-              ),
+                return tasksAsync.when(
+                  data: (tasks) {
+                    return _taskListView(tasks);
+                  },
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (error, stack) => Center(child: Text('Error: $error')),
+                );
+              },
             ),
-            _addNewTaskButton(),
-            SizedBox(height: 8)
-          ],
-        ),
+          ),
+          //_addNewTaskButton(),
+          SizedBox(height: 8)
+        ],
       ),
+      floatingActionButton: fabButton(context, () {
+        _showTask(context, (TaskModel task) {
+          setState(() {
+            tasks.add(task);
+          });
+        });
+      }, "Add New Tasks", 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -388,29 +395,6 @@ class _TodoState extends ConsumerState<TodoPage> {
           ),
         );
       },
-    );
-  }
-
-  Widget _addNewTaskButton() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9,
-      height: 70,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10))),
-        onPressed: () {
-          _showTask(context, (TaskModel task) {
-            setState(() {
-              tasks.add(task);
-            });
-          });
-        },
-        child: Text(
-          'Add New Tasks',
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
     );
   }
 }
