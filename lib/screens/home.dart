@@ -200,9 +200,9 @@ class LandPage extends ConsumerWidget {
                   bentoHeight,
                   bentoWidth,
                   "Habit Tracker",
-                  LineIcons.checkSquare,
+                  LineIcons.peace,
                   iconSize + 10,
-                  iconPos + 10),
+                  iconPos + 14),
             ),
             //temp nav for search page
             Flexible(
@@ -215,9 +215,9 @@ class LandPage extends ConsumerWidget {
                   bentoHeight,
                   bentoWidth,
                   "Connect",
-                  LineIcons.checkSquare,
+                  LineIcons.users,
                   iconSize + 10,
-                  iconPos + 10),
+                  iconPos + 4),
             ),
           ],
         )
