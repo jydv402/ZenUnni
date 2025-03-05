@@ -6,52 +6,53 @@ import 'package:google_fonts/google_fonts.dart';
 // Light theme for the app
 ThemeData get lightTheme {
   return ThemeData(
-      colorScheme: ColorScheme(
-        brightness: Brightness.dark,
-        primary: const Color(0xFF121212),
-        onPrimary: Colors.white,
-        secondary: const Color(0xFF9575CD),
-        onSecondary: Colors.white,
-        surface: const Color(0xFF202124),
-        onSurface: Colors.black,
-        error: Colors.red,
-        onError: Colors.white,
+    colorScheme: ColorScheme(
+      brightness: Brightness.dark,
+      primary: const Color(0xFF121212),
+      onPrimary: Colors.white,
+      secondary: const Color(0xFF9575CD),
+      onSecondary: Colors.white,
+      surface: const Color(0xFF202124),
+      onSurface: Colors.black,
+      error: Colors.red,
+      onError: Colors.white,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+        elevation: 1,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36))),
+    textTheme: TextTheme(
+      headlineLarge: GoogleFonts.poppins(
+        fontSize: 44,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
       ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-          elevation: 1,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(36))),
-      textTheme: TextTheme(
-        headlineLarge: GoogleFonts.poppins(
-          fontSize: 44,
-          fontWeight: FontWeight.w600,
-          color: Colors.white,
-        ),
-        headlineMedium: GoogleFonts.poppins(
-            fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
-        headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
-        labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
-        bodySmall: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue.shade200,
-          foregroundColor: Colors.white,
-          shadowColor: Colors.blue,
-          padding: EdgeInsets.all(26),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(26),
-          ),
+      headlineMedium: GoogleFonts.poppins(
+          fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
+      headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
+      labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
+      labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
+      bodySmall: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue.shade200,
+        foregroundColor: Colors.white,
+        shadowColor: Colors.blue,
+        padding: const EdgeInsets.all(26),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(26),
         ),
       ),
-      appBarTheme: AppBarTheme(
-        surfaceTintColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          //Define the status bar parameters
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.light,
-        ),
-      ));
+    ),
+    appBarTheme: AppBarTheme(
+      surfaceTintColor: Colors.transparent,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        //Define the status bar parameters
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    ),
+  );
 }
 
 var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
@@ -77,7 +78,7 @@ var markdownStyleSheetWhite = MarkdownStyleSheet(
   ),
   p: GoogleFonts.poppins(
     // Paragraph
-    fontSize: 14.0,
+    fontSize: 16.0,
     color: Colors.white,
   ),
   strong: const TextStyle(

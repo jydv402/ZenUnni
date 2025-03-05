@@ -16,26 +16,11 @@ class ChatPage extends ConsumerWidget {
     final scrollCntrl = ScrollController();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                ref.read(msgProvider.notifier).clearMessages();
-                //Show a snackbar
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Chat cleared'),
-                  duration: Duration(milliseconds: 300),
-                ));
-              },
-              icon: Icon(Icons.cleaning_services_rounded))
-        ],
-      ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.fromLTRB(0, 32, 0, 150),
+              padding: EdgeInsets.fromLTRB(0, 100, 0, 150),
               controller: scrollCntrl,
               itemCount: chatMsgs.length,
               itemBuilder: (context, index) {
@@ -82,69 +67,106 @@ class ChatPage extends ConsumerWidget {
 
   Widget fabField(BuildContext context, WidgetRef ref,
       TextEditingController controller, ScrollController scrollCntrl) {
-    return Row(
-      children: [
-        Flexible(
-          flex: 9,
-          fit: FlexFit.tight,
-          child: Container(
-            padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
-            margin: EdgeInsets.fromLTRB(16, 0, 5, 0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.25),
-                    spreadRadius: 5,
-                    blurRadius: 7)
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: controller,
-                    maxLines: null,
-                    minLines: 1,
-                    decoration: InputDecoration(
-                      hintText: 'Chat with Unni...',
-                      hintStyle: Theme.of(context).textTheme.labelMedium,
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(16),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.more_vert,
-                    )),
-              ],
+    final MenuController menucontroller = MenuController();
+    return Container(
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(32),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.grey.withValues(alpha: 0.25),
+              spreadRadius: 5,
+              blurRadius: 7)
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              maxLines: null,
+              minLines: 1,
+              decoration: InputDecoration(
+                hintText: 'Chat with Unni...',
+                hintStyle: Theme.of(context).textTheme.labelMedium,
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(16),
+              ),
             ),
           ),
-        ),
-        Flexible(
-          flex: 2,
-          fit: FlexFit.tight,
-          child: Container(
-            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-            margin: EdgeInsets.fromLTRB(0, 0, 16, 0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(32),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.25),
-                    spreadRadius: 5,
-                    blurRadius: 7)
-              ],
+          SizedBox(
+            width: 8,
+          ),
+          MenuAnchor(
+            controller: menucontroller,
+            alignmentOffset: Offset(-10, 18),
+            style: MenuStyle(
+              shadowColor: WidgetStateProperty.all(Colors.white),
+              alignment: Alignment(-5.5, 16),
+              backgroundColor: WidgetStateProperty.all(Colors.white),
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32))),
             ),
-            child: IconButton(
+            builder: (context, controller, child) {
+              return IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  controller.isOpen ? controller.close() : controller.open();
+                },
+                icon: Icon(
+                  LineIcons.verticalEllipsis,
+                  size: 26,
+                ),
+              );
+            },
+            menuChildren: [
+              menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
+                ref.read(msgProvider.notifier).clearMessages();
+                menucontroller.close();
+              }),
+              menuItem(context, ref, "Generate Schedule", LineIcons.penSquare,
+                  () {
+                menucontroller.close();
+              }),
+            ],
+          ),
+          //PopupMenuButton has animation while the menuanchor doesnt
+          // PopupMenuButton(
+          //   offset: Offset(0, 40),
+          //   menuPadding: EdgeInsets.all(16),
+          //   icon: Icon(
+          //     LineIcons.verticalEllipsis,
+          //     size: 26,
+          //     color: Colors.black,
+          //   ),
+          //   color: Colors.white,
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(26),
+          //   ),
+          //   onSelected: (value) {
+          //     if (value == 'clear') {
+          //       ref.read(msgProvider.notifier).clearMessages();
+          //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //         content: Text('Chat cleared'),
+          //         duration: Duration(milliseconds: 300),
+          //       ));
+          //     }
+          //   },
+          //   itemBuilder: (context) => [
+          //     PopupMenuItem(
+          //       value: 'clear',
+          //       child: Text('Clear Chat'),
+          //     ),
+          //     PopupMenuItem(
+          //       value: 'settings',
+          //       child: Text('Settings'),
+          //     ),
+          //   ],
+          // ),
+          IconButton(
+              padding: EdgeInsets.zero,
               onPressed: () async {
                 if (controller.text.isNotEmpty) {
                   //Add the message to the state
@@ -163,11 +185,21 @@ class ChatPage extends ConsumerWidget {
               icon: Icon(
                 LineIcons.share,
                 size: 26,
-              ),
-            ),
-          ),
-        ),
-      ],
+              )),
+        ],
+      ),
     );
   }
+}
+
+ListTile menuItem(BuildContext context, WidgetRef ref, String label,
+    IconData icon, GestureTapCallback onTap) {
+  return ListTile(
+    title: Text(
+      label,
+      style: Theme.of(context).textTheme.labelSmall,
+    ),
+    leading: Icon(icon),
+    onTap: onTap,
+  );
 }
