@@ -117,30 +117,25 @@ class _HabitState extends ConsumerState<HabitPage> {
                     }),
               ),
               SizedBox(height: 8),
-              ElevatedButton(
-                  onPressed: () async {
-                    if (habitNameController.text.isNotEmpty) {
-                      final newHabit = HabitModel(
-                        habitName: habitNameController.text,
-                        color: selectedColor.value
-                            .toRadixString(16)
-                            .padLeft(8, '0'),
-                        createdAt: DateTime.now(),
-                        completedDates: {},
-                      );
-                      await ref.read(habitAddProvider(newHabit).future);
-                      habitNameController.clear();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Enter habit name')));
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.blue.shade100,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15))),
-                  child: Text('ADD'))
+              fabButton(context, () async {
+                if (habitNameController.text.isNotEmpty) {
+                  final newHabit = HabitModel(
+                    habitName: habitNameController.text,
+                    color:
+                        selectedColor.value.toRadixString(16).padLeft(8, '0'),
+                    createdAt: DateTime.now(),
+                    completedDates: {},
+                  );
+                  await ref.read(habitAddProvider(newHabit).future);
+                  habitNameController.clear();
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Enter habit name')));
+                }
+              }, 'Add Habit', 0),
             ],
           ),
         )
