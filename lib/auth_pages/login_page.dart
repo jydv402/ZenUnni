@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obsureText = true;
 
   void displayMessageToUser(String message, BuildContext context) {
     showDialog(
@@ -22,6 +23,12 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) => AlertDialog(
               title: Text(message),
             ));
+  }
+
+  void _toggleObscure() {
+    setState(() {
+      _obsureText = !_obsureText;
+    });
   }
 
   void loginUser() async {
@@ -72,14 +79,26 @@ class _LoginPageState extends State<LoginPage> {
             decoration: const InputDecoration(
               labelText: 'Email',
             ),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 20),
           TextFormField(
             controller: _passwordController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Password',
+              suffixIcon: IconButton(
+                padding: EdgeInsets.only(right: 26),
+                onPressed: () => _toggleObscure(),
+                icon: Icon(
+                  _obsureText
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                ),
+                highlightColor: Colors.transparent,
+              ),
             ),
-            obscureText: true,
+            obscureText: _obsureText,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 20),
           Text(

@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      initialRoute: '/username', //Specifies the initial page route
+      initialRoute: '/', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
         '/login': (context) => const LoginPage(),

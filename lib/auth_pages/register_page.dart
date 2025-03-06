@@ -5,13 +5,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/theme/light.dart';
 
-class RegisterPage extends ConsumerWidget {
-  RegisterPage({super.key});
+class RegisterPage extends ConsumerStatefulWidget {
+  const RegisterPage({super.key});
 
+  @override
+  RegisterPageState createState() => RegisterPageState();
+}
+
+class RegisterPageState extends ConsumerState<RegisterPage> {
   final _emailController = TextEditingController();
-
   final _passwordController = TextEditingController();
-
   final _confirmPasswordController = TextEditingController();
 
   void displayMessageToUser(String message, BuildContext context) {
@@ -67,8 +70,16 @@ class RegisterPage extends ConsumerWidget {
     }
   }
 
+  bool _obsureText = true;
+
+  void _toggleObscure() {
+    setState(() {
+      _obsureText = !_obsureText;
+    });
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         padding: pagePadding,
@@ -83,22 +94,45 @@ class RegisterPage extends ConsumerWidget {
             decoration: const InputDecoration(
               labelText: 'Email',
             ),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 20),
           TextFormField(
             controller: _passwordController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Password',
+              suffixIcon: IconButton(
+                padding: EdgeInsets.only(right: 26),
+                onPressed: () => _toggleObscure(),
+                icon: Icon(
+                  _obsureText
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                ),
+                highlightColor: Colors.transparent,
+              ),
             ),
-            obscureText: true,
+            obscureText: _obsureText,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 20),
           TextFormField(
             controller: _confirmPasswordController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Confirm Password',
+              suffixIcon: IconButton(
+                padding: EdgeInsets.only(right: 26),
+                onPressed: () => _toggleObscure(),
+                icon: Icon(
+                  _obsureText
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                ),
+                highlightColor: Colors.transparent,
+              ),
             ),
-            obscureText: true,
+            obscureText: _obsureText,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 20),
           const SizedBox(

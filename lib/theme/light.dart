@@ -53,7 +53,7 @@ ThemeData get lightTheme {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      contentPadding: EdgeInsets.all(26),
+      contentPadding: EdgeInsets.all(32),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
         borderSide: const BorderSide(color: Colors.white, width: 2.0),
