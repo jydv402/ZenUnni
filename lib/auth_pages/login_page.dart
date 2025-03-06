@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:zen/components/fab_button.dart';
+import 'package:zen/theme/light.dart';
 
 // why is loginpage stateful
 class LoginPage extends StatefulWidget {
@@ -41,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
         //navigate to home page
         Navigator.pushReplacementNamed(
           context,
-         '/home',
+          '/home',
         );
       }
     } on FirebaseAuthException catch (e) {
@@ -56,90 +57,64 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Login to ZENUNNI",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-      ),
-      body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Login",
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
+      body: ListView(
+        padding: pagePadding,
+        children: [
+          Text(
+            "Login",
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          TextFormField(
+            controller: _emailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _passwordController,
+            decoration: const InputDecoration(
+              labelText: 'Password',
+              border: OutlineInputBorder(),
+            ),
+            obscureText: true,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            "Forgot Password?",
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Colors.blue,
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                "Forgot Password?",
-                style: TextStyle(color: Colors.blue),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  loginUser();
-                  _emailController.clear();
-                  _passwordController.clear();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                ),
-                child: const Text('Login',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              //   Row(
-              //   children: [
-              //     Text("Already have an account? "),
-              //     GestureDetector(
-              //       onTap: onTap,
-              //       child: Text("Login", style: TextStyle(color: Colors.blue)),
-              //     ),
-              //   ],
-              // )
-
-              Text.rich(TextSpan(text: "Don't have an account? ", children: [
+          ),
+          const SizedBox(height: 60),
+          Text.rich(
+            TextSpan(
+              text: "Don't have an account? ",
+              children: [
                 TextSpan(
                     text: "Register",
                     style: const TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         //navigate to register page
-                        Navigator.pushReplacementNamed(
-                            context,
-                           '/register');
+                        Navigator.pushReplacementNamed(context, '/register');
                       })
-              ])),
-            ],
-          )),
+              ],
+            ),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ),
+      floatingActionButton: fabButton(context, () {
+        loginUser();
+        _emailController.clear();
+        _passwordController.clear();
+      }, 'Login', 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

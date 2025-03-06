@@ -15,7 +15,7 @@ import 'package:zen/screens/profile.dart';
 import 'package:zen/screens/schedule.dart';
 import 'package:zen/screens/search.dart';
 import 'package:zen/screens/todo.dart';
-import 'package:zen/screens/username.dart';
+import 'package:zen/auth_pages/username.dart';
 import 'package:zen/theme/light.dart';
 import 'firebase_options.dart';
 

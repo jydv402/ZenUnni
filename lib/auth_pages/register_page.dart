@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/components/fab_button.dart';
+import 'package:zen/theme/light.dart';
 
 class RegisterPage extends ConsumerWidget {
   RegisterPage({super.key});
@@ -48,10 +50,7 @@ class RegisterPage extends ConsumerWidget {
           Navigator.pop(context);
 
           //navigate to home page
-          Navigator.pushReplacementNamed(
-            context,
-            '/username'
-          );
+          Navigator.pushReplacementNamed(context, '/username');
         }
         // Clear fields after successful registration
         _emailController.clear();
@@ -71,85 +70,62 @@ class RegisterPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Register to ZENUNNI",
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Register",
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 40),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _confirmPasswordController,
-                decoration: const InputDecoration(
-                  labelText: 'Confirm Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  registerUser(context);
-                  FocusScope.of(context).unfocus();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                ),
-                child: const Text(
-                  'Register',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text.rich(TextSpan(text: "Already have an account? ", children: [
+      body: ListView(
+        padding: pagePadding,
+        children: [
+          Text(
+            "Register",
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          const SizedBox(height: 40),
+          TextFormField(
+            controller: _emailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _passwordController,
+            decoration: const InputDecoration(
+              labelText: 'Password',
+              border: OutlineInputBorder(),
+            ),
+            obscureText: true,
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _confirmPasswordController,
+            decoration: const InputDecoration(
+              labelText: 'Confirm Password',
+              border: OutlineInputBorder(),
+            ),
+            obscureText: true,
+          ),
+          const SizedBox(height: 20),
+          const SizedBox(
+            height: 10,
+          ),
+          Text.rich(
+              TextSpan(text: "Already have an account? ", children: [
                 TextSpan(
                     text: "Login",
                     style: const TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         //navigate to login page
-                        Navigator.pushReplacementNamed(
-                            context,
-                           '/login');
+                        Navigator.pushReplacementNamed(context, '/login');
                       })
-              ])),
-            ],
-          ),
-        ),
+              ]),
+              style: Theme.of(context).textTheme.headlineSmall),
+        ],
       ),
+      floatingActionButton: fabButton(context, () {
+        registerUser(context);
+        FocusScope.of(context).unfocus();
+      }, "Register", 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

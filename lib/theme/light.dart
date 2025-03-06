@@ -8,12 +8,12 @@ ThemeData get lightTheme {
   return ThemeData(
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
-      primary: const Color(0xFF121212),
-      onPrimary: Colors.white,
-      secondary: const Color(0xFF9575CD),
+      primary: const Color(0xFFEEEEEE), // Light gray
+      onPrimary: Colors.black,
+      secondary: const Color(0xFF673AB7), // Darker purple
       onSecondary: Colors.white,
       surface: const Color(0xFF202124),
-      onSurface: Colors.black,
+      onSurface: Colors.white,
       error: Colors.red,
       onError: Colors.white,
     ),
@@ -50,6 +50,21 @@ ThemeData get lightTheme {
         //Define the status bar parameters
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      contentPadding: EdgeInsets.all(26),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(color: Colors.white, width: 1.0),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(color: Colors.white, width: 1.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(color: Colors.white, width: 1.0),
       ),
     ),
   );
