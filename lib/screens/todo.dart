@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zen/components/fab_button.dart';
-import 'package:zen/services/task_serv.dart';
+import 'package:zen/services/todo_serv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/models/todo_model.dart';
 import 'package:zen/theme/light.dart';
@@ -26,7 +26,7 @@ class _TodoState extends ConsumerState<TodoPage> {
   DateTime? _date; //save date
   TimeOfDay? _time; //save time
   String _prior = ""; //save current prior
-  List<TaskModel> tasks = []; //to store the tasks in a list
+  List<TodoModel> tasks = []; //to store the tasks in a list
   bool isDone = false;
 
   DateTime? localDate;
@@ -62,7 +62,7 @@ class _TodoState extends ConsumerState<TodoPage> {
         _prior.isNotEmpty;
   }
 
-  void _showTask(BuildContext context, Function(TaskModel) addTaskCallback) {
+  void _showTask(BuildContext context, Function(TodoModel) addTaskCallback) {
     nameController.clear();
     descController.clear();
 
@@ -88,7 +88,7 @@ class _TodoState extends ConsumerState<TodoPage> {
     );
   }
 
-  Widget _newTaskDialog(Function(TaskModel) addTaskCallback) {
+  Widget _newTaskDialog(Function(TodoModel) addTaskCallback) {
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
         return SimpleDialog(
@@ -252,7 +252,7 @@ class _TodoState extends ConsumerState<TodoPage> {
           );
   }
 
-  Widget _dialogButtons(Function(TaskModel) addTaskCallback) {
+  Widget _dialogButtons(Function(TodoModel) addTaskCallback) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -277,7 +277,7 @@ class _TodoState extends ConsumerState<TodoPage> {
                 _time!.hour,
                 _time!.minute,
               );
-              TaskModel task = TaskModel(
+              TodoModel task = TodoModel(
                 name: nameController.text,
                 description: descController.text,
                 date: dateTime,
@@ -329,7 +329,7 @@ class _TodoState extends ConsumerState<TodoPage> {
         ],
       ),
       floatingActionButton: fabButton(context, () {
-        _showTask(context, (TaskModel task) {
+        _showTask(context, (TodoModel task) {
           setState(() {
             tasks.add(task);
           });
@@ -339,7 +339,7 @@ class _TodoState extends ConsumerState<TodoPage> {
     );
   }
 
-  Widget _taskListView(List<TaskModel> tasks) {
+  Widget _taskListView(List<TodoModel> tasks) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: tasks.length,
@@ -351,7 +351,7 @@ class _TodoState extends ConsumerState<TodoPage> {
             leading: Checkbox(
               value: task.isDone,
               onChanged: (bool? value) {
-                final updatedTask = TaskModel(
+                final updatedTask = TodoModel(
                   name: task.name,
                   description: task.description,
                   date: task.date,

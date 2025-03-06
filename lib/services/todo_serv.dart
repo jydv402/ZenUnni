@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/models/todo_model.dart';
 
-final taskProvider = StreamProvider<List<TaskModel>>((ref) async* {
+// Task model
+final taskProvider = StreamProvider<List<TodoModel>>((ref) async* {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final todoDoc = FirebaseFirestore.instance
       .collection('users')
@@ -16,7 +17,7 @@ final taskProvider = StreamProvider<List<TaskModel>>((ref) async* {
   await for (final snapshot in todoDoc.snapshots()) {
     final tasks = snapshot.docs.map((doc) {
       final data = doc.data();
-      return TaskModel(
+      return TodoModel(
         name: data['task'] ?? '',
         description: data['description'] ?? '',
         date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -28,8 +29,9 @@ final taskProvider = StreamProvider<List<TaskModel>>((ref) async* {
   }
 });
 
+// Add task
 final taskAddProvider =
-    FutureProvider.autoDispose.family<void, TaskModel>((ref, task) async {
+    FutureProvider.autoDispose.family<void, TodoModel>((ref, task) async {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final taskDoc = FirebaseFirestore.instance
       .collection('users')
@@ -40,8 +42,9 @@ final taskAddProvider =
   await taskDoc.add(task.toMap());
 });
 
+// Update task
 final taskUpdateProvider =
-    FutureProvider.family<void, TaskModel>((ref, task) async {
+    FutureProvider.family<void, TodoModel>((ref, task) async {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final taskDoc = FirebaseFirestore.instance
       .collection('users')

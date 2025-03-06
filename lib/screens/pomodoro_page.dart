@@ -13,7 +13,6 @@ class PomodoroPage extends ConsumerWidget {
     final pomo = ref.watch(pomoProvider);
     final pomoNotifier = ref.read(pomoProvider.notifier);
     const space8 = SizedBox(height: 8);
-    const space16 = SizedBox(height: 16);
     const space32 = SizedBox(height: 32);
     const space50 = SizedBox(height: 50);
 

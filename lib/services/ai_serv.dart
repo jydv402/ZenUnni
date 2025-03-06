@@ -53,7 +53,7 @@ class AIService {
     AI:
     ''';
 
-    print(promptTemplate);
+    //print(promptTemplate);
 
     final prompt = PromptTemplate(
       inputVariables: const {'message'},
@@ -64,4 +64,8 @@ class AIService {
     final response = await chain.run({'message': message});
     return response;
   }
+
+  // Future<String> schedGen(String message, List history, String username) async {
+  //   return sched;
+  // }
 }

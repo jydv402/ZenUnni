@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final now = DateTime.now();
 
-class TaskModel {
+class TodoModel {
   //todo :change name to taskName
   String name;
   String description;
@@ -11,7 +11,7 @@ class TaskModel {
   bool isDone;
   final Function(bool?)? onChanged;
   //constructor
-  TaskModel(
+  TodoModel(
       {required this.name,
       required this.description,
       required this.date,
@@ -30,8 +30,8 @@ class TaskModel {
     };
   }
 
-  factory TaskModel.fromMap(Map<String, dynamic> map) {
-    return TaskModel(
+  factory TodoModel.fromMap(Map<String, dynamic> map) {
+    return TodoModel(
       name: map['task'] ?? '',
       description: map['description'] ?? '',
       date: (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
@@ -40,14 +40,14 @@ class TaskModel {
     );
   }
 
-  TaskModel copyWith({
+  TodoModel copyWith({
     String? name,
     String? description,
     DateTime? date,
     String? priority,
     bool? isDone,
   }) {
-    return TaskModel(
+    return TodoModel(
         name: name ?? this.name,
         description: description ?? this.description,
         date: date ?? this.date,

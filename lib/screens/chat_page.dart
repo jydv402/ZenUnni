@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:zen/components/confirm_box.dart';
 import 'package:zen/services/chat_serv.dart';
+import 'package:zen/services/schedule_serv.dart';
+import 'package:zen/services/todo_serv.dart';
 import 'package:zen/theme/light.dart';
 
 class ChatPage extends ConsumerWidget {
@@ -74,6 +75,8 @@ class ChatPage extends ConsumerWidget {
       ScrollController scrollCntrl,
       bool isEmpty) {
     final MenuController menucontroller = MenuController();
+    final tasks = ref.watch(taskProvider);
+
     return Container(
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -141,6 +144,7 @@ class ChatPage extends ConsumerWidget {
               //Generate schedule item
               menuItem(context, ref, "Generate Schedule", LineIcons.penSquare,
                   () {
+                ref.read(scheduleProvider(tasks.value ?? []).future);
                 menucontroller.close();
               }),
             ],
