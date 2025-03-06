@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/auth_pages/login_page.dart';
+import 'package:zen/services/user_serv.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends ConsumerWidget {
   const AuthPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         body: StreamBuilder(
             stream: FirebaseAuth.instance.authStateChanges(),

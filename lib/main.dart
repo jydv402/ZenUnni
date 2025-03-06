@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
-        '/login':(context)=>const LoginPage(),
-        '/register':(context)=> RegisterPage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => RegisterPage(),
         '/username': (context) => const UsernamePage(),
         '/home': (context) => const LandPage(),
         '/chat': (context) => const ChatPage(),
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/habit': (context) => const HabitPage(),
         '/profile': (context) => const ProfilePage(),
         '/schedule': (context) => const SchedPage(),
-        '/search':(context)=> const SearchPage()
+        '/search': (context) => const SearchPage()
       },
     );
   }
