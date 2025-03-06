@@ -11,25 +11,32 @@ class SchedPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tasks = ref.watch(taskProvider);
     final schedule = ref.watch(scheduleProvider(tasks.value ?? []));
-    return schedule.when(
-      data: (schedule) => Scaffold(
-        body: ListView(
-          padding: pagePadding,
-          children: [
-            Text(
-              "Schedule",
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            const SizedBox(height: 60),
-            Text(
-              schedule,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ],
-        ),
+    return Scaffold(
+      body: schedule.when(
+        data: (scheduleItems) {
+          // Use the scheduleItems list to build your UI
+          return ListView.builder(
+            padding: pagePadding,
+            itemCount: scheduleItems.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Text('Schedule',
+                    style: Theme.of(context).textTheme.headlineLarge);
+              } else {
+                final item = scheduleItems[index - 1];
+                return ListTile(
+                  title: Text(item.taskName,
+                      style: Theme.of(context).textTheme.bodySmall),
+                  subtitle: Text('${item.startTime} - ${item.endTime}',
+                      style: Theme.of(context).textTheme.bodySmall),
+                );
+              }
+            },
+          );
+        },
+        error: (error, stackTrace) => Text('Error: $error'),
+        loading: () => const CircularProgressIndicator(),
       ),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text('Error: $err')),
     );
   }
 }

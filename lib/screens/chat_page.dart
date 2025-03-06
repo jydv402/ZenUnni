@@ -145,6 +145,7 @@ class ChatPage extends ConsumerWidget {
               menuItem(context, ref, "Generate Schedule", LineIcons.penSquare,
                   () {
                 ref.read(scheduleProvider(tasks.value ?? []).future);
+                //schedGen(tasks.value ?? [], "user");
                 menucontroller.close();
               }),
             ],

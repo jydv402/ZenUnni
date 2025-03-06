@@ -60,6 +60,7 @@ class LandPage extends ConsumerWidget {
         if (mood == null)
           //Show add mood msg
           _msgContainer(context, "No mood added yet, add it now? 👀", () {
+            Navigator.pushNamed(context, '/mood1');
             Navigator.pushNamed(context, '/mood2');
           }),
         const SizedBox(height: 8),
