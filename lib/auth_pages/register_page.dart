@@ -82,24 +82,21 @@ class RegisterPage extends ConsumerWidget {
             controller: _emailController,
             decoration: const InputDecoration(
               labelText: 'Email',
-              border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           TextFormField(
             controller: _passwordController,
             decoration: const InputDecoration(
               labelText: 'Password',
-              border: OutlineInputBorder(),
             ),
             obscureText: true,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           TextFormField(
             controller: _confirmPasswordController,
             decoration: const InputDecoration(
               labelText: 'Confirm Password',
-              border: OutlineInputBorder(),
             ),
             obscureText: true,
           ),
@@ -111,7 +108,10 @@ class RegisterPage extends ConsumerWidget {
               TextSpan(text: "Already have an account? ", children: [
                 TextSpan(
                     text: "Login",
-                    style: const TextStyle(color: Colors.blue),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         //navigate to login page
@@ -119,6 +119,7 @@ class RegisterPage extends ConsumerWidget {
                       })
               ]),
               style: Theme.of(context).textTheme.headlineSmall),
+          const SizedBox(height: 200),
         ],
       ),
       floatingActionButton: fabButton(context, () {

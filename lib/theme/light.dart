@@ -56,16 +56,33 @@ ThemeData get lightTheme {
       contentPadding: EdgeInsets.all(26),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.white, width: 1.0),
+        borderSide: const BorderSide(color: Colors.white, width: 2.0),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.white, width: 1.0),
+        borderSide: const BorderSide(color: Colors.white, width: 2.0),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.white, width: 1.0),
+        borderSide: const BorderSide(color: Colors.white, width: 2.0),
       ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+      ),
+      hintStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      labelStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      helperStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      prefixStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      suffixStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      counterStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      errorStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.red),
+      floatingLabelStyle:
+          GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
     ),
   );
 }

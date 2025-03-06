@@ -71,15 +71,13 @@ class _LoginPageState extends State<LoginPage> {
             controller: _emailController,
             decoration: const InputDecoration(
               labelText: 'Email',
-              border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           TextFormField(
             controller: _passwordController,
             decoration: const InputDecoration(
               labelText: 'Password',
-              border: OutlineInputBorder(),
             ),
             obscureText: true,
           ),
@@ -97,7 +95,10 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 TextSpan(
                     text: "Register",
-                    style: const TextStyle(color: Colors.blue),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         //navigate to register page
@@ -107,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             style: Theme.of(context).textTheme.bodySmall,
           ),
+          const SizedBox(height: 200),
         ],
       ),
       floatingActionButton: fabButton(context, () {
