@@ -3,6 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:zen/components/confirm_box.dart';
 import 'package:zen/services/chat_serv.dart';
 import 'package:zen/theme/light.dart';
 
@@ -60,13 +61,18 @@ class ChatPage extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: fabField(context, ref, controller, scrollCntrl),
+      floatingActionButton:
+          fabField(context, ref, controller, scrollCntrl, chatMsgs.isEmpty),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget fabField(BuildContext context, WidgetRef ref,
-      TextEditingController controller, ScrollController scrollCntrl) {
+  Widget fabField(
+      BuildContext context,
+      WidgetRef ref,
+      TextEditingController controller,
+      ScrollController scrollCntrl,
+      bool isEmpty) {
     final MenuController menucontroller = MenuController();
     return Container(
       padding: EdgeInsets.all(8),
@@ -122,49 +128,23 @@ class ChatPage extends ConsumerWidget {
               );
             },
             menuChildren: [
-              menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
-                ref.read(msgProvider.notifier).clearMessages();
-                menucontroller.close();
-              }),
+              //Clear chat item
+              if (!isEmpty)
+                menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
+                  showConfirmDialog(context, "Clear Chat ?",
+                      "Are you sure you want to clear the chat ?", "Clear", () {
+                    ref.read(msgProvider.notifier).clearMessages();
+                    Navigator.of(context).pop();
+                  });
+                  menucontroller.close();
+                }),
+              //Generate schedule item
               menuItem(context, ref, "Generate Schedule", LineIcons.penSquare,
                   () {
                 menucontroller.close();
               }),
             ],
           ),
-          //PopupMenuButton has animation while the menuanchor doesnt
-          // PopupMenuButton(
-          //   offset: Offset(0, 40),
-          //   menuPadding: EdgeInsets.all(16),
-          //   icon: Icon(
-          //     LineIcons.verticalEllipsis,
-          //     size: 26,
-          //     color: Colors.black,
-          //   ),
-          //   color: Colors.white,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(26),
-          //   ),
-          //   onSelected: (value) {
-          //     if (value == 'clear') {
-          //       ref.read(msgProvider.notifier).clearMessages();
-          //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //         content: Text('Chat cleared'),
-          //         duration: Duration(milliseconds: 300),
-          //       ));
-          //     }
-          //   },
-          //   itemBuilder: (context) => [
-          //     PopupMenuItem(
-          //       value: 'clear',
-          //       child: Text('Clear Chat'),
-          //     ),
-          //     PopupMenuItem(
-          //       value: 'settings',
-          //       child: Text('Settings'),
-          //     ),
-          //   ],
-          // ),
           IconButton(
               padding: EdgeInsets.zero,
               onPressed: () async {
@@ -192,6 +172,7 @@ class ChatPage extends ConsumerWidget {
   }
 }
 
+//Menu Item in the popup menu
 ListTile menuItem(BuildContext context, WidgetRef ref, String label,
     IconData icon, GestureTapCallback onTap) {
   return ListTile(

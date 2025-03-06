@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/theme/light.dart';
 
@@ -30,53 +31,15 @@ class ProfilePage extends ConsumerWidget {
             height: 100,
           ),
           fabButton(context, () {
-            _showLogoutDialog(context);
+            // show logout dialog
+            showConfirmDialog(context, "Logout ?",
+                "Are you sure you want to logout ?", "Logout", () {
+              logoutUser(context);
+              Navigator.of(context).pop();
+            });
           }, "Logout", 0),
         ],
       ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(26),
-          ),
-          title: Text(
-            "Logout ?",
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          content: Text(
-            "Are you sure you want to logout?",
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child:
-                  Text("Cancel", style: Theme.of(context).textTheme.bodySmall),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                logoutUser(context); // Call the logout function
-              },
-              child: Text(
-                "Logout",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: Colors.red),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }
