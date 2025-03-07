@@ -102,11 +102,18 @@ class _LoginPageState extends State<LoginPage> {
             style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 20),
-          Text(
-            "Forgot Password?",
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.blue,
-                ),
+          Text.rich(
+            TextSpan(
+              text: "Forgot Password?",
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.blue,
+                  ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  //navigate to password reset page
+                  Navigator.pushNamed(context, '/pass_reset');
+                },
+            ),
           ),
           const SizedBox(height: 60),
           Text.rich(

@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/auth_pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zen/auth_pages/email_verif_page.dart';
 import 'package:zen/auth_pages/login_page.dart';
 import 'package:zen/auth_pages/register_page.dart';
 import 'package:zen/screens/chat_page.dart';
@@ -10,6 +11,7 @@ import 'package:zen/screens/currMood.dart';
 import 'package:zen/screens/habit.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
+import 'package:zen/screens/pass_reset.dart';
 import 'package:zen/screens/pomodoro_page.dart';
 import 'package:zen/screens/profile.dart';
 import 'package:zen/screens/schedule.dart';
@@ -52,7 +54,9 @@ class MyApp extends StatelessWidget {
         '/habit': (context) => const HabitPage(),
         '/profile': (context) => const ProfilePage(),
         '/schedule': (context) => const SchedPage(),
-        '/search': (context) => const SearchPage()
+        '/search': (context) => const SearchPage(),
+        '/pass_reset': (context) => const PassResetPage(),
+        '/email_verif': (context) => const EmailVerifPage(),
       },
     );
   }

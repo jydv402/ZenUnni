@@ -48,12 +48,24 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
             email: _emailController.text.trim(),
             password: _passwordController.text.trim());
 
+        try {
+          await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+        } catch (e) {
+          if (context.mounted) {
+            displayMessageToUser(e.toString(), context);
+          }
+        }
+
         if (context.mounted) {
           //pop loading circle
           Navigator.pop(context);
 
           //navigate to home page
-          Navigator.pushReplacementNamed(context, '/username');
+          //Navigator.pushReplacementNamed(context, '/username');
+          Navigator.pushReplacementNamed(
+            context,
+            '/email_verif',
+          );
         }
         // Clear fields after successful registration
         _emailController.clear();
