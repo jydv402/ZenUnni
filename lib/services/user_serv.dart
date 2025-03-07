@@ -9,9 +9,10 @@ Future<void> createUserDoc(String username) async {
 
     await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
       'username': username,
-      'usernameLower':username.toLowerCase(),
+      'usernameLower': username.toLowerCase(),
       'email': user.email,
       'createdAt': FieldValue.serverTimestamp(),
+      'score': 0,
     });
   } catch (e) {
     throw Exception('Failed to create user document: $e');

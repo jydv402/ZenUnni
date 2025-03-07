@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:zen/components/customfab.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/services/user_serv.dart';
 
@@ -33,13 +34,8 @@ class LandPage extends ConsumerWidget {
           return const Center(child: CircularProgressIndicator());
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/profile');
-        },
-        child: Icon(LineIcons.user),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
+      floatingActionButton: CustomFAB(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -289,19 +285,4 @@ class LandPage extends ConsumerWidget {
       ),
     );
   }
-}
-
-Widget pageButtons(BuildContext context, String heroTag, String route,
-    Icon icon, double bottom, double right) {
-  return Positioned(
-    bottom: bottom,
-    right: right,
-    child: FloatingActionButton(
-      heroTag: heroTag,
-      onPressed: () {
-        Navigator.pushNamed(context, route);
-      },
-      child: icon,
-    ),
-  );
 }
