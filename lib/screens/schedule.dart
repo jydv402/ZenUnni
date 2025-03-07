@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/components/fab_button.dart';
 import 'package:zen/services/schedule_serv.dart';
 import 'package:zen/services/todo_serv.dart';
 import 'package:zen/theme/light.dart';
@@ -27,7 +28,8 @@ class SchedPage extends ConsumerWidget {
                 return ListTile(
                   title: Text(item.taskName,
                       style: Theme.of(context).textTheme.bodySmall),
-                  subtitle: Text('${item.startTime} - ${item.endTime}',
+                  subtitle: Text(
+                      '${item.priority}\n${item.startTime} - ${item.endTime}',
                       style: Theme.of(context).textTheme.bodySmall),
                 );
               }
@@ -37,6 +39,10 @@ class SchedPage extends ConsumerWidget {
         error: (error, stackTrace) => Text('Error: $error'),
         loading: () => const CircularProgressIndicator(),
       ),
+      floatingActionButton: fabButton(context, () {
+        clearScheduleData(ref, tasks.value ?? []);
+      }, "Regenerate Schedule", 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
