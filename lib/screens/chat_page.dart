@@ -14,20 +14,18 @@ class ChatPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatMsgs = ref.watch(msgProvider);
-    final controller = TextEditingController();
-    final scrollCntrl = ScrollController();
 
     return Scaffold(
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.fromLTRB(0, 100, 0, 150),
-              controller: scrollCntrl,
+              padding: const EdgeInsets.fromLTRB(0, 100, 0, 150),
               itemCount: chatMsgs.length,
               itemBuilder: (context, index) {
                 final msg = chatMsgs[index];
                 return Align(
+                  key: ValueKey(msg.text),
                   alignment:
                       msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
@@ -39,18 +37,19 @@ class ChatPage extends ConsumerWidget {
                           ? Colors.green.shade200 //User msg pill
                           : Colors.blue.shade200, //AI msg pill
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(28),
-                        bottomRight: Radius.circular(28),
+                        bottomLeft: const Radius.circular(28),
+                        bottomRight: const Radius.circular(28),
                         topLeft: msg.isUser
-                            ? Radius.circular(28)
-                            : Radius.circular(2),
+                            ? const Radius.circular(28)
+                            : const Radius.circular(2),
                         topRight: msg.isUser
-                            ? Radius.circular(2)
-                            : Radius.circular(28),
+                            ? const Radius.circular(2)
+                            : const Radius.circular(28),
                       ),
                     ),
-                    padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                    margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     child: MarkdownBody(
                       data: msg.text,
                       styleSheet: markdownStyleSheetBlack,
@@ -62,24 +61,22 @@ class ChatPage extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton:
-          fabField(context, ref, controller, scrollCntrl, chatMsgs.isEmpty),
+      floatingActionButton: fabField(context, ref),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   Widget fabField(
-      BuildContext context,
-      WidgetRef ref,
-      TextEditingController controller,
-      ScrollController scrollCntrl,
-      bool isEmpty) {
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     final MenuController menucontroller = MenuController();
+    final TextEditingController controller = TextEditingController();
     final tasks = ref.watch(taskProvider);
 
     return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(32),
@@ -103,11 +100,11 @@ class ChatPage extends ConsumerWidget {
                 hintText: 'Chat with Unni...',
                 hintStyle: Theme.of(context).textTheme.labelMedium,
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.all(16),
+                contentPadding: const EdgeInsets.all(16),
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           MenuAnchor(
@@ -115,18 +112,18 @@ class ChatPage extends ConsumerWidget {
             alignmentOffset: Offset(-10, 18),
             style: MenuStyle(
               shadowColor: WidgetStateProperty.all(Colors.white),
-              alignment: Alignment(-5.5, 16),
+              alignment: const Alignment(-5.5, 16),
               backgroundColor: WidgetStateProperty.all(Colors.white),
               shape: WidgetStateProperty.all(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32))),
             ),
             builder: (context, controller, child) {
               return IconButton(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.all(0),
                 onPressed: () {
                   controller.isOpen ? controller.close() : controller.open();
                 },
-                icon: Icon(
+                icon: const Icon(
                   LineIcons.verticalEllipsis,
                   size: 26,
                 ),
@@ -134,15 +131,14 @@ class ChatPage extends ConsumerWidget {
             },
             menuChildren: [
               //Clear chat item
-              if (!isEmpty)
-                menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
-                  showConfirmDialog(context, "Clear Chat ?",
-                      "Are you sure you want to clear the chat ?", "Clear", () {
-                    ref.read(msgProvider.notifier).clearMessages();
-                    Navigator.of(context).pop();
-                  });
-                  menucontroller.close();
-                }),
+              menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
+                showConfirmDialog(context, "Clear Chat ?",
+                    "Are you sure you want to clear the chat ?", "Clear", () {
+                  ref.read(msgProvider.notifier).clearMessages();
+                  Navigator.of(context).pop();
+                });
+                menucontroller.close();
+              }),
               //Generate schedule item
               menuItem(context, ref, "Generate Schedule", LineIcons.penSquare,
                   () {
@@ -153,7 +149,7 @@ class ChatPage extends ConsumerWidget {
             ],
           ),
           IconButton(
-              padding: EdgeInsets.zero,
+              padding: const EdgeInsets.all(0),
               onPressed: () async {
                 if (controller.text.isNotEmpty) {
                   //Add the message to the state
@@ -164,12 +160,9 @@ class ChatPage extends ConsumerWidget {
                       await ref.read(aiResponseAdder(controller.text).future);
                   ref.read(msgProvider.notifier).addMessage(aiMsg);
                 }
-                scrollCntrl.animateTo(scrollCntrl.position.maxScrollExtent,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeIn);
                 controller.clear();
               },
-              icon: Icon(
+              icon: const Icon(
                 LineIcons.share,
                 size: 26,
               )),
