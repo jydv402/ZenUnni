@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/services/ai_serv.dart';
-import 'package:zen/services/user_serv.dart';
 
 final moodProvider = StreamProvider<String?>((ref) async* {
   final FirebaseAuth auth = FirebaseAuth.instance;
