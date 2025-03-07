@@ -2,14 +2,23 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_google/langchain_google.dart';
+import 'package:flutter/foundation.dart';
 
 class AIService {
-  final ChatGoogleGenerativeAI llm;
-  final DateTime now = DateTime.now();
+  Future<String> getMotivationalMessageIsolate(String mood) async {
+    final result = await compute(_getMotivationalMessageWorker, {
+      'mood': mood,
+      'apiKey': dotenv.env['KEY']!,
+    });
+    return result;
+  }
 
-  AIService() : llm = ChatGoogleGenerativeAI(apiKey: dotenv.env['KEY']!);
+  Future<String> _getMotivationalMessageWorker(
+      Map<String, dynamic> args) async {
+    final mood = args['mood'] as String;
+    final apiKey = args['apiKey'] as String;
+    final llm = ChatGoogleGenerativeAI(apiKey: apiKey);
 
-  Future<String> getMotivationalMessage(String mood) async {
     const systemPrompt = '''
     You are Unni, a motivational assistant. Your primary goal is to uplift and inspire users based on their current mood.
 
@@ -44,13 +53,28 @@ class AIService {
     return response;
   }
 
-  Future<String> chat(
+  Future<String> chatIsolate(
       String message, List history, String username, String mood) async {
+    final result = await compute(_chatWorker, {
+      'message': message,
+      'history': history,
+      'username': username,
+      'mood': mood,
+      'apiKey': dotenv.env['KEY']!,
+    });
+    return result;
+  }
+
+  Future<String> _chatWorker(Map<String, dynamic> args) async {
     final DateTime now = DateTime.now();
-    final historyString = history
+    final message = args['message'] as String;
+    final username = args['username'] as String;
+    final historyString = args['history']
         .map((msg) => '${msg.isUser ? username : 'AI'}: ${msg.text}')
         .join('\n');
-
+    final mood = args['mood'] as String;
+    final apiKey = args['apiKey'] as String;
+    final llm = ChatGoogleGenerativeAI(apiKey: apiKey);
     const systemPrompt = '''
     You are Unni, a helpful and informative AI assistant. 
     Your core purpose is to provide positive, fun, and encouraging messages to users, 
@@ -102,8 +126,19 @@ class AIService {
     return response;
   }
 
-  Future<String> schedGen(String userTasks) {
+  Future<String> schedGenIsolate(String userTasks) async {
+    final result = await compute(_schedGenWorker, {
+      'userTasks': userTasks,
+      'apiKey': dotenv.env['KEY']!,
+    });
+    return result;
+  }
+
+  Future<String> _schedGenWorker(Map<String, dynamic> args) async {
+    final userTasks = args['userTasks'] as String;
+    final apiKey = args['apiKey'] as String;
     final now = "${DateTime.now().hour}:${DateTime.now().minute}";
+
     final systemPrompt = '''
     You are Unni, a helpful AI assistant that specializes in creating efficient and personalized schedules for users keeping in mind the available time they have.
 
@@ -119,14 +154,20 @@ class AIService {
       "1": {
         "taskName": "Task 1",
         "priority": "High",
-        "startTime": "10:00 AM",
-        "endTime": "11:00 AM"
+        "startTime": "10:00",
+        "endTime": "11:00"
       },
       "2": {
         "taskName": "Task 2",
         "priority": "Medium",
-        "startTime": "11:00 AM",
-        "endTime": "12:00 PM"
+        "startTime": "13:00",
+        "endTime": "16:00"
+      }
+      "3": {
+        "taskName": "Task 3",
+        "priority": "Medium",
+        "startTime": "19:00",
+        "endTime": "21:00"
       }
     }
     ```
@@ -141,13 +182,13 @@ class AIService {
       ''',
     );
 
+    final llm = ChatGoogleGenerativeAI(apiKey: apiKey);
     final chain = LLMChain(llm: llm, prompt: promptTemplate);
-    final response = chain.run({
+    final response = await chain.run({
       'userTasks': userTasks,
       'systemPrompt': systemPrompt,
       'now': now,
     });
-
     return response;
   }
 }

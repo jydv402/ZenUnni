@@ -52,7 +52,7 @@ final scheduleProvider =
     final aiService = AIService();
 
     print(userTasks);
-    final response = await aiService.schedGen(userTasks);
+    final response = await aiService.schedGenIsolate(userTasks);
     print(response);
 
     final cleanedResponse = response

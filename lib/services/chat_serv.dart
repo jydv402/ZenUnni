@@ -35,7 +35,7 @@ final aiResponseAdder = FutureProvider.family<Message, String>(
     final mood = ref.watch(moodProvider);
 
     final aiResponse = await AIService()
-        .chat(msg, chatMsgs, userName.value ?? '', mood.value ?? '');
+        .chatIsolate(msg, chatMsgs, userName.value ?? '', mood.value ?? '');
 
     return Message(
         text: aiResponse
