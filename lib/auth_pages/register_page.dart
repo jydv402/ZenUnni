@@ -43,14 +43,23 @@ class RegisterPage extends ConsumerWidget {
             email: _emailController.text.trim(),
             password: _passwordController.text.trim());
 
+        try {
+          await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+        } catch (e) {
+          if (context.mounted) {
+            displayMessageToUser(e.toString(), context);
+          }
+        }
+
         if (context.mounted) {
           //pop loading circle
           Navigator.pop(context);
 
           //navigate to home page
+          //Navigator.pushReplacementNamed(context, '/username');
           Navigator.pushReplacementNamed(
             context,
-            '/username'
+            '/email_verif',
           );
         }
         // Clear fields after successful registration
@@ -141,9 +150,7 @@ class RegisterPage extends ConsumerWidget {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         //navigate to login page
-                        Navigator.pushReplacementNamed(
-                            context,
-                           '/login');
+                        Navigator.pushReplacementNamed(context, '/login');
                       })
               ])),
             ],

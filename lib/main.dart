@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/auth_pages/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zen/auth_pages/email_verif_page.dart';
 import 'package:zen/auth_pages/login_page.dart';
 import 'package:zen/auth_pages/register_page.dart';
 import 'package:zen/screens/chat_page.dart';
@@ -54,7 +55,8 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => const ProfilePage(),
         '/schedule': (context) => const SchedPage(),
         '/search': (context) => const SearchPage(),
-        '/pass_reset': (context) => const PassResetPage()
+        '/pass_reset': (context) => const PassResetPage(),
+        '/email_verif':(context) => const EmailVerifPage(),
       },
     );
   }
