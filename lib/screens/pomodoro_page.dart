@@ -67,59 +67,59 @@ class PomodoroPage extends ConsumerWidget {
           //   }
           // }, 'Start Timer', 0),
           space50,
-          Row(
-            spacing: 8,
-            children: [
-              Flexible(
-                flex: 1,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[400]),
-                    onPressed: () {
-                      pomoNotifier.resetTimer();
-                    },
-                    child: Text('Reset'),
-                  ),
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (duration.text.isNotEmpty &&
-                          breakDuration.text.isNotEmpty &&
-                          rounds.text.isNotEmpty) {
-                        pomoNotifier.setTimer(
-                            int.parse(duration.text),
-                            int.parse(breakDuration.text),
-                            int.parse(rounds.text));
-                        pomoNotifier.startTimer();
-                        Navigator.pushNamed(context, '/counter');
-                      }
-                    },
-                    child: Text('Start Timer'),
-                  ),
-                ),
-              ),
-            ],
-          )
+          // Row(
+          //   spacing: 8,
+          //   children: [
+          //     Flexible(
+          //       flex: 1,
+          //       child: SizedBox(
+          //         width: double.infinity,
+          //         child: ElevatedButton(
+          //           style: ElevatedButton.styleFrom(
+          //               backgroundColor: Colors.red[400]),
+          //           onPressed: () {
+          //             pomoNotifier.resetTimer();
+          //           },
+          //           child: Text('Reset'),
+          //         ),
+          //       ),
+          //     ),
+          //     Flexible(
+          //       flex: 1,
+          //       child: SizedBox(
+          //         width: double.infinity,
+          //         child: ElevatedButton(
+          //           onPressed: () {
+          //             if (duration.text.isNotEmpty &&
+          //                 breakDuration.text.isNotEmpty &&
+          //                 rounds.text.isNotEmpty) {
+          //               pomoNotifier.setTimer(
+          //                   int.parse(duration.text),
+          //                   int.parse(breakDuration.text),
+          //                   int.parse(rounds.text));
+          //               pomoNotifier.startTimer();
+          //               Navigator.pushNamed(context, '/counter');
+          //             }
+          //           },
+          //           child: Text('Start Timer'),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // )
         ],
       ),
-      // floatingActionButton: fabButton(() {
-      //   if (duration.text.isNotEmpty &&
-      //       breakDuration.text.isNotEmpty &&
-      //       rounds.text.isNotEmpty) {
-      //     pomoNotifier.setTimer(int.parse(duration.text),
-      //         int.parse(breakDuration.text), int.parse(rounds.text));
-      //     pomoNotifier.startTimer();
-      //     Navigator.pushNamed(context, '/counter');
-      //   }
-      // }, 'Start Timer', 26),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: fabButton(context, () {
+        if (duration.text.isNotEmpty &&
+            breakDuration.text.isNotEmpty &&
+            rounds.text.isNotEmpty) {
+          pomoNotifier.setTimer(int.parse(duration.text),
+              int.parse(breakDuration.text), int.parse(rounds.text));
+          pomoNotifier.startTimer();
+          Navigator.pushNamed(context, '/counter');
+        }
+      }, 'Start Timer', 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -127,18 +127,7 @@ class PomodoroPage extends ConsumerWidget {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: Colors.black,
-          ),
-      decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
-        contentPadding: EdgeInsets.all(26),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(26),
-          borderSide: BorderSide.none,
-        ),
-      ),
+      style: Theme.of(context).textTheme.bodySmall,
     );
   }
 

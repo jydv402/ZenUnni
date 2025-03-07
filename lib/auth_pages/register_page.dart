@@ -108,6 +108,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                   _obsureText
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
+                  color: Colors.white,
                 ),
                 highlightColor: Colors.transparent,
               ),
@@ -127,6 +128,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                   _obsureText
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
+                  color: Colors.white,
                 ),
                 highlightColor: Colors.transparent,
               ),

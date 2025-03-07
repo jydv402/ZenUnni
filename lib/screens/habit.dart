@@ -18,15 +18,14 @@ class _HabitState extends ConsumerState<HabitPage> {
   final TextEditingController habitNameController = TextEditingController();
   Color selectedColor = Colors.green;
 
-  //Todo:create dispose method
-  //todo: rename widgets according  to convention
+  //TODO:create dispose method
+  //TODO: rename widgets according  to convention
 
   @override
   Widget build(BuildContext context) {
     final habitsAsyncValue = ref.watch(habitProvider);
 
     return Scaffold(
-      backgroundColor: Colors.black,
       body: habitsAsyncValue.when(
         data: (habits) => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,26 +88,22 @@ class _HabitState extends ConsumerState<HabitPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                  controller: habitNameController,
-                  decoration: InputDecoration(
-                      hintText: 'Enter habit name',
-                      hintStyle: TextStyle(color: Colors.white54),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(20)),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(20)))),
+                controller: habitNameController,
+                style: Theme.of(context).textTheme.bodySmall,
+                decoration: InputDecoration(
+                  hintText: 'Enter habit name',
+                ),
+              ),
               SizedBox(height: 30),
               Text(
                 'Choose a color',
-                style: TextStyle(color: Colors.white, fontSize: 17),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               SizedBox(height: 10),
               SizedBox(
                 height:
                     160, //sizebox to get rid of the preset padding of block picker
-                // Todo:update this
+                // TODO:update this
                 child: BlockPicker(
                     pickerColor: selectedColor,
                     availableColors: colorOptions,
@@ -133,7 +128,13 @@ class _HabitState extends ConsumerState<HabitPage> {
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Enter habit name')));
+                    SnackBar(
+                      content: Text('Enter habit name'),
+                    ),
+                  );
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
                 }
               }, 'Add Habit', 0),
             ],
@@ -145,81 +146,94 @@ class _HabitState extends ConsumerState<HabitPage> {
 
   Widget heatmaplistview(List<HabitModel> habits) {
     return ListView.builder(
-      itemCount: habits.length,
+      padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+      itemCount: habits.length + 2,
       itemBuilder: (BuildContext context, int index) {
-        final habit = habits[index];
-        Color habitColor = getColorFromHex(habit.color);
-        return Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade900,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(width: 1, color: Colors.black12)),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15, right: 5),
-                        child: Text(
-                          habit.habitName,
-                          style: TextStyle(fontSize: 22, color: habitColor),
-                        ),
+        if (index == 0) {
+          //Top Text
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
+            child: Text(
+              'Habits',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          );
+        } else if (index == habits.length + 1) {
+          //Bottom padding
+          return const SizedBox(height: 150);
+        } else {
+          final habit = habits[index - 1];
+          Color habitColor = getColorFromHex(habit.color);
+          return Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.fromLTRB(6, 6, 6, 0),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(26),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Text(
+                        habit.habitName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(color: habitColor),
                       ),
-                      IconButton(
-                        onPressed: () async {
-                          final today = DateTime.now();
-                          final dateOnly =
-                              DateTime(today.year, today.month, today.day);
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        final today = DateTime.now();
+                        final dateOnly =
+                            DateTime(today.year, today.month, today.day);
 
-                          final updatedCompletedDates =
-                              Map<DateTime, bool>.from(habit.completedDates);
+                        final updatedCompletedDates =
+                            Map<DateTime, bool>.from(habit.completedDates);
 
-                          if (updatedCompletedDates.containsKey(dateOnly) &&
-                              updatedCompletedDates[dateOnly] == true) {
-                            updatedCompletedDates[dateOnly] = false;
-                          } else {
-                            updatedCompletedDates[dateOnly] = true;
+                        if (updatedCompletedDates.containsKey(dateOnly) &&
+                            updatedCompletedDates[dateOnly] == true) {
+                          updatedCompletedDates[dateOnly] = false;
+                        } else {
+                          updatedCompletedDates[dateOnly] = true;
+                        }
+
+                        final updatedHabit = habit.copyWith(
+                            completedDates: updatedCompletedDates);
+
+                        try {
+                          await ref
+                              .read(habitUpdateProvider(updatedHabit).future);
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Failed to update habit: $e')));
                           }
-
-                          final updatedHabit = habit.copyWith(
-                              completedDates: updatedCompletedDates);
-
-                          try {
-                            await ref
-                                .read(habitUpdateProvider(updatedHabit).future);
-                          } catch (e) {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text('Failed to update habit: $e')));
-                            }
-                          }
-                        },
-                        icon: Icon(habit.completedDates.containsKey(DateTime(
-                                    DateTime.now().year,
-                                    DateTime.now().month,
-                                    DateTime.now().day)) &&
-                                habit.completedDates[DateTime(
-                                    DateTime.now().year,
-                                    DateTime.now().month,
-                                    DateTime.now().day)]!
-                            ? Icons.check
-                            : Icons.check_box_outline_blank_rounded),
-                        color: habitColor,
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: heatmap(habit),
-                  ),
-                ],
-              )),
-        );
+                        }
+                      },
+                      icon: Icon(habit.completedDates.containsKey(DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day)) &&
+                              habit.completedDates[DateTime(DateTime.now().year,
+                                  DateTime.now().month, DateTime.now().day)]!
+                          ? Icons.check
+                          : Icons.check_box_outline_blank_rounded),
+                      color: habitColor,
+                    )
+                  ],
+                ),
+                //Heatmap widget
+                heatmap(habit),
+                const SizedBox(height: 6),
+              ],
+            ),
+          );
+        }
       },
     );
   }
@@ -242,10 +256,11 @@ class _HabitState extends ConsumerState<HabitPage> {
     try {
       return HeatMap(
         datasets: datasets,
+        startDate: DateTime.now().subtract(const Duration(days: 128)),
         endDate: DateTime.now(),
-        startDate: DateTime.now().subtract(const Duration(days: 135)),
         colorMode: ColorMode.color,
         size: 13,
+        fontSize: 12,
         showColorTip: false,
         showText: false,
         scrollable: true,

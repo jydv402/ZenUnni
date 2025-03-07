@@ -97,6 +97,8 @@ class ChatPage extends ConsumerWidget {
               controller: controller,
               maxLines: null,
               minLines: 1,
+              cursorColor: Colors.black,
+              style: Theme.of(context).textTheme.labelMedium,
               decoration: InputDecoration(
                 hintText: 'Chat with Unni...',
                 hintStyle: Theme.of(context).textTheme.labelMedium,

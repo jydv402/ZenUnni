@@ -93,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                   _obsureText
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
+                  color: Colors.white,
                 ),
                 highlightColor: Colors.transparent,
               ),

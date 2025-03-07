@@ -14,7 +14,7 @@ class PomodoroState {
   PomodoroState({
     this.duration = 25,
     this.breakDuration = 5,
-    this.rounds = 4,
+    this.rounds = 1,
     this.currentRound = 1,
     this.isRunning = false,
     this.timeRemaining = 25 * 60,

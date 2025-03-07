@@ -12,8 +12,9 @@ ThemeData get lightTheme {
       onPrimary: Colors.black,
       secondary: const Color(0xFF673AB7), // Darker purple
       onSecondary: Colors.white,
-      surface: const Color(0xFF202124),
-      onSurface: Colors.white,
+      surface: //Colors.black,
+          const Color(0xFF202124),
+      onSurface: Colors.black,
       error: Colors.red,
       onError: Colors.white,
     ),
