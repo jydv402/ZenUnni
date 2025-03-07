@@ -61,7 +61,7 @@ class ChatPage extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: fabField(context, ref),
+      floatingActionButton: fabField(context, ref, chatMsgs.isEmpty),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -69,6 +69,7 @@ class ChatPage extends ConsumerWidget {
   Widget fabField(
     BuildContext context,
     WidgetRef ref,
+    bool isEmpty,
   ) {
     final MenuController menucontroller = MenuController();
     final TextEditingController controller = TextEditingController();
@@ -131,14 +132,15 @@ class ChatPage extends ConsumerWidget {
             },
             menuChildren: [
               //Clear chat item
-              menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
-                showConfirmDialog(context, "Clear Chat ?",
-                    "Are you sure you want to clear the chat ?", "Clear", () {
-                  ref.read(msgProvider.notifier).clearMessages();
-                  Navigator.of(context).pop();
-                });
-                menucontroller.close();
-              }),
+              if (!isEmpty)
+                menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
+                  showConfirmDialog(context, "Clear Chat ?",
+                      "Are you sure you want to clear the chat ?", "Clear", () {
+                    ref.read(msgProvider.notifier).clearMessages();
+                    Navigator.of(context).pop();
+                  });
+                  menucontroller.close();
+                }),
               //Generate schedule item
               menuItem(context, ref, "Generate Schedule", LineIcons.penSquare,
                   () {
