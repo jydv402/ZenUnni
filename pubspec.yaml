@@ -52,6 +52,7 @@ dependencies:
   flutter_heatmap_calendar: ^1.0.5
   flutter_colorpicker: ^1.1.0
   glassmorphism: ^3.0.0
+  timeline_tile_plus: ^0.0.3
 
 dev_dependencies:
   flutter_test:

@@ -28,14 +28,7 @@ class _HabitState extends ConsumerState<HabitPage> {
 
     return Scaffold(
       body: habitsAsyncValue.when(
-        data: (habits) => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: heatmaplistview(habits),
-            ),
-          ],
-        ),
+        data: (habits) => heatmaplistview(habits),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),

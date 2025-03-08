@@ -21,21 +21,17 @@ class TodoListPage extends ConsumerWidget {
             'ToDo',
             style: Theme.of(context).textTheme.headlineLarge,
           ),
-          Expanded(
-            child: Consumer(
-              builder: (context, ref, child) {
-                final tasksAsync = ref.watch(taskProvider);
-
-                return tasksAsync.when(
-                  data: (tasks) {
-                    return _taskListView(tasks, ref); // Pass ref to ListView
-                  },
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  error: (error, stack) => Center(child: Text('Error: $error')),
-                );
-              },
-            ),
+          Consumer(
+            builder: (context, ref, child) {
+              final tasksAsync = ref.watch(taskProvider);
+              return tasksAsync.when(
+                data: (tasks) {
+                  return _taskListView(tasks, ref); // Pass ref to ListView
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+              );
+            },
           ),
           const SizedBox(height: 8),
         ],
@@ -51,7 +47,6 @@ class TodoListPage extends ConsumerWidget {
   }
 
   Widget _taskListView(List<TodoModel> tasks, WidgetRef ref) {
-    // Receive ref
     return ListView.builder(
       shrinkWrap: true,
       itemCount: tasks.length,
