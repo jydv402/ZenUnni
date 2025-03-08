@@ -25,62 +25,70 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
             ));
   }
 
-  void registerUser(BuildContext context) async {
-    //show loading circle
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-    //if passwords dont match
-    if (_passwordController.text != _confirmPasswordController.text) {
-      //pop loading circle
-      Navigator.pop(context);
-      //display error message
-      displayMessageToUser("Passwords don't match!", context);
-    } else {
-      //if passwords do match
-      //try creating the user
-      try {
-        //create the user
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim());
+  Future<void> registerUser(BuildContext context) async {
+  // Show loading indicator
+  showDialog(
+    context: context,
+    builder: (context) => const Center(child: CircularProgressIndicator()),
+  );
 
-        try {
-          await FirebaseAuth.instance.currentUser?.sendEmailVerification();
-        } catch (e) {
-          if (context.mounted) {
-            displayMessageToUser(e.toString(), context);
-          }
-        }
+  // Check if passwords match
+  if (_passwordController.text != _confirmPasswordController.text) {
+    Navigator.pop(context);
+    displayMessageToUser("Passwords don't match!", context);
+    return;
+  }
 
+  try {
+    final auth = FirebaseAuth.instance;
+    final email = _emailController.text.trim();
+
+    // Check if email is already registered
+    final signInMethods = await auth.fetchSignInMethodsForEmail(email);
+
+    if (signInMethods.isNotEmpty) {
+      // If the email is registered, check if the account is verified
+      final user = auth.currentUser;
+
+      if (user != null && user.email == email && !user.emailVerified) {
+        // If user exists and is NOT verified, delete the account
+        await user.delete();
+        await auth.signOut(); // Ensure no active session
+      } else {
         if (context.mounted) {
-          //pop loading circle
           Navigator.pop(context);
-
-          //navigate to home page
-          //Navigator.pushReplacementNamed(context, '/username');
-          Navigator.pushReplacementNamed(
-            context,
-            '/email_verif',
-          );
-        }
-        // Clear fields after successful registration
-        _emailController.clear();
-        _passwordController.clear();
-        _confirmPasswordController.clear();
-      } on FirebaseAuthException catch (e) {
-        if (context.mounted) {
-          //pop loading circle
-          Navigator.pop(context);
-          //display error message
-          displayMessageToUser(e.code, context);
+          displayMessageToUser("Email already in use. Please log in.", context);
+          return;
         }
       }
     }
+
+    // Create a new user
+    UserCredential userCredential =
+        await auth.createUserWithEmailAndPassword(email: email, password: _passwordController.text.trim());
+
+    // Send verification email
+    await userCredential.user?.sendEmailVerification();
+
+    if (context.mounted) {
+      Navigator.pop(context);
+      // Navigate to Email Verification Page
+      Navigator.pushReplacementNamed(context, '/email_verif');
+    }
+
+    // Clear input fields
+    _emailController.clear();
+    _passwordController.clear();
+    _confirmPasswordController.clear();
+  } on FirebaseAuthException catch (e) {
+    if (context.mounted) {
+      Navigator.pop(context);
+      displayMessageToUser(e.message ?? "An error occurred", context);
+    }
   }
+}
+
+
 
   bool _obsureText = true;
 
