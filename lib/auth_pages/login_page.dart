@@ -61,6 +61,10 @@ class _LoginPageState extends State<LoginPage> {
             context, "Error", e.code.replaceAll("-", " "), "Retry", Colors.red,
             () {
           Navigator.pop(context);
+          _passwordController.clear();
+          setState(() {
+            _obsureText = true;
+          });
         });
       }
     }
@@ -145,8 +149,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
       floatingActionButton: fabButton(context, () {
         loginUser();
-        _passwordController.clear();
-        _toggleObscure();
       }, 'Login', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
