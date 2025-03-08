@@ -264,7 +264,7 @@ class _HabitState extends ConsumerState<HabitPage> {
         showColorTip: false,
         showText: false,
         scrollable: true,
-        textColor: Colors.white,
+        textColor: Colors.grey.shade500,
         // defaultColor: habitColor.withAlpha(10),
         defaultColor: Colors.grey.shade800,
         colorsets: {1: habitColor},
