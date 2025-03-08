@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/theme/light.dart';
 
@@ -56,7 +57,9 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         //pop loading circle
         Navigator.pop(context);
-        displayMessageToUser(e.code, context);
+        showConfirmDialog(context, "Error", e.code, "Retry", Colors.red, () {
+          Navigator.pop(context);
+        });
       }
     }
   }
@@ -140,8 +143,8 @@ class _LoginPageState extends State<LoginPage> {
       ),
       floatingActionButton: fabButton(context, () {
         loginUser();
-        _emailController.clear();
         _passwordController.clear();
+        _toggleObscure();
       }, 'Login', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
