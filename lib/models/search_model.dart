@@ -1,15 +1,20 @@
 class SearchModel {
-  //todo : add fields for profile
   final String username;
+  final int score;
 
-  SearchModel({required this.username});
+  SearchModel({required this.username, required this.score});
 
   factory SearchModel.fromMap(Map<String, dynamic> map) {
-    return SearchModel(username: map['username'] ?? '');
+    return SearchModel(
+      username: map['username'] ?? '',
+      score: map['score'] ?? 0,
+    );
   }
 
-  // might need toMap() for local caching later
   Map<String, dynamic> toMap() {
-    return {'username': username};
+    return {
+      'username': username,
+      'score': score,
+    };
   }
 }
