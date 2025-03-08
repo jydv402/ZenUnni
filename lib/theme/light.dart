@@ -89,6 +89,7 @@ ThemeData get lightTheme {
 }
 
 var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
+var pagePaddingWithScore = const EdgeInsets.fromLTRB(26, 50, 26, 26);
 
 var markdownStyleSheetWhite = MarkdownStyleSheet(
   h1: GoogleFonts.poppins(

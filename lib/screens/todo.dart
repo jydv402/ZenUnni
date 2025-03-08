@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zen/components/fab_button.dart';
+import 'package:zen/components/scorecard.dart';
 import 'package:zen/services/todo_serv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/models/todo_model.dart';
@@ -302,8 +303,9 @@ class _TodoState extends ConsumerState<TodoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        padding: pagePadding,
+        padding: pagePaddingWithScore,
         children: [
+          ScoreCard(),
           Text(
             'ToDo',
             style: Theme.of(context).textTheme.headlineLarge,

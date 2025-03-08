@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/components/fab_button.dart';
+import 'package:zen/components/scorecard.dart';
 import 'package:zen/services/pomodoro_serve.dart';
 import 'package:zen/theme/light.dart';
 
@@ -26,8 +27,9 @@ class PomodoroPage extends ConsumerWidget {
 
     return Scaffold(
       body: ListView(
-        padding: pagePadding,
+        padding: pagePaddingWithScore,
         children: [
+          ScoreCard(),
           Text(
             'Pomodoro Timer',
             style: Theme.of(context).textTheme.headlineLarge,

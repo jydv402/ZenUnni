@@ -48,11 +48,11 @@ class LandPage extends ConsumerWidget {
             ? 'Afternoon'
             : 'Evening';
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 90, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       children: [
         ScoreCard(),
         Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
           child: _showGreeting(context, greeting, user),
         ),
         if (mood == null)
