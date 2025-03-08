@@ -61,7 +61,7 @@ class LandPage extends ConsumerWidget {
           }),
         const SizedBox(height: 8),
         _bentoBoxes(context),
-        const SizedBox(height: 420),
+        const SizedBox(height: 135),
       ],
     );
   }
