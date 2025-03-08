@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:zen/auth_pages/email_verif_page.dart';
 import 'package:zen/auth_pages/login_page.dart';
 import 'package:zen/auth_pages/register_page.dart';
+import 'package:zen/screens/add_todo.dart';
+import 'package:zen/screens/todo.dart';
 import 'package:zen/screens/chat_page.dart';
 import 'package:zen/screens/currMood.dart';
 import 'package:zen/screens/habit.dart';
@@ -16,7 +18,6 @@ import 'package:zen/screens/pomodoro_page.dart';
 import 'package:zen/screens/profile.dart';
 import 'package:zen/screens/schedule.dart';
 import 'package:zen/screens/search.dart';
-import 'package:zen/screens/todo.dart';
 import 'package:zen/auth_pages/username.dart';
 import 'package:zen/theme/light.dart';
 import 'firebase_options.dart';
@@ -48,7 +49,6 @@ class MyApp extends StatelessWidget {
         '/chat': (context) => const ChatPage(),
         '/mood1': (context) => const CurrentMood(),
         '/mood2': (context) => const MoodPage(),
-        '/todo': (context) => const TodoPage(),
         '/pomo': (context) => const PomodoroPage(),
         '/counter': (context) => const CountdownScreen(),
         '/habit': (context) => const HabitPage(),
@@ -57,6 +57,8 @@ class MyApp extends StatelessWidget {
         '/search': (context) => const SearchPage(),
         '/pass_reset': (context) => const PassResetPage(),
         '/email_verif': (context) => const EmailVerifPage(),
+        '/todo': (context) => const TodoListPage(),
+        '/add_todo': (context) => const AddTaskPage(),
       },
     );
   }
