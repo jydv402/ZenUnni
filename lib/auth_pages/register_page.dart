@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/theme/light.dart';
 
@@ -17,13 +18,13 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  void displayMessageToUser(String message, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(message),
-            ));
-  }
+  // void displayMessageToUser(String message, BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //             title: Text(message),
+  //           ));
+  // }
 
   void registerUser(BuildContext context) async {
     //show loading circle
@@ -38,7 +39,11 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       //pop loading circle
       Navigator.pop(context);
       //display error message
-      displayMessageToUser("Passwords don't match!", context);
+      // displayMessageToUser("Passwords don't match!", context);
+      showConfirmDialog(
+          context, "Error", "Passwords don't match!", "Retry", Colors.red, () {
+        Navigator.pop(context);
+      });
     } else {
       //if passwords do match
       //try creating the user
@@ -52,16 +57,17 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
           await FirebaseAuth.instance.currentUser?.sendEmailVerification();
         } catch (e) {
           if (context.mounted) {
-            displayMessageToUser(e.toString(), context);
+            // displayMessageToUser(e.toString(), context);
+            showConfirmDialog(context, "Error",
+                e.toString().replaceAll("-", " "), "Retry", Colors.red, () {
+              Navigator.pop(context);
+            });
           }
         }
 
         if (context.mounted) {
           //pop loading circle
           Navigator.pop(context);
-
-          //navigate to home page
-          //Navigator.pushReplacementNamed(context, '/username');
           Navigator.pushReplacementNamed(
             context,
             '/email_verif',
@@ -76,7 +82,14 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
           //pop loading circle
           Navigator.pop(context);
           //display error message
-          displayMessageToUser(e.code, context);
+          // displayMessageToUser(e.code, context);
+          showConfirmDialog(context, "Error", e.code.replaceAll("-", " "),
+              "Retry", Colors.red, () {
+            Navigator.pop(context);
+            _emailController.clear();
+            _passwordController.clear();
+            _confirmPasswordController.clear();
+          });
         }
       }
     }

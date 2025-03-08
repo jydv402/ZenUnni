@@ -57,7 +57,9 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         //pop loading circle
         Navigator.pop(context);
-        showConfirmDialog(context, "Error", e.code, "Retry", Colors.red, () {
+        showConfirmDialog(
+            context, "Error", e.code.replaceAll("-", " "), "Retry", Colors.red,
+            () {
           Navigator.pop(context);
         });
       }
