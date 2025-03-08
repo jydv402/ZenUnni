@@ -119,7 +119,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
             decoration: const InputDecoration(
               labelText: 'Email',
             ),
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           TextFormField(
@@ -139,7 +139,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
               ),
             ),
             obscureText: _obsureText,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           TextFormField(
@@ -159,7 +159,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
               ),
             ),
             obscureText: _obsureText,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           const SizedBox(

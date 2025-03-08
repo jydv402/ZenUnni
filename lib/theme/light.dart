@@ -32,7 +32,8 @@ ThemeData get lightTheme {
       headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
       labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
       labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
-      bodySmall: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      bodyMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      bodySmall: GoogleFonts.poppins(fontSize: 13.0, color: Colors.white),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

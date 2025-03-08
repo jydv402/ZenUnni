@@ -28,7 +28,8 @@ void showConfirmDialog(
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: Text("Cancel", style: Theme.of(context).textTheme.bodySmall),
+            child:
+                Text("Cancel", style: Theme.of(context).textTheme.bodyMedium),
           ),
           TextButton(
             onPressed: onPressed,
@@ -36,7 +37,7 @@ void showConfirmDialog(
               action,
               style: Theme.of(context)
                   .textTheme
-                  .bodySmall
+                  .bodyMedium
                   ?.copyWith(color: actionClr),
             ),
           ),

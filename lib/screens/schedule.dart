@@ -34,16 +34,16 @@ class SchedPage extends ConsumerWidget {
                         final item = scheduleItems[index];
                         return ListTile(
                           title: Text(item.taskName,
-                              style: Theme.of(context).textTheme.bodySmall),
+                              style: Theme.of(context).textTheme.bodyMedium),
                           subtitle: Text(
                               '${item.priority}\n${item.startTime} - ${item.endTime}',
-                              style: Theme.of(context).textTheme.bodySmall),
+                              style: Theme.of(context).textTheme.bodyMedium),
                         );
                       },
                     );
                   },
                   error: (error, stackTrace) => Text('Error: $error',
-                      style: Theme.of(context).textTheme.bodySmall),
+                      style: Theme.of(context).textTheme.bodyMedium),
                   loading: () =>
                       Center(child: const CircularProgressIndicator()),
                 ),

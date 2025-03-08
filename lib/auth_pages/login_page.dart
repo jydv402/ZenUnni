@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
             decoration: const InputDecoration(
               labelText: 'Email',
             ),
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           TextFormField(
@@ -108,13 +108,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             obscureText: _obsureText,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           Text.rich(
             TextSpan(
               text: "Forgot Password?",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.blue,
                   ),
               recognizer: TapGestureRecognizer()
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                       })
               ],
             ),
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 200),
         ],

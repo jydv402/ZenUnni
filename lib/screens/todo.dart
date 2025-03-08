@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/todo_model.dart';
@@ -12,29 +13,16 @@ class TodoListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final taskList = ref.watch(taskProvider);
     return Scaffold(
-      body: ListView(
-        padding: pagePaddingWithScore,
-        children: [
-          ScoreCard(),
-          Text(
-            'ToDo',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          Consumer(
-            builder: (context, ref, child) {
-              final tasksAsync = ref.watch(taskProvider);
-              return tasksAsync.when(
-                data: (tasks) {
-                  return _taskListView(tasks, ref); // Pass ref to ListView
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Center(child: Text('Error: $error')),
-              );
-            },
-          ),
-          const SizedBox(height: 8),
-        ],
+      body: taskList.when(
+        data: (tasks) => _taskListView(tasks, ref),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+            child: Text(
+          'Error: $error',
+          style: Theme.of(context).textTheme.bodyMedium,
+        )),
       ),
       floatingActionButton: fabButton(context, () {
         Navigator.push(
@@ -49,33 +37,101 @@ class TodoListPage extends ConsumerWidget {
   Widget _taskListView(List<TodoModel> tasks, WidgetRef ref) {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: tasks.length,
+      padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+      itemCount: tasks.length + 2,
       itemBuilder: (context, index) {
-        final task = tasks[index];
-        return Card(
-          elevation: 4,
-          child: ListTile(
-            leading: Checkbox(
-              value: task.isDone,
-              onChanged: (bool? value) {
-                final updatedTask = TodoModel(
-                  name: task.name,
-                  description: task.description,
-                  date: task.date,
-                  priority: task.priority,
-                  isDone: value ?? false,
-                );
-                ref.read(taskUpdateProvider(updatedTask)); // Use ref here
-              },
+        if (index == 0) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScoreCard(),
+                Text(
+                  'Todo',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+              ],
             ),
-            title: Text(
-              task.name,
-              style: const TextStyle(color: Colors.white),
+          );
+        } else if (index == tasks.length + 1) {
+          return const SizedBox(height: 140);
+        } else {
+          final task = tasks[index - 1];
+          return Container(
+            padding: const EdgeInsets.fromLTRB(26, 16, 10, 26),
+            margin: const EdgeInsets.fromLTRB(6, 6, 6, 0),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(26),
             ),
-            subtitle: Text(task.description,
-                style: const TextStyle(color: Colors.white)),
-          ),
-        );
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      task.name,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    Checkbox(
+                      value: task.isDone,
+                      side: const BorderSide(color: Colors.white, width: 2),
+                      activeColor: Colors.white,
+                      overlayColor: WidgetStateProperty.all(Colors.white),
+                      focusColor: Colors.white,
+                      checkColor: Colors.black,
+                      onChanged: (bool? value) {
+                        final updatedTask = TodoModel(
+                          name: task.name,
+                          description: task.description,
+                          date: task.date,
+                          priority: task.priority,
+                          isDone: value ?? false,
+                        );
+                        ref.read(taskUpdateProvider(updatedTask));
+                      },
+                    ),
+                  ],
+                ),
+                Text(
+                  task.description,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 26),
+                Text(
+                  "•  Due Date: ${DateFormat('dd MMM y').format(task.date)}",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "•  Due Time: ${DateFormat('hh:mm a').format(task.date)}",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 10),
+                Text.rich(
+                  TextSpan(children: [
+                    TextSpan(
+                      text: "•  Priority: ",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    TextSpan(
+                      text: task.priority,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: task.priority == "High"
+                                ? Colors.red.shade200
+                                : task.priority == "Medium"
+                                    ? Colors.orange.shade200
+                                    : Colors.green.shade200,
+                          ),
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+          );
+        }
       },
     );
   }

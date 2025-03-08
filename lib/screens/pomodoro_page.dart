@@ -129,7 +129,7 @@ class PomodoroPage extends ConsumerWidget {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
-      style: Theme.of(context).textTheme.bodySmall,
+      style: Theme.of(context).textTheme.bodyMedium,
     );
   }
 

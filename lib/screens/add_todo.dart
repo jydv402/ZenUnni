@@ -144,7 +144,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           //       fit: FlexFit.tight,
           //       child: _dialogButtons("Clear Fields", Colors.red, () {
           //         resetDialogFields();
-          //       }, Theme.of(context).textTheme.bodySmall),
+          //       }, Theme.of(context).textTheme.bodyMedium),
           //     ),
 
           //     //Save button
@@ -186,7 +186,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
       BuildContext context, TextEditingController controller, String hintText) {
     return TextField(
       controller: controller,
-      style: Theme.of(context).textTheme.bodySmall,
+      style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
         hintText: hintText,
       ),
@@ -252,7 +252,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             backgroundColor: Colors.grey,
             labelStyle: Theme.of(context)
                 .textTheme
-                .bodySmall
+                .bodyMedium
                 ?.copyWith(color: Colors.black),
           );
         }).toList(),

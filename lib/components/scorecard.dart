@@ -18,7 +18,7 @@ class ScoreCard extends ConsumerWidget {
             color: Colors.white12,
           ),
           child: Text("🏆   ${score.value.toString()}",
-              style: Theme.of(context).textTheme.bodySmall),
+              style: Theme.of(context).textTheme.bodyMedium),
         ),
       ],
     );

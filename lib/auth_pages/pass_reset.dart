@@ -68,7 +68,7 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
         const SizedBox(height: 40),
         TextField(
           controller: resetEmailController,
-          style: Theme.of(context).textTheme.bodySmall,
+          style: Theme.of(context).textTheme.bodyMedium,
           cursorColor: Colors.white,
           decoration: InputDecoration(
             hintText: 'Enter your email',

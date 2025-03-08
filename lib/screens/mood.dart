@@ -52,7 +52,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text("${_currentMoodIndex + 1}/${moodList.length}",
-                  style: Theme.of(context).textTheme.bodySmall),
+                  style: Theme.of(context).textTheme.bodyMedium),
             ),
           ),
           const SizedBox(height: 80),

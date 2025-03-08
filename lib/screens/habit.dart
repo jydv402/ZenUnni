@@ -69,7 +69,6 @@ class _HabitState extends ConsumerState<HabitPage> {
     // Color selectedColor = Colors.green;
 
     return SimpleDialog(
-      backgroundColor: Colors.grey.shade900,
       children: [
         Padding(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -79,7 +78,7 @@ class _HabitState extends ConsumerState<HabitPage> {
             children: [
               TextField(
                 controller: habitNameController,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(context).textTheme.bodyMedium,
                 decoration: InputDecoration(
                   hintText: 'Enter habit name',
                 ),

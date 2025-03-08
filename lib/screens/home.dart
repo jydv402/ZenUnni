@@ -84,7 +84,7 @@ class LandPage extends ConsumerWidget {
         padding: EdgeInsets.fromLTRB(16, 26, 26, 26),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(26), color: Colors.white30),
-        child: Text(msg, style: Theme.of(context).textTheme.bodySmall),
+        child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
       ),
     );
   }
