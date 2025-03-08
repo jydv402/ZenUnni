@@ -11,7 +11,7 @@ import 'package:zen/screens/currMood.dart';
 import 'package:zen/screens/habit.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
-import 'package:zen/screens/pass_reset.dart';
+import 'package:zen/auth_pages/pass_reset.dart';
 import 'package:zen/screens/pomodoro_page.dart';
 import 'package:zen/screens/profile.dart';
 import 'package:zen/screens/schedule.dart';

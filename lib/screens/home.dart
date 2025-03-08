@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:zen/components/customfab.dart';
+import 'package:zen/components/scorecard.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/services/user_serv.dart';
 
@@ -49,6 +50,7 @@ class LandPage extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 90, 16, 0),
       children: [
+        ScoreCard(),
         Padding(
           padding: const EdgeInsets.all(10),
           child: _showGreeting(context, greeting, user),
