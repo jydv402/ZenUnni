@@ -5,7 +5,6 @@ import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/todo_model.dart';
 import 'package:zen/services/todo_serv.dart';
-import 'package:zen/theme/light.dart';
 import 'package:zen/screens/add_todo.dart'; // Import the new page
 
 class TodoListPage extends ConsumerWidget {
