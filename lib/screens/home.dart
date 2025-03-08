@@ -50,7 +50,10 @@ class LandPage extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       children: [
-        ScoreCard(),
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: ScoreCard(),
+        ),
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
           child: _showGreeting(context, greeting, user),

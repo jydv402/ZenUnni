@@ -3,6 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/components/fab_button.dart';
+import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/habit_model.dart';
 import 'package:zen/services/habit_serv.dart';
 import 'package:zen/utils/color_utils.dart';
@@ -33,10 +34,6 @@ class _HabitState extends ConsumerState<HabitPage> {
             Expanded(
               child: heatmaplistview(habits),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(16.0),
-            //   child: addnewbutton(),
-            // ),
           ],
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -146,21 +143,27 @@ class _HabitState extends ConsumerState<HabitPage> {
 
   Widget heatmaplistview(List<HabitModel> habits) {
     return ListView.builder(
-      padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
       itemCount: habits.length + 2,
       itemBuilder: (BuildContext context, int index) {
         if (index == 0) {
           //Top Text
           return Padding(
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
-            child: Text(
-              'Habits',
-              style: Theme.of(context).textTheme.headlineLarge,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScoreCard(),
+                Text(
+                  'Habits',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+              ],
             ),
           );
         } else if (index == habits.length + 1) {
           //Bottom padding
-          return const SizedBox(height: 150);
+          return const SizedBox(height: 140);
         } else {
           final habit = habits[index - 1];
           Color habitColor = getColorFromHex(habit.color);
