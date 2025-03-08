@@ -52,6 +52,8 @@ dependencies:
   flutter_heatmap_calendar: ^1.0.5
   flutter_colorpicker: ^1.1.0
   glassmorphism: ^3.0.0
+  timeline_tile_plus: ^0.0.3
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +65,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.3
   change_app_package_name: ^1.4.0
 
 # For information on the generic Dart part of this file, see the
@@ -80,6 +83,7 @@ flutter:
   assets:
     - assets/emoji/
     - assets/loading/
+    - assets/icon/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see

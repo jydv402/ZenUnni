@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:zen/components/customfab.dart';
+import 'package:zen/components/scorecard.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/services/user_serv.dart';
 
@@ -35,7 +36,7 @@ class LandPage extends ConsumerWidget {
         },
       ),
       floatingActionButton: CustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -47,10 +48,14 @@ class LandPage extends ConsumerWidget {
             ? 'Afternoon'
             : 'Evening';
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 90, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       children: [
         Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(right: 10),
+          child: ScoreCard(),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
           child: _showGreeting(context, greeting, user),
         ),
         if (mood == null)
@@ -61,7 +66,7 @@ class LandPage extends ConsumerWidget {
           }),
         const SizedBox(height: 8),
         _bentoBoxes(context),
-        const SizedBox(height: 420),
+        const SizedBox(height: 135),
       ],
     );
   }
@@ -79,7 +84,7 @@ class LandPage extends ConsumerWidget {
         padding: EdgeInsets.fromLTRB(16, 26, 26, 26),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(26), color: Colors.white30),
-        child: Text(msg, style: Theme.of(context).textTheme.bodySmall),
+        child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
       ),
     );
   }

@@ -22,6 +22,7 @@ class UsernamePage extends ConsumerWidget {
           const SizedBox(height: 60),
           TextField(
             controller: userNameController,
+            style: Theme.of(context).textTheme.bodyMedium,
             decoration: const InputDecoration(
               labelText: 'Username',
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/components/fab_button.dart';
+import 'package:zen/components/scorecard.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/consts/moodlist.dart';
 import 'package:zen/theme/light.dart';
@@ -20,8 +21,9 @@ class _MoodPageState extends ConsumerState<MoodPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        padding: pagePadding,
+        padding: pagePaddingWithScore,
         children: [
+          ScoreCard(),
           Text(
             "How are you\nfeeling today?",
             style: Theme.of(context).textTheme.headlineLarge,
@@ -50,7 +52,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text("${_currentMoodIndex + 1}/${moodList.length}",
-                  style: Theme.of(context).textTheme.bodySmall),
+                  style: Theme.of(context).textTheme.bodyMedium),
             ),
           ),
           const SizedBox(height: 80),

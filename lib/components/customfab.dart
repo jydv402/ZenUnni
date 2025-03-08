@@ -27,8 +27,8 @@ class CustomFAB extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFFffffff).withOpacity(0.1),
-              const Color(0xFFFFFFFF).withOpacity(0.05),
+              const Color(0xFFffffff).withValues(alpha: 0.1),
+              const Color(0xFFFFFFFF).withValues(alpha: 0.05),
             ],
             stops: const [
               0.1,
@@ -38,8 +38,8 @@ class CustomFAB extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFFffffff).withOpacity(0.5),
-            const Color((0xFFFFFFFF)).withOpacity(0.5),
+            const Color(0xFFffffff).withValues(alpha: 0.5),
+            const Color(0xFFFFFFFF).withValues(alpha: 0.5),
           ],
         ),
         child: Row(
@@ -47,11 +47,21 @@ class CustomFAB extends StatelessWidget {
           children: [
             const Spacer(),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  shadowColor: Colors.transparent,
+                  shape: const CircleBorder(),
+                ),
+                onPressed: () {},
+                child: const Icon(LineIcons.home, size: 30)),
+            const Spacer(),
+            ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 foregroundColor: Colors.white,
+                shadowColor: Colors.transparent,
                 shape: const CircleBorder(),
-                fixedSize: Size(height - 20, height - 20),
               ),
               onPressed: () {
                 Navigator.of(context).push(PageRouteBuilder(
@@ -76,20 +86,10 @@ class CustomFAB extends StatelessWidget {
                 ));
               },
               child: const Icon(
-                Icons.add_rounded,
+                LineIcons.userAstronaut,
                 size: 30,
               ),
             ),
-            const Spacer(),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: const CircleBorder(),
-                  fixedSize: Size(height - 20, height - 20),
-                ),
-                onPressed: () {},
-                child: const Icon(LineIcons.home, size: 30)),
             const Spacer(),
           ],
         ),

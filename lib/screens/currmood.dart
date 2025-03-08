@@ -3,6 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/components/fab_button.dart';
+import 'package:zen/components/scorecard.dart';
 import 'package:zen/services/chat_serv.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/theme/light.dart';
@@ -31,8 +32,9 @@ class CurrentMood extends ConsumerWidget {
   Widget moodPage(BuildContext context, WidgetRef ref, String mood,
       String label, bool moodExists) {
     return ListView(
-      padding: pagePadding,
+      padding: pagePaddingWithScore,
       children: [
+        ScoreCard(),
         Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(height: 60),
         currMoodCard(context, mood),

@@ -55,8 +55,12 @@ class ProfilePage extends ConsumerWidget {
               ),
               fabButton(context, () {
                 // show logout dialog
-                showConfirmDialog(context, "Logout ?",
-                    "Are you sure you want to logout ?", "Logout", () {
+                showConfirmDialog(
+                    context,
+                    "Logout ?",
+                    "Are you sure you want to logout ?",
+                    "Logout",
+                    Colors.red, () {
                   logoutUser(context);
                   Navigator.of(context).pop();
                 });

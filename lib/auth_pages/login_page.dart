@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/theme/light.dart';
 
@@ -56,7 +57,15 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         //pop loading circle
         Navigator.pop(context);
-        displayMessageToUser(e.code, context);
+        showConfirmDialog(
+            context, "Error", e.code.replaceAll("-", " "), "Retry", Colors.red,
+            () {
+          Navigator.pop(context);
+          _passwordController.clear();
+          setState(() {
+            _obsureText = true;
+          });
+        });
       }
     }
   }
@@ -79,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
             decoration: const InputDecoration(
               labelText: 'Email',
             ),
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           TextFormField(
@@ -99,13 +108,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             obscureText: _obsureText,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
           Text.rich(
             TextSpan(
               text: "Forgot Password?",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.blue,
                   ),
               recognizer: TapGestureRecognizer()
@@ -133,15 +142,13 @@ class _LoginPageState extends State<LoginPage> {
                       })
               ],
             ),
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 200),
         ],
       ),
       floatingActionButton: fabButton(context, () {
         loginUser();
-        _emailController.clear();
-        _passwordController.clear();
       }, 'Login', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

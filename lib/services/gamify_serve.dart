@@ -8,3 +8,12 @@ final scoreProvider = StreamProvider<int>((ref) async* {
       await FirebaseFirestore.instance.collection('users').doc(user?.uid).get();
   yield doc.data()?['score'] as int;
 });
+
+final scoreIncrementProvider =
+    FutureProvider.autoDispose.family<void, int>((ref, value) async {
+  final user = FirebaseAuth.instance.currentUser;
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(user?.uid)
+      .update({'score': FieldValue.increment(value)});
+});

@@ -32,7 +32,8 @@ ThemeData get lightTheme {
       headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
       labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
       labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
-      bodySmall: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      bodyMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      bodySmall: GoogleFonts.poppins(fontSize: 13.0, color: Colors.white),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -89,6 +90,7 @@ ThemeData get lightTheme {
 }
 
 var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
+var pagePaddingWithScore = const EdgeInsets.fromLTRB(26, 50, 26, 26);
 
 var markdownStyleSheetWhite = MarkdownStyleSheet(
   h1: GoogleFonts.poppins(
@@ -220,3 +222,24 @@ BoxDecoration gradientDeco() {
     ),
   );
 }
+
+// class TextStyles {
+//   static TextStyle headlarge = GoogleFonts.poppins(
+//     fontSize: 44,
+//     fontWeight: FontWeight.w600,
+//     color: Colors.white,
+//   );
+// }
+
+
+      // headlineLarge: GoogleFonts.poppins(
+      //   fontSize: 44,
+      //   fontWeight: FontWeight.w600,
+      //   color: Colors.white,
+      // ),
+      // headlineMedium: GoogleFonts.poppins(
+      //     fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
+      // headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
+      // labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
+      // labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
+      // bodySmall: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
