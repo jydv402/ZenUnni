@@ -134,8 +134,12 @@ class ChatPage extends ConsumerWidget {
               //Clear chat item
               if (!isEmpty)
                 menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
-                  showConfirmDialog(context, "Clear Chat ?",
-                      "Are you sure you want to clear the chat ?", "Clear", () {
+                  showConfirmDialog(
+                      context,
+                      "Clear Chat ?",
+                      "Are you sure you want to clear the chat ?",
+                      "Clear",
+                      Colors.red, () {
                     ref.read(msgProvider.notifier).clearMessages();
                     Navigator.of(context).pop();
                   });

@@ -5,6 +5,7 @@ void showConfirmDialog(
   String title,
   String msg,
   String action,
+  Color actionClr,
   VoidCallback onPressed,
 ) {
   showDialog(
@@ -36,7 +37,7 @@ void showConfirmDialog(
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
-                  ?.copyWith(color: Colors.red),
+                  ?.copyWith(color: actionClr),
             ),
           ),
         ],

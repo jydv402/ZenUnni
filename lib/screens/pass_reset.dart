@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/components/confirm_box.dart';
+import 'package:zen/components/fab_button.dart';
+import 'package:zen/theme/light.dart';
 
 class PassResetPage extends ConsumerStatefulWidget {
   const PassResetPage({super.key});
@@ -22,96 +25,56 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: resetEmailController.text.trim());
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text('password reset link sent!\ncheck your email'),
-            );
-          });
+      showConfirmDialog(
+          context,
+          "Password Reset",
+          "Password reset link sent!\ncheck your email",
+          "Okay",
+          Colors.green.shade200, () {
+        Navigator.pop(context);
+      });
     } on FirebaseAuthException catch (e) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(e.message.toString()),
-            );
-          });
+      showConfirmDialog(context, "Error", "Error sending reset link: ${e.code}",
+          "Retry", Colors.red, () {
+        passwordReset();
+        Navigator.pop(context);
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [resetEmailContainer(context), resetEmailButton(context)],
-        ),
-      )),
+    return Scaffold(
+      body: resetEmailContainer(context),
+      floatingActionButton:
+          fabButton(context, () => passwordReset(), 'Reset Password', 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   Widget resetEmailContainer(context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.black,
-      ),
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.all(16),
-      height: MediaQuery.of(context).size.width * 0.5,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //  crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            "Forgot Your Password?",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-              SizedBox(height:10),
-          Text(
-            "Enter your email and we'll send you a reset link",
-            style: TextStyle(color: Colors.white, fontSize: 15),
-          ),
-      
-          TextField(
-              controller: resetEmailController,
-              style: TextStyle(color: Colors.white),
-              cursorColor: Colors.white,
-              decoration: InputDecoration(
-                  hintText: 'enter your email',
-                  hintStyle: TextStyle(color: Colors.white54),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(10)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(10)))),
-        ],
-      ),
-    );
-  }
-
-  Widget resetEmailButton(context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9,
-      height: 70,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10))),
-        onPressed: () {
-          passwordReset();
-        },
-        child: Text(
-          'Reset Password',
-          style: TextStyle(fontSize: 16),
+    return ListView(
+      padding: pagePadding,
+      children: [
+        Text(
+          "Forgot Your Password?",
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
-      ),
+        const SizedBox(height: 10),
+        Text(
+          "Enter your email and we'll send you a reset link",
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: 40),
+        TextField(
+          controller: resetEmailController,
+          style: Theme.of(context).textTheme.bodySmall,
+          cursorColor: Colors.white,
+          decoration: InputDecoration(
+            hintText: 'Enter your email',
+          ),
+        ),
+      ],
     );
   }
 }
