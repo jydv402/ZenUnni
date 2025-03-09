@@ -93,9 +93,11 @@ class TodoListPage extends ConsumerWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        Navigator.pushNamed(
+                        Navigator.push(
                           context,
-                          '/add_todo',
+                          MaterialPageRoute(
+                            builder: (context) => AddTaskPage(taskToEdit: task),
+                          ),
                         );
                       },
                       icon: Icon(
@@ -118,7 +120,7 @@ class TodoListPage extends ConsumerWidget {
                           priority: task.priority,
                           isDone: value ?? false,
                         );
-                        ref.read(taskUpdateProvider(updatedTask));
+                        ref.read(taskUpdateFullProvider(updatedTask));
                       },
                     ),
                   ],

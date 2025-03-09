@@ -8,7 +8,8 @@ import 'package:zen/services/todo_serv.dart';
 import 'package:zen/theme/light.dart';
 
 class AddTaskPage extends ConsumerStatefulWidget {
-  const AddTaskPage({super.key});
+  final TodoModel? taskToEdit;
+  const AddTaskPage({super.key, this.taskToEdit});
 
   @override
   ConsumerState<AddTaskPage> createState() => _AddTaskPageState();
@@ -27,6 +28,22 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   String localPrior = "";
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.taskToEdit != null) {
+      nameController.text = widget.taskToEdit!.name;
+      descController.text = widget.taskToEdit!.description;
+      _date = widget.taskToEdit!.date;
+      localDate = widget.taskToEdit!.date;
+      _time = TimeOfDay.fromDateTime(widget.taskToEdit!.date);
+      localTime = TimeOfDay.fromDateTime(widget.taskToEdit!.date);
+      _prior = widget.taskToEdit!.priority;
+      localPrior = widget.taskToEdit!.priority;
+      isDone = widget.taskToEdit!.isDone;
+    }
+  }
+
+  @override
   void dispose() {
     nameController.dispose();
     descController.dispose();
@@ -43,11 +60,13 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   }
 
   bool validateTaskFields() {
+    // Add null checks for controllers
     return nameController.text.isNotEmpty &&
         descController.text.isNotEmpty &&
         _date != null &&
         _time != null &&
-        _prior.isNotEmpty;
+        (_prior.isNotEmpty ||
+            localPrior.isNotEmpty); // Check both prior variables
   }
 
   @override
@@ -57,7 +76,8 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
         padding: pagePaddingWithScore,
         children: [
           ScoreCard(),
-          Text("Add Task", style: Theme.of(context).textTheme.headlineLarge),
+          Text(widget.taskToEdit != null ? "Edit Task" : "Add Task",
+              style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 25),
           //Task name text field
           _dialogTextFields(context, nameController, "Task name"),
@@ -151,13 +171,19 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 priority: _prior,
                 isDone: isDone,
               );
-              ref.read(taskAddProvider(task));
+              if (widget.taskToEdit != null) {
+                // Update existing task
+                ref.read(taskUpdateFullProvider(task));
+              } else {
+                // Add new task
+                ref.read(taskAddProvider(task));
+              }
               resetDialogFields();
               Navigator.pop(context);
             } else {
-              print("error fields must be null");
+              print("error fields must not be empty");
             }
-          }, "Save Task", 0)
+          }, widget.taskToEdit != null ? "Update Task" : "Save Task", 0)
         ],
       ),
     );

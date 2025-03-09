@@ -274,24 +274,3 @@ BoxDecoration gradientDeco() {
     ),
   );
 }
-
-// class TextStyles {
-//   static TextStyle headlarge = GoogleFonts.poppins(
-//     fontSize: 44,
-//     fontWeight: FontWeight.w600,
-//     color: Colors.white,
-//   );
-// }
-
-
-      // headlineLarge: GoogleFonts.poppins(
-      //   fontSize: 44,
-      //   fontWeight: FontWeight.w600,
-      //   color: Colors.white,
-      // ),
-      // headlineMedium: GoogleFonts.poppins(
-      //     fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
-      // headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
-      // labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
-      // labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
-      // bodySmall: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),

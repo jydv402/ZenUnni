@@ -67,6 +67,25 @@ final taskUpdateProvider = FutureProvider.family<void, TodoModel>(
   },
 );
 
+// Update full task
+final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
+  (ref, task) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final taskDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('task');
+
+    final querySnapshot =
+        await taskDoc.where('task', isEqualTo: task.name).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docId = querySnapshot.docs.first.id;
+      await taskDoc.doc(docId).update(task.toMap());
+    }
+  },
+);
+
 //Delete Task
 final taskDeleteProvider = FutureProvider.family<void, TodoModel>(
   (ref, task) async {
