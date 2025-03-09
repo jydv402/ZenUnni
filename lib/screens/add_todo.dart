@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/todo_model.dart';
@@ -69,9 +70,37 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           //Set due date button
           fabButton(context, () async {
             DateTime? pickDate = await showDatePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2100));
+              context: context,
+              firstDate: DateTime.now(),
+              lastDate: DateTime(2100),
+              builder: (BuildContext context, Widget? child) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    textTheme: TextTheme(
+                      headlineLarge: GoogleFonts.poppins(
+                          fontSize: 26.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                      labelLarge: GoogleFonts.poppins(
+                        fontSize: 18.0,
+                        color: Colors.white,
+                      ),
+                      bodyLarge: GoogleFonts.poppins(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    colorScheme: ColorScheme.dark(
+                      primary: Colors.blue.shade200,
+                      surface: Colors.black, // Change the header color
+                      onPrimary: Colors.white, // Change the header text color
+                      onSurface: Colors.white, // Change the day text color
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
+            );
             if (pickDate != null) {
               setState(() {
                 localDate = pickDate; //saves to local variable
