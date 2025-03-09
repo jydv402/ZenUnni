@@ -18,14 +18,6 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  // void displayMessageToUser(String message, BuildContext context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) => AlertDialog(
-  //             title: Text(message),
-  //           ));
-  // }
-
   void registerUser(BuildContext context) async {
     //show loading circle
     showDialog(

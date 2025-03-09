@@ -4,14 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/gamify_serve.dart';
 import 'package:zen/services/user_serv.dart';
 import 'package:zen/theme/light.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
-  void logoutUser(BuildContext context) async {
+  void logoutUser(BuildContext context, WidgetRef ref) async {
     await FirebaseAuth.instance.signOut();
     if (context.mounted) {
       // Navigate to the root page after logging out
@@ -57,7 +56,7 @@ class ProfilePage extends ConsumerWidget {
                     "Are you sure you want to logout ?",
                     "Logout",
                     Colors.red, () {
-                  logoutUser(context);
+                  logoutUser(context, ref); // Pass ref here
                   Navigator.of(context).pop();
                 });
               }, "Logout", 0),

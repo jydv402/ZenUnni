@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/services/user_serv.dart';
 import 'package:zen/theme/light.dart';
+import 'package:zen/utils/state_invalidator.dart';
 
 class UsernamePage extends ConsumerWidget {
   const UsernamePage({super.key});
@@ -41,6 +42,7 @@ class UsernamePage extends ConsumerWidget {
           const snackBar = SnackBar(content: Text('Enter a username first'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
+        stateInvalidator(ref);
       }, 'Continue', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

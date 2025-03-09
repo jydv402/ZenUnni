@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
@@ -9,14 +8,6 @@ import 'package:zen/services/user_serv.dart';
 
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});
-
-  void logoutUser(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    if (context.mounted) {
-      // Navigate to the root page after logging out
-      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -81,7 +72,7 @@ class LandPage extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.fromLTRB(16, 26, 26, 26),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(26), color: Colors.white30),
         child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),

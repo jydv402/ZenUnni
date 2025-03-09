@@ -45,28 +45,6 @@ final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
   },
 );
 
-// Update task
-final taskUpdateProvider = FutureProvider.family<void, TodoModel>(
-  (ref, task) async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final taskDoc = FirebaseFirestore.instance
-        .collection('users')
-        .doc(auth.currentUser?.uid)
-        .collection('task');
-
-    // Query to find the document with matching task name
-    final querySnapshot =
-        await taskDoc.where('task', isEqualTo: task.name).get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      final docId = querySnapshot.docs.first.id;
-      await taskDoc.doc(docId).update({
-        'isDone': task.isDone,
-      });
-    }
-  },
-);
-
 // Update full task
 final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
   (ref, task) async {

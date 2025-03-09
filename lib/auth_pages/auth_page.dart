@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/auth_pages/login_page.dart';
-import 'package:zen/services/user_serv.dart';
 
 class AuthPage extends ConsumerWidget {
   const AuthPage({super.key});
