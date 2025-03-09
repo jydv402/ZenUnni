@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/habit_model.dart';
@@ -170,7 +173,6 @@ class _HabitState extends ConsumerState<HabitPage> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
@@ -181,6 +183,25 @@ class _HabitState extends ConsumerState<HabitPage> {
                             .headlineMedium
                             ?.copyWith(color: habitColor),
                       ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        showConfirmDialog(
+                          context,
+                          "Delete Habit ?",
+                          "Are you sure you want to delete this habit ?",
+                          "Delete",
+                          Colors.red,
+                          () {
+                            ref.read(
+                              habitDeleteProvider(habit),
+                            );
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                      icon: Icon(LineIcons.alternateTrash, color: habitColor),
                     ),
                     IconButton(
                       onPressed: () async {
