@@ -1,43 +1,29 @@
-name: ZenUnni Release Workflow
-
 on:
-  release:
-    types: [published]
+  pull_request:
+    branches:
+      - release
+  push:
+    branches:
+      - release
 
+name: Build ZenUnni App
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    name: Build and Release
+    runs-on: macos-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Java JDK
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
         with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+          java-version: 17
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'latest'
-          channel: 'stable'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Android APK
-        run: flutter build apk --release
-
-      - name: Upload APK as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: build/app/outputs/flutter-apk/app-release.apk
-          generate_release_notes: true
+          channel: stable
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - name: Upload APK
+        uses: ncipollo/release-action@v1
+          with:
+            artifacts: "build/app/outputs/apk/release/app-release.apk"
+            tag: v0.0.${{ github.run_number }}
+            token: ${{ secrets.TOKEN }}
