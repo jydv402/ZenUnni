@@ -204,34 +204,48 @@ class _HabitState extends ConsumerState<HabitPage> {
                       icon: Icon(LineIcons.alternateTrash, color: habitColor),
                     ),
                     IconButton(
-                      onPressed: () async {
-                        final today = DateTime.now();
-                        final dateOnly =
-                            DateTime(today.year, today.month, today.day);
+                      onPressed: () {
+                        showConfirmDialog(
+                          context,
+                          "Mark as done ?",
+                          "Are you sure you want to mark this habit as complete ?",
+                          "Yes",
+                          habitColor,
+                          () async {
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
 
-                        final updatedCompletedDates =
-                            Map<DateTime, bool>.from(habit.completedDates);
+                            final today = DateTime.now();
+                            final dateOnly =
+                                DateTime(today.year, today.month, today.day);
 
-                        if (updatedCompletedDates.containsKey(dateOnly) &&
-                            updatedCompletedDates[dateOnly] == true) {
-                          updatedCompletedDates[dateOnly] = false;
-                        } else {
-                          updatedCompletedDates[dateOnly] = true;
-                        }
+                            final updatedCompletedDates =
+                                Map<DateTime, bool>.from(habit.completedDates);
 
-                        final updatedHabit = habit.copyWith(
-                            completedDates: updatedCompletedDates);
+                            if (updatedCompletedDates.containsKey(dateOnly) &&
+                                updatedCompletedDates[dateOnly] == true) {
+                              updatedCompletedDates[dateOnly] = false;
+                            } else {
+                              updatedCompletedDates[dateOnly] = true;
+                            }
+                            final updatedHabit = habit.copyWith(
+                                completedDates: updatedCompletedDates);
 
-                        try {
-                          await ref
-                              .read(habitUpdateProvider(updatedHabit).future);
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text('Failed to update habit: $e')));
-                          }
-                        }
-                        ref.read(scoreIncrementProvider(10));
+                            try {
+                              await ref.read(
+                                  habitUpdateProvider(updatedHabit).future);
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Failed to update habit: $e')));
+                              }
+                            }
+                            ref.read(scoreIncrementProvider(10));
+                          },
+                        );
                       },
                       icon: Icon(habit.completedDates.containsKey(DateTime(
                                   DateTime.now().year,
