@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/models/schedule_model.dart';
-import 'package:zen/models/todo_model.dart';
-import 'package:zen/services/ai_serv.dart';
+import 'package:zen/zen_barrel.dart';
+
 import 'package:logger/logger.dart';
 
 final scheduleProvider =

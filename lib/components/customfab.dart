@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/screens/profile.dart';
+import 'package:zen/zen_barrel.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 
 class CustomFAB extends StatelessWidget {

@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/models/todo_model.dart';
-import 'package:zen/services/gamify_serve.dart';
-import 'package:zen/services/todo_serv.dart';
-import 'package:zen/screens/add_todo.dart'; // Import the new page
+import 'package:zen/zen_barrel.dart';
 
 class TodoListPage extends ConsumerWidget {
   const TodoListPage({super.key});

@@ -1,7 +1,7 @@
 // lib/services/pomodoro_notifier.dart
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/services/gamify_serve.dart';
+import 'package:zen/zen_barrel.dart';
 
 class PomodoroState {
   final int duration;

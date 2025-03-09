@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:timeline_tile_plus/timeline_tile_plus.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/models/schedule_model.dart';
-import 'package:zen/services/schedule_serv.dart';
-import 'package:zen/services/todo_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 class SchedPage extends ConsumerWidget {
   const SchedPage({super.key});

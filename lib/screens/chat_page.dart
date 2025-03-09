@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/services/chat_serv.dart';
-import 'package:zen/services/schedule_serv.dart';
-import 'package:zen/services/todo_serv.dart';
-import 'package:zen/theme/light.dart';
+import 'package:zen/zen_barrel.dart';
 
 class ChatPage extends ConsumerWidget {
   const ChatPage({super.key});

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/components/customfab.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/mood_serv.dart';
-import 'package:zen/services/user_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});

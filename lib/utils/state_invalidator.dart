@@ -1,13 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/services/chat_serv.dart';
-import 'package:zen/services/gamify_serve.dart';
-import 'package:zen/services/habit_serv.dart';
-import 'package:zen/services/mood_serv.dart';
-import 'package:zen/services/pomodoro_serve.dart';
-import 'package:zen/services/schedule_serv.dart';
-import 'package:zen/services/search_serv.dart';
-import 'package:zen/services/todo_serv.dart';
-import 'package:zen/services/user_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 void stateInvalidator(WidgetRef ref) {
   // Invalidate all state providers

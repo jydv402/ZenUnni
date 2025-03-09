@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/services/user_serv.dart';
-import 'package:zen/theme/light.dart';
-import 'package:zen/utils/state_invalidator.dart';
+import 'package:zen/zen_barrel.dart';
 
 class UsernamePage extends ConsumerWidget {
   const UsernamePage({super.key});

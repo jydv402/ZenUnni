@@ -1,8 +1,6 @@
 //Message class with text and isUser bool with Riverpod
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/services/ai_serv.dart';
-import 'package:zen/services/mood_serv.dart';
-import 'package:zen/services/user_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 class Message {
   final String text;

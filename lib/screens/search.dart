@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/models/search_model.dart';
-import 'package:zen/services/search_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 class ConnectPage extends ConsumerStatefulWidget {
   const ConnectPage({super.key});

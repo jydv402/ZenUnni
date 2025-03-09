@@ -3,13 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/models/habit_model.dart';
-import 'package:zen/services/gamify_serve.dart';
-import 'package:zen/services/habit_serv.dart';
-import 'package:zen/utils/color_utils.dart';
+import 'package:zen/zen_barrel.dart';
 
 class HabitPage extends ConsumerStatefulWidget {
   const HabitPage({super.key});
