@@ -150,8 +150,9 @@ class CountdownScreen extends ConsumerWidget {
 
     return Scaffold(
       body: ListView(
-        padding: pagePadding,
+        padding: pagePaddingWithScore,
         children: [
+          ScoreCard(),
           Text(
             pomo.isRunning
                 ? pomo.isBreak
@@ -178,9 +179,9 @@ class CountdownScreen extends ConsumerWidget {
     return Text(
       seconds.toString().padLeft(2, '0'), // Display time remaining
       style: GoogleFonts.bebasNeue(
-          fontSize: MediaQuery.of(context).size.width * 0.75,
+          fontSize: MediaQuery.of(context).size.width * 0.70,
           color: Colors.white,
-          height: 0.9),
+          height: 0.8),
       textAlign: TextAlign.center,
     );
   }
