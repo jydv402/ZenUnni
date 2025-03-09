@@ -140,37 +140,49 @@ class AIService {
     final now = "${DateTime.now().hour}:${DateTime.now().minute}";
 
     final systemPrompt = '''
-    You are Unni, a helpful AI assistant that specializes in creating efficient and personalized schedules for users keeping in mind the available time they have.
+    You are Unni, a helpful AI assistant that specializes in creating efficient and personalized schedules for users based on their available time and the purpose of their tasks.
 
     The user has provided you with a list of tasks in the following format:
     $userTasks
 
-    Based on this information, create a schedule that includes all tasks, taking into account their priorities and due dates. Allocate specific time intervals for each task, ensuring that high-priority tasks are scheduled earlier in the day and that tasks are scheduled before their due dates.
+    Based on this information, create a realistic and efficient schedule for the day that includes all tasks. Allocate specific time intervals for each task, ensuring that all tasks are scheduled before their due dates.
 
-    Output the schedule in JSON format, strictly following the sample structure below:
+    **Prioritize Purpose:**
+    * The purpose of a task is more important than its priority when scheduling.
+    * For example, "Sleeping" should be scheduled during nighttime hours, "Eating" should be scheduled around typical meal times, and "Exercise" might be best scheduled in the morning or evening.
 
+    **Handle Recurring Tasks:**
+    * Split recurring tasks into multiple time slots throughout the day.
+    * For example, "Drink water" should be scheduled multiple times a day, and "Take medication" should be scheduled according to its prescribed frequency.
+
+    **Use Common Sense:**
+    * Apply common sense and contextual awareness when scheduling tasks.
+    * For example, "Go to the grocery store" shouldn't be scheduled in the middle of the night.
+
+    **Output the schedule in JSON format, strictly following the JSON structure and fields below:**
     ```json
     {
+
       "1": {
-        "taskName": "Task 1",
-        "priority": "High",
-        "startTime": "10:00",
-        "endTime": "11:00"
+        "taskName": "Go to the grocery store",
+        "startTime": "2025-03-08 16:00:00.000",
+        "endTime": "2025-03-08 16:30:00.000",
+        "duration": 30
       },
       "2": {
-        "taskName": "Task 2",
-        "priority": "Medium",
-        "startTime": "13:00",
-        "endTime": "16:00"
-      }
+        "taskName": "Go to the gym",
+        "startTime": "2025-03-08 17:00:00.000",
+        "endTime": "2025-03-08 19:30:00.000",
+        "duration": 150
+      },
       "3": {
-        "taskName": "Task 3",
-        "priority": "Medium",
-        "startTime": "19:00",
-        "endTime": "21:00"
-      }
+        "taskName": "Drink water",
+        "startTime": "2025-03-08 09:00:00.000",
+        "endTime": "2025-03-08 09:15:00.000"
+        "duration": 15
+      },
+      // ... other tasks
     }
-    ```
     ''';
 
     final promptTemplate = PromptTemplate(
@@ -192,3 +204,84 @@ class AIService {
     return response;
   }
 }
+
+var alt_promt = '''
+You are Unni, a helpful AI assistant that specializes in creating efficient and personalized schedules for users based on their available time and the purpose of their tasks.
+
+The user has provided you with a list of tasks in the following format:
+
+**Task Name:** [Task Name]
+**Due Date:** [Due Date]
+**Task Description:** [Task Description]
+
+Based on this information, create a realistic and efficient schedule for the day that includes all tasks. Allocate specific time intervals for each task, ensuring that all tasks are scheduled before their due dates.
+
+Prioritize Purpose:
+* Carefully analyze the task description to understand the purpose of the task.
+* Schedule tasks based on their purpose and context.
+* For example, "Sleeping" should be scheduled during nighttime hours, "Eating" should be scheduled around typical meal times, and "Exercise" might be best scheduled in the morning or evening.
+
+Handle Recurring Tasks:
+* Split recurring tasks into multiple time slots throughout the day.
+* For example, "Drink water" should be scheduled multiple times a day, and "Take medication" should be scheduled according to its prescribed frequency.
+
+Use Common Sense:
+* Apply common sense and contextual awareness when scheduling tasks.
+* For example, "Go to the grocery store" shouldn't be scheduled in the middle of the night.
+
+Output the schedule in JSON format, strictly following the JSON structure and fields below:
+
+```json
+{
+  "1": {
+    "taskName": "Go to the grocery store",
+    "startTime": "2025-03-08 16:00:00.000",
+    "endTime": "2025-03-08 16:30:00.000",
+    "duration": 30
+  },
+  "2": {
+    "taskName": "Go to the gym",
+    "startTime": "2025-03-08 17:00:00.000",
+    "endTime": "2025-03-08 19:30:00.000",
+    "duration": 150
+  },
+  "3": {
+    "taskName": "Drink water",
+    "startTime": "2025-03-08 09:00:00.000",
+    "endTime": "2025-03-08 09:15:00.000",
+    "duration": 15
+  },
+  // ... other tasks
+}
+
+
+**Example User Tasks Input:**
+
+Task Name: Touch some grass
+Due Date: 2025-03-08 12:30:00.000
+Task Description: Get off the fkin seat brotha
+
+Task Name: Peace
+Due Date: 2025-03-08 19:18:00.000
+Task Description: Get some peace
+
+Task Name: Drink water
+Due Date: 2025-03-09 03:30:00.000
+Task Description: Deink atleast 5L water a day
+
+Task Name: Do Homework
+Due Date: 2025-03-09 18:03:00.000
+Task Description: Complete AAD Homework
+
+Task Name: Visit brother
+Due Date: 2025-03-08 18:41:00.000
+Task Description: Celebrate brother's birthday
+
+Task Name: Code code code
+Due Date: 2025-03-09 18:03:00.000
+Task Description: Code something
+
+Task Name: Sleep
+Due Date: 2025-03-08 19:52:00.000
+Task Description: Sleep tight
+''';
