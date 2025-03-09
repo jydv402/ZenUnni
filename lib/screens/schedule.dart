@@ -75,7 +75,7 @@ class SchedPage extends ConsumerWidget {
             endChild: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                '${DateFormat('hh:mm a').format(item.startTime)} - ${DateFormat('hh:mm a').format(item.endTime)}\n${item.taskName}',
+                '${item.taskName}\n${DateFormat('hh:mm a').format(item.startTime)} - ${DateFormat('hh:mm a').format(item.endTime)}\n${DateFormat('dd/MM/yyyy').format(item.startTime)}\n${item.duration} minutes',
                 style: TextStyle(fontSize: 16),
               ),
             ),
