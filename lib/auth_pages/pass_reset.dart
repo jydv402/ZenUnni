@@ -23,20 +23,32 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: resetEmailController.text.trim());
-      showConfirmDialog(
+      if (mounted) {
+        showConfirmDialog(
           context,
           "Password Reset",
           "Password reset link sent!\ncheck your email",
           "Okay",
-          Colors.green.shade200, () {
-        Navigator.pop(context);
-      });
+          Colors.green.shade200,
+          () {
+            Navigator.pop(context);
+          },
+        );
+      }
     } on FirebaseAuthException catch (e) {
-      showConfirmDialog(context, "Error", "Error sending reset link: ${e.code}",
-          "Retry", Colors.red, () {
-        passwordReset();
-        Navigator.pop(context);
-      });
+      if (mounted) {
+        showConfirmDialog(
+          context,
+          "Error",
+          "Error sending reset link: ${e.code}",
+          "Retry",
+          Colors.red,
+          () {
+            passwordReset();
+            Navigator.pop(context);
+          },
+        );
+      }
     }
   }
 

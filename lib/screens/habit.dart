@@ -102,8 +102,10 @@ class _HabitState extends ConsumerState<HabitPage> {
                 if (habitNameController.text.isNotEmpty) {
                   final newHabit = HabitModel(
                     habitName: habitNameController.text,
-                    color:
-                        selectedColor.value.toRadixString(16).padLeft(8, '0'),
+                    color: selectedColor
+                        .toARGB32()
+                        .toRadixString(16)
+                        .padLeft(8, '0'),
                     createdAt: DateTime.now(),
                     completedDates: {},
                   );

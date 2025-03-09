@@ -29,20 +29,26 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
     if (user != null && user.emailVerified) {
       setState(() => isEmailVerified = true);
       timer?.cancel();
-      Navigator.pushReplacementNamed(context, '/username');
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/username');
+      }
     }
   }
 
   Future<void> resendVerificationEmail() async {
     try {
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Verification email resent!')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Verification email resent!')),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
     }
   }
 
