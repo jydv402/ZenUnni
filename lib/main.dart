@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         '/habit': (context) => const HabitPage(),
         '/profile': (context) => const ProfilePage(),
         '/schedule': (context) => const SchedPage(),
-        '/search': (context) => const SearchPage(),
+        '/search': (context) => const ConnectPage(),
         '/pass_reset': (context) => const PassResetPage(),
         '/email_verif': (context) => const EmailVerifPage(),
         '/todo': (context) => const TodoListPage(),
