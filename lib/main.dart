@@ -9,7 +9,7 @@ import 'package:zen/auth_pages/register_page.dart';
 import 'package:zen/screens/add_todo.dart';
 import 'package:zen/screens/todo.dart';
 import 'package:zen/screens/chat_page.dart';
-import 'package:zen/screens/currMood.dart';
+import 'package:zen/screens/currmood.dart';
 import 'package:zen/screens/habit.dart';
 import 'package:zen/screens/home.dart';
 import 'package:zen/screens/mood.dart';
