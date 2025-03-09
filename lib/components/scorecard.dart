@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/services/gamify_serv.dart';
+import 'package:zen/services/gamify_serve.dart';
 
 class ScoreCard extends ConsumerWidget {
   const ScoreCard({super.key});

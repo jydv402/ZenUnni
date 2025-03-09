@@ -13,7 +13,7 @@ ThemeData get lightTheme {
       secondary: const Color(0xFF673AB7), // Darker purple
       onSecondary: Colors.white,
       surface: //Colors.black,
-          const Color.fromARGB(255, 23, 25, 27),
+          const Color(0xFF202124),
       onSurface: Colors.black,
       error: Colors.red,
       onError: Colors.white,

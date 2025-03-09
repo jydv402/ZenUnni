@@ -7,7 +7,7 @@ import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/habit_model.dart';
-import 'package:zen/services/gamify_serv.dart';
+import 'package:zen/services/gamify_serve.dart';
 import 'package:zen/services/habit_serv.dart';
 import 'package:zen/utils/color_utils.dart';
 

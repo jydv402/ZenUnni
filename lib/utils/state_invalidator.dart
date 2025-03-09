@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/services/chat_serv.dart';
-import 'package:zen/services/gamify_serv.dart';
+import 'package:zen/services/gamify_serve.dart';
 import 'package:zen/services/habit_serv.dart';
 import 'package:zen/services/mood_serv.dart';
 import 'package:zen/services/pomodoro_serve.dart';
