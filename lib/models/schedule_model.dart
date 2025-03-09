@@ -1,13 +1,11 @@
 class ScheduleItem {
   final String taskName;
-  //final String priority;
   final DateTime startTime;
   final DateTime endTime;
   final int duration;
 
   ScheduleItem({
     required this.taskName,
-    //required this.priority,
     required this.startTime,
     required this.endTime,
     required this.duration,

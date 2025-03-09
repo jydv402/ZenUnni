@@ -6,6 +6,7 @@ import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/todo_model.dart';
+import 'package:zen/services/gamify_serve.dart';
 import 'package:zen/services/todo_serv.dart';
 import 'package:zen/screens/add_todo.dart'; // Import the new page
 
@@ -121,6 +122,7 @@ class TodoListPage extends ConsumerWidget {
                           isDone: value ?? false,
                         );
                         ref.read(taskUpdateFullProvider(updatedTask));
+                        ref.read(scoreIncrementProvider(value! ? 5 : -5));
                       },
                     ),
                   ],

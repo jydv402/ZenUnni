@@ -16,4 +16,5 @@ final scoreIncrementProvider =
       .collection('users')
       .doc(user?.uid)
       .update({'score': FieldValue.increment(value)});
+  ref.invalidate(scoreProvider); // Add this line to force refresh
 });
