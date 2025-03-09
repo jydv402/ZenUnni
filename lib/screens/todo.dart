@@ -122,7 +122,22 @@ class TodoListPage extends ConsumerWidget {
                           isDone: value ?? false,
                         );
                         ref.read(taskUpdateFullProvider(updatedTask));
-                        ref.read(scoreIncrementProvider(value! ? 5 : -5));
+                        if (task.priority == "High") {
+                          ref.read(
+                            scoreIncrementProvider(
+                                value! ? 25 : -25), //High priority score
+                          );
+                        } else if (task.priority == "Medium") {
+                          ref.read(
+                            scoreIncrementProvider(
+                                value! ? 15 : -15), //Medium priority score
+                          );
+                        } else {
+                          ref.read(
+                            scoreIncrementProvider(
+                                value! ? 5 : -5), //Low priority score
+                          );
+                        }
                       },
                     ),
                   ],
