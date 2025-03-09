@@ -25,12 +25,6 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   TimeOfDay? localTime;
   String localPrior = "";
 
-  void onChanged(bool? value) {
-    setState(() {
-      isDone = value ?? false;
-    });
-  }
-
   @override
   void dispose() {
     nameController.dispose();
@@ -135,48 +129,6 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               print("error fields must be null");
             }
           }, "Save Task", 0)
-          // Row(
-          //   spacing: 8,
-          //   children: [
-          //     //Clear fields button
-          //     Flexible(
-          //       flex: 1,
-          //       fit: FlexFit.tight,
-          //       child: _dialogButtons("Clear Fields", Colors.red, () {
-          //         resetDialogFields();
-          //       }, Theme.of(context).textTheme.bodyMedium),
-          //     ),
-
-          //     //Save button
-          //     Flexible(
-          //       flex: 1,
-          //       fit: FlexFit.tight,
-          //       child: _dialogButtons("Save Task", Colors.blue.shade200, () {
-          //         if (validateTaskFields()) {
-          //           DateTime dateTime = DateTime(
-          //             _date!.year,
-          //             _date!.month,
-          //             _date!.day,
-          //             _time!.hour,
-          //             _time!.minute,
-          //           );
-          //           TodoModel task = TodoModel(
-          //             name: nameController.text,
-          //             description: descController.text,
-          //             date: dateTime,
-          //             priority: _prior,
-          //             isDone: isDone,
-          //           );
-          //           ref.read(taskAddProvider(task));
-          //           resetDialogFields();
-          //           Navigator.pop(context);
-          //         } else {
-          //           print("error fields must be null");
-          //         }
-          //       }, Theme.of(context).textTheme.labelMedium),
-          //     )
-          //   ],
-          // )
         ],
       ),
     );
@@ -256,20 +208,6 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 ?.copyWith(color: Colors.black),
           );
         }).toList(),
-      ),
-    );
-  }
-
-  Widget _dialogButtons(
-      String label, Color bgClr, VoidCallback onPressed, TextStyle? style) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: bgClr,
-      ),
-      onPressed: onPressed,
-      child: Text(
-        label,
-        style: style,
       ),
     );
   }
