@@ -10,17 +10,22 @@ name: Build ZenUnni App
 jobs:
   build:
     name: Build and Release
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - name: Checkout Codebase
+        uses: actions/checkout@v2
+      - name: Setup JDK 17
+        uses: actions/setup-java@v1
         with:
           java-version: 17
-      - uses: subosito/flutter-action@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - run: flutter pub get
-      - run: flutter build apk --release
+      - name: Getting Dependencies
+        run: flutter pub get
+      - name: Building APK
+        run: flutter build apk --release
       - name: Upload APK
         uses: ncipollo/release-action@v1
         with:
