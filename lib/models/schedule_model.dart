@@ -19,4 +19,18 @@ class ScheduleItem {
       endTime: json['endTime'],
     );
   }
+
+  
+  Map<String, dynamic> toMap() {
+    return {
+      'taskName': taskName,
+      'priority': priority,
+      'startTime': startTime,
+      'endTime': endTime,
+    };
+  }
+
+  static List<Map<String, dynamic>> listToMap(List<ScheduleItem> items) {
+    return items.map((item) => item.toMap()).toList();
+  }
 }
