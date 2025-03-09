@@ -135,7 +135,7 @@ class TodoListPage extends ConsumerWidget {
                         } else {
                           ref.read(
                             scoreIncrementProvider(
-                                value! ? 5 : -5), //Low priority score
+                                value! ? 10 : -10), //Low priority score
                           );
                         }
                       },
