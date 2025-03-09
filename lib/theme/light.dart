@@ -86,6 +86,58 @@ ThemeData get lightTheme {
       floatingLabelStyle:
           GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
     ),
+    datePickerTheme: DatePickerThemeData(
+      backgroundColor: const Color(0xFF202124),
+      dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.black;
+        } else if (states.contains(WidgetState.disabled)) {
+          return Colors.grey;
+        }
+        return Colors.white;
+      }),
+      dividerColor: Colors.white,
+
+      //   headerHeadlineStyle: GoogleFonts.poppins(
+      //     color: Colors.white,
+      //     fontSize: 26,
+      //     fontWeight: FontWeight.bold,
+      //   ),
+      //   weekdayStyle: GoogleFonts.poppins(
+      //     color: Colors.white,
+      //     fontSize: 16,
+      //   ),
+      //   dayStyle: GoogleFonts.poppins(
+      //     color: Colors.white,
+      //     fontSize: 16,
+      //   ),
+      yearForegroundColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.black;
+          }
+          return Colors.white;
+        },
+      ),
+      yearStyle: GoogleFonts.poppins(
+        fontSize: 16,
+        color: Colors.white,
+      ),
+      //   confirmButtonStyle: ButtonStyle(
+      //     textStyle: WidgetStateTextStyle.resolveWith((states) {
+
+      //     }),
+      //     foregroundColor: WidgetStateProperty.resolveWith((states) {
+      //       return Colors.blue.shade200;
+      //     }),
+      //   ),
+      //   cancelButtonStyle: ButtonStyle(
+      //     foregroundColor: WidgetStateProperty.resolveWith((states) {
+      //       return Colors.blue.shade200;
+      //     }),
+      //   ),
+    ),
+    timePickerTheme: TimePickerThemeData(),
   );
 }
 
@@ -222,24 +274,3 @@ BoxDecoration gradientDeco() {
     ),
   );
 }
-
-// class TextStyles {
-//   static TextStyle headlarge = GoogleFonts.poppins(
-//     fontSize: 44,
-//     fontWeight: FontWeight.w600,
-//     color: Colors.white,
-//   );
-// }
-
-
-      // headlineLarge: GoogleFonts.poppins(
-      //   fontSize: 44,
-      //   fontWeight: FontWeight.w600,
-      //   color: Colors.white,
-      // ),
-      // headlineMedium: GoogleFonts.poppins(
-      //     fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
-      // headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
-      // labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
-      // labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
-      // bodySmall: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),

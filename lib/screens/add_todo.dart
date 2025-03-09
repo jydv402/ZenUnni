@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/todo_model.dart';
@@ -7,7 +8,8 @@ import 'package:zen/services/todo_serv.dart';
 import 'package:zen/theme/light.dart';
 
 class AddTaskPage extends ConsumerStatefulWidget {
-  const AddTaskPage({super.key});
+  final TodoModel? taskToEdit;
+  const AddTaskPage({super.key, this.taskToEdit});
 
   @override
   ConsumerState<AddTaskPage> createState() => _AddTaskPageState();
@@ -25,10 +27,20 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   TimeOfDay? localTime;
   String localPrior = "";
 
-  void onChanged(bool? value) {
-    setState(() {
-      isDone = value ?? false;
-    });
+  @override
+  void initState() {
+    super.initState();
+    if (widget.taskToEdit != null) {
+      nameController.text = widget.taskToEdit!.name;
+      descController.text = widget.taskToEdit!.description;
+      _date = widget.taskToEdit!.date;
+      localDate = widget.taskToEdit!.date;
+      _time = TimeOfDay.fromDateTime(widget.taskToEdit!.date);
+      localTime = TimeOfDay.fromDateTime(widget.taskToEdit!.date);
+      _prior = widget.taskToEdit!.priority;
+      localPrior = widget.taskToEdit!.priority;
+      isDone = widget.taskToEdit!.isDone;
+    }
   }
 
   @override
@@ -48,11 +60,13 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   }
 
   bool validateTaskFields() {
+    // Add null checks for controllers
     return nameController.text.isNotEmpty &&
         descController.text.isNotEmpty &&
         _date != null &&
         _time != null &&
-        _prior.isNotEmpty;
+        (_prior.isNotEmpty ||
+            localPrior.isNotEmpty); // Check both prior variables
   }
 
   @override
@@ -62,7 +76,8 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
         padding: pagePaddingWithScore,
         children: [
           ScoreCard(),
-          Text("Add Task", style: Theme.of(context).textTheme.headlineLarge),
+          Text(widget.taskToEdit != null ? "Edit Task" : "Add Task",
+              style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 25),
           //Task name text field
           _dialogTextFields(context, nameController, "Task name"),
@@ -75,9 +90,37 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           //Set due date button
           fabButton(context, () async {
             DateTime? pickDate = await showDatePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2100));
+              context: context,
+              firstDate: DateTime.now(),
+              lastDate: DateTime(2100),
+              builder: (BuildContext context, Widget? child) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    textTheme: TextTheme(
+                      headlineLarge: GoogleFonts.poppins(
+                          fontSize: 26.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                      labelLarge: GoogleFonts.poppins(
+                        fontSize: 18.0,
+                        color: Colors.white,
+                      ),
+                      bodyLarge: GoogleFonts.poppins(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    colorScheme: ColorScheme.dark(
+                      primary: Colors.blue.shade200,
+                      surface: Colors.black, // Change the header color
+                      onPrimary: Colors.white, // Change the header text color
+                      onSurface: Colors.white, // Change the day text color
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
+            );
             if (pickDate != null) {
               setState(() {
                 localDate = pickDate; //saves to local variable
@@ -128,55 +171,19 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 priority: _prior,
                 isDone: isDone,
               );
-              ref.read(taskAddProvider(task));
+              if (widget.taskToEdit != null) {
+                // Update existing task
+                ref.read(taskUpdateFullProvider(task));
+              } else {
+                // Add new task
+                ref.read(taskAddProvider(task));
+              }
               resetDialogFields();
               Navigator.pop(context);
             } else {
-              print("error fields must be null");
+              print("error fields must not be empty");
             }
-          }, "Save Task", 0)
-          // Row(
-          //   spacing: 8,
-          //   children: [
-          //     //Clear fields button
-          //     Flexible(
-          //       flex: 1,
-          //       fit: FlexFit.tight,
-          //       child: _dialogButtons("Clear Fields", Colors.red, () {
-          //         resetDialogFields();
-          //       }, Theme.of(context).textTheme.bodyMedium),
-          //     ),
-
-          //     //Save button
-          //     Flexible(
-          //       flex: 1,
-          //       fit: FlexFit.tight,
-          //       child: _dialogButtons("Save Task", Colors.blue.shade200, () {
-          //         if (validateTaskFields()) {
-          //           DateTime dateTime = DateTime(
-          //             _date!.year,
-          //             _date!.month,
-          //             _date!.day,
-          //             _time!.hour,
-          //             _time!.minute,
-          //           );
-          //           TodoModel task = TodoModel(
-          //             name: nameController.text,
-          //             description: descController.text,
-          //             date: dateTime,
-          //             priority: _prior,
-          //             isDone: isDone,
-          //           );
-          //           ref.read(taskAddProvider(task));
-          //           resetDialogFields();
-          //           Navigator.pop(context);
-          //         } else {
-          //           print("error fields must be null");
-          //         }
-          //       }, Theme.of(context).textTheme.labelMedium),
-          //     )
-          //   ],
-          // )
+          }, widget.taskToEdit != null ? "Update Task" : "Save Task", 0)
         ],
       ),
     );
@@ -256,20 +263,6 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 ?.copyWith(color: Colors.black),
           );
         }).toList(),
-      ),
-    );
-  }
-
-  Widget _dialogButtons(
-      String label, Color bgClr, VoidCallback onPressed, TextStyle? style) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: bgClr,
-      ),
-      onPressed: onPressed,
-      child: Text(
-        label,
-        style: style,
       ),
     );
   }

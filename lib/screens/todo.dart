@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/todo_model.dart';
+import 'package:zen/services/gamify_serve.dart';
 import 'package:zen/services/todo_serv.dart';
 import 'package:zen/screens/add_todo.dart'; // Import the new page
 
@@ -58,7 +61,7 @@ class TodoListPage extends ConsumerWidget {
         } else {
           final task = tasks[index - 1];
           return Container(
-            padding: const EdgeInsets.fromLTRB(26, 16, 10, 26),
+            padding: const EdgeInsets.fromLTRB(26, 6, 10, 26),
             margin: const EdgeInsets.fromLTRB(6, 6, 6, 0),
             decoration: BoxDecoration(
               color: Colors.black,
@@ -68,11 +71,40 @@ class TodoListPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      task.name,
-                      style: Theme.of(context).textTheme.headlineMedium,
+                    IconButton(
+                      onPressed: () {
+                        showConfirmDialog(
+                          context,
+                          "Delete Task ?",
+                          "Are you sure you want to delete this task ?",
+                          "Delete",
+                          Colors.red,
+                          () {
+                            ref.read(taskDeleteProvider(task));
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        LineIcons.alternateTrash,
+                        color: Colors.white,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddTaskPage(taskToEdit: task),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        LineIcons.pen,
+                        color: Colors.white,
+                      ),
                     ),
                     Checkbox(
                       value: task.isDone,
@@ -89,11 +121,32 @@ class TodoListPage extends ConsumerWidget {
                           priority: task.priority,
                           isDone: value ?? false,
                         );
-                        ref.read(taskUpdateProvider(updatedTask));
+                        ref.read(taskUpdateFullProvider(updatedTask));
+                        if (task.priority == "High") {
+                          ref.read(
+                            scoreIncrementProvider(
+                                value! ? 25 : -25), //High priority score
+                          );
+                        } else if (task.priority == "Medium") {
+                          ref.read(
+                            scoreIncrementProvider(
+                                value! ? 15 : -15), //Medium priority score
+                          );
+                        } else {
+                          ref.read(
+                            scoreIncrementProvider(
+                                value! ? 10 : -10), //Low priority score
+                          );
+                        }
                       },
                     ),
                   ],
                 ),
+                Text(
+                  task.name,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 10),
                 Text(
                   task.description,
                   style: Theme.of(context).textTheme.headlineSmall,

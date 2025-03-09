@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:timeline_tile_plus/timeline_tile_plus.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
@@ -74,7 +75,7 @@ class SchedPage extends ConsumerWidget {
             endChild: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                '${item.startTime} - ${item.endTime}\n${item.taskName} [${item.priority}]',
+                '${item.taskName}\n${DateFormat('hh:mm a').format(item.startTime)} - ${DateFormat('hh:mm a').format(item.endTime)}\n${DateFormat('dd/MM/yyyy').format(item.startTime)}\n${item.duration} minutes',
                 style: TextStyle(fontSize: 16),
               ),
             ),

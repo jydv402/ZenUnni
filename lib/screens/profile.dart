@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/components/confirm_box.dart';
 import 'package:zen/components/fab_button.dart';
+import 'package:zen/components/scorecard.dart';
 import 'package:zen/services/gamify_serve.dart';
 import 'package:zen/services/user_serv.dart';
 import 'package:zen/theme/light.dart';
@@ -21,15 +22,15 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final username = ref.watch(userNameProvider);
-    final score = ref.watch(scoreProvider);
     return Hero(
       tag: 'profile',
       child: Material(
         type: MaterialType.transparency,
         child: Scaffold(
           body: ListView(
-            padding: pagePadding,
+            padding: pagePaddingWithScore,
             children: [
+              ScoreCard(),
               Text(
                 "Profile",
                 style: Theme.of(context).textTheme.headlineLarge,
@@ -44,11 +45,6 @@ class ProfilePage extends ConsumerWidget {
               ),
               const SizedBox(
                 height: 10,
-              ),
-              Text(
-                "Score: ${score.value}",
-                style: Theme.of(context).textTheme.headlineMedium,
-                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 100,
