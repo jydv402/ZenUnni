@@ -205,7 +205,7 @@ class AIService {
   }
 }
 
-var alt_promt = '''
+var altPrompt = '''
 You are Unni, a helpful AI assistant that specializes in creating efficient and personalized schedules for users based on their available time and the purpose of their tasks.
 
 The user has provided you with a list of tasks in the following format:
