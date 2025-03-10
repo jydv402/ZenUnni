@@ -41,6 +41,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
     // try sign in
     try {
+      stateInvalidator(ref);
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text);
       // pop loading circle
@@ -147,7 +148,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ],
       ),
       floatingActionButton: fabButton(context, () {
-        stateInvalidator(ref);
         loginUser();
       }, 'Login', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

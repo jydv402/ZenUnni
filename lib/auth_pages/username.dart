@@ -28,6 +28,7 @@ class UsernamePage extends ConsumerWidget {
         ],
       ),
       floatingActionButton: fabButton(context, () async {
+        stateInvalidator(ref);
         String username = userNameController.text.trim();
 
         if (username.isNotEmpty) {
@@ -39,7 +40,6 @@ class UsernamePage extends ConsumerWidget {
           const snackBar = SnackBar(content: Text('Enter a username first'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
-        stateInvalidator(ref);
       }, 'Continue', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
