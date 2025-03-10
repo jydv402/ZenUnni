@@ -38,21 +38,6 @@ class _HabitState extends ConsumerState<HabitPage> {
     );
   }
 
-  // Widget addnewbutton() {
-  //   return ElevatedButton(
-  //       style: ElevatedButton.styleFrom(
-  //           backgroundColor: Colors.blue.shade200,
-  //           foregroundColor: Colors.black,
-  //           shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(15))),
-  //       onPressed: () {
-  //         showDialog(
-  //             context: context,
-  //             builder: (BuildContext context) => newHabitDialog(context));
-  //       },
-  //       child: Text('track new habits'));
-  // }
-
   Widget newHabitDialog(BuildContext context) {
     List<Color> colorOptions = [
       Colors.pink.shade100,
@@ -172,7 +157,9 @@ class _HabitState extends ConsumerState<HabitPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: Text(
-                        habit.habitName,
+                        habit.habitName.length > 16
+                            ? '${habit.habitName.substring(0, 16)}...'
+                            : habit.habitName,
                         style: Theme.of(context)
                             .textTheme
                             .headlineMedium

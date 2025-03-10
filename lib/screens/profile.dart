@@ -39,10 +39,13 @@ class ProfilePage extends ConsumerWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
-                height: 10,
+                height: 26,
               ),
+              fabButton(context, () {
+                Navigator.pushNamed(context, '/username');
+              }, "Change username", 0),
               const SizedBox(
-                height: 100,
+                height: 110,
               ),
               fabButton(context, () {
                 // show logout dialog
