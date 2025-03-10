@@ -15,15 +15,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obsureText = true;
-
-  // void displayMessageToUser(String message, BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text(message),
-  //     ),
-  //   );
-  // }
+  bool _isLoading = false;
 
   void _toggleObscure() {
     setState(() {
@@ -32,27 +24,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void loginUser() async {
-    // show loading circle
-    showLoadingDialog(context, "Logging you in...");
+    if (_isLoading) return; // Prevent multiple attempts
 
-    // try sign in
     try {
+      setState(() => _isLoading = true);
       stateInvalidator(ref);
+
+      showLoadingDialog(context, "Logging you in...");
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text);
-      // pop loading circle
+
       if (mounted) {
-        Navigator.pop(context);
-        // navigate to home page
-        Navigator.pushReplacementNamed(
-          context,
-          '/home',
-        );
+        Navigator.pop(context); // Close loading dialog
+        Navigator.pushReplacementNamed(context, '/home');
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
-        // pop loading circle
-        Navigator.pop(context);
+        Navigator.pop(context); // Close loading dialog
         showConfirmDialog(
             context, "Error", e.code.replaceAll("-", " "), "Retry", Colors.red,
             () {
@@ -62,6 +51,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             _obsureText = true;
           });
         });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
       }
     }
   }

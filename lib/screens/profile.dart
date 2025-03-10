@@ -55,8 +55,8 @@ class ProfilePage extends ConsumerWidget {
                     "Are you sure you want to logout ?",
                     "Logout",
                     Colors.red, () {
-                  logoutUser(context, ref); // Pass ref here
                   Navigator.of(context).pop();
+                  logoutUser(context, ref); // Pass ref here
                 });
               }, "Logout", 0),
             ],
