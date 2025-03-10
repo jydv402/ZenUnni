@@ -14,15 +14,18 @@ class _SearchState extends ConsumerState<ConnectPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String searchQuery = searchNameController.text;
-    final searchResults = ref.watch(
-      userSearchProvider(searchQuery),
-    );
+    final String searchQuery = searchNameController.text.toLowerCase();
+    final searchResults = ref.watch(rankedUserSearchProvider);
 
     return Scaffold(
       body: searchResults.when(
         data: (users) {
-          if (users.isEmpty) {
+          final filteredUsers = users.where((user) {
+            final username = user.username.toLowerCase();
+            return username.contains(searchQuery);
+          }).toList();
+
+          if (filteredUsers.isEmpty) {
             return Center(
               child: Text(
                 "No Users Found",
@@ -30,7 +33,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
               ),
             );
           }
-          return searchResListView(users);
+          return searchResListView(filteredUsers);
         },
         error: (err, stack) => Center(
           child: Text("Error:$err"),
@@ -62,6 +65,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
         children: [
           Expanded(
             child: TextField(
+              onChanged: (value) {
+                setState(() {});
+              },
               controller: searchNameController,
               maxLines: null,
               minLines: 1,
@@ -128,7 +134,8 @@ class _SearchState extends ConsumerState<ConnectPage> {
               ),
               tileColor: tileColor,
               leading: Text(
-                '# $index',
+                '# ${user.rank}',
+                //'$index',
                 style: TextStyle(color: Colors.black),
               ),
               title: Text(
