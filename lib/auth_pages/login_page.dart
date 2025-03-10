@@ -16,14 +16,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _passwordController = TextEditingController();
   bool _obsureText = true;
 
-  void displayMessageToUser(String message, BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(message),
-      ),
-    );
-  }
+  // void displayMessageToUser(String message, BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: Text(message),
+  //     ),
+  //   );
+  // }
 
   void _toggleObscure() {
     setState(() {
@@ -33,12 +33,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void loginUser() async {
     // show loading circle
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    showLoadingDialog(context, "Logging you in...");
+
     // try sign in
     try {
       stateInvalidator(ref);

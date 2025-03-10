@@ -18,12 +18,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
 
   void registerUser(BuildContext context) async {
     //show loading circle
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    showLoadingDialog(context, "Creating your account...");
     //if passwords dont match
     if (_passwordController.text != _confirmPasswordController.text) {
       //pop loading circle
