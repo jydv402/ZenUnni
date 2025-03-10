@@ -35,8 +35,9 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       try {
         //create the user
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim());
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
 
         try {
           await FirebaseAuth.instance.currentUser?.sendEmailVerification();

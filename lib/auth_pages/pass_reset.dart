@@ -21,8 +21,9 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
 
   Future passwordReset() async {
     try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: resetEmailController.text.trim());
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: resetEmailController.text.trim(),
+      );
       if (mounted) {
         showConfirmDialog(
           context,

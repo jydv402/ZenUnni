@@ -47,7 +47,10 @@ class PomodoroNotifier extends StateNotifier<PomodoroState> {
   final Ref ref;
   Timer? _timer;
 
-  PomodoroNotifier(this.ref) : super(PomodoroState());
+  PomodoroNotifier(this.ref)
+      : super(
+          PomodoroState(),
+        );
 
   void setTimer(int duration, int breakDuration, int rounds) {
     state = state.copyWith(

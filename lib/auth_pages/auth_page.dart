@@ -9,17 +9,19 @@ class AuthPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        body: StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              //if user is logged in
-              if (snapshot.hasData) {
-                return const LandPage();
-              }
-              //if user is not logged in
-              else {
-                return const LoginPage();
-              }
-            }));
+      body: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          //if user is logged in
+          if (snapshot.hasData) {
+            return const LandPage();
+          }
+          //if user is not logged in
+          else {
+            return const LoginPage();
+          }
+        },
+      ),
+    );
   }
 }

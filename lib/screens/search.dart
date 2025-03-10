@@ -15,22 +15,30 @@ class _SearchState extends ConsumerState<ConnectPage> {
   @override
   Widget build(BuildContext context) {
     final String searchQuery = searchNameController.text;
-    final searchResults = ref.watch(userSearchProvider(searchQuery));
+    final searchResults = ref.watch(
+      userSearchProvider(searchQuery),
+    );
 
     return Scaffold(
       body: searchResults.when(
-          data: (users) {
-            if (users.isEmpty) {
-              return Center(
-                  child: Text(
+        data: (users) {
+          if (users.isEmpty) {
+            return Center(
+              child: Text(
                 "No Users Found",
                 style: TextStyle(color: Colors.white),
-              ));
-            }
-            return searchResListView(users);
-          },
-          error: (err, stack) => Center(child: Text("Error:$err")),
-          loading: () => Center(child: CircularProgressIndicator())),
+              ),
+            );
+          }
+          return searchResListView(users);
+        },
+        error: (err, stack) => Center(
+          child: Text("Error:$err"),
+        ),
+        loading: () => Center(
+          child: showRunningIndicator(context, "Loading..."),
+        ),
+      ),
       floatingActionButton: searchTextField(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -116,12 +124,21 @@ class _SearchState extends ConsumerState<ConnectPage> {
             child: ListTile(
               minVerticalPadding: 25,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(26)),
+                borderRadius: BorderRadius.circular(26),
+              ),
               tileColor: tileColor,
-              leading: Text('# $index', style: TextStyle(color: Colors.black)),
-              title: Text(user.username, style: TextStyle(color: Colors.black)),
-              trailing: Text('Score: ${user.score}',
-                  style: TextStyle(color: Colors.black)),
+              leading: Text(
+                '# $index',
+                style: TextStyle(color: Colors.black),
+              ),
+              title: Text(
+                user.username,
+                style: TextStyle(color: Colors.black),
+              ),
+              trailing: Text(
+                'Score: ${user.score}',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           );
         }

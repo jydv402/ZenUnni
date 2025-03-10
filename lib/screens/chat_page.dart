@@ -112,7 +112,8 @@ class ChatPage extends ConsumerWidget {
               alignment: const Alignment(-5.5, 16),
               backgroundColor: WidgetStateProperty.all(Colors.white),
               shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32))),
+                borderRadius: BorderRadius.circular(32),
+              )),
             ),
             builder: (context, controller, child) {
               return IconButton(
@@ -151,23 +152,24 @@ class ChatPage extends ConsumerWidget {
             ],
           ),
           IconButton(
-              padding: const EdgeInsets.all(0),
-              onPressed: () async {
-                if (controller.text.isNotEmpty) {
-                  //Add the message to the state
-                  final userMsg = Message(text: controller.text, isUser: true);
-                  ref.read(msgProvider.notifier).addMessage(userMsg);
-                  //Get the AI response
-                  final aiMsg =
-                      await ref.read(aiResponseAdder(controller.text).future);
-                  ref.read(msgProvider.notifier).addMessage(aiMsg);
-                }
-                controller.clear();
-              },
-              icon: const Icon(
-                LineIcons.share,
-                size: 26,
-              )),
+            padding: const EdgeInsets.all(0),
+            onPressed: () async {
+              if (controller.text.isNotEmpty) {
+                //Add the message to the state
+                final userMsg = Message(text: controller.text, isUser: true);
+                ref.read(msgProvider.notifier).addMessage(userMsg);
+                //Get the AI response
+                final aiMsg =
+                    await ref.read(aiResponseAdder(controller.text).future);
+                ref.read(msgProvider.notifier).addMessage(aiMsg);
+              }
+              controller.clear();
+            },
+            icon: const Icon(
+              LineIcons.share,
+              size: 26,
+            ),
+          ),
         ],
       ),
     );

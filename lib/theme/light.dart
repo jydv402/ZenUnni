@@ -20,7 +20,9 @@ ThemeData get lightTheme {
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
         elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36))),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(36),
+        )),
     textTheme: TextTheme(
       headlineLarge: GoogleFonts.poppins(
         fontSize: 44,

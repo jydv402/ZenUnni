@@ -19,8 +19,10 @@ final habitProvider = StreamProvider<List<HabitModel>>((ref) async* {
         color: data['color'] ?? '',
         createdAt:
             (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-        completedDates: (data['completedDates'] as Map<String, dynamic>? ?? {})
-            .map((key, value) => MapEntry(DateTime.parse(key), value as bool)),
+        completedDates:
+            (data['completedDates'] as Map<String, dynamic>? ?? {}).map(
+          (key, value) => MapEntry(DateTime.parse(key), value as bool),
+        ),
       );
     }).toList();
     yield habit;
@@ -34,7 +36,9 @@ final habitAddProvider =
       .collection('users')
       .doc(auth.currentUser?.uid)
       .collection('habit');
-  await habitDoc.add(habit.toMap());
+  await habitDoc.add(
+    habit.toMap(),
+  );
 });
 
 final habitUpdateProvider = FutureProvider.autoDispose.family<void, HabitModel>(
@@ -49,7 +53,9 @@ final habitUpdateProvider = FutureProvider.autoDispose.family<void, HabitModel>(
         await habitDoc.where('habitName', isEqualTo: habit.habitName).get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      await querySnapshot.docs.first.reference.update(habit.toMap());
+      await querySnapshot.docs.first.reference.update(
+        habit.toMap(),
+      );
     } else {
       throw Exception('Habit Not Found');
     }

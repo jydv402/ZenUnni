@@ -13,17 +13,22 @@ class TodoListPage extends ConsumerWidget {
     return Scaffold(
       body: taskList.when(
         data: (tasks) => _taskListView(tasks, ref),
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Center(
+          child: showRunningIndicator(context, "Loading Todo data..."),
+        ),
         error: (error, stack) => Center(
-            child: Text(
-          'Error: $error',
-          style: Theme.of(context).textTheme.bodyMedium,
-        )),
+          child: Text(
+            'Error: $error',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
       ),
       floatingActionButton: fabButton(context, () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const AddTaskPage()),
+          MaterialPageRoute(
+            builder: (context) => const AddTaskPage(),
+          ),
         );
       }, "Add New Tasks", 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -76,7 +81,9 @@ class TodoListPage extends ConsumerWidget {
                           "Delete",
                           Colors.red,
                           () {
-                            ref.read(taskDeleteProvider(task));
+                            ref.read(
+                              taskDeleteProvider(task),
+                            );
                             Navigator.pop(context);
                           },
                         );
@@ -115,7 +122,9 @@ class TodoListPage extends ConsumerWidget {
                           priority: task.priority,
                           isDone: value ?? false,
                         );
-                        ref.read(taskUpdateFullProvider(updatedTask));
+                        ref.read(
+                          taskUpdateFullProvider(updatedTask),
+                        );
                         if (task.priority == "High") {
                           ref.read(
                             scoreIncrementProvider(

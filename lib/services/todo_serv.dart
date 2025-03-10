@@ -41,7 +41,9 @@ final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
         .collection('task');
 
     // Add new document
-    await taskDoc.add(task.toMap());
+    await taskDoc.add(
+      task.toMap(),
+    );
   },
 );
 
@@ -59,7 +61,9 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
-      await taskDoc.doc(docId).update(task.toMap());
+      await taskDoc.doc(docId).update(
+            task.toMap(),
+          );
     }
   },
 );

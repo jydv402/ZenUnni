@@ -81,9 +81,9 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         ],
       ),
       floatingActionButton: fabButton(context, () async {
-        await ref.read(
-            moodAddProvider(moodList.values.elementAt(_currentMoodIndex))
-                .future);
+        await ref.read(moodAddProvider(
+          moodList.values.elementAt(_currentMoodIndex),
+        ).future);
         if (context.mounted) {
           Navigator.pop(context);
         }

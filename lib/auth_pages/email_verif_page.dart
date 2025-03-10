@@ -19,8 +19,10 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
   void initState() {
     super.initState();
     checkEmailVerification();
-    timer =
-        Timer.periodic(Duration(seconds: 3), (_) => checkEmailVerification());
+    timer = Timer.periodic(
+      Duration(seconds: 3),
+      (_) => checkEmailVerification(),
+    );
   }
 
   Future<void> checkEmailVerification() async {
@@ -40,13 +42,17 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Verification email resent!')),
+          SnackBar(
+            content: Text('Verification email resent!'),
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+          ),
         );
       }
     }

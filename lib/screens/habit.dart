@@ -26,8 +26,12 @@ class _HabitState extends ConsumerState<HabitPage> {
     return Scaffold(
       body: habitsAsyncValue.when(
         data: (habits) => heatmaplistview(habits),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        loading: () => Center(
+          child: showRunningIndicator(context, "Loading Habit data..."),
+        ),
+        error: (error, stack) => Center(
+          child: Text('Error: $error'),
+        ),
       ),
       floatingActionButton: fabButton(context, () {
         showDialog(
@@ -53,7 +57,9 @@ class _HabitState extends ConsumerState<HabitPage> {
 
     return SimpleDialog(
       contentPadding: EdgeInsets.symmetric(vertical: 26, horizontal: 26),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(32),
+      ),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -219,20 +225,22 @@ class _HabitState extends ConsumerState<HabitPage> {
                                   habitUpdateProvider(updatedHabit).future);
                             } catch (e) {
                               if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Failed to update habit: $e')));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Failed to update habit: $e'),
+                                ));
                               }
                             }
-                            ref.read(scoreIncrementProvider(10));
+                            ref.read(
+                              scoreIncrementProvider(10),
+                            );
                           },
                         );
                       },
-                      icon: Icon(habit.completedDates.containsKey(DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day)) &&
+                      icon: Icon(habit.completedDates.containsKey(
+                                DateTime(DateTime.now().year,
+                                    DateTime.now().month, DateTime.now().day),
+                              ) &&
                               habit.completedDates[DateTime(DateTime.now().year,
                                   DateTime.now().month, DateTime.now().day)]!
                           ? Icons.check
@@ -270,7 +278,9 @@ class _HabitState extends ConsumerState<HabitPage> {
     try {
       return HeatMap(
         datasets: datasets,
-        startDate: DateTime.now().subtract(const Duration(days: 128)),
+        startDate: DateTime.now().subtract(
+          const Duration(days: 128),
+        ),
         endDate: DateTime.now(),
         colorMode: ColorMode.color,
         size: 13,
@@ -283,8 +293,12 @@ class _HabitState extends ConsumerState<HabitPage> {
         defaultColor: Colors.grey.shade800,
         colorsets: {1: habitColor},
         onClick: (value) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(value.toString())));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+              value.toString(),
+            )),
+          );
         },
       );
     } catch (e) {

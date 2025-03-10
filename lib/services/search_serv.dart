@@ -10,9 +10,13 @@ final userSearchProvider =
         .orderBy('score', descending: true)
         .limit(10)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) {
-              return SearchModel.fromMap(doc.data());
-            }).toList());
+        .map(
+          (snapshot) => snapshot.docs.map((doc) {
+            return SearchModel.fromMap(
+              doc.data(),
+            );
+          }).toList(),
+        );
   }
 
   String lowerQuery = query.toLowerCase();
@@ -23,7 +27,11 @@ final userSearchProvider =
       .startAt([lowerQuery])
       .endAt(["$lowerQuery\uf8ff"])
       .snapshots()
-      .map((snapshot) => snapshot.docs.map((doc) {
-            return SearchModel.fromMap(doc.data());
-          }).toList());
+      .map(
+        (snapshot) => snapshot.docs.map((doc) {
+          return SearchModel.fromMap(
+            doc.data(),
+          );
+        }).toList(),
+      );
 });

@@ -10,15 +10,18 @@ class SchedPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tasks = ref.watch(taskProvider);
-    final schedule = ref.watch(scheduleProvider(tasks.value ?? []));
+    final schedule = ref.watch(
+      scheduleProvider(tasks.value ?? []),
+    );
     return Scaffold(
       body: schedule.when(
         data: (scheduleItems) {
           return _scheduleListView(scheduleItems);
         },
-        error: (error, stackTrace) => Text('Error: $error',
-            style: Theme.of(context).textTheme.bodyMedium),
-        loading: () => Center(child: const CircularProgressIndicator()),
+        error: (error, stackTrace) => _scheduleFailListView(context),
+        loading: () => Center(
+          child: showRunningIndicator(context, "Generating Schedule..."),
+        ),
       ),
       floatingActionButton: fabButton(context, () {
         clearScheduleData(ref, tasks.value ?? []);
@@ -78,6 +81,27 @@ class SchedPage extends ConsumerWidget {
           );
         }
       },
+    );
+  }
+
+  Widget _scheduleFailListView(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      padding: pagePaddingWithScore,
+      children: [
+        ScoreCard(),
+        Text(
+          "Schedule",
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+        const SizedBox(height: 75),
+        Text(
+            "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
+            style: Theme.of(context).textTheme.headlineMedium),
+        const SizedBox(height: 10),
+        Text("Psst! Checking your \ninternet connection may help... 🙂",
+            style: Theme.of(context).textTheme.bodySmall),
+      ],
     );
   }
 }

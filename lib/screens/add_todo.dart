@@ -169,10 +169,14 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               );
               if (widget.taskToEdit != null) {
                 // Update existing task
-                ref.read(taskUpdateFullProvider(task));
+                ref.read(
+                  taskUpdateFullProvider(task),
+                );
               } else {
                 // Add new task
-                ref.read(taskAddProvider(task));
+                ref.read(
+                  taskAddProvider(task),
+                );
               }
               resetDialogFields();
               Navigator.pop(context);
@@ -231,15 +235,19 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   }
 
 //TODO: use a segmented button
-  Widget _dialogPrioritySelect(void Function(void Function()) setState) {
+  Widget _dialogPrioritySelect(
+      void Function(
+        void Function(),
+      ) setState) {
     return Center(
       child: Wrap(
         spacing: 2,
         children: ['High', 'Medium', 'Low'].map((String value) {
           return ChoiceChip(
             padding: EdgeInsets.fromLTRB(16, 24, 16, 24),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(26),
+            ),
             label: Text(value),
             selected: localPrior == value,
             onSelected: (bool selected) {

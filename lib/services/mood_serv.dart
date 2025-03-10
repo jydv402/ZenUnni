@@ -20,7 +20,10 @@ final moodProvider = StreamProvider<String?>((ref) async* {
 
   final querySnapshot = moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)
-      .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
+      .where('updatedOn',
+          isLessThan: today.add(
+            const Duration(days: 1),
+          ))
       .limit(1)
       .snapshots();
 
@@ -49,7 +52,10 @@ final moodAddProvider = FutureProvider.autoDispose.family<void, String>(
     // }
     final query = await moodDoc
         .where('updatedOn', isGreaterThanOrEqualTo: today)
-        .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
+        .where('updatedOn',
+            isLessThan: today.add(
+              const Duration(days: 1),
+            ))
         .limit(1)
         .get();
 

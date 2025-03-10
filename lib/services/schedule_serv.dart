@@ -33,8 +33,11 @@ final scheduleProvider =
         .trim();
     final Map<String, dynamic> schedJSON = jsonDecode(cleanedResponse);
 
-    final List<ScheduleItem> scheduleItems =
-        schedJSON.values.map((item) => ScheduleItem.fromJson(item)).toList();
+    final List<ScheduleItem> scheduleItems = schedJSON.values
+        .map(
+          (item) => ScheduleItem.fromJson(item),
+        )
+        .toList();
 
     return scheduleItems;
   },
@@ -42,5 +45,7 @@ final scheduleProvider =
 
 /// Clears the cached schedule data so that the scheduleProvider can be re-run.
 void clearScheduleData(WidgetRef ref, List<TodoModel> tasks) {
-  ref.invalidate(scheduleProvider(tasks));
+  ref.invalidate(
+    scheduleProvider(tasks),
+  );
 }

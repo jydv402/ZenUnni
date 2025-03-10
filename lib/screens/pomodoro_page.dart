@@ -49,7 +49,7 @@ class PomodoroPage extends ConsumerWidget {
           //       breakDuration.text.isNotEmpty &&
           //       rounds.text.isNotEmpty) {
           //     pomoNotifier.setTimer(int.parse(duration.text),
-          //         int.parse(breakDuration.text), int.parse(rounds.text));
+          //         int.parse(breakDuration.text), int.parse(rounds.text),);
           //     pomoNotifier.startTimer();
           //     Navigator.pushNamed(context, '/counter');
           //   }
@@ -60,7 +60,7 @@ class PomodoroPage extends ConsumerWidget {
           //       breakDuration.text.isNotEmpty &&
           //       rounds.text.isNotEmpty) {
           //     pomoNotifier.setTimer(int.parse(duration.text),
-          //         int.parse(breakDuration.text), int.parse(rounds.text));
+          //         int.parse(breakDuration.text), int.parse(rounds.text),);
           //     pomoNotifier.startTimer();
           //     Navigator.pushNamed(context, '/counter');
           //   }
@@ -95,7 +95,7 @@ class PomodoroPage extends ConsumerWidget {
           //               pomoNotifier.setTimer(
           //                   int.parse(duration.text),
           //                   int.parse(breakDuration.text),
-          //                   int.parse(rounds.text));
+          //                   int.parse(rounds.text),);
           //               pomoNotifier.startTimer();
           //               Navigator.pushNamed(context, '/counter');
           //             }
@@ -112,8 +112,11 @@ class PomodoroPage extends ConsumerWidget {
         if (duration.text.isNotEmpty &&
             breakDuration.text.isNotEmpty &&
             rounds.text.isNotEmpty) {
-          pomoNotifier.setTimer(int.parse(duration.text),
-              int.parse(breakDuration.text), int.parse(rounds.text));
+          pomoNotifier.setTimer(
+            int.parse(duration.text),
+            int.parse(breakDuration.text),
+            int.parse(rounds.text),
+          );
           pomoNotifier.startTimer();
           Navigator.pushNamed(context, '/counter');
         }

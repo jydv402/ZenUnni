@@ -10,7 +10,10 @@ void showLoadingDialog(BuildContext context, String heading) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(26),
         ),
-        title: Text(heading, style: Theme.of(context).textTheme.headlineMedium),
+        title: Text(
+          heading,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
         children: [
           Center(
             child: Lottie.asset(
@@ -22,5 +25,24 @@ void showLoadingDialog(BuildContext context, String heading) {
         ],
       );
     },
+  );
+}
+
+Column showRunningIndicator(BuildContext context, String message) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Lottie.asset(
+        "assets/loading/ld_shapes.json",
+        height: 100,
+        width: 100,
+      ),
+      const SizedBox(height: 20),
+      Text(
+        message,
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+    ],
   );
 }

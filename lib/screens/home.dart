@@ -17,10 +17,14 @@ class LandPage extends ConsumerWidget {
           return homeScreen(context, user.value, mood.value);
         },
         error: (error, stackTrace) {
-          return Center(child: Text('Error: $error'));
+          return Center(
+            child: Text('Error: $error'),
+          );
         },
         loading: () {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: showRunningIndicator(context, "Setting everything up..."),
+          );
         },
       ),
       floatingActionButton: CustomFAB(),
@@ -258,21 +262,23 @@ class LandPage extends ConsumerWidget {
               ),
             ),
             Positioned(
-                top: -iconPos,
-                left: -iconPos,
-                child: Icon(
-                  icon,
-                  color: Colors.black26,
-                  size: iconSize,
-                )),
+              top: -iconPos,
+              left: -iconPos,
+              child: Icon(
+                icon,
+                color: Colors.black26,
+                size: iconSize,
+              ),
+            ),
             Positioned(
-                top: pos,
-                right: pos,
-                child: Icon(
-                  Icons.arrow_outward_rounded,
-                  color: Colors.black,
-                  size: 32,
-                ))
+              top: pos,
+              right: pos,
+              child: Icon(
+                Icons.arrow_outward_rounded,
+                color: Colors.black,
+                size: 32,
+              ),
+            )
           ],
         ),
       ),
