@@ -31,8 +31,9 @@ class _HabitState extends ConsumerState<HabitPage> {
       ),
       floatingActionButton: fabButton(context, () {
         showDialog(
-            context: context,
-            builder: (BuildContext context) => newHabitDialog(context));
+          context: context,
+          builder: (BuildContext context) => newHabitDialog(context),
+        );
       }, 'Track new Habit', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -51,67 +52,66 @@ class _HabitState extends ConsumerState<HabitPage> {
     // Color selectedColor = Colors.green;
 
     return SimpleDialog(
+      contentPadding: EdgeInsets.symmetric(vertical: 26, horizontal: 26),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: habitNameController,
-                style: Theme.of(context).textTheme.bodyMedium,
-                decoration: InputDecoration(
-                  hintText: 'Enter habit name',
-                ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: habitNameController,
+              style: Theme.of(context).textTheme.bodyMedium,
+              decoration: InputDecoration(
+                hintText: 'Enter habit name',
               ),
-              SizedBox(height: 30),
-              Text(
-                'Choose a color',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              SizedBox(height: 10),
-              SizedBox(
-                height:
-                    160, //sizebox to get rid of the preset padding of block picker
-                // TODO:update this
-                child: BlockPicker(
-                    pickerColor: selectedColor,
-                    availableColors: colorOptions,
-                    onColorChanged: (Color color) {
-                      selectedColor = color;
-                    }),
-              ),
-              SizedBox(height: 8),
-              fabButton(context, () async {
-                if (habitNameController.text.isNotEmpty) {
-                  final newHabit = HabitModel(
-                    habitName: habitNameController.text,
-                    color: selectedColor
-                        .toARGB32()
-                        .toRadixString(16)
-                        .padLeft(8, '0'),
-                    createdAt: DateTime.now(),
-                    completedDates: {},
-                  );
-                  await ref.read(habitAddProvider(newHabit).future);
-                  habitNameController.clear();
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Enter habit name'),
-                    ),
-                  );
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
+            ),
+            SizedBox(height: 30),
+            Text(
+              'Choose a color',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              height:
+                  160, //sizebox to get rid of the preset padding of block picker
+              // TODO:update this
+              child: BlockPicker(
+                  pickerColor: selectedColor,
+                  availableColors: colorOptions,
+                  onColorChanged: (Color color) {
+                    selectedColor = color;
+                  }),
+            ),
+            SizedBox(height: 8),
+            fabButton(context, () async {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+              if (habitNameController.text.isNotEmpty) {
+                final newHabit = HabitModel(
+                  habitName: habitNameController.text,
+                  color: selectedColor
+                      .toARGB32()
+                      .toRadixString(16)
+                      .padLeft(8, '0'),
+                  createdAt: DateTime.now(),
+                  completedDates: {},
+                );
+                await ref.read(habitAddProvider(newHabit).future);
+                habitNameController.clear();
+                if (context.mounted) {
+                  Navigator.of(context).pop();
                 }
-              }, 'Add Habit', 0),
-            ],
-          ),
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Enter habit name'),
+                  ),
+                );
+              }
+            }, 'Add Habit', 0),
+          ],
         )
       ],
     );
