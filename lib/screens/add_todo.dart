@@ -166,6 +166,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 date: dateTime,
                 priority: _prior,
                 isDone: isDone,
+                expired: true,
               );
               if (widget.taskToEdit != null) {
                 // Update existing task

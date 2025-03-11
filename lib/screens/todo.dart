@@ -72,6 +72,18 @@ class TodoListPage extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    task.expired
+                        ? const Spacer()
+                        : Text(
+                            "Task Expired",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic),
+                          ),
+                    const Spacer(),
                     IconButton(
                       onPressed: () {
                         showConfirmDialog(
@@ -107,79 +119,126 @@ class TodoListPage extends ConsumerWidget {
                         color: Colors.white,
                       ),
                     ),
-                    Checkbox(
-                      value: task.isDone,
-                      side: const BorderSide(color: Colors.white, width: 2),
-                      activeColor: Colors.white,
-                      overlayColor: WidgetStateProperty.all(Colors.white),
-                      focusColor: Colors.white,
-                      checkColor: Colors.black,
-                      onChanged: (bool? value) {
-                        final updatedTask = TodoModel(
-                          name: task.name,
-                          description: task.description,
-                          date: task.date,
-                          priority: task.priority,
-                          isDone: value ?? false,
-                        );
-                        ref.read(
-                          taskUpdateFullProvider(updatedTask),
-                        );
-                        if (task.priority == "High") {
-                          ref.read(
-                            scoreIncrementProvider(
-                                value! ? 25 : -25), //High priority score
-                          );
-                        } else if (task.priority == "Medium") {
-                          ref.read(
-                            scoreIncrementProvider(
-                                value! ? 15 : -15), //Medium priority score
-                          );
-                        } else {
-                          ref.read(
-                            scoreIncrementProvider(
-                                value! ? 10 : -10), //Low priority score
-                          );
-                        }
-                      },
-                    ),
+                    task.expired
+                        ? Checkbox(
+                            value: task.isDone,
+                            side:
+                                const BorderSide(color: Colors.white, width: 2),
+                            activeColor: Colors.white,
+                            overlayColor: WidgetStateProperty.all(Colors.white),
+                            focusColor: Colors.white,
+                            checkColor: Colors.black,
+                            onChanged: (bool? value) {
+                              final updatedTask = TodoModel(
+                                name: task.name,
+                                description: task.description,
+                                date: task.date,
+                                priority: task.priority,
+                                isDone: value ?? false,
+                                expired: task.expired,
+                              );
+                              ref.read(
+                                taskUpdateFullProvider(updatedTask),
+                              );
+                              if (task.priority == "High") {
+                                ref.read(
+                                  scoreIncrementProvider(
+                                      value! ? 25 : -25), //High priority score
+                                );
+                              } else if (task.priority == "Medium") {
+                                ref.read(
+                                  scoreIncrementProvider(value!
+                                      ? 15
+                                      : -15), //Medium priority score
+                                );
+                              } else {
+                                ref.read(
+                                  scoreIncrementProvider(
+                                      value! ? 10 : -10), //Low priority score
+                                );
+                              }
+                            },
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
                 Text(
                   task.name,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: task.expired
+                      ? Theme.of(context).textTheme.headlineMedium
+                      : Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   task.description,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: task.expired
+                      ? Theme.of(context).textTheme.headlineSmall
+                      : Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: Colors.grey,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: Colors.white,
+                            decorationThickness: 2,
+                          ),
                 ),
                 const SizedBox(height: 26),
                 Text(
                   "•  Due Date: ${DateFormat('dd MMM y').format(task.date)}",
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: task.expired
+                      ? Theme.of(context).textTheme.bodySmall
+                      : Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   "•  Due Time: ${DateFormat('hh:mm a').format(task.date)}",
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: task.expired
+                      ? Theme.of(context).textTheme.bodySmall
+                      : Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
                 Text.rich(
                   TextSpan(children: [
                     TextSpan(
                       text: "•  Priority: ",
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: task.expired
+                          ? Theme.of(context).textTheme.bodySmall
+                          : Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Colors.white,
+                              decorationThickness: 2),
                     ),
                     TextSpan(
                       text: task.priority,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: task.priority == "High"
-                                ? Colors.red.shade200
-                                : task.priority == "Medium"
-                                    ? Colors.orange.shade200
-                                    : Colors.green.shade200,
-                          ),
+                      style: task.expired
+                          ? Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: task.priority == "High"
+                                    ? Colors.red.shade200
+                                    : task.priority == "Medium"
+                                        ? Colors.orange.shade200
+                                        : Colors.green.shade200,
+                              )
+                          : Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: task.priority == "High"
+                                    ? Colors.red.shade200
+                                    : task.priority == "Medium"
+                                        ? Colors.orange.shade200
+                                        : Colors.green.shade200,
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Colors.white,
+                                decorationThickness: 2,
+                              ),
                     ),
                   ]),
                 ),

@@ -9,6 +9,7 @@ class TodoModel {
   DateTime date;
   String priority;
   bool isDone;
+  bool expired;
   final Function(bool?)? onChanged;
   //constructor
   TodoModel(
@@ -17,7 +18,8 @@ class TodoModel {
       required this.date,
       required this.priority,
       required this.isDone,
-      this.onChanged});
+      this.onChanged,
+      required this.expired});
 
   Map<String, dynamic> toMap() {
     return {
@@ -30,13 +32,14 @@ class TodoModel {
     };
   }
 
-  factory TodoModel.fromMap(Map<String, dynamic> map) {
+  factory TodoModel.fromMap(Map<String, dynamic> map, bool expired) {
     return TodoModel(
       name: map['task'] ?? '',
       description: map['description'] ?? '',
       date: (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
       priority: map['priority'] ?? '',
       isDone: map['isDone'] ?? false,
+      expired: expired,
     );
   }
 
@@ -52,6 +55,7 @@ class TodoModel {
         description: description ?? this.description,
         date: date ?? this.date,
         priority: priority ?? this.priority,
-        isDone: isDone ?? this.isDone);
+        isDone: isDone ?? this.isDone,
+        expired: expired);
   }
 }
