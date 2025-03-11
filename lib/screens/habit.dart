@@ -36,14 +36,15 @@ class _HabitState extends ConsumerState<HabitPage> {
       floatingActionButton: fabButton(context, () {
         showDialog(
           context: context,
-          builder: (BuildContext context) => newHabitDialog(context),
+          builder: (BuildContext context) =>
+              newHabitDialog(context, false, null),
         );
       }, 'Track new Habit', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget newHabitDialog(BuildContext context) {
+  Widget newHabitDialog(BuildContext context, bool isEdit, HabitModel? habit) {
     List<Color> colorOptions = [
       Colors.pink.shade100,
       Colors.blue.shade100,
@@ -55,6 +56,12 @@ class _HabitState extends ConsumerState<HabitPage> {
 
     // Color selectedColor = Colors.green;
 
+    //Function to update the values
+    if (isEdit) {
+      habitNameController.text = habit!.habitName;
+      selectedColor = getColorFromHex(habit.color);
+    }
+
     return SimpleDialog(
       contentPadding: EdgeInsets.symmetric(vertical: 26, horizontal: 26),
       shape: RoundedRectangleBorder(
@@ -65,6 +72,11 @@ class _HabitState extends ConsumerState<HabitPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
+            Text(
+              isEdit ? 'Edit Habit' : 'Add Habit',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 20),
             TextField(
               controller: habitNameController,
               style: Theme.of(context).textTheme.bodyMedium,
@@ -83,11 +95,12 @@ class _HabitState extends ConsumerState<HabitPage> {
                   160, //sizebox to get rid of the preset padding of block picker
               // TODO:update this
               child: BlockPicker(
-                  pickerColor: selectedColor,
-                  availableColors: colorOptions,
-                  onColorChanged: (Color color) {
-                    selectedColor = color;
-                  }),
+                pickerColor: selectedColor,
+                availableColors: colorOptions,
+                onColorChanged: (Color color) {
+                  selectedColor = color;
+                },
+              ),
             ),
             SizedBox(height: 8),
             fabButton(context, () async {
@@ -106,6 +119,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                 );
                 await ref.read(habitAddProvider(newHabit).future);
                 habitNameController.clear();
+                selectedColor = Colors.pink.shade100;
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }
@@ -116,7 +130,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                   ),
                 );
               }
-            }, 'Add Habit', 0),
+            }, isEdit ? 'Update Habit' : 'Add Habit', 0),
           ],
         )
       ],
@@ -190,6 +204,19 @@ class _HabitState extends ConsumerState<HabitPage> {
                         );
                       },
                       icon: Icon(LineIcons.alternateTrash, color: habitColor),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              newHabitDialog(context, true, habit),
+                        );
+                      },
+                      icon: Icon(
+                        LineIcons.pen,
+                        color: habitColor,
+                      ),
                     ),
                     IconButton(
                       onPressed: () {
