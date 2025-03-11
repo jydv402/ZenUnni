@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:timeline_tile_plus/timeline_tile_plus.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/models/schedule_model.dart';
-import 'package:zen/services/schedule_serv.dart';
-import 'package:zen/services/todo_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 class SchedPage extends ConsumerWidget {
   const SchedPage({super.key});
@@ -13,15 +10,18 @@ class SchedPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tasks = ref.watch(taskProvider);
-    final schedule = ref.watch(scheduleProvider(tasks.value ?? []));
+    final schedule = ref.watch(
+      scheduleProvider(tasks.value ?? []),
+    );
     return Scaffold(
       body: schedule.when(
         data: (scheduleItems) {
           return _scheduleListView(scheduleItems);
         },
-        error: (error, stackTrace) => Text('Error: $error',
-            style: Theme.of(context).textTheme.bodyMedium),
-        loading: () => Center(child: const CircularProgressIndicator()),
+        error: (error, stackTrace) => _scheduleFailListView(context),
+        loading: () => Center(
+          child: showRunningIndicator(context, "Generating Schedule..."),
+        ),
       ),
       floatingActionButton: fabButton(context, () {
         clearScheduleData(ref, tasks.value ?? []);
@@ -74,13 +74,34 @@ class SchedPage extends ConsumerWidget {
             endChild: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                '${item.startTime} - ${item.endTime}\n${item.taskName} [${item.priority}]',
+                '${item.taskName}\n${DateFormat('hh:mm a').format(item.startTime)} - ${DateFormat('hh:mm a').format(item.endTime)}\n${DateFormat('dd/MM/yyyy').format(item.startTime)}\n${item.duration} minutes',
                 style: TextStyle(fontSize: 16),
               ),
             ),
           );
         }
       },
+    );
+  }
+
+  Widget _scheduleFailListView(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      padding: pagePaddingWithScore,
+      children: [
+        ScoreCard(),
+        Text(
+          "Schedule",
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+        const SizedBox(height: 75),
+        Text(
+            "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
+            style: Theme.of(context).textTheme.headlineMedium),
+        const SizedBox(height: 10),
+        Text("Psst! Checking your \ninternet connection may help... 🙂",
+            style: Theme.of(context).textTheme.bodySmall),
+      ],
     );
   }
 }

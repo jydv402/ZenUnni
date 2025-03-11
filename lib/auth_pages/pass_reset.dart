@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/theme/light.dart';
+import 'package:zen/zen_barrel.dart';
 
 class PassResetPage extends ConsumerStatefulWidget {
   const PassResetPage({super.key});
@@ -23,22 +21,35 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
 
   Future passwordReset() async {
     try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: resetEmailController.text.trim());
-      showConfirmDialog(
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: resetEmailController.text.trim(),
+      );
+      if (mounted) {
+        showConfirmDialog(
           context,
           "Password Reset",
           "Password reset link sent!\ncheck your email",
           "Okay",
-          Colors.green.shade200, () {
-        Navigator.pop(context);
-      });
+          Colors.green.shade200,
+          () {
+            Navigator.pop(context);
+          },
+        );
+      }
     } on FirebaseAuthException catch (e) {
-      showConfirmDialog(context, "Error", "Error sending reset link: ${e.code}",
-          "Retry", Colors.red, () {
-        passwordReset();
-        Navigator.pop(context);
-      });
+      if (mounted) {
+        showConfirmDialog(
+          context,
+          "Error",
+          "Error sending reset link: ${e.code}",
+          "Retry",
+          Colors.red,
+          () {
+            passwordReset();
+            Navigator.pop(context);
+          },
+        );
+      }
     }
   }
 

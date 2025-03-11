@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/pomodoro_serve.dart';
-import 'package:zen/theme/light.dart';
+import 'package:zen/zen_barrel.dart';
 
 class PomodoroPage extends ConsumerWidget {
   const PomodoroPage({super.key});
@@ -52,7 +49,7 @@ class PomodoroPage extends ConsumerWidget {
           //       breakDuration.text.isNotEmpty &&
           //       rounds.text.isNotEmpty) {
           //     pomoNotifier.setTimer(int.parse(duration.text),
-          //         int.parse(breakDuration.text), int.parse(rounds.text));
+          //         int.parse(breakDuration.text), int.parse(rounds.text),);
           //     pomoNotifier.startTimer();
           //     Navigator.pushNamed(context, '/counter');
           //   }
@@ -63,7 +60,7 @@ class PomodoroPage extends ConsumerWidget {
           //       breakDuration.text.isNotEmpty &&
           //       rounds.text.isNotEmpty) {
           //     pomoNotifier.setTimer(int.parse(duration.text),
-          //         int.parse(breakDuration.text), int.parse(rounds.text));
+          //         int.parse(breakDuration.text), int.parse(rounds.text),);
           //     pomoNotifier.startTimer();
           //     Navigator.pushNamed(context, '/counter');
           //   }
@@ -98,7 +95,7 @@ class PomodoroPage extends ConsumerWidget {
           //               pomoNotifier.setTimer(
           //                   int.parse(duration.text),
           //                   int.parse(breakDuration.text),
-          //                   int.parse(rounds.text));
+          //                   int.parse(rounds.text),);
           //               pomoNotifier.startTimer();
           //               Navigator.pushNamed(context, '/counter');
           //             }
@@ -115,8 +112,11 @@ class PomodoroPage extends ConsumerWidget {
         if (duration.text.isNotEmpty &&
             breakDuration.text.isNotEmpty &&
             rounds.text.isNotEmpty) {
-          pomoNotifier.setTimer(int.parse(duration.text),
-              int.parse(breakDuration.text), int.parse(rounds.text));
+          pomoNotifier.setTimer(
+            int.parse(duration.text),
+            int.parse(breakDuration.text),
+            int.parse(rounds.text),
+          );
           pomoNotifier.startTimer();
           Navigator.pushNamed(context, '/counter');
         }
@@ -150,8 +150,9 @@ class CountdownScreen extends ConsumerWidget {
 
     return Scaffold(
       body: ListView(
-        padding: pagePadding,
+        padding: pagePaddingWithScore,
         children: [
+          ScoreCard(),
           Text(
             pomo.isRunning
                 ? pomo.isBreak
@@ -178,9 +179,9 @@ class CountdownScreen extends ConsumerWidget {
     return Text(
       seconds.toString().padLeft(2, '0'), // Display time remaining
       style: GoogleFonts.bebasNeue(
-          fontSize: MediaQuery.of(context).size.width * 0.75,
+          fontSize: MediaQuery.of(context).size.width * 0.70,
           color: Colors.white,
-          height: 0.9),
+          height: 0.8),
       textAlign: TextAlign.center,
     );
   }
