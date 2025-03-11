@@ -2,9 +2,6 @@ on:
   pull_request:
     branches:
       - release
-  push:
-    branches:
-      - release
 
 name: Build ZenUnni App
 jobs:
@@ -30,7 +27,7 @@ jobs:
 
       - name: Create .env File
         run: |
-          echo "API_KEY=${{ secrets.API_KEY }}" > .env
+          echo "API_KEY=${{ secrets.KEY }}" > .env
 
       - name: Building APK
         run: flutter build apk --release
