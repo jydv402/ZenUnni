@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:zen/components/headsup_noti.dart';
 import 'package:zen/zen_barrel.dart';
 
 class TodoListPage extends ConsumerWidget {
@@ -36,6 +37,7 @@ class TodoListPage extends ConsumerWidget {
   }
 
   Widget _taskListView(List<TodoModel> tasks, WidgetRef ref) {
+    int score;
     return ListView.builder(
       shrinkWrap: true,
       padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
@@ -145,17 +147,27 @@ class TodoListPage extends ConsumerWidget {
                                   scoreIncrementProvider(
                                       value! ? 25 : -25), //High priority score
                                 );
+                                score = 25;
                               } else if (task.priority == "Medium") {
                                 ref.read(
                                   scoreIncrementProvider(value!
                                       ? 15
                                       : -15), //Medium priority score
                                 );
+                                score = 15;
                               } else {
                                 ref.read(
                                   scoreIncrementProvider(
                                       value! ? 10 : -10), //Low priority score
                                 );
+                                score = 10;
+                              }
+                              if (value) {
+                                showHeadsupNoti(context,
+                                    "Hurray! Task Completed.\n$score Points Earned");
+                              } else {
+                                showHeadsupNoti(
+                                    context, "Oops! Lost $score Points");
                               }
                             },
                           )
