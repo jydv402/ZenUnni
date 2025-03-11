@@ -42,6 +42,7 @@ Column showRunningIndicator(BuildContext context, String message) {
       Text(
         message,
         style: Theme.of(context).textTheme.headlineSmall,
+        textAlign: TextAlign.center,
       ),
     ],
   );

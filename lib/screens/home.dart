@@ -23,7 +23,8 @@ class LandPage extends ConsumerWidget {
         },
         loading: () {
           return Center(
-            child: showRunningIndicator(context, "Setting everything up..."),
+            child: showRunningIndicator(
+                context, "Setting things up...\nJust for you..!"),
           );
         },
       ),

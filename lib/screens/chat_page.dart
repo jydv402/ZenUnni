@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:lottie/lottie.dart';
 import 'package:zen/zen_barrel.dart';
 
 class ChatPage extends ConsumerWidget {
@@ -12,10 +13,33 @@ class ChatPage extends ConsumerWidget {
     final chatMsgs = ref.watch(msgProvider);
 
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
+      body: chatMsgs.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 16,
+                children: [
+                  Lottie.asset(
+                    'assets/loading/ld_shapes.json',
+                    alignment: Alignment.center,
+                    height: 150,
+                    width: 100,
+                  ),
+                  Text(
+                    'Unni',
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        fontSize: 96, color: Colors.blue.shade200, height: .8),
+                  ),
+                  Text('Ask me anything !',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(color: Colors.grey.shade400)),
+                ],
+              ),
+            )
+          : ListView.builder(
               padding: const EdgeInsets.fromLTRB(0, 100, 0, 150),
               itemCount: chatMsgs.length,
               itemBuilder: (context, index) {
@@ -54,9 +78,6 @@ class ChatPage extends ConsumerWidget {
                 );
               },
             ),
-          ),
-        ],
-      ),
       floatingActionButton: fabField(context, ref, chatMsgs.isEmpty),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
