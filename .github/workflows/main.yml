@@ -14,18 +14,27 @@ jobs:
     steps:
       - name: Checkout Codebase
         uses: actions/checkout@v2
+
       - name: Setup JDK 17
         uses: actions/setup-java@v1
         with:
           java-version: 17
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+
       - name: Getting Dependencies
         run: flutter pub get
+
+      - name: Create .env File
+        run: |
+          echo "API_KEY=${{ secrets.API_KEY }}" > .env
+
       - name: Building APK
         run: flutter build apk --release
+
       - name: Upload APK
         uses: ncipollo/release-action@v1
         with:
