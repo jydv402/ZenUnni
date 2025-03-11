@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/services/chat_serv.dart';
-import 'package:zen/services/schedule_serv.dart';
-import 'package:zen/services/todo_serv.dart';
-import 'package:zen/theme/light.dart';
+import 'package:lottie/lottie.dart';
+import 'package:zen/zen_barrel.dart';
 
 class ChatPage extends ConsumerWidget {
   const ChatPage({super.key});
@@ -16,10 +13,33 @@ class ChatPage extends ConsumerWidget {
     final chatMsgs = ref.watch(msgProvider);
 
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
+      body: chatMsgs.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 16,
+                children: [
+                  Lottie.asset(
+                    'assets/loading/ld_shapes.json',
+                    alignment: Alignment.center,
+                    height: 150,
+                    width: 100,
+                  ),
+                  Text(
+                    'Unni',
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        fontSize: 96, color: Colors.blue.shade200, height: .8),
+                  ),
+                  Text('Ask me anything !',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(color: Colors.grey.shade400)),
+                ],
+              ),
+            )
+          : ListView.builder(
               padding: const EdgeInsets.fromLTRB(0, 100, 0, 150),
               itemCount: chatMsgs.length,
               itemBuilder: (context, index) {
@@ -58,9 +78,6 @@ class ChatPage extends ConsumerWidget {
                 );
               },
             ),
-          ),
-        ],
-      ),
       floatingActionButton: fabField(context, ref, chatMsgs.isEmpty),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -116,7 +133,8 @@ class ChatPage extends ConsumerWidget {
               alignment: const Alignment(-5.5, 16),
               backgroundColor: WidgetStateProperty.all(Colors.white),
               shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32))),
+                borderRadius: BorderRadius.circular(32),
+              )),
             ),
             builder: (context, controller, child) {
               return IconButton(
@@ -155,23 +173,24 @@ class ChatPage extends ConsumerWidget {
             ],
           ),
           IconButton(
-              padding: const EdgeInsets.all(0),
-              onPressed: () async {
-                if (controller.text.isNotEmpty) {
-                  //Add the message to the state
-                  final userMsg = Message(text: controller.text, isUser: true);
-                  ref.read(msgProvider.notifier).addMessage(userMsg);
-                  //Get the AI response
-                  final aiMsg =
-                      await ref.read(aiResponseAdder(controller.text).future);
-                  ref.read(msgProvider.notifier).addMessage(aiMsg);
-                }
-                controller.clear();
-              },
-              icon: const Icon(
-                LineIcons.share,
-                size: 26,
-              )),
+            padding: const EdgeInsets.all(0),
+            onPressed: () async {
+              if (controller.text.isNotEmpty) {
+                //Add the message to the state
+                final userMsg = Message(text: controller.text, isUser: true);
+                ref.read(msgProvider.notifier).addMessage(userMsg);
+                //Get the AI response
+                final aiMsg =
+                    await ref.read(aiResponseAdder(controller.text).future);
+                ref.read(msgProvider.notifier).addMessage(aiMsg);
+              }
+              controller.clear();
+            },
+            icon: const Icon(
+              LineIcons.share,
+              size: 26,
+            ),
+          ),
         ],
       ),
     );

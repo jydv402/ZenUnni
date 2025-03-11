@@ -104,7 +104,7 @@ class AIService {
     * **Neutral:** "How can I brighten your day today?" 
 
     Avoid negative or discouraging language. Always focus on the positive 
-    and help users see the best in themselves and their situations.
+    and help users see the best in themselves and their situations. Mention the user's name to personalise their experience.
     ''';
 
     final promptTemplate = '''

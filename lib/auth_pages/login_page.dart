@@ -1,30 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/theme/light.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/zen_barrel.dart';
 
-// why is loginpage stateful
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obsureText = true;
-
-  void displayMessageToUser(String message, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(message),
-            ));
-  }
+  bool _isLoading = false;
 
   void _toggleObscure() {
     setState(() {
@@ -33,30 +24,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void loginUser() async {
-    //show loading circle
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-    //try sign in
+    if (_isLoading) return; // Prevent multiple attempts
+
     try {
+      setState(() => _isLoading = true);
+      stateInvalidator(ref);
+
+      showLoadingDialog(context, "Logging you in...");
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text);
-      //pop loading circle
+
       if (mounted) {
-        Navigator.pop(context);
-        //navigate to home page
-        Navigator.pushReplacementNamed(
-          context,
-          '/home',
-        );
+        Navigator.pop(context); // Close loading dialog
+        Navigator.pushReplacementNamed(context, '/home');
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
-        //pop loading circle
-        Navigator.pop(context);
+        Navigator.pop(context); // Close loading dialog
         showConfirmDialog(
             context, "Error", e.code.replaceAll("-", " "), "Retry", Colors.red,
             () {
@@ -66,6 +51,10 @@ class _LoginPageState extends State<LoginPage> {
             _obsureText = true;
           });
         });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
       }
     }
   }
@@ -96,8 +85,8 @@ class _LoginPageState extends State<LoginPage> {
             decoration: InputDecoration(
               labelText: 'Password',
               suffixIcon: IconButton(
-                padding: EdgeInsets.only(right: 26),
-                onPressed: () => _toggleObscure(),
+                padding: const EdgeInsets.only(right: 26),
+                onPressed: _toggleObscure,
                 icon: Icon(
                   _obsureText
                       ? Icons.visibility_off_outlined
@@ -119,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  //navigate to password reset page
+                  // navigate to password reset page
                   Navigator.pushNamed(context, '/pass_reset');
                 },
             ),
@@ -137,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                         ?.copyWith(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        //navigate to register page
+                        // navigate to register page
                         Navigator.pushReplacementNamed(context, '/register');
                       })
               ],

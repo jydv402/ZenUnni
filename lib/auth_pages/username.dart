@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/services/user_serv.dart';
-import 'package:zen/theme/light.dart';
+import 'package:zen/zen_barrel.dart';
 
 class UsernamePage extends ConsumerWidget {
   const UsernamePage({super.key});
@@ -30,6 +28,7 @@ class UsernamePage extends ConsumerWidget {
         ],
       ),
       floatingActionButton: fabButton(context, () async {
+        stateInvalidator(ref);
         String username = userNameController.text.trim();
 
         if (username.isNotEmpty) {
@@ -38,8 +37,7 @@ class UsernamePage extends ConsumerWidget {
             Navigator.pushNamed(context, '/home');
           }
         } else {
-          const snackBar = SnackBar(content: Text('Enter a username first'));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          showHeadsupNoti(context, "Enter a username first.");
         }
       }, 'Continue', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

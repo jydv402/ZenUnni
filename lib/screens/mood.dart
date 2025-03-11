@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/mood_serv.dart';
-import 'package:zen/consts/moodlist.dart';
-import 'package:zen/theme/light.dart';
+
+import 'package:zen/zen_barrel.dart';
 
 class MoodPage extends ConsumerStatefulWidget {
   const MoodPage({super.key});
@@ -85,10 +82,13 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         ],
       ),
       floatingActionButton: fabButton(context, () async {
-        await ref.read(
-            moodAddProvider(moodList.values.elementAt(_currentMoodIndex))
-                .future);
+        await ref.read(moodAddProvider(
+          moodList.values.elementAt(_currentMoodIndex),
+        ).future);
+
         if (context.mounted) {
+          showHeadsupNoti(context,
+              "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}");
           Navigator.pop(context);
         }
       }, "Add Mood", 26),

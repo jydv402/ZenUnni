@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/models/todo_model.dart';
+import 'package:zen/zen_barrel.dart';
 
 // Task model
 final taskProvider = StreamProvider<List<TodoModel>>(
@@ -24,6 +24,8 @@ final taskProvider = StreamProvider<List<TodoModel>>(
           date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
           priority: data['priority'] ?? '',
           isDone: data['isDone'] ?? false,
+          expired: ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
+              .isAfter(DateTime.now()),
         );
       }).toList();
       yield tasks;
@@ -41,29 +43,9 @@ final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
         .collection('task');
 
     // Add new document
-    await taskDoc.add(task.toMap());
-  },
-);
-
-// Update task
-final taskUpdateProvider = FutureProvider.family<void, TodoModel>(
-  (ref, task) async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final taskDoc = FirebaseFirestore.instance
-        .collection('users')
-        .doc(auth.currentUser?.uid)
-        .collection('task');
-
-    // Query to find the document with matching task name
-    final querySnapshot =
-        await taskDoc.where('task', isEqualTo: task.name).get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      final docId = querySnapshot.docs.first.id;
-      await taskDoc.doc(docId).update({
-        'isDone': task.isDone,
-      });
-    }
+    await taskDoc.add(
+      task.toMap(),
+    );
   },
 );
 
@@ -81,7 +63,9 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
-      await taskDoc.doc(docId).update(task.toMap());
+      await taskDoc.doc(docId).update(
+            task.toMap(),
+          );
     }
   },
 );

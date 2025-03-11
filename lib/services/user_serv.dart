@@ -25,7 +25,10 @@ final userNameProvider =
 });
 
 class UserNameNotifier extends StateNotifier<AsyncValue<String?>> {
-  UserNameNotifier(Ref ref) : super(const AsyncValue.loading()) {
+  UserNameNotifier(Ref ref)
+      : super(
+          const AsyncValue.loading(),
+        ) {
     loadUserName();
   }
   Future<void> loadUserName() async {

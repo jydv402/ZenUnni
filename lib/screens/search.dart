@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/models/search_model.dart';
-import 'package:zen/services/search_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 class ConnectPage extends ConsumerStatefulWidget {
   const ConnectPage({super.key});
@@ -16,23 +14,34 @@ class _SearchState extends ConsumerState<ConnectPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String searchQuery = searchNameController.text;
-    final searchResults = ref.watch(userSearchProvider(searchQuery));
+    final String searchQuery = searchNameController.text.toLowerCase();
+    final searchResults = ref.watch(rankedUserSearchProvider);
 
     return Scaffold(
       body: searchResults.when(
-          data: (users) {
-            if (users.isEmpty) {
-              return Center(
-                  child: Text(
+        data: (users) {
+          final filteredUsers = users.where((user) {
+            final username = user.username.toLowerCase();
+            return username.contains(searchQuery);
+          }).toList();
+
+          if (filteredUsers.isEmpty) {
+            return Center(
+              child: Text(
                 "No Users Found",
                 style: TextStyle(color: Colors.white),
-              ));
-            }
-            return searchResListView(users);
-          },
-          error: (err, stack) => Center(child: Text("Error:$err")),
-          loading: () => Center(child: CircularProgressIndicator())),
+              ),
+            );
+          }
+          return searchResListView(filteredUsers);
+        },
+        error: (err, stack) => Center(
+          child: Text("Error:$err"),
+        ),
+        loading: () => Center(
+          child: showRunningIndicator(context, "Loading..."),
+        ),
+      ),
       floatingActionButton: searchTextField(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -56,6 +65,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
         children: [
           Expanded(
             child: TextField(
+              onChanged: (value) {
+                setState(() {});
+              },
               controller: searchNameController,
               maxLines: null,
               minLines: 1,
@@ -118,12 +130,22 @@ class _SearchState extends ConsumerState<ConnectPage> {
             child: ListTile(
               minVerticalPadding: 25,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(26)),
+                borderRadius: BorderRadius.circular(26),
+              ),
               tileColor: tileColor,
-              leading: Text('# $index', style: TextStyle(color: Colors.black)),
-              title: Text(user.username, style: TextStyle(color: Colors.black)),
-              trailing: Text('Score: ${user.score}',
-                  style: TextStyle(color: Colors.black)),
+              leading: Text(
+                '# ${user.rank}',
+                //'$index',
+                style: TextStyle(color: Colors.black),
+              ),
+              title: Text(
+                user.username,
+                style: TextStyle(color: Colors.black),
+              ),
+              trailing: Text(
+                'Score: ${user.score}',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           );
         }

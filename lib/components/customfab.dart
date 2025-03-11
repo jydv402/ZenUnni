@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/screens/profile.dart';
+import 'package:zen/zen_barrel.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 
 class CustomFAB extends StatelessWidget {
@@ -47,14 +47,15 @@ class CustomFAB extends StatelessWidget {
           children: [
             const Spacer(),
             ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shadowColor: Colors.transparent,
-                  shape: const CircleBorder(),
-                ),
-                onPressed: () {},
-                child: const Icon(LineIcons.home, size: 30)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                shadowColor: Colors.transparent,
+                shape: const CircleBorder(),
+              ),
+              onPressed: () {},
+              child: const Icon(LineIcons.home, size: 30),
+            ),
             const Spacer(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -64,26 +65,28 @@ class CustomFAB extends StatelessWidget {
                 shape: const CircleBorder(),
               ),
               onPressed: () {
-                Navigator.of(context).push(PageRouteBuilder(
-                  transitionDuration: const Duration(milliseconds: 400),
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return CustomOverlay(
-                      child: ProfilePage(),
-                    );
-                  },
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    return ScaleTransition(
-                      scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                        CurvedAnimation(
-                          parent: animation,
-                          curve: Curves.fastLinearToSlowEaseIn,
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 400),
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return CustomOverlay(
+                        child: ProfilePage(),
+                      );
+                    },
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return ScaleTransition(
+                        scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                          CurvedAnimation(
+                            parent: animation,
+                            curve: Curves.fastLinearToSlowEaseIn,
+                          ),
                         ),
-                      ),
-                      child: child,
-                    );
-                  },
-                ));
+                        child: child,
+                      );
+                    },
+                  ),
+                );
               },
               child: const Icon(
                 LineIcons.userAstronaut,

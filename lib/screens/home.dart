@@ -1,22 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/components/customfab.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/mood_serv.dart';
-import 'package:zen/services/user_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});
-
-  void logoutUser(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    if (context.mounted) {
-      // Navigate to the root page after logging out
-      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,10 +17,15 @@ class LandPage extends ConsumerWidget {
           return homeScreen(context, user.value, mood.value);
         },
         error: (error, stackTrace) {
-          return Center(child: Text('Error: $error'));
+          return Center(
+            child: Text('Error: $error'),
+          );
         },
         loading: () {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: showRunningIndicator(
+                context, "Setting things up...\nJust for you..!"),
+          );
         },
       ),
       floatingActionButton: CustomFAB(),
@@ -81,7 +74,7 @@ class LandPage extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.fromLTRB(16, 26, 26, 26),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(26), color: Colors.white30),
         child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
@@ -270,21 +263,23 @@ class LandPage extends ConsumerWidget {
               ),
             ),
             Positioned(
-                top: -iconPos,
-                left: -iconPos,
-                child: Icon(
-                  icon,
-                  color: Colors.black26,
-                  size: iconSize,
-                )),
+              top: -iconPos,
+              left: -iconPos,
+              child: Icon(
+                icon,
+                color: Colors.black26,
+                size: iconSize,
+              ),
+            ),
             Positioned(
-                top: pos,
-                right: pos,
-                child: Icon(
-                  Icons.arrow_outward_rounded,
-                  color: Colors.black,
-                  size: 32,
-                ))
+              top: pos,
+              right: pos,
+              child: Icon(
+                Icons.arrow_outward_rounded,
+                color: Colors.black,
+                size: 32,
+              ),
+            )
           ],
         ),
       ),
