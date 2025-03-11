@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+
 import 'package:zen/zen_barrel.dart';
 
 class MoodPage extends ConsumerStatefulWidget {
@@ -84,7 +85,10 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         await ref.read(moodAddProvider(
           moodList.values.elementAt(_currentMoodIndex),
         ).future);
+
         if (context.mounted) {
+          showHeadsupNoti(context,
+              "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}");
           Navigator.pop(context);
         }
       }, "Add Mood", 26),

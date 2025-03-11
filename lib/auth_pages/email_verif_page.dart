@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:zen/zen_barrel.dart';
 
 class EmailVerifPage extends ConsumerStatefulWidget {
@@ -41,19 +42,11 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
     try {
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Verification email resent!'),
-          ),
-        );
+        showHeadsupNoti(context, "Verification email resent!");
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: ${e.toString()}'),
-          ),
-        );
+        showHeadsupNoti(context, "Error: ${e.toString()}");
       }
     }
   }

@@ -37,10 +37,7 @@ class UsernamePage extends ConsumerWidget {
             Navigator.pushNamed(context, '/home');
           }
         } else {
-          const snackBar = SnackBar(
-            content: Text('Enter a username first'),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          showHeadsupNoti(context, "Enter a username first.");
         }
       }, 'Continue', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

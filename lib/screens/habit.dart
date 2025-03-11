@@ -3,6 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+
 import 'package:zen/zen_barrel.dart';
 
 class HabitPage extends ConsumerStatefulWidget {
@@ -124,11 +125,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                   Navigator.of(context).pop();
                 }
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Enter habit name'),
-                  ),
-                );
+                showHeadsupNoti(context, "Enter habit name");
               }
             }, isEdit ? 'Update Habit' : 'Add Habit', 0),
           ],
@@ -252,15 +249,17 @@ class _HabitState extends ConsumerState<HabitPage> {
                                   habitUpdateProvider(updatedHabit).future);
                             } catch (e) {
                               if (context.mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text('Failed to update habit: $e'),
-                                ));
+                                showHeadsupNoti(
+                                    context, "Failed to update habit: $e");
                               }
                             }
                             ref.read(
                               scoreIncrementProvider(10),
                             );
+                            if (context.mounted) {
+                              showHeadsupNoti(context,
+                                  "Great job! Keep it going.\n10 points added.");
+                            }
                           },
                         );
                       },
@@ -320,12 +319,7 @@ class _HabitState extends ConsumerState<HabitPage> {
         defaultColor: Colors.grey.shade800,
         colorsets: {1: habitColor},
         onClick: (value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-              value.toString(),
-            )),
-          );
+          showHeadsupNoti(context, value.toString());
         },
       );
     } catch (e) {
