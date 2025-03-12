@@ -209,7 +209,7 @@ class LandPage extends ConsumerWidget {
                   Colors.deepPurple,
                   bentoHeight,
                   bentoWidth,
-                  "Connect",
+                  "Leaderboard",
                   LineIcons.users,
                   iconSize + 10,
                   iconPos + 4),
