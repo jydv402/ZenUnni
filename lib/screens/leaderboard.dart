@@ -107,12 +107,12 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   'Leaderboard',
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 26),
               ],
             ),
           );
         } else if (index == users.length + 1) {
-          return const SizedBox(height: 140);
+          return const SizedBox(height: 130);
         } else if (index == 1) {
           return SizedBox(
             height: 150,
@@ -120,12 +120,14 @@ class _SearchState extends ConsumerState<ConnectPage> {
               fit: StackFit.loose,
               clipBehavior: Clip.none,
               children: [
-                //rankCard(double top, double right, double left, String rank,String username, String score)
+                //rankCard(double top, double right, double left, double dp, double fSize, String rank, String username, String score)
                 //Rank 1
                 rankCard(
                   0,
                   0,
                   0,
+                  100,
+                  18,
                   "1",
                   users[0].username.toString(),
                   users[0].score.toString(),
@@ -133,8 +135,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
                 //Rank 2
                 rankCard(
                   100,
-                  MediaQuery.of(context).size.width - 126,
-                  26,
+                  MediaQuery.of(context).size.width - 80 - 28,
+                  28,
+                  80,
+                  14,
                   "2",
                   users[1].username.toString(),
                   users[1].score.toString(),
@@ -142,8 +146,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
                 //Rank 3
                 rankCard(
                   100,
-                  26,
-                  MediaQuery.of(context).size.width - 126,
+                  28,
+                  MediaQuery.of(context).size.width - 80 - 28,
+                  80,
+                  14,
                   "3",
                   users[2].username.toString(),
                   users[2].score.toString(),
@@ -153,47 +159,76 @@ class _SearchState extends ConsumerState<ConnectPage> {
           );
         } else if (index == 2 || index == 3) {
           return const SizedBox(
-            height: 72,
+            height: 60,
           );
         } else {
           final user = users[index - 1];
-          Color tileColor;
-          if (index == 0) {
-            // TODO: fill colours later
-            tileColor = Colors.deepPurple.shade400; // First position colour
-          } else if (index == 1) {
-            tileColor = Colors.deepPurple.shade400; // Second position colour
-          } else if (index == 2) {
-            tileColor = Colors.deepPurple.shade400; // Third position colour
-          } else {
-            tileColor = Colors.deepPurple.shade400; // Other positions colour
-          }
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(6, 0, 6, 6),
-            child: ListTile(
-              minVerticalPadding: 25,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(26),
-              ),
-              tileColor: tileColor,
-              leading: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/icon/icon.png')),
+          // Color tileColor;
+          // if (index == 0) {
+          //   tileColor = Colors.deepPurple.shade400; // First position colour
+          // } else if (index == 1) {
+          //   tileColor = Colors.deepPurple.shade400; // Second position colour
+          // } else if (index == 2) {
+          //   tileColor = Colors.deepPurple.shade400; // Third position colour
+          // } else {
+          //   tileColor = Colors.deepPurple.shade400; // Other positions colour
+          // }
+          return Container(
+            margin: const EdgeInsets.fromLTRB(8, 0, 8, 6),
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(26),
+              color: Colors.black,
+            ),
+            child: Stack(
+              children: [
+                //Rank text
+                Positioned(
+                  top: 38,
+                  left: 26,
+                  child: Text(
+                    "${user.rank}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              title: Text(
-                "#${user.rank}           ${user.username}",
-                style: TextStyle(color: Colors.black),
-              ),
-              trailing: Text(
-                'Score: ${user.score}',
-                style: TextStyle(color: Colors.black),
-              ),
+                //User details
+                Positioned(
+                  left: 75,
+                  top: 30,
+                  child: Row(
+                    spacing: 12,
+                    children: [
+                      ClipOval(
+                        child: Image.asset(
+                          'assets/icon/icon.png',
+                          height: 40,
+                          width: 40,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      Text(
+                        user.username.toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(fontSize: 22),
+                      ),
+                    ],
+                  ),
+                ),
+                //Score
+                Positioned(
+                  top: 40,
+                  right: 26,
+                  child: Text(
+                    "${user.score} pts",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
             ),
           );
         }
@@ -201,41 +236,54 @@ class _SearchState extends ConsumerState<ConnectPage> {
     );
   }
 
-  Positioned rankCard(double top, double right, double left, String rank,
-      String username, String score) {
+  Positioned rankCard(double top, double right, double left, double dp,
+      double fSize, String rank, String username, String score) {
     return Positioned(
       top: top,
       right: right,
       left: left,
       child: Column(
         children: [
-          // Text(
-          //   rank,
-          // ),
-          Container(
-            key: Key(rank),
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(image: AssetImage('assets/icon/icon.png')),
-            ),
-            child: Text(rank),
-            // child: Stack(
-            //   children: [
-            //     Positioned(
-            //       top: 6,
-            //       child: Container(
-            //           decoration: BoxDecoration(
-
-            //               shape: BoxShape.circle, color: Colors.black),
-            //           child: Text(rank)),
-            //     ),
-            //   ],
-            // ),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              ClipOval(
+                child: Image.asset(
+                  'assets/icon/icon.png',
+                  height: dp,
+                  width: dp,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Positioned(
+                top: -12,
+                left: -8,
+                child: Container(
+                  padding: EdgeInsets.all(fSize - 4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black,
+                  ),
+                  child: Text(
+                    rank,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: fSize,
+                        ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          Text(username),
-          Text(score)
+          const SizedBox(height: 4),
+          Text(
+            username,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          Text(
+            "$score pts",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ],
       ),
     );
