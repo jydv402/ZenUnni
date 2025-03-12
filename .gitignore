@@ -1,6 +1,5 @@
 # Miscellaneous
 *.class
-*.bin
 *.txt
 *.env
 *.md
