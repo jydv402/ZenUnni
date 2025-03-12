@@ -26,14 +26,33 @@ class _SearchState extends ConsumerState<ConnectPage> {
           }).toList();
 
           if (filteredUsers.isEmpty) {
-            return Center(
-              child: Text(
-                "No Users Found",
-                style: TextStyle(color: Colors.white),
-              ),
+            return ListView(
+              children: [
+                header(),
+                const SizedBox(height: 80),
+                Center(
+                  child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.fromLTRB(8, 0, 8, 6),
+                    padding: const EdgeInsets.all(40),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(26),
+                      color: Colors.black,
+                    ),
+                    child: Text(
+                      "No users found matching \n\" $searchQuery \"",
+                      style: Theme.of(context).textTheme.headlineMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 80),
+              ],
             );
           }
-          return searchResListView(filteredUsers);
+          return searchNameController.text.isEmpty
+              ? rankView(filteredUsers)
+              : searchView(filteredUsers);
         },
         error: (err, stack) => Center(
           child: Text("Error:$err"),
@@ -90,27 +109,13 @@ class _SearchState extends ConsumerState<ConnectPage> {
     );
   }
 
-  Widget searchResListView(List<SearchModel> users) {
+  Widget rankView(List<SearchModel> users) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: users.length + 2,
       itemBuilder: (context, index) {
         if (index == 0) {
-          //Top Text
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ScoreCard(),
-                Text(
-                  'Leaderboard',
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                const SizedBox(height: 26),
-              ],
-            ),
-          );
+          return header();
         } else if (index == users.length + 1) {
           return const SizedBox(height: 130);
         } else if (index == 1) {
@@ -163,76 +168,43 @@ class _SearchState extends ConsumerState<ConnectPage> {
           );
         } else {
           final user = users[index - 1];
-          // Color tileColor;
-          // if (index == 0) {
-          //   tileColor = Colors.deepPurple.shade400; // First position colour
-          // } else if (index == 1) {
-          //   tileColor = Colors.deepPurple.shade400; // Second position colour
-          // } else if (index == 2) {
-          //   tileColor = Colors.deepPurple.shade400; // Third position colour
-          // } else {
-          //   tileColor = Colors.deepPurple.shade400; // Other positions colour
-          // }
-          return Container(
-            margin: const EdgeInsets.fromLTRB(8, 0, 8, 6),
-            height: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(26),
-              color: Colors.black,
-            ),
-            child: Stack(
-              children: [
-                //Rank text
-                Positioned(
-                  top: 38,
-                  left: 26,
-                  child: Text(
-                    "${user.rank}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium
-                        ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                //User details
-                Positioned(
-                  left: 75,
-                  top: 30,
-                  child: Row(
-                    spacing: 12,
-                    children: [
-                      ClipOval(
-                        child: Image.asset(
-                          'assets/icon/icon.png',
-                          height: 40,
-                          width: 40,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Text(
-                        user.username.toString(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(fontSize: 22),
-                      ),
-                    ],
-                  ),
-                ),
-                //Score
-                Positioned(
-                  top: 40,
-                  right: 26,
-                  child: Text(
-                    "${user.score} pts",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-              ],
-            ),
-          );
+          return rankListCards(user);
         }
       },
+    );
+  }
+
+  Widget searchView(List<SearchModel> users) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: users.length + 2,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return header();
+        } else if (index == users.length + 1) {
+          return const SizedBox(height: 130);
+        } else {
+          final user = users[index - 1];
+          return rankListCards(user);
+        }
+      },
+    );
+  }
+
+  Padding header() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ScoreCard(),
+          Text(
+            'Leaderboard',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          const SizedBox(height: 26),
+        ],
+      ),
     );
   }
 
@@ -283,6 +255,67 @@ class _SearchState extends ConsumerState<ConnectPage> {
           Text(
             "$score pts",
             style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container rankListCards(user) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(8, 0, 8, 6),
+      height: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+        color: Colors.black,
+      ),
+      child: Stack(
+        children: [
+          //Rank text
+          Positioned(
+            top: 38,
+            left: 26,
+            child: Text(
+              "${user.rank}",
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium
+                  ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          //User details
+          Positioned(
+            left: 75,
+            top: 30,
+            child: Row(
+              spacing: 12,
+              children: [
+                ClipOval(
+                  child: Image.asset(
+                    'assets/icon/icon.png',
+                    height: 40,
+                    width: 40,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                Text(
+                  user.username.toString(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontSize: 22),
+                ),
+              ],
+            ),
+          ),
+          //Score
+          Positioned(
+            top: 40,
+            right: 26,
+            child: Text(
+              "${user.score} pts",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
         ],
       ),
