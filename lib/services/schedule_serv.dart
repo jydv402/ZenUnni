@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/models/schedule_model.dart';
-import 'package:zen/models/todo_model.dart';
-import 'package:zen/services/ai_serv.dart';
+import 'package:zen/zen_barrel.dart';
+
 import 'package:logger/logger.dart';
 
 final scheduleProvider =
@@ -34,8 +33,11 @@ final scheduleProvider =
         .trim();
     final Map<String, dynamic> schedJSON = jsonDecode(cleanedResponse);
 
-    final List<ScheduleItem> scheduleItems =
-        schedJSON.values.map((item) => ScheduleItem.fromJson(item)).toList();
+    final List<ScheduleItem> scheduleItems = schedJSON.values
+        .map(
+          (item) => ScheduleItem.fromJson(item),
+        )
+        .toList();
 
     return scheduleItems;
   },
@@ -43,5 +45,7 @@ final scheduleProvider =
 
 /// Clears the cached schedule data so that the scheduleProvider can be re-run.
 void clearScheduleData(WidgetRef ref, List<TodoModel> tasks) {
-  ref.invalidate(scheduleProvider(tasks));
+  ref.invalidate(
+    scheduleProvider(tasks),
+  );
 }

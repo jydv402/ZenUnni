@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/models/todo_model.dart';
-import 'package:zen/services/todo_serv.dart';
-import 'package:zen/theme/light.dart';
+import 'package:zen/zen_barrel.dart';
 
 class AddTaskPage extends ConsumerStatefulWidget {
   final TodoModel? taskToEdit;
@@ -170,13 +166,18 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 date: dateTime,
                 priority: _prior,
                 isDone: isDone,
+                expired: true,
               );
               if (widget.taskToEdit != null) {
                 // Update existing task
-                ref.read(taskUpdateFullProvider(task));
+                ref.read(
+                  taskUpdateFullProvider(task),
+                );
               } else {
                 // Add new task
-                ref.read(taskAddProvider(task));
+                ref.read(
+                  taskAddProvider(task),
+                );
               }
               resetDialogFields();
               Navigator.pop(context);
@@ -235,15 +236,19 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   }
 
 //TODO: use a segmented button
-  Widget _dialogPrioritySelect(void Function(void Function()) setState) {
+  Widget _dialogPrioritySelect(
+      void Function(
+        void Function(),
+      ) setState) {
     return Center(
       child: Wrap(
         spacing: 2,
         children: ['High', 'Medium', 'Low'].map((String value) {
           return ChoiceChip(
             padding: EdgeInsets.fromLTRB(16, 24, 16, 24),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(26),
+            ),
             label: Text(value),
             selected: localPrior == value,
             onSelected: (bool selected) {

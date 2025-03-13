@@ -2,9 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/theme/light.dart';
+import 'package:zen/zen_barrel.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -18,22 +16,9 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  // void displayMessageToUser(String message, BuildContext context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) => AlertDialog(
-  //             title: Text(message),
-  //           ));
-  // }
-
   void registerUser(BuildContext context) async {
     //show loading circle
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    showLoadingDialog(context, "Creating your account...");
     //if passwords dont match
     if (_passwordController.text != _confirmPasswordController.text) {
       //pop loading circle
@@ -50,8 +35,9 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       try {
         //create the user
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim());
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
 
         try {
           await FirebaseAuth.instance.currentUser?.sendEmailVerification();

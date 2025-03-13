@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/models/habit_model.dart';
-import 'package:zen/services/gamify_serve.dart';
-import 'package:zen/services/habit_serv.dart';
-import 'package:zen/utils/color_utils.dart';
+import 'package:line_icons/line_icons.dart';
+
+import 'package:zen/zen_barrel.dart';
 
 class HabitPage extends ConsumerStatefulWidget {
   const HabitPage({super.key});
@@ -30,34 +27,25 @@ class _HabitState extends ConsumerState<HabitPage> {
     return Scaffold(
       body: habitsAsyncValue.when(
         data: (habits) => heatmaplistview(habits),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        loading: () => Center(
+          child: showRunningIndicator(context, "Loading Habit data..."),
+        ),
+        error: (error, stack) => Center(
+          child: Text('Error: $error'),
+        ),
       ),
       floatingActionButton: fabButton(context, () {
         showDialog(
-            context: context,
-            builder: (BuildContext context) => newHabitDialog(context));
+          context: context,
+          builder: (BuildContext context) =>
+              newHabitDialog(context, false, null),
+        );
       }, 'Track new Habit', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  // Widget addnewbutton() {
-  //   return ElevatedButton(
-  //       style: ElevatedButton.styleFrom(
-  //           backgroundColor: Colors.blue.shade200,
-  //           foregroundColor: Colors.black,
-  //           shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(15))),
-  //       onPressed: () {
-  //         showDialog(
-  //             context: context,
-  //             builder: (BuildContext context) => newHabitDialog(context));
-  //       },
-  //       child: Text('track new habits'));
-  // }
-
-  Widget newHabitDialog(BuildContext context) {
+  Widget newHabitDialog(BuildContext context, bool isEdit, HabitModel? habit) {
     List<Color> colorOptions = [
       Colors.pink.shade100,
       Colors.blue.shade100,
@@ -69,66 +57,78 @@ class _HabitState extends ConsumerState<HabitPage> {
 
     // Color selectedColor = Colors.green;
 
+    //Function to update the values
+    if (isEdit) {
+      habitNameController.text = habit!.habitName;
+      selectedColor = getColorFromHex(habit.color);
+    }
+
     return SimpleDialog(
+      contentPadding: EdgeInsets.symmetric(vertical: 26, horizontal: 26),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(32),
+      ),
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: habitNameController,
-                style: Theme.of(context).textTheme.bodyMedium,
-                decoration: InputDecoration(
-                  hintText: 'Enter habit name',
-                ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              isEdit ? 'Edit Habit' : 'Add Habit',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: habitNameController,
+              style: Theme.of(context).textTheme.bodyMedium,
+              decoration: InputDecoration(
+                hintText: 'Enter habit name',
               ),
-              SizedBox(height: 30),
-              Text(
-                'Choose a color',
-                style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            SizedBox(height: 30),
+            Text(
+              'Choose a color',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              height:
+                  160, //sizebox to get rid of the preset padding of block picker
+              // TODO:update this
+              child: BlockPicker(
+                pickerColor: selectedColor,
+                availableColors: colorOptions,
+                onColorChanged: (Color color) {
+                  selectedColor = color;
+                },
               ),
-              SizedBox(height: 10),
-              SizedBox(
-                height:
-                    160, //sizebox to get rid of the preset padding of block picker
-                // TODO:update this
-                child: BlockPicker(
-                    pickerColor: selectedColor,
-                    availableColors: colorOptions,
-                    onColorChanged: (Color color) {
-                      selectedColor = color;
-                    }),
-              ),
-              SizedBox(height: 8),
-              fabButton(context, () async {
-                if (habitNameController.text.isNotEmpty) {
-                  final newHabit = HabitModel(
-                    habitName: habitNameController.text,
-                    color:
-                        selectedColor.value.toRadixString(16).padLeft(8, '0'),
-                    createdAt: DateTime.now(),
-                    completedDates: {},
-                  );
-                  await ref.read(habitAddProvider(newHabit).future);
-                  habitNameController.clear();
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Enter habit name'),
-                    ),
-                  );
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
+            ),
+            SizedBox(height: 8),
+            fabButton(context, () async {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+              if (habitNameController.text.isNotEmpty) {
+                final newHabit = HabitModel(
+                  habitName: habitNameController.text,
+                  color: selectedColor
+                      .toARGB32()
+                      .toRadixString(16)
+                      .padLeft(8, '0'),
+                  createdAt: DateTime.now(),
+                  completedDates: {},
+                );
+                await ref.read(habitAddProvider(newHabit).future);
+                habitNameController.clear();
+                selectedColor = Colors.pink.shade100;
+                if (context.mounted) {
+                  Navigator.of(context).pop();
                 }
-              }, 'Add Habit', 0),
-            ],
-          ),
+              } else {
+                showHeadsupNoti(context, "Enter habit name");
+              }
+            }, isEdit ? 'Update Habit' : 'Add Habit', 0),
+          ],
         )
       ],
     );
@@ -170,52 +170,103 @@ class _HabitState extends ConsumerState<HabitPage> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: Text(
-                        habit.habitName,
+                        habit.habitName.length > 16
+                            ? '${habit.habitName.substring(0, 16)}...'
+                            : habit.habitName,
                         style: Theme.of(context)
                             .textTheme
                             .headlineMedium
                             ?.copyWith(color: habitColor),
                       ),
                     ),
+                    const Spacer(),
                     IconButton(
-                      onPressed: () async {
-                        final today = DateTime.now();
-                        final dateOnly =
-                            DateTime(today.year, today.month, today.day);
-
-                        final updatedCompletedDates =
-                            Map<DateTime, bool>.from(habit.completedDates);
-
-                        if (updatedCompletedDates.containsKey(dateOnly) &&
-                            updatedCompletedDates[dateOnly] == true) {
-                          updatedCompletedDates[dateOnly] = false;
-                        } else {
-                          updatedCompletedDates[dateOnly] = true;
-                        }
-
-                        final updatedHabit = habit.copyWith(
-                            completedDates: updatedCompletedDates);
-
-                        try {
-                          await ref
-                              .read(habitUpdateProvider(updatedHabit).future);
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text('Failed to update habit: $e')));
-                          }
-                        }
-                        ref.read(scoreIncrementProvider(10));
+                      onPressed: () {
+                        showConfirmDialog(
+                          context,
+                          "Delete Habit ?",
+                          "Are you sure you want to delete this habit ?",
+                          "Delete",
+                          Colors.red,
+                          () {
+                            ref.read(
+                              habitDeleteProvider(habit),
+                            );
+                            Navigator.pop(context);
+                          },
+                        );
                       },
-                      icon: Icon(habit.completedDates.containsKey(DateTime(
-                                  DateTime.now().year,
-                                  DateTime.now().month,
-                                  DateTime.now().day)) &&
+                      icon: Icon(LineIcons.alternateTrash, color: habitColor),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              newHabitDialog(context, true, habit),
+                        );
+                      },
+                      icon: Icon(
+                        LineIcons.pen,
+                        color: habitColor,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        showConfirmDialog(
+                          context,
+                          "Mark as done ?",
+                          "Are you sure you want to mark this habit as complete ?",
+                          "Yes",
+                          habitColor,
+                          () async {
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
+
+                            final today = DateTime.now();
+                            final dateOnly =
+                                DateTime(today.year, today.month, today.day);
+
+                            final updatedCompletedDates =
+                                Map<DateTime, bool>.from(habit.completedDates);
+
+                            if (updatedCompletedDates.containsKey(dateOnly) &&
+                                updatedCompletedDates[dateOnly] == true) {
+                              updatedCompletedDates[dateOnly] = false;
+                            } else {
+                              updatedCompletedDates[dateOnly] = true;
+                            }
+                            final updatedHabit = habit.copyWith(
+                                completedDates: updatedCompletedDates);
+
+                            try {
+                              await ref.read(
+                                  habitUpdateProvider(updatedHabit).future);
+                            } catch (e) {
+                              if (context.mounted) {
+                                showHeadsupNoti(
+                                    context, "Failed to update habit: $e");
+                              }
+                            }
+                            ref.read(
+                              scoreIncrementProvider(10),
+                            );
+                            if (context.mounted) {
+                              showHeadsupNoti(context,
+                                  "Great job! Keep it going.\n10 points added.");
+                            }
+                          },
+                        );
+                      },
+                      icon: Icon(habit.completedDates.containsKey(
+                                DateTime(DateTime.now().year,
+                                    DateTime.now().month, DateTime.now().day),
+                              ) &&
                               habit.completedDates[DateTime(DateTime.now().year,
                                   DateTime.now().month, DateTime.now().day)]!
                           ? Icons.check
@@ -253,7 +304,9 @@ class _HabitState extends ConsumerState<HabitPage> {
     try {
       return HeatMap(
         datasets: datasets,
-        startDate: DateTime.now().subtract(const Duration(days: 128)),
+        startDate: DateTime.now().subtract(
+          const Duration(days: 128),
+        ),
         endDate: DateTime.now(),
         colorMode: ColorMode.color,
         size: 13,
@@ -266,8 +319,7 @@ class _HabitState extends ConsumerState<HabitPage> {
         defaultColor: Colors.grey.shade800,
         colorsets: {1: habitColor},
         onClick: (value) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(value.toString())));
+          showHeadsupNoti(context, value.toString());
         },
       );
     } catch (e) {

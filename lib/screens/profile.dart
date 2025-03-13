@@ -1,17 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/gamify_serve.dart';
-import 'package:zen/services/user_serv.dart';
-import 'package:zen/theme/light.dart';
+import 'package:zen/zen_barrel.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
-  void logoutUser(BuildContext context) async {
+  void logoutUser(BuildContext context, WidgetRef ref) async {
     await FirebaseAuth.instance.signOut();
     if (context.mounted) {
       // Navigate to the root page after logging out
@@ -44,10 +39,13 @@ class ProfilePage extends ConsumerWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
-                height: 10,
+                height: 26,
               ),
+              fabButton(context, () {
+                Navigator.pushNamed(context, '/username');
+              }, "Change username", 0),
               const SizedBox(
-                height: 100,
+                height: 110,
               ),
               fabButton(context, () {
                 // show logout dialog
@@ -57,8 +55,8 @@ class ProfilePage extends ConsumerWidget {
                     "Are you sure you want to logout ?",
                     "Logout",
                     Colors.red, () {
-                  logoutUser(context);
                   Navigator.of(context).pop();
+                  logoutUser(context, ref); // Pass ref here
                 });
               }, "Logout", 0),
             ],
