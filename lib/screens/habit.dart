@@ -115,10 +115,18 @@ class _HabitState extends ConsumerState<HabitPage> {
                       .toARGB32()
                       .toRadixString(16)
                       .padLeft(8, '0'),
-                  createdAt: DateTime.now(),
-                  completedDates: {},
+                  createdAt: isEdit ? habit!.createdAt : DateTime.now(),
+                  completedDates: isEdit ? habit!.completedDates : {},
+                  oldname: habit!.habitName,
                 );
-                await ref.read(habitAddProvider(newHabit).future);
+                //Adding to firestore
+                if (isEdit) {
+                  //update
+                  await ref.read(habitUpdateProvider(newHabit).future);
+                } else {
+                  //add new
+                  await ref.read(habitAddProvider(newHabit).future);
+                }
                 habitNameController.clear();
                 selectedColor = Colors.pink.shade100;
                 if (context.mounted) {
