@@ -19,6 +19,22 @@ Future<void> createUserDoc(String username) async {
   }
 }
 
+Future<void> updateUserDoc(String username) async {
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) throw Exception('No authenticated user found');
+
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
+      {
+        'username': username,
+        'usernameLower': username.toLowerCase(),
+      },
+    );
+  } catch (e) {
+    throw Exception('Failed to create user document: $e');
+  }
+}
+
 final userNameProvider =
     StateNotifierProvider<UserNameNotifier, AsyncValue<String?>>((ref) {
   return UserNameNotifier(ref);

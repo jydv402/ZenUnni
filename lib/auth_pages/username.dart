@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 class UsernamePage extends ConsumerWidget {
-  const UsernamePage({super.key});
+  final bool? isUpdate;
+  const UsernamePage({super.key, this.isUpdate});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,13 +32,18 @@ class UsernamePage extends ConsumerWidget {
         stateInvalidator(ref);
         String username = userNameController.text.trim();
 
-        if (username.isNotEmpty) {
+        if (username.isNotEmpty && !isUpdate!) {
           await createUserDoc(username);
           if (context.mounted) {
             Navigator.pushNamed(context, '/home');
           }
+        } else if (username.isNotEmpty && isUpdate!) {
+          await updateUserDoc(username);
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
         } else {
-          showHeadsupNoti(context, "Enter a username first.");
+          showHeadsupNoti(context, "Please enter a username first.");
         }
       }, 'Continue', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

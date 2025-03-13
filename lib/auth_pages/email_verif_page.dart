@@ -33,7 +33,14 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
       setState(() => isEmailVerified = true);
       timer?.cancel();
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/username');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const UsernamePage(
+              isUpdate: false,
+            ),
+          ),
+        );
       }
     }
   }

@@ -42,7 +42,15 @@ class ProfilePage extends ConsumerWidget {
                 height: 26,
               ),
               fabButton(context, () {
-                Navigator.pushNamed(context, '/username');
+                Navigator.push(
+                  context,
+                  //Define the isUpdate parameter as true
+                  MaterialPageRoute(
+                    builder: (context) => const UsernamePage(
+                      isUpdate: true,
+                    ),
+                  ),
+                );
               }, "Change username", 0),
               const SizedBox(
                 height: 110,
