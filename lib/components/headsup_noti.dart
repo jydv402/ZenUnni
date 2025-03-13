@@ -8,7 +8,7 @@ void showHeadsupNoti(BuildContext context, String message) {
     position: DelightSnackbarPosition.top,
     autoDismiss: true,
     builder: (context) => Container(
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+      margin: EdgeInsets.fromLTRB(16, 20, 16, 0),
       padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 final rankedUserSearchProvider = StreamProvider<List<SearchModel>>((ref) {
+  final username = ref.watch(userNameProvider).asData?.value ?? '';
   return ref.watch(userSearchProvider).when(
         data: (users) {
           int rank = 1;
@@ -12,6 +13,7 @@ final rankedUserSearchProvider = StreamProvider<List<SearchModel>>((ref) {
                 username: user.username,
                 score: user.score,
                 rank: rank++,
+                isUser: user.username == username,
               );
             },
           ).toList();
@@ -36,19 +38,5 @@ final userSearchProvider = StreamProvider<List<SearchModel>>(
             },
           ).toList(),
         );
-    // return FirebaseFirestore.instance
-    //     .collection('users')
-    //     .orderBy('score', descending: true)
-    //     .snapshots()
-    //     .map(
-    //       (snapshot) => snapshot.docs.map(
-    //         (doc) {
-    //           // final rank = ref.read(rankProvider);
-    //           // print(rank);
-    //           // ref.read(rankProvider.notifier).state++;
-    //           return SearchModel.fromMap(doc.data());
-    //         },
-    //       ).toList(),
-    //     );
   },
 );

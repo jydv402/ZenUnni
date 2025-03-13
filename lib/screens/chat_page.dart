@@ -11,6 +11,13 @@ class ChatPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatMsgs = ref.watch(msgProvider);
+    const msgs = {
+      "Say Hi to Unni !": "Hi",
+      "Get motivational message": "Motivate me",
+      "Hit me with a fact": "Hit me with a fact",
+      "Tell me a story": "Tell me a story",
+      "Tell me a joke": "Tell me a joke",
+    };
 
     return Scaffold(
       body: chatMsgs.isEmpty
@@ -23,19 +30,68 @@ class ChatPage extends ConsumerWidget {
                   Lottie.asset(
                     'assets/loading/ld_shapes.json',
                     alignment: Alignment.center,
-                    height: 150,
-                    width: 100,
+                    height: 160,
+                    width: 160,
                   ),
                   Text(
                     'Unni',
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontSize: 96, color: Colors.blue.shade200, height: .8),
+                        fontSize: 120, color: Colors.blue.shade200, height: .8),
                   ),
-                  Text('Ask me anything !',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(color: Colors.grey.shade400)),
+                  Text(
+                    'Ask me anything !',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(color: Colors.grey.shade400),
+                  ),
+                  const SizedBox(height: 2),
+                  SizedBox(
+                    height: 40,
+                    child: ListView.builder(
+                      itemCount: msgs.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            ref.read(msgProvider.notifier).addMessage(
+                                  Message(
+                                    text: msgs.values.toList()[index],
+                                    isUser: true,
+                                  ),
+                                );
+                            final aiMsg = await ref.read(
+                                aiResponseAdder(msgs.values.toList()[index])
+                                    .future);
+                            ref.read(msgProvider.notifier).addMessage(aiMsg);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white10,
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(
+                                color: Colors.white30,
+                              ),
+                            ),
+                            child: Text(
+                              msgs.keys.toList()[index],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    height: 0,
+                                    color: Colors.grey.shade400,
+                                  ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 40),
                 ],
               ),
             )

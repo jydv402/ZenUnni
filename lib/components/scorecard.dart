@@ -8,6 +8,7 @@ class ScoreCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final score = ref.watch(scoreProvider);
+    final String score0 = score.value.toString();
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -17,8 +18,15 @@ class ScoreCard extends ConsumerWidget {
             borderRadius: BorderRadius.circular(26),
             color: Colors.white12,
           ),
-          child: Text("🏆   ${score.value.toString()}",
-              style: Theme.of(context).textTheme.bodyMedium),
+          child: score0 == "null"
+              ? Text(
+                  "🏆    0",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                )
+              : Text(
+                  "🏆    $score0",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
         ),
       ],
     );
