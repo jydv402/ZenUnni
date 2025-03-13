@@ -50,7 +50,7 @@ final habitUpdateProvider = FutureProvider.autoDispose.family<void, HabitModel>(
         .collection('habit');
 
     final querySnapshot =
-        await habitDoc.where('habitName', isEqualTo: habit.habitName).get();
+        await habitDoc.where('habitName', isEqualTo: habit.oldname).get();
 
     if (querySnapshot.docs.isNotEmpty) {
       await querySnapshot.docs.first.reference.update(
@@ -61,6 +61,28 @@ final habitUpdateProvider = FutureProvider.autoDispose.family<void, HabitModel>(
     }
   },
 );
+
+// final habitNameUpdateProvider =
+//     FutureProvider.autoDispose.family<void, HabitModel>(
+//   (ref, habit) async {
+//     final FirebaseAuth auth = FirebaseAuth.instance;
+//     final habitDoc = FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(auth.currentUser?.uid)
+//         .collection('habit');
+
+//     final querySnapshot =
+//         await habitDoc.where('habitName', isEqualTo: habit.oldname).get();
+
+//     if (querySnapshot.docs.isNotEmpty) {
+//       await querySnapshot.docs.first.reference.update(
+//         habit.toMap(),
+//       );
+//     } else {
+//       throw Exception('Habit Not Found');
+//     }
+//   },
+// );
 
 final habitDeleteProvider = FutureProvider.autoDispose.family<void, HabitModel>(
   (ref, habit) async {
