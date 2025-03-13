@@ -1,6 +1,7 @@
 # Miscellaneous
 *.class
 *.txt
+*.env
 *.md
 *.log
 *.pyc
