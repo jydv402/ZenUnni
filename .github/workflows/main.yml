@@ -25,12 +25,18 @@ jobs:
         with:
           channel: stable
 
-      - name: Getting Dependencies
-        run: flutter pub get
-
       - name: Create .env File
         run: |
-          echo "API_KEY=${{ secrets.KEY }}" > .env
+          echo "API_KEY=${{ secrets.KEY }}" > assets/.env
+
+      - name: Debug .env
+        run: cat assets/.env
+
+      - name: Flutter clean
+        run: flutter clean
+
+      - name: Getting Dependencies
+        run: flutter pub upgrade
 
       - name: Building APK
         run: flutter build apk --release

@@ -8,7 +8,7 @@ import 'package:zen/zen_barrel.dart';
 Future<void> main() async {
   //to ensure firebase plugins are correctly intialised before using it
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); //load the .env file
+  await dotenv.load(fileName: "assets/.env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
   runApp(
