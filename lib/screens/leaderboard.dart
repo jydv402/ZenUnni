@@ -25,6 +25,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
             return username.contains(searchQuery);
           }).toList();
 
+          //If no users found
           if (filteredUsers.isEmpty) {
             return ListView(
               children: [
@@ -128,41 +129,47 @@ class _SearchState extends ConsumerState<ConnectPage> {
               children: [
                 //rankCard(double top, double right, double left, double dp, double fSize, String rank, String username, String score)
                 //Rank 1
-                rankCard(
-                  0,
-                  0,
-                  0,
-                  100,
-                  18,
-                  "1",
-                  users[0].username.toString(),
-                  users[0].score.toString(),
-                  users[0].isUser ?? false,
-                ),
+                if (users.isNotEmpty)
+                  // Check if list contains at least 1 element
+                  rankCard(
+                    0,
+                    0,
+                    0,
+                    100,
+                    18,
+                    "1",
+                    users[0].username.toString(),
+                    users[0].score.toString(),
+                    users[0].isUser ?? false,
+                  ),
                 //Rank 2
-                rankCard(
-                  100,
-                  MediaQuery.of(context).size.width - 80 - 28,
-                  28,
-                  80,
-                  14,
-                  "2",
-                  users[1].username.toString(),
-                  users[1].score.toString(),
-                  users[1].isUser ?? false,
-                ),
+                if (users.length > 1)
+                  // Check if list contains at least 2 elements
+                  rankCard(
+                    100,
+                    MediaQuery.of(context).size.width - 80 - 28,
+                    28,
+                    80,
+                    14,
+                    "2",
+                    users[1].username.toString(),
+                    users[1].score.toString(),
+                    users[1].isUser ?? false,
+                  ),
                 //Rank 3
-                rankCard(
-                  100,
-                  28,
-                  MediaQuery.of(context).size.width - 80 - 28,
-                  80,
-                  14,
-                  "3",
-                  users[2].username.toString(),
-                  users[2].score.toString(),
-                  users[2].isUser ?? false,
-                ),
+                if (users.length > 2)
+                  // Check if list contains at least 3 elements
+                  rankCard(
+                    100,
+                    28,
+                    MediaQuery.of(context).size.width - 80 - 28,
+                    80,
+                    14,
+                    "3",
+                    users[2].username.toString(),
+                    users[2].score.toString(),
+                    users[2].isUser ?? false,
+                  ),
               ],
             ),
           );

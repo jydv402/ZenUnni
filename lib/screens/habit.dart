@@ -122,7 +122,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                 //Adding to firestore
                 if (isEdit) {
                   //update
-                  await ref.read(habitUpdateProvider(newHabit).future);
+                  await ref.read(habitNameUpdateProvider(newHabit).future);
                 } else {
                   //add new
                   await ref.read(habitAddProvider(newHabit).future);
