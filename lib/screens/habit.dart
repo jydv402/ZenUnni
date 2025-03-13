@@ -125,7 +125,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                   Navigator.of(context).pop();
                 }
               } else {
-                showHeadsupNoti(context, "Enter habit name");
+                showHeadsupNoti(context, "Please enter a habit name.");
               }
             }, isEdit ? 'Update Habit' : 'Add Habit', 0),
           ],
@@ -216,52 +216,53 @@ class _HabitState extends ConsumerState<HabitPage> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {
-                        showConfirmDialog(
-                          context,
-                          "Mark as done ?",
-                          "Are you sure you want to mark this habit as complete ?",
-                          "Yes",
-                          habitColor,
-                          () async {
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
+                      onPressed: () async {
+                        final today = DateTime.now();
+                        final dateOnly =
+                            DateTime(today.year, today.month, today.day);
 
-                            final today = DateTime.now();
-                            final dateOnly =
-                                DateTime(today.year, today.month, today.day);
+                        final updatedCompletedDates =
+                            Map<DateTime, bool>.from(habit.completedDates);
 
-                            final updatedCompletedDates =
-                                Map<DateTime, bool>.from(habit.completedDates);
+                        if (updatedCompletedDates.containsKey(dateOnly) &&
+                            updatedCompletedDates[dateOnly] == true) {
+                          //Habit unchecked
+                          //Increment score
+                          ref.read(
+                            scoreIncrementProvider(-10),
+                          );
+                          //Show heads up
+                          showHeadsupNoti(
+                            context,
+                            "Oops! You missed a habit.\n10 points deducted.",
+                          );
+                          updatedCompletedDates[dateOnly] = false;
+                        } else {
+                          //Habit completed
+                          //Increment score
+                          ref.read(
+                            scoreIncrementProvider(10),
+                          );
+                          //Show heads up
+                          showHeadsupNoti(
+                            context,
+                            "Great job! Keep it going.\n10 points added.",
+                          );
+                          //Update completed dates
+                          updatedCompletedDates[dateOnly] = true;
+                        }
+                        final updatedHabit = habit.copyWith(
+                            completedDates: updatedCompletedDates);
 
-                            if (updatedCompletedDates.containsKey(dateOnly) &&
-                                updatedCompletedDates[dateOnly] == true) {
-                              updatedCompletedDates[dateOnly] = false;
-                            } else {
-                              updatedCompletedDates[dateOnly] = true;
-                            }
-                            final updatedHabit = habit.copyWith(
-                                completedDates: updatedCompletedDates);
-
-                            try {
-                              await ref.read(
-                                  habitUpdateProvider(updatedHabit).future);
-                            } catch (e) {
-                              if (context.mounted) {
-                                showHeadsupNoti(
-                                    context, "Failed to update habit: $e");
-                              }
-                            }
-                            ref.read(
-                              scoreIncrementProvider(10),
-                            );
-                            if (context.mounted) {
-                              showHeadsupNoti(context,
-                                  "Great job! Keep it going.\n10 points added.");
-                            }
-                          },
-                        );
+                        try {
+                          await ref
+                              .read(habitUpdateProvider(updatedHabit).future);
+                        } catch (e) {
+                          if (context.mounted) {
+                            showHeadsupNoti(
+                                context, "Failed to update habit: $e");
+                          }
+                        }
                       },
                       icon: Icon(habit.completedDates.containsKey(
                                 DateTime(DateTime.now().year,
