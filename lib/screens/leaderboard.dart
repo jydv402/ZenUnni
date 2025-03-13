@@ -136,6 +136,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   "1",
                   users[0].username.toString(),
                   users[0].score.toString(),
+                  users[0].isUser ?? false,
                 ),
                 //Rank 2
                 rankCard(
@@ -147,6 +148,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   "2",
                   users[1].username.toString(),
                   users[1].score.toString(),
+                  users[1].isUser ?? false,
                 ),
                 //Rank 3
                 rankCard(
@@ -158,6 +160,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   "3",
                   users[2].username.toString(),
                   users[2].score.toString(),
+                  users[2].isUser ?? false,
                 ),
               ],
             ),
@@ -209,7 +212,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
   }
 
   Positioned rankCard(double top, double right, double left, double dp,
-      double fSize, String rank, String username, String score) {
+      double fSize, String rank, String username, String score, bool isUser) {
     return Positioned(
       top: top,
       right: right,
@@ -219,9 +222,15 @@ class _SearchState extends ConsumerState<ConnectPage> {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              ClipOval(
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                      color: isUser ? Colors.white : Colors.transparent,
+                      width: 4),
+                ),
                 child: Image.asset(
-                  'assets/icon/icon.png',
+                  'assets/icon/avt.png',
                   height: dp,
                   width: dp,
                   fit: BoxFit.contain,
@@ -248,9 +257,17 @@ class _SearchState extends ConsumerState<ConnectPage> {
             ],
           ),
           const SizedBox(height: 4),
-          Text(
-            username,
-            style: Theme.of(context).textTheme.headlineMedium,
+          Text.rich(
+            TextSpan(
+              text: username,
+              style: Theme.of(context).textTheme.headlineMedium,
+              children: [
+                TextSpan(
+                  text: isUser ? '[You]' : '',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
           ),
           Text(
             "$score pts",
@@ -263,10 +280,12 @@ class _SearchState extends ConsumerState<ConnectPage> {
 
   Container rankListCards(user) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(8, 0, 8, 6),
+      margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
       height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
+        border: Border.all(
+            color: user.isUser ? Colors.white : Colors.transparent, width: 2),
         color: Colors.black,
       ),
       child: Stack(
@@ -290,20 +309,26 @@ class _SearchState extends ConsumerState<ConnectPage> {
             child: Row(
               spacing: 12,
               children: [
-                ClipOval(
-                  child: Image.asset(
-                    'assets/icon/icon.png',
-                    height: 40,
-                    width: 40,
-                    fit: BoxFit.contain,
-                  ),
+                Image.asset(
+                  'assets/icon/avt.png',
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.contain,
                 ),
-                Text(
-                  user.username.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(fontSize: 22),
+                Text.rich(
+                  TextSpan(
+                    text: "${user.username} ",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(fontSize: 22),
+                    children: [
+                      TextSpan(
+                        text: user.isUser ? '[You]' : '',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
