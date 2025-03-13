@@ -50,7 +50,8 @@ class _SearchState extends ConsumerState<ConnectPage> {
               ],
             );
           }
-          return searchNameController.text.isEmpty
+
+          return searchQuery.isEmpty
               ? rankView(filteredUsers)
               : searchView(filteredUsers);
         },
