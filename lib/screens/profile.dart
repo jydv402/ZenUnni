@@ -26,16 +26,16 @@ class ProfilePage extends ConsumerWidget {
             padding: pagePaddingWithScore,
             children: [
               ScoreCard(),
-              Text(
+              const Text(
                 "Profile",
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: headL,
               ),
               const SizedBox(
                 height: 100,
               ),
               Text(
                 username.value ?? 'No username',
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: headL,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
