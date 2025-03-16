@@ -18,7 +18,7 @@ class SchedPage extends ConsumerWidget {
         data: (scheduleItems) {
           return _scheduleListView(scheduleItems);
         },
-        error: (error, stackTrace) => _scheduleFailListView(context),
+         error: (error, stackTrace) => _scheduleFailListView(context),
         loading: () => Center(
           child: showRunningIndicator(context, "Generating Schedule..."),
         ),
