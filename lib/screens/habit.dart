@@ -117,7 +117,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                       .padLeft(8, '0'),
                   createdAt: isEdit ? habit!.createdAt : DateTime.now(),
                   completedDates: isEdit ? habit!.completedDates : {},
-                  oldname: habit!.habitName,
+                  oldname: isEdit ? habit!.habitName : habitNameController.text,
                 );
                 //Adding to firestore
                 if (isEdit) {
