@@ -35,6 +35,8 @@ class _HabitState extends ConsumerState<HabitPage> {
         ),
       ),
       floatingActionButton: fabButton(context, () {
+        habitNameController.clear();
+        selectedColor = Colors.pink.shade100;
         showDialog(
           context: context,
           builder: (BuildContext context) =>
@@ -127,8 +129,6 @@ class _HabitState extends ConsumerState<HabitPage> {
                   //add new
                   await ref.read(habitAddProvider(newHabit).future);
                 }
-                habitNameController.clear();
-                selectedColor = Colors.pink.shade100;
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }
