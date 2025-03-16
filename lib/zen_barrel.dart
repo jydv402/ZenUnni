@@ -49,7 +49,8 @@ export 'services/todo_serv.dart';
 export 'services/user_serv.dart';
 
 //theme
-export 'theme/light.dart';
+export 'theme/text_theme.dart';
+export 'theme/theme.dart';
 
 //utils
 export 'utils/color_utils.dart';

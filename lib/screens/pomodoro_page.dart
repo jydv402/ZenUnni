@@ -27,9 +27,9 @@ class PomodoroPage extends ConsumerWidget {
         padding: pagePaddingWithScore,
         children: [
           ScoreCard(),
-          Text(
+          const Text(
             'Pomodoro Timer',
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: headL,
           ),
           space50,
           _text(context, "Focus duration : "),
@@ -159,7 +159,7 @@ class CountdownScreen extends ConsumerWidget {
                     ? 'Break Session ${pomo.rounds - pomo.currentRound + 1}'
                     : 'Focus Session ${pomo.rounds - pomo.currentRound + 1}'
                 : 'Session Ended',
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: headL,
           ),
           const SizedBox(height: 56),
           _showTime(context, pomo.timeRemaining ~/ 60), //Pass minutes

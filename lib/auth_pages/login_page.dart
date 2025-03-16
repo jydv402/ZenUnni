@@ -65,9 +65,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       body: ListView(
         padding: pagePadding,
         children: [
-          Text(
+          const Text(
             "Login",
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: headL,
           ),
           const SizedBox(
             height: 40,

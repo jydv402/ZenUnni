@@ -35,6 +35,8 @@ class _HabitState extends ConsumerState<HabitPage> {
         ),
       ),
       floatingActionButton: fabButton(context, () {
+        habitNameController.clear();
+        selectedColor = Colors.pink.shade100;
         showDialog(
           context: context,
           builder: (BuildContext context) =>
@@ -117,7 +119,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                       .padLeft(8, '0'),
                   createdAt: isEdit ? habit!.createdAt : DateTime.now(),
                   completedDates: isEdit ? habit!.completedDates : {},
-                  oldname: habit!.habitName,
+                  oldname: isEdit ? habit!.habitName : habitNameController.text,
                 );
                 //Adding to firestore
                 if (isEdit) {
@@ -127,8 +129,6 @@ class _HabitState extends ConsumerState<HabitPage> {
                   //add new
                   await ref.read(habitAddProvider(newHabit).future);
                 }
-                habitNameController.clear();
-                selectedColor = Colors.pink.shade100;
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }
@@ -155,9 +155,9 @@ class _HabitState extends ConsumerState<HabitPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ScoreCard(),
-                Text(
+                const Text(
                   'Habits',
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: headL,
                 ),
               ],
             ),

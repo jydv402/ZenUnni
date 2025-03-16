@@ -73,7 +73,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
         children: [
           ScoreCard(),
           Text(widget.taskToEdit != null ? "Edit Task" : "Add Task",
-              style: Theme.of(context).textTheme.headlineLarge),
+              style: headL),
           const SizedBox(height: 25),
           //Task name text field
           _dialogTextFields(context, nameController, "Task name"),

@@ -18,7 +18,7 @@ class SchedPage extends ConsumerWidget {
         data: (scheduleItems) {
           return _scheduleListView(scheduleItems);
         },
-        error: (error, stackTrace) => _scheduleFailListView(context),
+         error: (error, stackTrace) => _scheduleFailListView(context),
         loading: () => Center(
           child: showRunningIndicator(context, "Generating Schedule..."),
         ),
@@ -42,9 +42,9 @@ class SchedPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ScoreCard(),
-                Text(
+                const Text(
                   'Schedule',
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: headL,
                 ),
               ],
             ),
@@ -90,9 +90,9 @@ class SchedPage extends ConsumerWidget {
       padding: pagePaddingWithScore,
       children: [
         ScoreCard(),
-        Text(
+        const Text(
           "Schedule",
-          style: Theme.of(context).textTheme.headlineLarge,
+          style: headL,
         ),
         const SizedBox(height: 75),
         Text(

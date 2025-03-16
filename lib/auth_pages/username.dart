@@ -14,9 +14,9 @@ class UsernamePage extends ConsumerWidget {
       body: ListView(
         padding: pagePadding,
         children: [
-          Text(
+          const Text(
             "What should\nwe call you?",
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: headL,
           ),
           const SizedBox(height: 60),
           TextField(

@@ -64,9 +64,9 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
       body: ListView(
         padding: pagePadding,
         children: [
-          Text(
+          const Text(
             'Verify Your Email',
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: headL,
           ),
           SizedBox(height: 20),
           Text(

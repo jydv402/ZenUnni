@@ -50,9 +50,9 @@ class TodoListPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ScoreCard(),
-                Text(
+                const Text(
                   'Todo',
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: headL,
                 ),
               ],
             ),
