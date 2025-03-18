@@ -204,7 +204,7 @@ class LandPage extends ConsumerWidget {
               fit: FlexFit.tight,
               child: _bentoBox(
                   context,
-                  '/search',
+                  '/leader',
                   Colors.deepPurple,
                   bentoHeight,
                   bentoWidth,
