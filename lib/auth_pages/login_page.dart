@@ -1,142 +1,145 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:zen/screens/home.dart';
-import 'package:zen/auth_pages/register_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/zen_barrel.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obsureText = true;
+  bool _isLoading = false;
 
-  void displayMessageToUser(String message, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(message),
-            ));
+  void _toggleObscure() {
+    setState(() {
+      _obsureText = !_obsureText;
+    });
   }
 
   void loginUser() async {
-    //show loading circle
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-    //try sign in
+    if (_isLoading) return; // Prevent multiple attempts
+
     try {
+      setState(() => _isLoading = true);
+      stateInvalidator(ref);
+
+      showLoadingDialog(context, "Logging you in...");
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text);
-      //pop loading circle
-      if (context.mounted) Navigator.pop(context);
-      //navigate to home page
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LandPage()),
-      );
+
+      if (mounted) {
+        Navigator.pop(context); // Close loading dialog
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     } on FirebaseAuthException catch (e) {
-      //pop loading circle
-      Navigator.pop(context);
-      displayMessageToUser(e.code, context);
+      if (mounted) {
+        Navigator.pop(context); // Close loading dialog
+        showConfirmDialog(
+            context, "Error", e.code.replaceAll("-", " "), "Retry", Colors.red,
+            () {
+          Navigator.pop(context);
+          _passwordController.clear();
+          setState(() {
+            _obsureText = true;
+          });
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Login to ZENUNNI",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-      ),
-      body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Login",
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
+      body: ListView(
+        padding: pagePadding,
+        children: [
+          const Text(
+            "Login",
+            style: headL,
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          TextFormField(
+            controller: _emailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+            ),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
+            controller: _passwordController,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                padding: const EdgeInsets.only(right: 26),
+                onPressed: _toggleObscure,
+                icon: Icon(
+                  _obsureText
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: Colors.white,
                 ),
+                highlightColor: Colors.transparent,
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                "Forgot Password?",
-                style: TextStyle(color: Colors.blue),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  loginUser();
-                  _emailController.clear();
-                  _passwordController.clear();
+            ),
+            obscureText: _obsureText,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 20),
+          Text.rich(
+            TextSpan(
+              text: "Forgot Password?",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.blue,
+                  ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  // navigate to password reset page
+                  Navigator.pushNamed(context, '/pass_reset');
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                ),
-                child: const Text('Login',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              //   Row(
-              //   children: [
-              //     Text("Already have an account? "),
-              //     GestureDetector(
-              //       onTap: onTap,
-              //       child: Text("Login", style: TextStyle(color: Colors.blue)),
-              //     ),
-              //   ],
-              // )
-
-              Text.rich(TextSpan(text: "Don't have an account? ", children: [
+            ),
+          ),
+          const SizedBox(height: 60),
+          Text.rich(
+            TextSpan(
+              text: "Don't have an account? ",
+              children: [
                 TextSpan(
                     text: "Register",
-                    style: const TextStyle(color: Colors.blue),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        //navigate to register page
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const RegisterPage()));
+                        // navigate to register page
+                        Navigator.pushReplacementNamed(context, '/register');
                       })
-              ])),
-            ],
-          )),
+              ],
+            ),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 200),
+        ],
+      ),
+      floatingActionButton: fabButton(context, () {
+        loginUser();
+      }, 'Login', 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

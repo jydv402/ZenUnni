@@ -1,316 +1,264 @@
 import 'package:flutter/material.dart';
-import 'package:zen/screens/home.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 
-//where data of each task is stored when user is selecting options
-class Task {
-  String name;
-  String description;
-  DateTime date;
-  String priority;
-  //constructor
-  Task({
-    required this.name,
-    required this.description,
-    required this.date,
-    required this.priority,
-  });
-}
+import 'package:zen/zen_barrel.dart';
 
-class Todo extends StatefulWidget {
-  const Todo({super.key});
+class TodoListPage extends ConsumerWidget {
+  const TodoListPage({super.key});
 
   @override
-  State<Todo> createState() => _TodoState();
-}
-
-class _TodoState extends State<Todo> {
-  //variables to store data
-  DateTime? _date; //save date
-  TimeOfDay? _time; //save time
-  String _prior = ""; //save current prior
-  List<Task> tasks = []; //to store the tasks in a list
-  //controllers to pick up the info to be stored
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController descController = TextEditingController();
-  @override
-  void dispose() {
-    nameController.dispose();
-    descController.dispose();
-    super.dispose();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final taskList = ref.watch(taskProvider);
+    return Scaffold(
+      body: taskList.when(
+        data: (tasks) => _taskListView(tasks, ref),
+        loading: () => Center(
+          child: showRunningIndicator(context, "Loading Todo data..."),
+        ),
+        error: (error, stack) => Center(
+          child: Text(
+            'Error: $error',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+      ),
+      floatingActionButton: fabButton(context, () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AddTaskPage(),
+          ),
+        );
+      }, "Add New Tasks", 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 
-  //function that displays dialog box to select task details
-  void _showTask(BuildContext context, Function addTaskCallback) {
-    //clearing controllers so that dialog box looks new
-    nameController.clear();
-    descController.clear();
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        useSafeArea: false,
-        builder: (BuildContext context) {
-          DateTime? localDate;
-          TimeOfDay? localTime;
-          String localPrior = ""; //to display current prior on dialog
-          return StatefulBuilder(
-            //stateful builder to display updating elements
-            builder: (BuildContext context,
-                void Function(void Function()) setState) {
-              return SimpleDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                contentPadding: const EdgeInsets.all(30),
-                title: const Text(
-                  "Add a new task",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+  Widget _taskListView(List<TodoModel> tasks, WidgetRef ref) {
+    int score;
+    return ListView.builder(
+      shrinkWrap: true,
+      padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+      itemCount: tasks.length + 2,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScoreCard(),
+                const Text(
+                  'Todo',
+                  style: headL,
                 ),
-                children: [
-                  TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                        label: Text(
-                          "Task name",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        hintText: "Enter a name for your task"),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: descController,
-                    decoration: const InputDecoration(
-                        label: Text(
-                          "Task description",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        hintText: "Enter a name for your task"),
-                  ),
-                  const SizedBox(height: 25),
-                  //picking a date
-                  ElevatedButton(
-                      onPressed: () async {
-                        DateTime? pickDate = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2100));
-                        if (pickDate != null) {
-                          setState(() {
-                            localDate = pickDate; //saves to local variable
-                            _date = pickDate; //to save it to global variable
-                            print("Selected date: $localDate");
-                          });
-                        }
-                      },
-                      child: const Text("Select a date")),
-                  const SizedBox(height: 15),
-                  if (localDate != null)
-                    Text(
-                      "Selected Date: ${localDate!.year}-${localDate!.month.toString().padLeft(2, '0')}-${localDate!.day.toString().padLeft(2, '0')}", // Display selected date
-                      style: const TextStyle(fontSize: 18),
-                    )
-                  else
-                    const Text(
-                      "No date selected currently", // Display fallback message if no date is selected
-                      style:
-                          TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
-                    ),
-                  //picking a time
-                  ElevatedButton(
-                      onPressed: () async {
-                        TimeOfDay? picktime = await showTimePicker(
-                            context: context, initialTime: TimeOfDay.now());
-                        if (picktime != null) {
-                          setState(() {
-                            localTime = picktime; //saves to local variable
-                            _time = picktime; //saves to global variable
-                            print("Selected time: $localTime");
-                          });
-                        }
-                      },
-                      child: const Text("Select a time")),
-                  const SizedBox(height: 20),
-                  if (localTime != null)
-                    Text(
-                      "Selected Time: ${localTime!.hour}:${localTime!.minute.toString().padLeft(2, '0')}",
-                      style: const TextStyle(fontSize: 18),
-                    )
-                  else
-                    const Text(
-                      "No time selected currently",
-                      style:
-                          TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
-                    ),
-                  const SizedBox(height: 20),
-                  //to select priority of the task
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Select priority"),
-                      DropdownButton(
-                          value: localPrior.isEmpty ? null : localPrior,
-                          iconSize: 30,
-                          menuWidth: 100,
-                          //menuMaxHeight: 10,
-                          itemHeight: 50,
-                          dropdownColor: Colors.transparent,
-                          items: ['High', 'Medium', 'Low']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              localPrior = newValue!;
-                              _prior = newValue;
-                              print(_prior);
-                            });
-                          },
-                          underline: Container()),
-                    ],
-                  ),
-                  const SizedBox(height: 90),
-                  //to add buttons which confirms creation of a task or to discards
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      FloatingActionButton(
-                        onPressed: () {
-                          // X has been pressed so removing whatever has been stored
-                          _date = null;
-                          _time = null;
-                          _prior = "";
-                          nameController.text = "";
-                          descController.text = "";
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(
-                          Icons.close,
-                          size: 25,
-                          color: Colors.red,
-                        ),
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {
-                          if (nameController.text.isNotEmpty &&
-                              descController.text.isNotEmpty &&
-                              _date != null &&
-                              _time != null &&
-                              _prior.isNotEmpty) {
-                            setState(
-                              () {
-                                //this will combine both date and time into date_time
-                                DateTime dateTime = DateTime(
-                                    _date!.year,
-                                    _date!.month,
-                                    _date!.day,
-                                    _time!.hour,
-                                    _time!.minute);
-                                //adding details to task model
-                                Task task = Task(
-                                    name: nameController.text,
-                                    description: descController.text,
-                                    date: dateTime,
-                                    priority: _prior);
-                                addTaskCallback(task);
-                                //setting the global variables to null
-                                _date = null;
-                                _time = null;
-                                _prior = "";
-                                nameController.text = "";
-                                descController.text = "";
-                                //debugging stuff can be removed later
-                                print("new task has been added successfully");
-                                for (var t in tasks) {
-                                  print(
-                                      "Task: ${t.name}, Description: ${t.description}, "
-                                      "Date: ${t.date}, Priority: ${t.priority}");
-                                }
-                              },
+              ],
+            ),
+          );
+        } else if (index == tasks.length + 1) {
+          return const SizedBox(height: 140);
+        } else {
+          final task = tasks[index - 1];
+          return Container(
+            padding: const EdgeInsets.fromLTRB(26, 6, 10, 26),
+            margin: const EdgeInsets.fromLTRB(6, 6, 6, 0),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(26),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    task.expired
+                        ? const Spacer()
+                        : Text(
+                            "Task Expired",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic),
+                          ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        showConfirmDialog(
+                          context,
+                          "Delete Task ?",
+                          "Are you sure you want to delete this task ?",
+                          "Delete",
+                          Colors.red,
+                          () {
+                            ref.read(
+                              taskDeleteProvider(task),
                             );
                             Navigator.pop(context);
-                          } else {
-                            print("error fields must be null");
-                          }
-                        },
-                        child: const Icon(Icons.check,
-                            size: 25, color: Colors.green),
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        LineIcons.alternateTrash,
+                        color: Colors.white,
                       ),
-                    ],
-                  )
-                ],
-              );
-            },
-          );
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("To-Do list",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold)),
-          backgroundColor: Colors.blue,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LandPage()));
-                },
-                icon: const Icon(Icons.arrow_back)),
-          ],
-        ),
-        //to add details....
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 4,
-                    child: ListTile(
-                      title: Text(tasks[index].name),
-                      subtitle: Text(tasks[index].description),
                     ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 75,
-                height: 75,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    _showTask(context, (Task task) {
-                      setState(() {
-                        tasks.add(task);
-                      });
-                    });
-                  },
-                  child: const Icon(Icons.add),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddTaskPage(taskToEdit: task),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        LineIcons.pen,
+                        color: Colors.white,
+                      ),
+                    ),
+                    task.expired
+                        ? Checkbox(
+                            value: task.isDone,
+                            side:
+                                const BorderSide(color: Colors.white, width: 2),
+                            activeColor: Colors.white,
+                            overlayColor: WidgetStateProperty.all(Colors.white),
+                            focusColor: Colors.white,
+                            checkColor: Colors.black,
+                            onChanged: (bool? value) {
+                              final updatedTask = TodoModel(
+                                name: task.name,
+                                description: task.description,
+                                date: task.date,
+                                priority: task.priority,
+                                isDone: value ?? false,
+                                expired: task.expired,
+                              );
+                              ref.read(
+                                taskUpdateFullProvider(updatedTask),
+                              );
+                              if (task.priority == "High") {
+                                ref.read(
+                                  scoreIncrementProvider(
+                                      value! ? 25 : -25), //High priority score
+                                );
+                                score = 25;
+                              } else if (task.priority == "Medium") {
+                                ref.read(
+                                  scoreIncrementProvider(value!
+                                      ? 15
+                                      : -15), //Medium priority score
+                                );
+                                score = 15;
+                              } else {
+                                ref.read(
+                                  scoreIncrementProvider(
+                                      value! ? 10 : -10), //Low priority score
+                                );
+                                score = 10;
+                              }
+                              if (value) {
+                                showHeadsupNoti(context,
+                                    "Hurray! Task Completed.\n$score Points Earned");
+                              } else {
+                                showHeadsupNoti(
+                                    context, "Oops! Lost $score Points");
+                              }
+                            },
+                          )
+                        : const SizedBox.shrink(),
+                  ],
                 ),
-              )
-            ],
-          ),
-        ));
+                Text(
+                  task.name,
+                  style: task.expired
+                      ? Theme.of(context).textTheme.headlineMedium
+                      : Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  task.description,
+                  style: task.expired
+                      ? Theme.of(context).textTheme.headlineSmall
+                      : Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            color: Colors.grey,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: Colors.white,
+                            decorationThickness: 2,
+                          ),
+                ),
+                const SizedBox(height: 26),
+                Text(
+                  "•  Due Date: ${DateFormat('dd MMM y').format(task.date)}",
+                  style: task.expired
+                      ? Theme.of(context).textTheme.bodySmall
+                      : Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "•  Due Time: ${DateFormat('hh:mm a').format(task.date)}",
+                  style: task.expired
+                      ? Theme.of(context).textTheme.bodySmall
+                      : Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2),
+                ),
+                const SizedBox(height: 10),
+                Text.rich(
+                  TextSpan(children: [
+                    TextSpan(
+                      text: "•  Priority: ",
+                      style: task.expired
+                          ? Theme.of(context).textTheme.bodySmall
+                          : Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Colors.white,
+                              decorationThickness: 2),
+                    ),
+                    TextSpan(
+                      text: task.priority,
+                      style: task.expired
+                          ? Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: task.priority == "High"
+                                    ? Colors.red.shade200
+                                    : task.priority == "Medium"
+                                        ? Colors.orange.shade200
+                                        : Colors.green.shade200,
+                              )
+                          : Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: task.priority == "High"
+                                    ? Colors.red.shade200
+                                    : task.priority == "Medium"
+                                        ? Colors.orange.shade200
+                                        : Colors.green.shade200,
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Colors.white,
+                                decorationThickness: 2,
+                              ),
+                    ),
+                  ]),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
   }
 }

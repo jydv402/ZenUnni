@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:zen/auth_pages/auth_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:zen/screens/currMood.dart';
-import 'package:zen/screens/home.dart';
-import 'package:zen/screens/mood.dart';
-import 'package:zen/screens/todo.dart';
-import 'package:zen/theme/light.dart';
 import 'firebase_options.dart';
+import 'package:zen/zen_barrel.dart';
 
-void main() async {
+Future<void> main() async {
   //to ensure firebase plugins are correctly intialised before using it
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  await dotenv.load(fileName: ".env"); //load the .env file
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,10 +29,23 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => RegisterPage(),
+        '/username': (context) => const UsernamePage(),
         '/home': (context) => const LandPage(),
-        '/mood2': (context) => const MoodPage(),
+        '/chat': (context) => const ChatPage(),
         '/mood1': (context) => const CurrentMood(),
-        '/todo': (context) => const Todo(),
+        '/mood2': (context) => const MoodPage(),
+        '/pomo': (context) => const PomodoroPage(),
+        '/counter': (context) => const CountdownScreen(),
+        '/habit': (context) => const HabitPage(),
+        '/profile': (context) => const ProfilePage(),
+        '/schedule': (context) => const SchedPage(),
+        '/search': (context) => const ConnectPage(),
+        '/pass_reset': (context) => const PassResetPage(),
+        '/email_verif': (context) => const EmailVerifPage(),
+        '/todo': (context) => const TodoListPage(),
+        '/add_todo': (context) => const AddTaskPage(),
       },
     );
   }

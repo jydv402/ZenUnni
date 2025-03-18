@@ -1,88 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:glassmorphism_widgets/glassmorphism_widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:zen/services/mood_serv.dart';
-import 'package:zen/theme/light.dart';
 
-class MoodPage extends StatelessWidget {
+import 'package:zen/zen_barrel.dart';
+
+class MoodPage extends ConsumerStatefulWidget {
   const MoodPage({super.key});
 
-  static const moodList = {
-    "assets/emoji/chill.json": "Relaxed",
-    "assets/emoji/happy.json": "Happy",
-    "assets/emoji/halo.json": "Under Control",
-    "assets/emoji/nerdy.json": "Study Mode",
-    "assets/emoji/neutral.json": "Neutral",
-    "assets/emoji/sad.json": "Sad",
-    "assets/emoji/angry.json": "Angry",
-    "assets/emoji/anxious.json": "Anxious",
-    "assets/emoji/overwhelmed.json": "Overwhelmed",
-    "assets/emoji/tired.json": "Tired",
-    "assets/emoji/sick.json": "Sick",
-  };
+  @override
+  ConsumerState<MoodPage> createState() => _MoodPageState();
+}
+
+class _MoodPageState extends ConsumerState<MoodPage> {
+  int _currentMoodIndex = 0; // Index of the selected mood
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _moodSelectionScreen(context),
-    );
-  }
-
-  Widget _moodSelectionScreen(context) {
-    return Container(
-        decoration: gradientDeco(), //Gradient background
-        padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
-        child: SizedBox(
-            // SizedBox to fill the entire screen
-            width: double.infinity,
-            height: double.infinity,
-            child: ListView.builder(
-              itemCount: moodList.length + 1,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  // Title
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    child: Text("How are you\nfeeling today?",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge
-                            ?.copyWith(color: Colors.white)),
-                  );
-                } else {
-                  // Mood Cards
-                  return _moodCard(context, moodList.keys.elementAt(index - 1),
-                      moodList.values.elementAt(index - 1));
-                }
-              },
-            )));
-  }
-
-  Widget _moodCard(context, String emoji, String mood) {
-    return GestureDetector(
-      onTap: () async {
-        addMoodToFirestore(mood);
-        await Future.delayed(const Duration(seconds: 2));
-      },
-      child: GlassContainer(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          borderRadius: const BorderRadius.all(Radius.circular(36)),
-          blur: 75,
-          border: 1,
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Row(
-              children: [
-                Lottie.asset(emoji, height: 70, width: 70),
-                const SizedBox(width: 35),
-                Text(mood,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium
-                        ?.copyWith(color: Colors.white)),
-              ],
+      body: ListView(
+        padding: pagePaddingWithScore,
+        children: [
+          ScoreCard(),
+          const Text(
+            "How are you\nfeeling today?",
+            style: headL,
+          ),
+          const SizedBox(height: 80),
+          // Mood Icon
+          Center(
+            child: Lottie.asset(
+              moodList.keys.elementAt(_currentMoodIndex),
+              height: 200,
+              width: 200,
             ),
-          )),
+          ),
+          const SizedBox(height: 40),
+          // Mood Name Display
+          Center(
+            child: Text(
+              moodList.values.elementAt(_currentMoodIndex),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineMedium
+                  ?.copyWith(color: Colors.white),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text("${_currentMoodIndex + 1}/${moodList.length}",
+                  style: Theme.of(context).textTheme.bodyMedium),
+            ),
+          ),
+          const SizedBox(height: 80),
+          SliderTheme(
+            data: SliderThemeData(
+                trackHeight: 50,
+                activeTickMarkColor: Colors.black,
+                inactiveTickMarkColor: Colors.white,
+                activeTrackColor: Colors.white,
+                inactiveTrackColor: Colors.black,
+                thumbColor:
+                    _currentMoodIndex == 0 ? Colors.white : Colors.black),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: Slider(
+                autofocus: true,
+                value: _currentMoodIndex.toDouble(),
+                min: 0,
+                max: moodList.length - 1.toDouble(),
+                divisions: moodList.length - 1,
+                onChanged: (double value) {
+                  setState(() {
+                    _currentMoodIndex = value.toInt();
+                  });
+                },
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+        ],
+      ),
+      floatingActionButton: fabButton(context, () async {
+        await ref.read(moodAddProvider(
+          moodList.values.elementAt(_currentMoodIndex),
+        ).future);
+
+        if (context.mounted) {
+          showHeadsupNoti(context,
+              "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}");
+          Navigator.pop(context);
+        }
+      }, "Add Mood", 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

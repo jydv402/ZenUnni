@@ -1,46 +1,76 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/zen_barrel.dart';
 
-final moodDoc =
-    FirebaseFirestore.instance.collection('mood'); //Get the mood collection
-final now = DateTime.now();
-final today = DateTime(now.year, now.month, now.day);
+final moodProvider = StreamProvider<String?>((ref) async* {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final moodDoc = FirebaseFirestore.instance
+      .collection('users')
+      .doc(auth.currentUser?.uid)
+      .collection('mood');
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
 
-Future<void> addMoodToFirestore(String mood) async {
-  // Check if a document for today already exists
-  final query = await moodDoc
+  //  final uid = FirebaseAuth.instance.currentUser?.uid;
+  //  if (uid == null) {
+  //   yield null;
+  //   return;
+  // }
+
+  final querySnapshot = moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)
-      .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
+      .where('updatedOn',
+          isLessThan: today.add(
+            const Duration(days: 1),
+          ))
       .limit(1)
-      .get();
+      .snapshots();
 
-  // If a document for today exists, query.docs will be non empty
-  if (query.docs.isNotEmpty) {
-    final docId = query.docs.first.id; //Get the document ID
-    await moodDoc.doc(docId).update({
-      'mood': mood,
-      'updatedOn': now
-    }); //Update the mood and updatedOn fields
-  } else {
-    // Document doesn't exist, create a new one
-    await moodDoc.add({
-      'mood': mood,
-      'updatedOn': now,
-    });
+  await for (final snapshot in querySnapshot) {
+    if (snapshot.docs.isNotEmpty) {
+      yield snapshot.docs.first.data()['mood'] as String;
+    } else {
+      yield null;
+    }
   }
-}
+});
 
-Future<String?> getMoodFromFirestore() async {
-  // Check if a document for today already exists
-  final query = await moodDoc
-      .where('updatedOn', isGreaterThanOrEqualTo: today)
-      .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
-      .limit(1)
-      .get();
+final moodAddProvider = FutureProvider.autoDispose.family<void, String>(
+  (ref, newMood) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final moodDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('mood');
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
 
-  // Return the mood if the document exists, otherwise return null
-  if (query.docs.isNotEmpty) {
-    return query.docs.first.data()['mood'];
-  } else {
-    return null;
-  }
-}
+    // final uid = FirebaseAuth.instance.currentUser?.uid;
+    // if (uid == null) {
+    //   throw Exception("No user is signed in");
+    // }
+    final query = await moodDoc
+        .where('updatedOn', isGreaterThanOrEqualTo: today)
+        .where('updatedOn',
+            isLessThan: today.add(
+              const Duration(days: 1),
+            ))
+        .limit(1)
+        .get();
+
+    if (query.docs.isNotEmpty) {
+      // Update existing document
+      final docId = query.docs.first.id;
+      await moodDoc.doc(docId).update({'mood': newMood, 'updatedOn': now});
+    } else {
+      // Add new document
+      await moodDoc.add({'mood': newMood, 'updatedOn': now});
+    }
+  },
+);
+
+final motivationalMessageProvider =
+    FutureProvider.family<String, String>((ref, mood) async {
+  return await AIService().getMotivationalMessageIsolate(mood);
+});
