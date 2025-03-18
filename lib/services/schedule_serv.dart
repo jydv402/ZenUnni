@@ -9,13 +9,13 @@ final scheduleProvider =
   (ref, tasks) async {
     // ignore: prefer_interpolation_to_compose_strings
     final userTasks = tasks.map((task) => '''
-
-  Task no.${tasks.indexOf(task) + 1}
-  Task Name: ${task.name}
-
-  Due Date: ${task.date}
-  Task Description: ${task.description}
-  Status: ${task.isDone ? "Done" : "Not Done"}
+    {
+      "task": "${task.name}",
+      "description": "${task.description}",
+      "date": "${task.date}",
+      "priority": "${task.priority}",
+      "isDone": ${task.isDone}
+    },
 
   ''').join();
     final aiService = AIService();
