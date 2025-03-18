@@ -139,7 +139,7 @@ ThemeData get lightTheme {
       //     }),
       //   ),
     ),
-    timePickerTheme: TimePickerThemeData(),
+    timePickerTheme: TimePickerThemeData(dayPeriodColor: Colors.white),
   );
 }
 
