@@ -26,12 +26,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      initialRoute: '/', //Specifies the initial page route
+      initialRoute: '/nav', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => RegisterPage(),
         '/username': (context) => const UsernamePage(),
+        '/nav': (context) => const Navbar(),
         '/home': (context) => const LandPage(),
         '/chat': (context) => ChatPage(),
         '/mood1': (context) => const CurrentMood(),

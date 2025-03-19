@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:zen/theme/text_theme.dart';
 
 // Light theme for the app
 ThemeData get lightTheme {
@@ -18,11 +19,6 @@ ThemeData get lightTheme {
       error: Colors.red,
       onError: Colors.white,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-        elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(36),
-        )),
     textTheme: TextTheme(
       headlineLarge: GoogleFonts.poppins(
         fontSize: 44,
@@ -87,6 +83,12 @@ ThemeData get lightTheme {
       errorStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.red),
       floatingLabelStyle:
           GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      labelTextStyle: WidgetStateProperty.all(bodyS),
+      iconTheme: WidgetStateProperty.all(
+        const IconThemeData(color: Colors.white),
+      ),
     ),
     datePickerTheme: DatePickerThemeData(
       backgroundColor: const Color(0xFF202124),

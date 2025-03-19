@@ -28,8 +28,8 @@ class LandPage extends ConsumerWidget {
           );
         },
       ),
-      floatingActionButton: CustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: CustomFAB(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

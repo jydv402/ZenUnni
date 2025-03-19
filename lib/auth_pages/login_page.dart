@@ -37,7 +37,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
       if (mounted) {
         Navigator.pop(context); // Close loading dialog
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/nav');
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {

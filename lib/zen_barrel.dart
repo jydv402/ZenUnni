@@ -36,6 +36,8 @@ export 'screens/profile.dart';
 export 'screens/schedule.dart';
 export 'screens/todo.dart';
 
+export 'screens/nav.dart';
+
 //services
 export 'services/ai_serv.dart';
 export 'services/chat_serv.dart';

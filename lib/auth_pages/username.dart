@@ -35,7 +35,7 @@ class UsernamePage extends ConsumerWidget {
         if (username.isNotEmpty && !isUpdate!) {
           await createUserDoc(username);
           if (context.mounted) {
-            Navigator.pushNamed(context, '/home');
+            Navigator.pushNamed(context, '/nav');
           }
         } else if (username.isNotEmpty && isUpdate!) {
           await updateUserDoc(username);
