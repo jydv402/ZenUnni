@@ -11,29 +11,27 @@ class LandPage extends ConsumerWidget {
     final user = ref.watch(userNameProvider);
     final mood = ref.watch(moodProvider);
 
-    return Scaffold(
-      body: user.when(
-        data: (data) {
-          return homeScreen(context, user.value, mood.value);
-        },
-        error: (error, stackTrace) {
-          return Center(
-            child: Text('Error: $error'),
-          );
-        },
-        loading: () {
-          return Center(
-            child: showRunningIndicator(
-                context, "Setting things up...\nJust for you..!"),
-          );
-        },
-      ),
-      // floatingActionButton: CustomFAB(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    return user.when(
+      data: (data) {
+        return homeScreen(context, ref, user.value, mood.value);
+      },
+      error: (error, stackTrace) {
+        return Center(
+          child: Text('Error: $error'),
+        );
+      },
+      loading: () {
+        return Center(
+          child: showRunningIndicator(
+              context, "Setting things up...\nJust for you..!"),
+        );
+      },
     );
+    // floatingActionButton: CustomFAB(),
+    // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
   }
 
-  Widget homeScreen(BuildContext context, String? user, mood) {
+  Widget homeScreen(BuildContext context, WidgetRef ref, String? user, mood) {
     final now = DateTime.now().hour;
     final greeting = now < 12
         ? 'Morning'
@@ -53,10 +51,11 @@ class LandPage extends ConsumerWidget {
         ),
         if (mood == null)
           //Show add mood msg
-          _msgContainer(context, "No mood added yet, add it now? 👀", () {
-            Navigator.pushNamed(context, '/mood1');
-            Navigator.pushNamed(context, '/mood2');
-          }),
+          _msgContainer(
+            context,
+            "No mood added yet, add it now? 👀",
+            () => updatePgIndex(ref, 5, 3),
+          ),
         const SizedBox(height: 8),
         _bentoBoxes(context),
         const SizedBox(height: 135),

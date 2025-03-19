@@ -50,6 +50,8 @@ export 'services/search_serv.dart';
 export 'services/todo_serv.dart';
 export 'services/user_serv.dart';
 
+export 'services/nav_serv.dart';
+
 //theme
 export 'theme/text_theme.dart';
 export 'theme/theme.dart';

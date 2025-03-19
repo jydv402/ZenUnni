@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/services/nav_serv.dart';
 import 'package:zen/zen_barrel.dart';
 
 class Navbar extends ConsumerStatefulWidget {
@@ -18,6 +17,7 @@ class _NavbarState extends ConsumerState<Navbar> {
     const LandPage(),
     const CurrentMood(),
     const ConnectPage(),
+    const MoodPage(),
   ];
 
   List<Widget> destinations = [
@@ -31,6 +31,7 @@ class _NavbarState extends ConsumerState<Navbar> {
   @override
   Widget build(BuildContext context) {
     int pgIndex = ref.watch(pgIndexProvider);
+    int subPgIndex = ref.watch(subPgIndexProvider);
     return Scaffold(
       body: pages[pgIndex],
       bottomNavigationBar: NavigationBar(
@@ -38,12 +39,12 @@ class _NavbarState extends ConsumerState<Navbar> {
         shadowColor: Colors.white,
         elevation: 16,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        selectedIndex: pgIndex,
+        selectedIndex: pgIndex > 4 ? subPgIndex : pgIndex,
         destinations: destinations,
         onDestinationSelected: (int index) {
           setState(
             () {
-              ref.read(pgIndexProvider.notifier).state = index;
+              updatePgIndex(ref, index, index);
             },
           );
         },
