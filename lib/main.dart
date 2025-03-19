@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zen/services/notif_serv.dart';
 import 'firebase_options.dart';
 import 'package:zen/zen_barrel.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   //to ensure firebase plugins are correctly intialised before using it
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
+      await NotifServ().initNotifications();
   runApp(
     const ProviderScope(
       child: MyApp(),

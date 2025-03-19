@@ -114,7 +114,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                 final newHabit = HabitModel(
                   habitName: habitNameController.text,
                   color: selectedColor
-                      .toARGB32()
+                      .value
                       .toRadixString(16)
                       .padLeft(8, '0'),
                   createdAt: isEdit ? habit!.createdAt : DateTime.now(),
