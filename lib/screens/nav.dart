@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:zen/services/nav_serv.dart';
 import 'package:zen/zen_barrel.dart';
 
 class Navbar extends ConsumerStatefulWidget {
@@ -11,8 +12,6 @@ class Navbar extends ConsumerStatefulWidget {
 }
 
 class _NavbarState extends ConsumerState<Navbar> {
-  int pgIndex = 2;
-
   List<Widget> pages = [
     const TodoListPage(),
     const SchedPage(),
@@ -31,6 +30,7 @@ class _NavbarState extends ConsumerState<Navbar> {
 
   @override
   Widget build(BuildContext context) {
+    int pgIndex = ref.watch(pgIndexProvider);
     return Scaffold(
       body: pages[pgIndex],
       bottomNavigationBar: NavigationBar(
@@ -43,17 +43,19 @@ class _NavbarState extends ConsumerState<Navbar> {
         onDestinationSelected: (int index) {
           setState(
             () {
-              pgIndex = index;
+              ref.read(pgIndexProvider.notifier).state = index;
             },
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/chat');
-        },
-        child: const Icon(LineIcons.comment),
-      ),
+      floatingActionButton: pgIndex != 2
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/chat');
+              },
+              child: const Icon(LineIcons.comment),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
