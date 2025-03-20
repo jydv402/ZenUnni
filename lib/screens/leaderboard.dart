@@ -16,6 +16,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
     final searchResults = ref.watch(rankedUserSearchProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: searchResults.when(
         data: (users) {
           final filteredUsers = users.where((user) {
@@ -36,7 +37,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     padding: const EdgeInsets.all(40),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(26),
-                      color: Colors.black,
+                      color: Colors.grey[200],
                     ),
                     child: Text(
                       "No users found matching \n\" $searchQuery \"",
@@ -236,7 +237,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: isUser ? Colors.white : Colors.transparent,
+                      color: isUser ? Color(0xFFFF8C2B) : Colors.transparent,
                       width: 4),
                 ),
                 child: Image.asset(
@@ -253,7 +254,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   padding: EdgeInsets.all(fSize - 4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black,
+                    color: Colors.grey[200],
                   ),
                   child: Text(
                     rank,
@@ -267,18 +268,19 @@ class _SearchState extends ConsumerState<ConnectPage> {
             ],
           ),
           const SizedBox(height: 4),
-          Text.rich(
-            TextSpan(
-              text: username,
-              style: Theme.of(context).textTheme.headlineMedium,
-              children: [
-                TextSpan(
-                  text: isUser ? '[You]' : '',
-                  style: Theme.of(context).textTheme.bodySmall,
+          Text(
+            username,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontSize: 18,
                 ),
-              ],
-            ),
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
           ),
+          if (isUser)
+            Text(
+              '[You]',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           Text(
             "$score pts",
             style: Theme.of(context).textTheme.bodySmall,
@@ -295,8 +297,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-            color: user.isUser ? Colors.white : Colors.transparent, width: 2),
-        color: Colors.black,
+            color: user.isUser ? Color(0xFFFF8C2B) : Colors.transparent,
+            width: 2),
+        color: Colors.grey[200],
       ),
       child: Stack(
         children: [

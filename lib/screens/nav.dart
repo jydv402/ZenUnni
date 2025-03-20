@@ -81,30 +81,35 @@ class _NavbarState extends ConsumerState<Navbar> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: IndexedStack(index: pgIndex, children: pages),
-        bottomNavigationBar: NavigationBar(
-          indicatorColor: Color(0xFFFF8B2C),
-          surfaceTintColor: Color.fromARGB(255, 150, 150, 150),
-          shadowColor: Colors.black,
-          elevation: 16,
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-          selectedIndex: pgIndex > 4 ? subPgIndex : pgIndex,
-          destinations: destinations,
-          onDestinationSelected: (int index) {
-            setState(
-              () {
-                if (index == 2) {
-                  ref.read(navStackProvider.notifier).reset(); // Reset to Home
-                } else if (ref.read(navStackProvider).last != index) {
-                  ref
-                      .read(navStackProvider.notifier)
-                      .push(index); // Add to stack
-                }
-                updatePgIndex(ref, index, index);
-              },
-            );
-            print(navStack);
-          },
-        ),
+        bottomNavigationBar: isKeyboardOpen
+            ? null
+            : NavigationBar(
+                indicatorColor: Color(0xFFFF8B2C),
+                surfaceTintColor: Color.fromARGB(255, 150, 150, 150),
+                shadowColor: Colors.black,
+                elevation: 16,
+                labelBehavior:
+                    NavigationDestinationLabelBehavior.onlyShowSelected,
+                selectedIndex: pgIndex > 4 ? subPgIndex : pgIndex,
+                destinations: destinations,
+                onDestinationSelected: (int index) {
+                  setState(
+                    () {
+                      if (index == 2) {
+                        ref
+                            .read(navStackProvider.notifier)
+                            .reset(); // Reset to Home
+                      } else if (ref.read(navStackProvider).last != index) {
+                        ref
+                            .read(navStackProvider.notifier)
+                            .push(index); // Add to stack
+                      }
+                      updatePgIndex(ref, index, index);
+                    },
+                  );
+                  print(navStack);
+                },
+              ),
         // floatingActionButton: pgIndex != 2
         //     ? FloatingActionButton(
         //         onPressed: () {
