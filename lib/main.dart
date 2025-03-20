@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,6 +12,14 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.dark,
+    ),
+  );
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -25,8 +34,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      initialRoute: '/nav', //Specifies the initial page route
+      theme: newTheme,
+      initialRoute: '/', //Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
         '/login': (context) => const LoginPage(),

@@ -65,7 +65,7 @@ class TodoListPage extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(26, 6, 10, 26),
             margin: const EdgeInsets.fromLTRB(6, 6, 6, 0),
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: Colors.grey.shade200,
               borderRadius: BorderRadius.circular(26),
             ),
             child: Column(
@@ -82,7 +82,7 @@ class TodoListPage extends ConsumerWidget {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                    color: Colors.grey,
+                                    color: Colors.black54,
                                     fontStyle: FontStyle.italic),
                           ),
                     const Spacer(),
@@ -104,7 +104,6 @@ class TodoListPage extends ConsumerWidget {
                       },
                       icon: Icon(
                         LineIcons.alternateTrash,
-                        color: Colors.white,
                       ),
                     ),
                     IconButton(
@@ -118,18 +117,17 @@ class TodoListPage extends ConsumerWidget {
                       },
                       icon: Icon(
                         LineIcons.pen,
-                        color: Colors.white,
                       ),
                     ),
                     task.expired
                         ? Checkbox(
                             value: task.isDone,
-                            side:
-                                const BorderSide(color: Colors.white, width: 2),
-                            activeColor: Colors.white,
-                            overlayColor: WidgetStateProperty.all(Colors.white),
-                            focusColor: Colors.white,
-                            checkColor: Colors.black,
+                            side: const BorderSide(
+                                color: Colors.black, width: 1.5),
+                            activeColor: Color(0xFFFF8B2C),
+                            overlayColor: WidgetStateProperty.all(Colors.black),
+                            focusColor: Colors.black,
+                            checkColor: Colors.white,
                             onChanged: (bool? value) {
                               final updatedTask = TodoModel(
                                 name: task.name,
@@ -179,9 +177,9 @@ class TodoListPage extends ConsumerWidget {
                   style: task.expired
                       ? Theme.of(context).textTheme.headlineMedium
                       : Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: Colors.grey,
+                          color: Colors.black54,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.white,
+                          decorationColor: Colors.black54,
                           decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
@@ -190,9 +188,9 @@ class TodoListPage extends ConsumerWidget {
                   style: task.expired
                       ? Theme.of(context).textTheme.headlineSmall
                       : Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            color: Colors.grey,
+                            color: Colors.black54,
                             decoration: TextDecoration.lineThrough,
-                            decorationColor: Colors.white,
+                            decorationColor: Colors.black54,
                             decorationThickness: 2,
                           ),
                 ),
@@ -202,9 +200,9 @@ class TodoListPage extends ConsumerWidget {
                   style: task.expired
                       ? Theme.of(context).textTheme.bodySmall
                       : Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
+                          color: Colors.black54,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.white,
+                          decorationColor: Colors.black54,
                           decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
@@ -213,9 +211,9 @@ class TodoListPage extends ConsumerWidget {
                   style: task.expired
                       ? Theme.of(context).textTheme.bodySmall
                       : Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
+                          color: Colors.black54,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.white,
+                          decorationColor: Colors.black54,
                           decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
@@ -226,9 +224,9 @@ class TodoListPage extends ConsumerWidget {
                       style: task.expired
                           ? Theme.of(context).textTheme.bodySmall
                           : Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.grey,
+                              color: Colors.black54,
                               decoration: TextDecoration.lineThrough,
-                              decorationColor: Colors.white,
+                              decorationColor: Colors.black54,
                               decorationThickness: 2),
                     ),
                     TextSpan(
@@ -236,10 +234,10 @@ class TodoListPage extends ConsumerWidget {
                       style: task.expired
                           ? Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: task.priority == "High"
-                                    ? Colors.red.shade200
+                                    ? Colors.red
                                     : task.priority == "Medium"
-                                        ? Colors.orange.shade200
-                                        : Colors.green.shade200,
+                                        ? Colors.orange
+                                        : Colors.green,
                               )
                           : Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: task.priority == "High"
@@ -248,7 +246,7 @@ class TodoListPage extends ConsumerWidget {
                                         ? Colors.orange.shade200
                                         : Colors.green.shade200,
                                 decoration: TextDecoration.lineThrough,
-                                decorationColor: Colors.white,
+                                decorationColor: Colors.black54,
                                 decorationThickness: 2,
                               ),
                     ),

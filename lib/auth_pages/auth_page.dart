@@ -14,7 +14,7 @@ class AuthPage extends ConsumerWidget {
         builder: (context, snapshot) {
           //if user is logged in
           if (snapshot.hasData) {
-            return const LandPage();
+            return const Navbar();
           }
           //if user is not logged in
           else {
