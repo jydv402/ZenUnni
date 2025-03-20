@@ -1,3 +1,7 @@
+//flutter packages
+export 'package:flutter/material.dart';
+export 'package:flutter_riverpod/flutter_riverpod.dart';
+
 //auth_pages
 export 'auth_pages/auth_page.dart';
 export 'auth_pages/email_verif_page.dart';
@@ -37,6 +41,7 @@ export 'screens/schedule.dart';
 export 'screens/todo.dart';
 
 export 'screens/nav.dart';
+export 'screens/task_switch.dart';
 
 //services
 export 'services/ai_serv.dart';

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -65,7 +63,7 @@ class TodoListPage extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(26, 6, 10, 26),
             margin: const EdgeInsets.fromLTRB(6, 6, 6, 0),
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
+              color: Colors.black,
               borderRadius: BorderRadius.circular(26),
             ),
             child: Column(
@@ -75,15 +73,17 @@ class TodoListPage extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     task.expired
-                        ? const Spacer()
+                        ? Text(
+                            "Task Pending",
+                            style: bodyM.copyWith(
+                                color: Colors.grey,
+                                fontStyle: FontStyle.italic),
+                          )
                         : Text(
                             "Task Expired",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    color: Colors.black54,
-                                    fontStyle: FontStyle.italic),
+                            style: bodyM.copyWith(
+                                color: Colors.grey,
+                                fontStyle: FontStyle.italic),
                           ),
                     const Spacer(),
                     IconButton(
@@ -104,6 +104,7 @@ class TodoListPage extends ConsumerWidget {
                       },
                       icon: Icon(
                         LineIcons.alternateTrash,
+                        color: Colors.white,
                       ),
                     ),
                     IconButton(
@@ -117,17 +118,18 @@ class TodoListPage extends ConsumerWidget {
                       },
                       icon: Icon(
                         LineIcons.pen,
+                        color: Colors.white,
                       ),
                     ),
                     task.expired
                         ? Checkbox(
                             value: task.isDone,
-                            side: const BorderSide(
-                                color: Colors.black, width: 1.5),
-                            activeColor: Color(0xFFFF8B2C),
-                            overlayColor: WidgetStateProperty.all(Colors.black),
-                            focusColor: Colors.black,
-                            checkColor: Colors.white,
+                            side:
+                                const BorderSide(color: Colors.white, width: 1),
+                            activeColor: Colors.white,
+                            overlayColor: WidgetStateProperty.all(Colors.white),
+                            focusColor: Colors.white,
+                            checkColor: Colors.black,
                             onChanged: (bool? value) {
                               final updatedTask = TodoModel(
                                 name: task.name,
@@ -175,45 +177,45 @@ class TodoListPage extends ConsumerWidget {
                 Text(
                   task.name,
                   style: task.expired
-                      ? Theme.of(context).textTheme.headlineMedium
-                      : Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: Colors.black54,
+                      ? headM.copyWith(color: Colors.white)
+                      : headM.copyWith(
+                          color: Colors.grey,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.black54,
+                          decorationColor: Colors.white,
                           decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   task.description,
                   style: task.expired
-                      ? Theme.of(context).textTheme.headlineSmall
-                      : Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            color: Colors.black54,
-                            decoration: TextDecoration.lineThrough,
-                            decorationColor: Colors.black54,
-                            decorationThickness: 2,
-                          ),
+                      ? headS.copyWith(color: Colors.white)
+                      : headS.copyWith(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2,
+                        ),
                 ),
                 const SizedBox(height: 26),
                 Text(
                   "•  Due Date: ${DateFormat('dd MMM y').format(task.date)}",
                   style: task.expired
-                      ? Theme.of(context).textTheme.bodySmall
-                      : Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.black54,
+                      ? bodyS.copyWith(color: Colors.white)
+                      : bodyS.copyWith(
+                          color: Colors.grey,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.black54,
+                          decorationColor: Colors.white,
                           decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   "•  Due Time: ${DateFormat('hh:mm a').format(task.date)}",
                   style: task.expired
-                      ? Theme.of(context).textTheme.bodySmall
-                      : Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.black54,
+                      ? bodyS.copyWith(color: Colors.white)
+                      : bodyS.copyWith(
+                          color: Colors.grey,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.black54,
+                          decorationColor: Colors.white,
                           decorationThickness: 2),
                 ),
                 const SizedBox(height: 10),
@@ -222,33 +224,33 @@ class TodoListPage extends ConsumerWidget {
                     TextSpan(
                       text: "•  Priority: ",
                       style: task.expired
-                          ? Theme.of(context).textTheme.bodySmall
-                          : Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.black54,
+                          ? bodyS.copyWith(color: Colors.white)
+                          : bodyS.copyWith(
+                              color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
-                              decorationColor: Colors.black54,
+                              decorationColor: Colors.white,
                               decorationThickness: 2),
                     ),
                     TextSpan(
                       text: task.priority,
                       style: task.expired
-                          ? Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: task.priority == "High"
-                                    ? Colors.red
-                                    : task.priority == "Medium"
-                                        ? Colors.orange
-                                        : Colors.green,
-                              )
-                          : Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: task.priority == "High"
-                                    ? Colors.red.shade200
-                                    : task.priority == "Medium"
-                                        ? Colors.orange.shade200
-                                        : Colors.green.shade200,
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor: Colors.black54,
-                                decorationThickness: 2,
-                              ),
+                          ? bodyS.copyWith(
+                              color: task.priority == "High"
+                                  ? Colors.red.shade200
+                                  : task.priority == "Medium"
+                                      ? Colors.orange.shade200
+                                      : Colors.green.shade200,
+                            )
+                          : bodyS.copyWith(
+                              color: task.priority == "High"
+                                  ? Colors.red.shade200
+                                  : task.priority == "Medium"
+                                      ? Colors.orange.shade200
+                                      : Colors.green.shade200,
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Colors.white,
+                              decorationThickness: 2,
+                            ),
                     ),
                   ]),
                 ),

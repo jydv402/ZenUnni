@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 class Navbar extends ConsumerStatefulWidget {
@@ -12,7 +10,8 @@ class Navbar extends ConsumerStatefulWidget {
 
 class _NavbarState extends ConsumerState<Navbar> {
   List<Widget> pages = [
-    const TodoListPage(), // index 0: Todo
+    const TaskPage(),
+    //const TodoListPage(), // index 0: Todo
     const HabitPage(), // index 1: Habit
     const LandPage(), // index 2: Home
     const CurrentMood(), // index 3: Mood
