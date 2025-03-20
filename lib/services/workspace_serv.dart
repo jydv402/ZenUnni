@@ -58,7 +58,7 @@ void initializeBackgroundTask() {
   Workmanager().registerPeriodicTask(
     "taskCheck",
     "checkTasks",
-    frequency: const Duration(hours: 1),     // Runs every hour
+    frequency: const Duration(minutes: 10),     // Runs every hour
     existingWorkPolicy: ExistingWorkPolicy.replace, 
   );
 }
