@@ -13,7 +13,9 @@ final navStackProvider = StateNotifierProvider<NavStackNotifier, List<int>>(
 
 // Update Page Index
 void updatePgIndex(WidgetRef ref, int newPageIndex, int subPageIndex) {
+  // Update page index
   ref.read(pgIndexProvider.notifier).state = newPageIndex;
+  // Update sub page index
   ref.read(subPgIndexProvider.notifier).state = subPageIndex;
 }
 

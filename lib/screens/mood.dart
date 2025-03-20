@@ -18,12 +18,12 @@ class _MoodPageState extends ConsumerState<MoodPage> {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           const Text(
             "How are you\nfeeling today?",
             style: headL,
           ),
-          const SizedBox(height: 80),
+          const SizedBox(height: 50),
           // Mood Icon
           Center(
             child: Lottie.asset(
@@ -32,15 +32,12 @@ class _MoodPageState extends ConsumerState<MoodPage> {
               width: 200,
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 30),
           // Mood Name Display
           Center(
             child: Text(
               moodList.values.elementAt(_currentMoodIndex),
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
           Center(
@@ -50,13 +47,13 @@ class _MoodPageState extends ConsumerState<MoodPage> {
                   style: Theme.of(context).textTheme.bodyMedium),
             ),
           ),
-          const SizedBox(height: 80),
+          const SizedBox(height: 50),
           SliderTheme(
             data: SliderThemeData(
                 trackHeight: 50,
                 activeTickMarkColor: Colors.black,
                 inactiveTickMarkColor: Colors.white,
-                activeTrackColor: Colors.white,
+                activeTrackColor: Color(0xFFFF8B2C),
                 inactiveTrackColor: Colors.black,
                 thumbColor:
                     _currentMoodIndex == 0 ? Colors.white : Colors.black),

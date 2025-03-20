@@ -18,6 +18,7 @@ class _NavbarState extends ConsumerState<Navbar> {
     const MoodPage(), // index 5: Add mood
     const ConnectPage(), // index 6: Leaderboard
     const PomodoroPage(), // index 7: Pomodoro
+    const AddTaskPage(), // index 8: Add task
   ];
 
   List<Widget> destinations = [
@@ -51,7 +52,7 @@ class _NavbarState extends ConsumerState<Navbar> {
     ),
     NavigationDestination(
       icon: Icon(
-        LucideIcons.square_user_round,
+        LucideIcons.user_round,
         size: 22,
       ),
       label: 'Profile',
@@ -63,6 +64,9 @@ class _NavbarState extends ConsumerState<Navbar> {
     int pgIndex = ref.watch(pgIndexProvider);
     int subPgIndex = ref.watch(subPgIndexProvider);
     List<int> navStack = ref.watch(navStackProvider);
+
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
+
     return PopScope(
       canPop: navStack.length <= 1, // Only allow exiting when at home
       onPopInvokedWithResult: (didPop, dynamic) {
@@ -75,6 +79,7 @@ class _NavbarState extends ConsumerState<Navbar> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: IndexedStack(index: pgIndex, children: pages),
         bottomNavigationBar: NavigationBar(
           indicatorColor: Color(0xFFFF8B2C),

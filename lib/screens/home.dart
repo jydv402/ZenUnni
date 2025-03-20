@@ -41,7 +41,7 @@ class LandPage extends ConsumerWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 10),
-          child: ScoreCard(),
+          child: const ScoreCard(),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),

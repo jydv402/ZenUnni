@@ -96,6 +96,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
                 hintText: 'Enter a username',
                 hintStyle: Theme.of(context).textTheme.labelMedium,
                 border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
               ),
             ),
@@ -206,7 +210,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           const Text(
             'Leaderboard',
             style: headL,

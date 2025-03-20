@@ -66,10 +66,11 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           Text(widget.taskToEdit != null ? "Edit Task" : "Add Task",
               style: headL),
           const SizedBox(height: 25),
@@ -176,7 +177,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           ),
           const SizedBox(height: 16),
           _dialogPrioritySelect(setState),
-          const SizedBox(height: 75),
+          const SizedBox(height: 30),
           fabButton(context, () {
             if (validateTaskFields()) {
               DateTime dateTime = DateTime(
@@ -213,6 +214,41 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           }, widget.taskToEdit != null ? "Update Task" : "Save Task", 0)
         ],
       ),
+      // floatingActionButton: fabButton(context, () {
+      //   if (validateTaskFields()) {
+      //     DateTime dateTime = DateTime(
+      //       _date!.year,
+      //       _date!.month,
+      //       _date!.day,
+      //       _time!.hour,
+      //       _time!.minute,
+      //     );
+      //     TodoModel task = TodoModel(
+      //       name: nameController.text,
+      //       description: descController.text,
+      //       date: dateTime,
+      //       priority: _prior,
+      //       isDone: isDone,
+      //       expired: true,
+      //     );
+      //     if (widget.taskToEdit != null) {
+      //       // Update existing task
+      //       ref.read(
+      //         taskUpdateFullProvider(task),
+      //       );
+      //     } else {
+      //       // Add new task
+      //       ref.read(
+      //         taskAddProvider(task),
+      //       );
+      //     }
+      //     resetDialogFields();
+      //     Navigator.pop(context);
+      //   } else {
+      //     print("error fields must not be empty");
+      //   }
+      // }, widget.taskToEdit != null ? "Update Task" : "Save Task", 26),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 

@@ -24,7 +24,7 @@ class PomodoroPage extends ConsumerWidget {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           const Text(
             'Pomodoro Timer',
             style: headL,
@@ -150,7 +150,7 @@ class CountdownScreen extends ConsumerWidget {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           Text(
             pomo.isRunning
                 ? pomo.isBreak

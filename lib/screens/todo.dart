@@ -11,6 +11,7 @@ class TodoListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final taskList = ref.watch(taskProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: taskList.when(
         data: (tasks) => _taskListView(tasks, ref),
         loading: () => Center(
@@ -24,12 +25,8 @@ class TodoListPage extends ConsumerWidget {
         ),
       ),
       floatingActionButton: fabButton(context, () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AddTaskPage(),
-          ),
-        );
+        updatePgIndex(ref, 8, 0);
+        ref.read(navStackProvider.notifier).push(8);
       }, "Add New Tasks", 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -48,7 +45,7 @@ class TodoListPage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ScoreCard(),
+                const ScoreCard(),
                 const Text(
                   'Todo',
                   style: headL,

@@ -31,13 +31,14 @@ class CurrentMood extends ConsumerWidget {
     return ListView(
       padding: pagePaddingWithScore,
       children: [
-        ScoreCard(),
+        const ScoreCard(),
         const Text("Mood", style: headL),
         const SizedBox(height: 60),
         _currMoodCard(context, mood),
         const SizedBox(height: 50),
         fabButton(context, () {
-          Navigator.pushNamed(context, '/mood2');
+          updatePgIndex(ref, 5, 3);
+          ref.read(navStackProvider.notifier).push(3);
         }, 'Update Mood', 0),
         const SizedBox(height: 20),
         if (moodExists) _motivationContainer(context, mood, ref),

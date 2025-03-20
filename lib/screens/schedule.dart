@@ -12,6 +12,7 @@ class SchedPage extends ConsumerWidget {
       scheduleProvider(tasks.value ?? []),
     );
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: schedule.when(
         data: (scheduleItems) {
           return _scheduleListView(scheduleItems);
@@ -39,7 +40,7 @@ class SchedPage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ScoreCard(),
+                const ScoreCard(),
                 const Text(
                   'Schedule',
                   style: headL,
@@ -87,7 +88,7 @@ class SchedPage extends ConsumerWidget {
       shrinkWrap: true,
       padding: pagePaddingWithScore,
       children: [
-        ScoreCard(),
+        const ScoreCard(),
         const Text(
           "Schedule",
           style: headL,

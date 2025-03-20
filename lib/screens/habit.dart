@@ -23,6 +23,7 @@ class _HabitState extends ConsumerState<HabitPage> {
     final habitsAsyncValue = ref.watch(habitProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: habitsAsyncValue.when(
         data: (habits) => heatmaplistview(habits),
         loading: () => Center(
@@ -152,7 +153,7 @@ class _HabitState extends ConsumerState<HabitPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ScoreCard(),
+                const ScoreCard(),
                 const Text(
                   'Habits',
                   style: headL,
