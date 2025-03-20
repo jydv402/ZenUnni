@@ -2,9 +2,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:zen/models/todo_model.dart';
+import 'package:zen/zen_barrel.dart';
 
 class NotifServ {
-  final FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   bool _isInitialized = false;
 
   bool get isInitialized => _isInitialized;
@@ -15,10 +17,12 @@ class NotifServ {
 
     tz.initializeTimeZones();
 
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings =
+        AndroidInitializationSettings('@mipmap/launcher_icon');
     const iosSettings = DarwinInitializationSettings();
 
-    const settings = InitializationSettings(android: androidSettings, iOS: iosSettings);
+    const settings =
+        InitializationSettings(android: androidSettings, iOS: iosSettings);
 
     await notificationsPlugin.initialize(settings);
     _isInitialized = true;
@@ -73,9 +77,8 @@ class NotifServ {
       body,
       tz.TZDateTime.from(scheduledTime, tz.local),
       notificationDetails(),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle, 
-      matchDateTimeComponents: DateTimeComponents.time,  
-
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 
@@ -96,19 +99,19 @@ class NotifServ {
   bool isTaskDueSoon(TodoModel task) {
     final now = DateTime.now();
     final timeDifference = task.date.difference(now).inHours;
-    return timeDifference > 0 && timeDifference <= 24;  // Due within 24 hours
+    return timeDifference > 0 && timeDifference <= 24; // Due within 24 hours
   }
 
   // Internal function to schedule individual task notifications
   Future<void> _scheduleNotification(TodoModel task) async {
     await notificationsPlugin.zonedSchedule(
-      task.hashCode, 
+      task.hashCode,
       "Task Reminder",
       "Your task '${task.name}' is due soon!",
       tz.TZDateTime.from(task.date, tz.local),
       notificationDetails(),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time, 
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 }

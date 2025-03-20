@@ -12,15 +12,15 @@ class TodoListPage extends ConsumerWidget {
     final taskList = ref.watch(taskProvider);
     return Scaffold(
       body: taskList.when(
-       data: (tasks) {
+        data: (tasks) {
           // Schedule notifications when tasks are loaded
           WidgetsBinding.instance.addPostFrameCallback((_) async {
-  final notifService = NotifServ();
-  await notifService.scheduleNotificationsForTasks(tasks); // Ensure it awaits scheduling
-});
+            final notifService = NotifServ();
+            await notifService.scheduleNotificationsForTasks(
+                tasks); // Ensure it awaits scheduling
+          });
           return _taskListView(tasks, ref);
         },
-
         loading: () => Center(
           child: showRunningIndicator(context, "Loading Todo data..."),
         ),
@@ -56,7 +56,6 @@ class TodoListPage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
 //              //   TODO:remoce this button
 //                 ElevatedButton(
 //   onPressed: () {

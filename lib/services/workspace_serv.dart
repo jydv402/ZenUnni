@@ -1,16 +1,16 @@
 import 'package:workmanager/workmanager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';         
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zen/services/notif_serv.dart';
 import 'package:zen/models/todo_model.dart';
-import 'package:zen/firebase_options.dart';                
+import 'package:zen/firebase_options.dart';
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
-     
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
 
       final FirebaseAuth auth = FirebaseAuth.instance;
       final userId = auth.currentUser?.uid;
@@ -39,7 +39,6 @@ void callbackDispatcher() {
         );
       }).toList();
 
-      
       final notifService = NotifServ();
       await notifService.initNotification();
       await notifService.scheduleNotificationsForTasks(tasks);
@@ -58,7 +57,7 @@ void initializeBackgroundTask() {
   Workmanager().registerPeriodicTask(
     "taskCheck",
     "checkTasks",
-    frequency: const Duration(minutes: 10),     // Runs every hour
-    existingWorkPolicy: ExistingWorkPolicy.replace, 
+    frequency: const Duration(minutes: 10), // Runs every hour
+    existingWorkPolicy: ExistingWorkPolicy.replace,
   );
 }
