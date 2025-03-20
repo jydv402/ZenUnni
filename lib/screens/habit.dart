@@ -1,7 +1,7 @@
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:line_icons/line_icons.dart';
-
 import 'package:zen/zen_barrel.dart';
 
 class HabitPage extends ConsumerStatefulWidget {
@@ -206,7 +206,11 @@ class _HabitState extends ConsumerState<HabitPage> {
                           },
                         );
                       },
-                      icon: Icon(LineIcons.alternateTrash, color: habitColor),
+                      icon: Icon(
+                        LucideIcons.trash_2,
+                        color: habitColor,
+                        size: 22,
+                      ),
                     ),
                     IconButton(
                       onPressed: () {
@@ -217,7 +221,8 @@ class _HabitState extends ConsumerState<HabitPage> {
                         );
                       },
                       icon: Icon(
-                        LineIcons.pen,
+                        LucideIcons.square_pen,
+                        size: 22,
                         color: habitColor,
                       ),
                     ),

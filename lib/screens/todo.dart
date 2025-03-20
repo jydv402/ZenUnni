@@ -1,3 +1,4 @@
+import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -103,8 +104,9 @@ class TodoListPage extends ConsumerWidget {
                         );
                       },
                       icon: Icon(
-                        LineIcons.alternateTrash,
+                        LucideIcons.trash_2,
                         color: Colors.white,
+                        size: 22,
                       ),
                     ),
                     IconButton(
@@ -117,7 +119,8 @@ class TodoListPage extends ConsumerWidget {
                         );
                       },
                       icon: Icon(
-                        LineIcons.pen,
+                        LucideIcons.square_pen,
+                        size: 22,
                         color: Colors.white,
                       ),
                     ),
@@ -125,7 +128,7 @@ class TodoListPage extends ConsumerWidget {
                         ? Checkbox(
                             value: task.isDone,
                             side:
-                                const BorderSide(color: Colors.white, width: 1),
+                                const BorderSide(color: Colors.white, width: 2),
                             activeColor: Colors.white,
                             overlayColor: WidgetStateProperty.all(Colors.white),
                             focusColor: Colors.white,

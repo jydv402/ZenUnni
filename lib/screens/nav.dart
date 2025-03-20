@@ -10,8 +10,7 @@ class Navbar extends ConsumerStatefulWidget {
 
 class _NavbarState extends ConsumerState<Navbar> {
   List<Widget> pages = [
-    const TaskPage(),
-    //const TodoListPage(), // index 0: Todo
+    const TaskPage(), // index 0: Todo and Schedule
     const HabitPage(), // index 1: Habit
     const LandPage(), // index 2: Home
     const CurrentMood(), // index 3: Mood
@@ -24,7 +23,7 @@ class _NavbarState extends ConsumerState<Navbar> {
   List<Widget> destinations = [
     NavigationDestination(
       icon: Icon(
-        LucideIcons.list_check,
+        LucideIcons.pencil_ruler,
         size: 22,
       ),
       label: 'Tasks',
