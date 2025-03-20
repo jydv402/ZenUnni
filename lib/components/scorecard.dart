@@ -13,9 +13,11 @@ class ScoreCard extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       spacing: 10,
       children: [
+        //Score
         GestureDetector(
           onTap: () {
-            updatePgIndex(ref, 6, 2);
+            updatePgIndex(ref, 6, 4);
+            ref.read(navStackProvider.notifier).push(4);
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(16, 16, 26, 16),
@@ -36,7 +38,8 @@ class ScoreCard extends ConsumerWidget {
         ),
         GestureDetector(
           onTap: () {
-            updatePgIndex(ref, 7, 2);
+            updatePgIndex(ref, 4, 4);
+            ref.read(navStackProvider.notifier).push(4);
           },
           child: Container(
             height: 54,

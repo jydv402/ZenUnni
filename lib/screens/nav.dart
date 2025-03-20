@@ -11,25 +11,18 @@ class Navbar extends ConsumerStatefulWidget {
 }
 
 class _NavbarState extends ConsumerState<Navbar> {
-  final List<int> _navStack = [0];
-
   List<Widget> pages = [
-    const LandPage(), // Home
-    const TodoListPage(), // Task
-    const HabitPage(), // Habit
-    const CurrentMood(), // Mood
-    const SchedPage(), // Schedule
-    const ProfilePage(), // Profile
+    const TodoListPage(), // index 0: Todo
+    const HabitPage(), // index 1: Habit
+    const LandPage(), // index 2: Home
+    const CurrentMood(), // index 3: Mood
+    const ProfilePage(), // index 4: Profile
+    const MoodPage(), // index 5: Add mood
+    const ConnectPage(), // index 6: Leaderboard
+    const PomodoroPage(), // index 7: Pomodoro
   ];
 
   List<Widget> destinations = [
-    NavigationDestination(
-      icon: Icon(
-        LucideIcons.house,
-        size: 22,
-      ),
-      label: 'Home',
-    ),
     NavigationDestination(
       icon: Icon(
         LucideIcons.list_check,
@@ -39,10 +32,17 @@ class _NavbarState extends ConsumerState<Navbar> {
     ),
     NavigationDestination(
       icon: Icon(
-        LucideIcons.check,
+        LucideIcons.grid_2x2_check,
         size: 22,
       ),
       label: 'Habit',
+    ),
+    NavigationDestination(
+      icon: Icon(
+        LucideIcons.house,
+        size: 22,
+      ),
+      label: 'Home',
     ),
     NavigationDestination(
       icon: Icon(
@@ -50,13 +50,6 @@ class _NavbarState extends ConsumerState<Navbar> {
         size: 22,
       ),
       label: 'Mood',
-    ),
-    NavigationDestination(
-      icon: Icon(
-        LucideIcons.clock,
-        size: 22,
-      ),
-      label: 'Schedule',
     ),
     NavigationDestination(
       icon: Icon(
@@ -71,12 +64,16 @@ class _NavbarState extends ConsumerState<Navbar> {
   Widget build(BuildContext context) {
     int pgIndex = ref.watch(pgIndexProvider);
     int subPgIndex = ref.watch(subPgIndexProvider);
+    List<int> navStack = ref.watch(navStackProvider);
     return PopScope(
-      canPop: _navStack.length <= 1, // Only allow exiting when at home
+      canPop: navStack.length <= 1, // Only allow exiting when at home
       onPopInvokedWithResult: (didPop, dynamic) {
-        if (!didPop && _navStack.length > 1) {
-          _navStack.removeLast();
-          ref.read(pgIndexProvider.notifier).state = _navStack.last;
+        if (!didPop && ref.read(navStackProvider).length > 1) {
+          //Pop last element
+          ref.read(navStackProvider.notifier).pop();
+          //Update nav index
+          ref.read(pgIndexProvider.notifier).state =
+              ref.read(navStackProvider).last;
         }
       },
       child: Scaffold(
@@ -92,27 +89,31 @@ class _NavbarState extends ConsumerState<Navbar> {
           onDestinationSelected: (int index) {
             setState(
               () {
-                if (_navStack.isEmpty || _navStack.last != index) {
-                  _navStack.add(index);
+                if (index == 2) {
+                  ref.read(navStackProvider.notifier).reset(); // Reset to Home
+                } else if (ref.read(navStackProvider).last != index) {
+                  ref
+                      .read(navStackProvider.notifier)
+                      .push(index); // Add to stack
                 }
                 updatePgIndex(ref, index, index);
               },
             );
+            print(navStack);
           },
         ),
-        floatingActionButton: pgIndex != 2
-            ? FloatingActionButton(
-                elevation: 2,
-                onPressed: () {
-                  Navigator.pushNamed(context, '/chat');
-                },
-                child: const Icon(
-                  LucideIcons.message_square_dot,
-                  color: Colors.black,
-                ),
-              )
-            : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        // floatingActionButton: pgIndex != 2
+        //     ? FloatingActionButton(
+        //         onPressed: () {
+        //           Navigator.pushNamed(context, '/chat');
+        //         },
+        //         child: const Icon(
+        //           LucideIcons.message_square_dot,
+        //           color: Colors.black,
+        //         ),
+        //       )
+        //     : null,
+        // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }
