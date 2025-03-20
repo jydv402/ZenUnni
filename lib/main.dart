@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:zen/services/notif_serv.dart';
 import 'firebase_options.dart';
 import 'package:zen/zen_barrel.dart';
 
@@ -12,7 +11,10 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
-  NotifServ().initNNotification;
+      
+ final notifService = NotifServ();
+  await notifService.initNotification();
+  initializeBackgroundTask();
   runApp(
     const ProviderScope(
       child: MyApp(),

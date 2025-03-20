@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
-
 import 'package:zen/zen_barrel.dart';
 
 class TodoListPage extends ConsumerWidget {
@@ -13,7 +12,15 @@ class TodoListPage extends ConsumerWidget {
     final taskList = ref.watch(taskProvider);
     return Scaffold(
       body: taskList.when(
-        data: (tasks) => _taskListView(tasks, ref),
+       data: (tasks) {
+          // Schedule notifications when tasks are loaded
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+  final notifService = NotifServ();
+  await notifService.scheduleNotificationsForTasks(tasks); // Ensure it awaits scheduling
+});
+          return _taskListView(tasks, ref);
+        },
+
         loading: () => Center(
           child: showRunningIndicator(context, "Loading Todo data..."),
         ),
@@ -49,6 +56,14 @@ class TodoListPage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+//              //   TODO:remoce this button
+//                 ElevatedButton(
+//   onPressed: () {
+//     callbackDispatcher();
+//   },
+//   child: Text('Trigger Background Task'),
+// ),
                 ScoreCard(),
                 const Text(
                   'Todo',

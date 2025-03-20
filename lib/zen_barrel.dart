@@ -47,6 +47,9 @@ export 'services/schedule_serv.dart';
 export 'services/search_serv.dart';
 export 'services/todo_serv.dart';
 export 'services/user_serv.dart';
+export 'services/notif_serv.dart';
+export 'services/todo_notif_serv.dart';
+export 'services/workspace_serv.dart';
 
 //theme
 export 'theme/text_theme.dart';
