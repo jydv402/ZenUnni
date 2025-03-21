@@ -11,7 +11,7 @@ class NotifServ {
 
   bool get isInitialized => _isInitialized;
 
-  // Initialize notification settings
+  /// Initialize notifications with proper settings
   Future<void> initNotification() async {
     if (_isInitialized) return;
 
@@ -38,8 +38,7 @@ class NotifServ {
         importance: Importance.max,
         priority: Priority.high,
       ),
-      iOS: DarwinNotificationDetails(sound: 'default',
-      badgeNumber: 1, ),
+      iOS: DarwinNotificationDetails(),
     );
   }
 
@@ -61,7 +60,7 @@ class NotifServ {
     );
   }
 
-  /// Schedule notification
+  /// Schedule notification using the new syntax
   Future<void> scheduleNotification({
     required int id,
     required String title,
@@ -97,12 +96,11 @@ class NotifServ {
   }
 
   // Helper function to check if the task is due soon
-bool isTaskDueSoon(TodoModel task) {
+  bool isTaskDueSoon(TodoModel task) {
     final now = DateTime.now();
-    if (task.date.isBefore(now)) return false;  // Prevent expired tasks
     final timeDifference = task.date.difference(now).inHours;
-    return timeDifference <= 24;  // Due within 24 hours
-}
+    return timeDifference > 0 && timeDifference <= 24; // Due within 24 hours
+  }
 
   // Internal function to schedule individual task notifications
   Future<void> _scheduleNotification(TodoModel task) async {
@@ -117,15 +115,3 @@ bool isTaskDueSoon(TodoModel task) {
     );
   }
 }
-
-
-
-//  await notificationsPlugin.zonedSchedule(
-//       id,
-//       title,
-//       body,
-//       tz.TZDateTime.from(scheduledTime, tz.local),
-//       notificationDetails(),
-//       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-//       matchDateTimeComponents: DateTimeComponents.time,
-//     );
