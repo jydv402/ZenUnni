@@ -37,9 +37,6 @@ export 'screens/leaderboard.dart';
 export 'screens/mood.dart';
 export 'screens/pomodoro_page.dart';
 export 'screens/profile.dart';
-export 'screens/schedule.dart';
-export 'screens/todo.dart';
-
 export 'screens/nav.dart';
 export 'screens/task_switch.dart';
 

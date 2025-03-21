@@ -26,13 +26,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     try {
       setState(() => _isLoading = true);
-      stateInvalidator(ref);
 
       showLoadingDialog(context, "Logging you in...");
 
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text, password: _passwordController.text);
 
+      stateInvalidator(ref);
       if (mounted) {
         Navigator.pop(context); // Close loading dialog
         Navigator.pushReplacementNamed(context, '/nav');

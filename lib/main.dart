@@ -48,11 +48,9 @@ class MyApp extends StatelessWidget {
         '/counter': (context) => const CountdownScreen(),
         '/habit': (context) => const HabitPage(),
         '/profile': (context) => const ProfilePage(),
-        '/schedule': (context) => const SchedPage(),
         '/leader': (context) => const ConnectPage(),
         '/pass_reset': (context) => const PassResetPage(),
         '/email_verif': (context) => const EmailVerifPage(),
-        '/todo': (context) => const TodoListPage(),
         '/add_todo': (context) => const AddTaskPage(),
       },
     );
