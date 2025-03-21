@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +8,7 @@ import 'package:zen/models/todo_model.dart';
 import 'package:zen/firebase_options.dart';
 
 void callbackDispatcher() {
+  WidgetsFlutterBinding.ensureInitialized();
   Workmanager().executeTask((task, inputData) async {
     try {
       await Firebase.initializeApp(
@@ -34,6 +36,7 @@ void callbackDispatcher() {
           date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
           priority: data['priority'] ?? '',
           isDone: data['isDone'] ?? false,
+          isRecurring: data['isRecurring']??false,
           expired: ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
               .isAfter(DateTime.now()),
         );
