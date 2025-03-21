@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
 
 class AddTaskPage extends ConsumerStatefulWidget {
@@ -91,28 +91,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               lastDate: DateTime(2100),
               builder: (BuildContext context, Widget? child) {
                 return Theme(
-                  data: Theme.of(context).copyWith(
-                    textTheme: TextTheme(
-                      headlineLarge: GoogleFonts.poppins(
-                          fontSize: 26.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                      labelLarge: GoogleFonts.poppins(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                      bodyLarge: GoogleFonts.poppins(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    colorScheme: ColorScheme.dark(
-                      primary: const Color(0xFFff8b2c),
-                      surface: Colors.black, // Change the header color
-                      onPrimary: Colors.white, // Change the header text color
-                      onSurface: Colors.white, // Change the day text color
-                    ),
-                  ),
+                  data: lightTheme, // Apply global theme
                   child: child!,
                 );
               },

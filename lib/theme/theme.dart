@@ -98,21 +98,37 @@ ThemeData get lightTheme {
         }
         return Colors.white;
       }),
-      dividerColor: Colors.white,
+      headerHelpStyle: GoogleFonts.poppins(
+        color: Colors.white,
+        fontSize: 16,
+      ),
+      dayBackgroundColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const Color(0xFFff8b2c);
+        }
+        return Colors.transparent;
+      }),
+      //rangePickerHeaderForegroundColor: Color(0xFFff8b2c),
+      //rangePickerHeaderBackgroundColor: Color(0xFFff8b2c),
 
-      //   headerHeadlineStyle: GoogleFonts.poppins(
-      //     color: Colors.white,
-      //     fontSize: 26,
-      //     fontWeight: FontWeight.bold,
-      //   ),
-      //   weekdayStyle: GoogleFonts.poppins(
-      //     color: Colors.white,
-      //     fontSize: 16,
-      //   ),
-      //   dayStyle: GoogleFonts.poppins(
-      //     color: Colors.white,
-      //     fontSize: 16,
-      //   ),
+      //rangePickerSurfaceTintColor: Color(0xFFff8b2c),
+
+      //rangeSelectionBackgroundColor: Color(0xFFff8b2c),
+      //rangeSelectionBackgroundColor: const Color(0xFFff8b2c),
+      dividerColor: Colors.white,
+      headerHeadlineStyle: GoogleFonts.poppins(
+        color: Colors.white,
+        fontSize: 26,
+        fontWeight: FontWeight.bold,
+      ),
+      weekdayStyle: GoogleFonts.poppins(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+      dayStyle: GoogleFonts.poppins(
+        color: Colors.white,
+        fontSize: 16,
+      ),
       yearForegroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.selected)) {
@@ -125,21 +141,23 @@ ThemeData get lightTheme {
         fontSize: 16,
         color: Colors.white,
       ),
-      //   confirmButtonStyle: ButtonStyle(
-      //     textStyle: WidgetStateTextStyle.resolveWith((states) {
-
-      //     }),
-      //     foregroundColor: WidgetStateProperty.resolveWith((states) {
-      //       return Colors.blue.shade200;
-      //     }),
-      //   ),
-      //   cancelButtonStyle: ButtonStyle(
-      //     foregroundColor: WidgetStateProperty.resolveWith((states) {
-      //       return Colors.blue.shade200;
-      //     }),
-      //   ),
+      confirmButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          return const Color(0xFFff8b2c);
+        }),
+      ),
+      cancelButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          return const Color(0xFFff8b2c);
+        }),
+      ),
     ),
     timePickerTheme: TimePickerThemeData(
+        cancelButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            return const Color(0xFFff8b2c);
+          }),
+        ),
         dayPeriodTextColor: Color.fromRGBO(0, 0, 0, 1),
         timeSelectorSeparatorColor: WidgetStateColor.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
