@@ -56,13 +56,6 @@ class TodoListPage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-//              //   TODO:remoce this button
-//                 ElevatedButton(
-//   onPressed: () {
-//     callbackDispatcher();
-//   },
-//   child: Text('Trigger Background Task'),
-// ),
                 ScoreCard(),
                 const Text(
                   'Todo',
@@ -151,6 +144,7 @@ class TodoListPage extends ConsumerWidget {
                                 date: task.date,
                                 priority: task.priority,
                                 isDone: value ?? false,
+                                isRecurring: value?? false,
                                 expired: task.expired,
                               );
                               ref.read(

@@ -9,6 +9,7 @@ class TodoModel {
   DateTime date;
   String priority;
   bool isDone;
+  bool isRecurring;
   bool expired;
   final Function(bool?)? onChanged;
   //constructor
@@ -18,6 +19,7 @@ class TodoModel {
       required this.date,
       required this.priority,
       required this.isDone,
+      required this.isRecurring,
       this.onChanged,
       required this.expired});
 
@@ -28,6 +30,7 @@ class TodoModel {
       'date': date,
       'priority': priority,
       'isDone': isDone,
+      'isRecurring':isRecurring
       //todo :'updatedOn': now
     };
   }
@@ -39,6 +42,7 @@ class TodoModel {
       date: (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
       priority: map['priority'] ?? '',
       isDone: map['isDone'] ?? false,
+      isRecurring: map['isRecurring']??false,
       expired: expired,
     );
   }
@@ -49,6 +53,7 @@ class TodoModel {
     DateTime? date,
     String? priority,
     bool? isDone,
+    bool? isRecurring,
   }) {
     return TodoModel(
         name: name ?? this.name,
@@ -56,6 +61,7 @@ class TodoModel {
         date: date ?? this.date,
         priority: priority ?? this.priority,
         isDone: isDone ?? this.isDone,
+        isRecurring: isRecurring ?? this.isRecurring,
         expired: expired);
   }
 }

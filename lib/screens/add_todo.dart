@@ -18,6 +18,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   TimeOfDay? _time;
   String _prior = "";
   bool isDone = false;
+  bool isRecurring = false;
 
   DateTime? localDate;
   TimeOfDay? localTime;
@@ -36,6 +37,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
       _prior = widget.taskToEdit!.priority;
       localPrior = widget.taskToEdit!.priority;
       isDone = widget.taskToEdit!.isDone;
+      isRecurring = widget.taskToEdit!.isDone;
     }
   }
 
@@ -150,7 +152,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           ),
           const SizedBox(height: 16),
           _dialogPrioritySelect(setState),
-          const SizedBox(height: 75),
+          const SizedBox(height: 30),
+          _isRecurringCheckBox(),
+          const SizedBox(height: 60),
           fabButton(context, () {
             if (validateTaskFields()) {
               DateTime dateTime = DateTime(
@@ -166,6 +170,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 date: dateTime,
                 priority: _prior,
                 isDone: isDone,
+                isRecurring: isRecurring,
                 expired: true,
               );
               if (widget.taskToEdit != null) {
@@ -269,6 +274,27 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           );
         }).toList(),
       ),
+    );
+  }
+
+  Widget _isRecurringCheckBox() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text(
+          'Is this a recurring task ?',
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        Checkbox(
+            activeColor: Colors.white,
+            focusColor: Colors.white,
+            value: isRecurring,
+            onChanged: (bool? value) {
+              setState(() {
+                isRecurring = value ?? false;
+              });
+            })
+      ],
     );
   }
 }
