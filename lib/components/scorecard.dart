@@ -8,6 +8,7 @@ class ScoreCard extends ConsumerWidget {
     final score = ref.watch(scoreProvider);
     final String score0 = score.value.toString();
     return Row(
+      key: Key('scorecard'),
       mainAxisAlignment: MainAxisAlignment.end,
       spacing: 10,
       children: [

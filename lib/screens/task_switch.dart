@@ -18,17 +18,9 @@ class _TaskPageState extends ConsumerState<TaskPage> {
     final tasks = ref.watch(taskProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          const SizedBox(height: 50), // Adjust top spacing
-          _tabSwitcher(), // Custom tab switcher
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _selectedTab == 0 ? todoListPage() : schedulePage(),
-            ),
-          ),
-        ],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: _selectedTab == 0 ? todoListPage() : schedulePage(),
       ),
       floatingActionButton: _selectedTab == 0
           ? fabButton(context, () {
@@ -65,14 +57,10 @@ class _TaskPageState extends ConsumerState<TaskPage> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: const EdgeInsets.all(10),
         child: Text(
           title,
-          style: TextStyle(
-            fontSize: isSelected ? 24 : 18, // Larger when selected
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: isSelected ? Colors.black : Colors.grey, // Highlight color
-          ),
+          style: isSelected ? headL : headM.copyWith(color: Colors.grey),
         ),
       ),
     );
@@ -110,10 +98,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const ScoreCard(),
-                const Text(
-                  'Todo',
-                  style: headL,
-                ),
+                _tabSwitcher(),
               ],
             ),
           );
@@ -334,6 +319,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
   Widget _scheduleListView(List<ScheduleItem> scheduleItems) {
     return ListView.builder(
       shrinkWrap: true,
+      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
       itemCount: scheduleItems.length + 2,
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -343,10 +329,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const ScoreCard(),
-                const Text(
-                  'Schedule',
-                  style: headL,
-                ),
+                _tabSwitcher(),
               ],
             ),
           );
