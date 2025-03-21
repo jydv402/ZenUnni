@@ -15,6 +15,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    final tasks = ref.watch(taskProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -29,6 +30,15 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           ),
         ],
       ),
+      floatingActionButton: _selectedTab == 0
+          ? fabButton(context, () {
+              updatePgIndex(ref, 8, 0);
+              ref.read(navStackProvider.notifier).push(8);
+            }, "Add New Tasks", 26)
+          : fabButton(context, () {
+              clearScheduleData(ref, tasks.value ?? []);
+            }, "Regenerate Schedule", 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
