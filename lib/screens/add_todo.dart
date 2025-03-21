@@ -209,7 +209,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               resetDialogFields();
               Navigator.pop(context);
             } else {
-              print("error fields must not be empty");
+              showHeadsupNoti(context, "Please fill in all fields!");
             }
           }, widget.taskToEdit != null ? "Update Task" : "Save Task", 0)
         ],
