@@ -12,7 +12,6 @@ export 'auth_pages/username.dart';
 
 //components
 export 'components/confirm_box.dart';
-export 'components/customfab.dart';
 export 'components/fab_button.dart';
 export 'components/headsup_noti.dart';
 export 'components/loading_anims.dart';

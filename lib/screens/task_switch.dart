@@ -24,8 +24,12 @@ class _TaskPageState extends ConsumerState<TaskPage> {
       ),
       floatingActionButton: _selectedTab == 0
           ? fabButton(context, () {
-              updatePgIndex(ref, 8, 0);
-              ref.read(navStackProvider.notifier).push(8);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddTaskPage(),
+                ),
+              );
             }, "Add New Tasks", 26)
           : fabButton(context, () {
               clearScheduleData(ref, tasks.value ?? []);
@@ -39,9 +43,11 @@ class _TaskPageState extends ConsumerState<TaskPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const Spacer(), // Even space between tabs
         _tabButton("Todo", 0),
-        const SizedBox(width: 20), // Space between tabs
+        const Spacer(),
         _tabButton("Schedule", 1),
+        const Spacer(),
       ],
     );
   }
@@ -57,7 +63,6 @@ class _TaskPageState extends ConsumerState<TaskPage> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(10),
         child: Text(
           title,
           style: isSelected ? headL : headM.copyWith(color: Colors.grey),
@@ -95,6 +100,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           return Padding(
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
             child: Column(
+              spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const ScoreCard(),
@@ -153,6 +159,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                         size: 22,
                       ),
                     ),
+                    //Edit Button
                     IconButton(
                       onPressed: () {
                         Navigator.push(
@@ -326,6 +333,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           return Padding(
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
             child: Column(
+              spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const ScoreCard(),

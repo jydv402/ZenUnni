@@ -2,6 +2,7 @@ import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:delightful_toast/delight_toast.dart';
+import 'package:zen/theme/text_theme.dart';
 
 void showHeadsupNoti(BuildContext context, String message) {
   return DelightToastBar(
@@ -13,6 +14,7 @@ void showHeadsupNoti(BuildContext context, String message) {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         color: Colors.white,
+        border: Border.all(color: Color(0xFFFF8C2B)),
       ),
       child: ToastCard(
         shadowColor: Colors.transparent,
@@ -20,7 +22,7 @@ void showHeadsupNoti(BuildContext context, String message) {
         leading: Image.asset('assets/icon/icon_up.png', width: 20, height: 20),
         title: Text(
           message,
-          style: Theme.of(context).textTheme.labelSmall,
+          style: labelS,
         ),
       ),
     ),
