@@ -56,6 +56,7 @@ dependencies:
   logger: ^2.5.0
   delightful_toast: ^1.1.0
   flutter_local_notifications: ^19.0.0
+  timezone: ^0.10.0
 
 dev_dependencies:
   flutter_test:

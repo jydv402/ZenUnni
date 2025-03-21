@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zen/notification/notif.dart';
 import 'firebase_options.dart';
 import 'package:zen/zen_barrel.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 Future<void> main() async {
   //to ensure firebase plugins are correctly intialised before using it
@@ -11,6 +13,8 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
+  await NotificationService.init();
+  tz.initializeTimeZones();
   runApp(
     const ProviderScope(
       child: MyApp(),

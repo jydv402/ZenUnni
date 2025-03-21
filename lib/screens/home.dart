@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:zen/notification/notif.dart';
 import 'package:zen/zen_barrel.dart';
 
 class LandPage extends ConsumerWidget {
@@ -30,6 +31,7 @@ class LandPage extends ConsumerWidget {
       ),
       floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      
     );
   }
 
@@ -43,6 +45,16 @@ class LandPage extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       children: [
+       // TODO: remove this button later
+        ElevatedButton(onPressed: (){
+          NotificationService.showInstantNotification("test notif", "This shows an instant notif");
+        }, child: Text('show instant notif')),
+        SizedBox(height:4),
+         // TODO: remove this button later
+        ElevatedButton(onPressed: (){
+          DateTime sheduleDate = DateTime.now().add(const Duration(seconds: 5));
+          NotificationService.sheduleNotification("sheduled Notification", "this shows sheduled notif", sheduleDate);
+        }, child: Text('show schedule notif')),
         Padding(
           padding: const EdgeInsets.only(right: 10),
           child: ScoreCard(),
