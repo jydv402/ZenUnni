@@ -16,12 +16,21 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final username = ref.watch(userNameProvider);
     return ListView(
-      padding: pagePaddingWithScore,
+      padding: const EdgeInsets.fromLTRB(0, 50, 0, 50),
       children: [
-        const ScoreCard(),
-        const Text(
-          "Profile",
-          style: headL,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
+          child: Column(
+            spacing: 16,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const ScoreCard(),
+              const Text(
+                "Profile",
+                style: headL,
+              ),
+            ],
+          ),
         ),
         const SizedBox(
           height: 100,
@@ -34,44 +43,70 @@ class ProfilePage extends ConsumerWidget {
         const SizedBox(
           height: 26,
         ),
-        fabButton(context, () {
-          Navigator.push(
-            context,
-            //Define the isUpdate parameter as true
-            MaterialPageRoute(
-              builder: (context) => const UsernamePage(
-                isUpdate: true,
-              ),
-            ),
-          );
-        }, "Change username", 0),
-        const SizedBox(
-          height: 26,
+        const Padding(
+          padding: EdgeInsets.fromLTRB(26, 26, 26, 2),
+          child: Text("Account", style: prfDivTxt),
         ),
-        Container(
-          height: 100,
-          padding: const EdgeInsets.all(16),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(32), color: Colors.black12),
-          child: SwitchListTile(
-            title: Text("Dark Mode", style: bodyM),
+        buttonBg(
+          ListTile(
+            title: const Text("Change username", style: bodyM),
+            trailing: Icon(LucideIcons.user_round_pen),
+            onTap: () {
+              Navigator.push(
+                context,
+                //Define the isUpdate parameter as true
+                MaterialPageRoute(
+                  builder: (context) => const UsernamePage(
+                    isUpdate: true,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        buttonBg(
+          ListTile(
+            title: const Text("Logout", style: bodyM),
+            trailing: Icon(LucideIcons.log_out),
+            onTap: () {
+              // show logout dialog
+              showConfirmDialog(
+                context,
+                "Logout ?",
+                "Are you sure you want to logout ?",
+                "Logout",
+                Colors.red,
+                () {
+                  Navigator.of(context).pop();
+                  logoutUser(context, ref);
+                },
+              );
+            },
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(26, 26, 26, 2),
+          child: Text("Theme", style: prfDivTxt),
+        ),
+        buttonBg(
+          SwitchListTile(
+            title: const Text("Dark Mode", style: bodyM),
             value: false,
             onChanged: (value) {},
           ),
         ),
-        const SizedBox(
-          height: 110,
-        ),
-        fabButton(context, () {
-          // show logout dialog
-          showConfirmDialog(context, "Logout ?",
-              "Are you sure you want to logout ?", "Logout", Colors.red, () {
-            Navigator.of(context).pop();
-            logoutUser(context, ref); // Pass ref here
-          });
-        }, "Logout", 0),
       ],
     );
+  }
+
+  Container buttonBg(Widget child) {
+    return Container(
+        height: 100,
+        margin: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+        padding: const EdgeInsets.all(10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(32), color: Colors.black12),
+        child: child);
   }
 }

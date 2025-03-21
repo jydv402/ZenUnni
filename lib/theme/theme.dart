@@ -149,7 +149,7 @@ ThemeData get newTheme {
   return ThemeData(
     colorScheme: ColorScheme(
       brightness: Brightness.light,
-      primary: const Color(0xFFFF8B2C), // Orange
+      primary: const Color.fromRGBO(255, 139, 44, 1), // Orange
       onPrimary: Colors.white,
       secondary: const Color(0xFFFFA54F), // Lighter shade of orange
       onSecondary: Colors.white,
@@ -177,7 +177,7 @@ ThemeData get newTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFF8B2C),
+        backgroundColor: const Color.fromRGBO(255, 139, 44, 1),
         foregroundColor: Colors.white,
         shadowColor: Colors.orangeAccent,
         padding: const EdgeInsets.all(26),
@@ -211,7 +211,8 @@ ThemeData get newTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Color(0xFFFF8B2C), width: 2.0),
+        borderSide: const BorderSide(
+            color: Color.fromRGBO(255, 139, 44, 1), width: 2.0),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
@@ -259,7 +260,7 @@ ThemeData get newTheme {
     timePickerTheme: const TimePickerThemeData(
       backgroundColor: Colors.white,
       hourMinuteColor: Colors.black,
-      dialHandColor: Color(0xFFFF8B2C),
+      dialHandColor: Color.fromRGBO(255, 139, 44, 1),
     ),
   );
 }

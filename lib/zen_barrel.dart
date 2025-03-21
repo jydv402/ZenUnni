@@ -1,6 +1,7 @@
 //flutter packages
 export 'package:flutter/material.dart';
 export 'package:flutter_riverpod/flutter_riverpod.dart';
+export 'package:flutter_lucide/flutter_lucide.dart';
 
 //auth_pages
 export 'auth_pages/auth_page.dart';

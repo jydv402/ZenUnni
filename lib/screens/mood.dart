@@ -53,7 +53,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
                 trackHeight: 50,
                 activeTickMarkColor: Colors.black,
                 inactiveTickMarkColor: Colors.white,
-                activeTrackColor: Color(0xFFFF8B2C),
+                activeTrackColor: const Color.fromRGBO(255, 139, 44, 1),
                 inactiveTrackColor: Colors.black,
                 thumbColor:
                     _currentMoodIndex == 0 ? Colors.white : Colors.black),
@@ -84,8 +84,10 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         if (context.mounted) {
           showHeadsupNoti(context,
               "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}");
-          Navigator.pop(context);
         }
+
+        updatePgIndex(ref, 3, 3);
+        ref.read(navStackProvider.notifier).push(3);
       }, "Add Mood", 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

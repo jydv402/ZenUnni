@@ -208,6 +208,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               }
               resetDialogFields();
               Navigator.pop(context);
+              showHeadsupNoti(context, "Task saved successfully!");
             } else {
               showHeadsupNoti(context, "Please fill in all fields!");
             }

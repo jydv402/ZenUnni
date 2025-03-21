@@ -42,3 +42,9 @@ const TextStyle bodyS = TextStyle(
   fontSize: 13.0,
   color: Colors.black,
 );
+
+const TextStyle prfDivTxt = TextStyle(
+  fontFamily: 'Pop',
+  fontSize: 30.0,
+  color: Colors.black,
+);

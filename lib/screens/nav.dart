@@ -1,4 +1,3 @@
-import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:zen/zen_barrel.dart';
 
 class Navbar extends ConsumerStatefulWidget {
@@ -52,10 +51,10 @@ class _NavbarState extends ConsumerState<Navbar> {
     ),
     NavigationDestination(
       icon: Icon(
-        LucideIcons.user_round,
+        LucideIcons.ellipsis,
         size: 22,
       ),
-      label: 'Profile',
+      label: 'More',
     ),
   ];
 
@@ -84,7 +83,7 @@ class _NavbarState extends ConsumerState<Navbar> {
         bottomNavigationBar: isKeyboardOpen
             ? null
             : NavigationBar(
-                indicatorColor: Color(0xFFFF8B2C),
+                indicatorColor: const Color.fromRGBO(255, 139, 44, 1),
                 surfaceTintColor: Color.fromARGB(255, 150, 150, 150),
                 shadowColor: Colors.black,
                 elevation: 16,
