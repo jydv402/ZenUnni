@@ -48,7 +48,6 @@ dependencies:
   langchain_google: ^0.6.4+2
   flutter_riverpod: ^2.6.1
   flutter_markdown: ^0.7.6+2
-  flutter_local_notifications: ^19.0.0
   flutter_heatmap_calendar: ^1.0.5
   flutter_colorpicker: ^1.1.0
   glassmorphism: ^3.0.0
@@ -56,6 +55,7 @@ dependencies:
   intl: ^0.20.2
   logger: ^2.5.0
   delightful_toast: ^1.1.0
+  flutter_local_notifications: ^19.0.0
 
 dev_dependencies:
   flutter_test:

@@ -85,6 +85,13 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           const SizedBox(height: 30),
           _selectedDateText(),
           const SizedBox(height: 15),
+          //TODO:remove this later
+          // ElevatedButton(onPressed: (){
+          //   NotifServ().showNotification(
+          //     title: "TITLE",
+          //     body: "Body"
+          //   );
+          // }, child: Text('notif test button')),
           //Set due date button
           fabButton(context, () async {
             DateTime? pickDate = await showDatePicker(

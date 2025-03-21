@@ -11,7 +11,6 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
-  NotifServ().initNNotification;
   runApp(
     const ProviderScope(
       child: MyApp(),
