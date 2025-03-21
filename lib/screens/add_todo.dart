@@ -107,7 +107,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                       ),
                     ),
                     colorScheme: ColorScheme.dark(
-                      primary: Colors.blue.shade200,
+                      primary: const Color(0xFFff8b2c),
                       surface: Colors.black, // Change the header color
                       onPrimary: Colors.white, // Change the header text color
                       onSurface: Colors.white, // Change the day text color
@@ -135,28 +135,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               initialTime: TimeOfDay.now(),
               builder: (BuildContext context, Widget? child) {
                 return Theme(
-                  data: Theme.of(context).copyWith(
-                    textTheme: TextTheme(
-                      headlineLarge: GoogleFonts.poppins(
-                          fontSize: 26.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                      labelLarge: GoogleFonts.poppins(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                      bodyLarge: GoogleFonts.poppins(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    colorScheme: ColorScheme.dark(
-                      primary: Colors.blue.shade200, // Accent color
-                      surface: Color(0xFF202124), // Background color
-                      onPrimary: Colors.white, // Header text color
-                      onSurface: Colors.white, // Time text color
-                    ),
-                  ),
+                  data: lightTheme, // Apply the global theme
                   child: child!,
                 );
               },
@@ -288,7 +267,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               });
             },
             showCheckmark: false,
-            selectedColor: Colors.blue.shade200,
+            selectedColor: const Color(0xFFff8b2c),
             backgroundColor: Colors.grey,
             labelStyle: Theme.of(context)
                 .textTheme

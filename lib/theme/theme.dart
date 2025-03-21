@@ -39,9 +39,9 @@ ThemeData get lightTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue.shade200,
+        backgroundColor: const Color(0xFFff8b2c),
         foregroundColor: Colors.white,
-        shadowColor: Colors.blue,
+        shadowColor: const Color.fromARGB(255, 255, 139, 44),
         padding: const EdgeInsets.all(26),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(26),
@@ -139,7 +139,26 @@ ThemeData get lightTheme {
       //     }),
       //   ),
     ),
-    timePickerTheme: TimePickerThemeData(dayPeriodColor: Colors.white),
+    timePickerTheme: TimePickerThemeData(
+        dayPeriodTextColor: Color.fromRGBO(0, 0, 0, 1),
+        timeSelectorSeparatorColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return Colors.grey;
+          }
+          return Colors.white;
+        }),
+        hourMinuteTextColor: Color(0xFFFfffff),
+        hourMinuteColor: Color(0xFFff8b2c),
+        dialBackgroundColor: const Color(0xFF202124), // Background color
+        backgroundColor: const Color(0xFF202124), // Background color
+        dialHandColor: const Color(0xFFff8b2c),
+        dialTextColor: WidgetStateColor.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? Colors.white
+              : const Color.fromARGB(255, 255, 255, 255),
+        ),
+        entryModeIconColor: const Color(0xFFff8b2c),
+        dayPeriodColor: const Color(0xFFFFffff)),
   );
 }
 
