@@ -69,6 +69,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appColorsProvider);
     return Scaffold(
       body: ListView(
         padding: pagePadding,
@@ -97,6 +98,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 onPressed: _toggleObscure,
                 icon: Icon(
                   _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
+                  color: colors.iconClr,
                 ),
                 highlightColor: Colors.transparent,
               ),

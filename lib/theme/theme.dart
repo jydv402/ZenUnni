@@ -36,9 +36,9 @@ ThemeData get darkTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue.shade200,
+        backgroundColor: Color(0xFFFF8B2C),
         foregroundColor: Colors.white,
-        shadowColor: Colors.blue,
+        shadowColor: Colors.orangeAccent,
         padding: const EdgeInsets.all(26),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(26),
@@ -87,8 +87,13 @@ ThemeData get darkTheme {
     ),
     navigationBarTheme: NavigationBarThemeData(
       labelTextStyle: WidgetStateProperty.all(bodySD),
-      iconTheme: WidgetStateProperty.all(
-        const IconThemeData(color: Colors.white),
+      iconTheme: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return const IconThemeData(color: Colors.black);
+          }
+          return const IconThemeData(color: Colors.white);
+        },
       ),
     ),
     datePickerTheme: DatePickerThemeData(

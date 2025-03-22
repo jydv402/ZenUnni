@@ -89,6 +89,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appColorsProvider);
     return Scaffold(
       body: ListView(
         padding: pagePadding,
@@ -115,6 +116,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                 onPressed: () => _toggleObscure(),
                 icon: Icon(
                   _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
+                  color: colors.iconClr,
                 ),
                 highlightColor: Colors.transparent,
               ),
@@ -132,6 +134,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                 onPressed: () => _toggleObscure(),
                 icon: Icon(
                   _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
+                  color: colors.iconClr,
                 ),
                 highlightColor: Colors.transparent,
               ),
