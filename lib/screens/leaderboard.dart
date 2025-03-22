@@ -142,6 +142,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     100,
                     18,
                     "1",
+                    users[0].gender == 0
+                        ? males.values.elementAt(users[0].avatar)
+                        : females.values.elementAt(users[0].avatar),
                     users[0].username.toString(),
                     users[0].score.toString(),
                     users[0].isUser ?? false,
@@ -156,6 +159,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     80,
                     14,
                     "2",
+                    users[1].gender == 0
+                        ? males.values.elementAt(users[1].avatar)
+                        : females.values.elementAt(users[1].avatar),
                     users[1].username.toString(),
                     users[1].score.toString(),
                     users[1].isUser ?? false,
@@ -170,6 +176,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     80,
                     14,
                     "3",
+                    users[2].gender == 0
+                        ? males.values.elementAt(users[2].avatar)
+                        : females.values.elementAt(users[2].avatar),
                     users[2].username.toString(),
                     users[2].score.toString(),
                     users[2].isUser ?? false,
@@ -223,8 +232,17 @@ class _SearchState extends ConsumerState<ConnectPage> {
     );
   }
 
-  Positioned rankCard(double top, double right, double left, double dp,
-      double fSize, String rank, String username, String score, bool isUser) {
+  Positioned rankCard(
+      double top,
+      double right,
+      double left,
+      double dp,
+      double fSize,
+      String rank,
+      String path,
+      String username,
+      String score,
+      bool isUser) {
     return Positioned(
       top: top,
       right: right,
@@ -242,7 +260,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                       width: 4),
                 ),
                 child: Image.asset(
-                  'assets/icon/avt.png',
+                  path,
                   height: dp,
                   width: dp,
                   fit: BoxFit.contain,
@@ -318,15 +336,17 @@ class _SearchState extends ConsumerState<ConnectPage> {
           ),
           //User details
           Positioned(
-            left: 75,
-            top: 30,
+            left: 60,
+            top: 20,
             child: Row(
               spacing: 12,
               children: [
                 Image.asset(
-                  'assets/icon/avt.png',
-                  height: 40,
-                  width: 40,
+                  user.gender == 0
+                      ? males.values.elementAt(user.avatar)
+                      : females.values.elementAt(user.avatar),
+                  height: 60,
+                  width: 60,
                   fit: BoxFit.contain,
                 ),
                 Text.rich(

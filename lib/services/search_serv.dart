@@ -13,6 +13,8 @@ final rankedUserSearchProvider = StreamProvider<List<SearchModel>>((ref) {
                 score: user.score,
                 rank: rank++,
                 isUser: user.username == username,
+                gender: user.gender,
+                avatar: user.avatar,
               );
             },
           ).toList();
