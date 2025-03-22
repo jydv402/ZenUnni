@@ -1,4 +1,5 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/zen_barrel.dart';
 
@@ -87,6 +88,7 @@ class CurrentMood extends ConsumerWidget {
 
   Widget _motivationCard(
       BuildContext context, String motivation, WidgetRef ref) {
+    final colors = ref.watch(appColorsProvider);
     final message = motivation
         .replaceAll(
             RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'), '')
@@ -99,7 +101,66 @@ class CurrentMood extends ConsumerWidget {
         const SizedBox(height: 24),
         MarkdownBody(
           data: message,
-          styleSheet: markdownStyleSheetBlack,
+          styleSheet: MarkdownStyleSheet(
+            h1: TextStyle(
+              // Heading 1
+              fontFamily: 'Pop',
+              fontSize: 32.0,
+              fontWeight: FontWeight.bold,
+              color: colors.mdText,
+            ),
+            h2: TextStyle(
+              fontFamily: 'Pop',
+              // Heading 2
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              color: colors.mdText,
+            ),
+            h3: TextStyle(
+              fontFamily: 'Pop',
+              // Heading 3
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: colors.mdText,
+            ),
+            p: TextStyle(
+              fontFamily: 'Pop',
+              // Paragraph
+              fontSize: 14.0,
+              color: colors.mdText,
+            ),
+            strong: TextStyle(
+              // Bold text
+              fontWeight: FontWeight.bold,
+              color: colors.mdText,
+            ),
+            em: TextStyle(
+              // Italic text
+              fontStyle: FontStyle.italic,
+              color: colors.mdText,
+            ),
+            a: const TextStyle(
+              // Link
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+            //TODO: Add roboto local font
+            code: GoogleFonts.robotoMono(
+              // Code block
+              backgroundColor: Colors.grey[800],
+              color: colors.mdText,
+            ),
+            blockquote: const TextStyle(
+              // Blockquote
+              color: Colors.grey,
+              fontStyle: FontStyle.italic,
+            ),
+            listBullet: TextStyle(
+              // Unordered list
+              color: colors.mdText,
+            ),
+            blockSpacing: 24.0, // Spacing between blocks
+          ),
         ),
         const SizedBox(height: 30),
         fabButton(context, () {

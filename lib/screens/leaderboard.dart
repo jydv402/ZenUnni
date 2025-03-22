@@ -14,6 +14,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
   Widget build(BuildContext context) {
     final String searchQuery = searchNameController.text.toLowerCase();
     final searchResults = ref.watch(rankedUserSearchProvider);
+    final colors = ref.watch(appColorsProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -37,7 +38,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     padding: const EdgeInsets.all(40),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(26),
-                      color: Colors.grey[200],
+                      color: colors.pillClr,
                     ),
                     child: Text(
                       "No users found matching \n\" $searchQuery \"",
@@ -243,6 +244,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
       String username,
       String score,
       bool isUser) {
+    final colors = ref.watch(appColorsProvider);
     return Positioned(
       top: top,
       right: right,
@@ -273,7 +275,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   padding: EdgeInsets.all(fSize - 4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.grey[200],
+                    color: colors.pillClr,
                   ),
                   child: Text(
                     rank,
@@ -310,6 +312,8 @@ class _SearchState extends ConsumerState<ConnectPage> {
   }
 
   Container rankListCards(user) {
+    final colors = ref.watch(appColorsProvider);
+
     return Container(
       margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
       height: 100,
@@ -318,7 +322,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
         border: Border.all(
             color: user.isUser ? Color(0xFFFF8C2B) : Colors.transparent,
             width: 2),
-        color: Colors.grey[200],
+        color: colors.pillClr,
       ),
       child: Stack(
         children: [

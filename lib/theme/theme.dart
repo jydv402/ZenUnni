@@ -32,6 +32,7 @@ ThemeData get darkTheme {
       labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
       bodyMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
       bodySmall: GoogleFonts.poppins(fontSize: 13.0, color: Colors.white),
+      titleMedium: prfDivTxtD,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -85,7 +86,7 @@ ThemeData get darkTheme {
           GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
     ),
     navigationBarTheme: NavigationBarThemeData(
-      labelTextStyle: WidgetStateProperty.all(bodyS),
+      labelTextStyle: WidgetStateProperty.all(bodySD),
       iconTheme: WidgetStateProperty.all(
         const IconThemeData(color: Colors.white),
       ),
@@ -101,20 +102,6 @@ ThemeData get darkTheme {
         return Colors.white;
       }),
       dividerColor: Colors.white,
-
-      //   headerHeadlineStyle: GoogleFonts.poppins(
-      //     color: Colors.white,
-      //     fontSize: 26,
-      //     fontWeight: FontWeight.bold,
-      //   ),
-      //   weekdayStyle: GoogleFonts.poppins(
-      //     color: Colors.white,
-      //     fontSize: 16,
-      //   ),
-      //   dayStyle: GoogleFonts.poppins(
-      //     color: Colors.white,
-      //     fontSize: 16,
-      //   ),
       yearForegroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.selected)) {
@@ -174,6 +161,7 @@ ThemeData get lightTheme {
       labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
       bodyMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
       bodySmall: GoogleFonts.poppins(fontSize: 13.0, color: Colors.black),
+      titleMedium: prfDivTxt,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -226,7 +214,10 @@ ThemeData get lightTheme {
       surfaceTintColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.black),
       titleTextStyle: TextStyle(
-          color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
       // systemOverlayStyle: SystemUiOverlayStyle(
       //   statusBarColor: Colors.transparent,
       //   statusBarIconBrightness: Brightness.dark,
@@ -237,28 +228,51 @@ ThemeData get lightTheme {
       contentPadding: const EdgeInsets.all(32),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.black54, width: 2.0),
+        borderSide: const BorderSide(
+          color: Colors.black54,
+          width: 2.0,
+        ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.black54, width: 2.0),
+        borderSide: const BorderSide(
+          color: Colors.black54,
+          width: 2.0,
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
         borderSide: const BorderSide(
-            color: Color.fromRGBO(255, 139, 44, 1), width: 2.0),
+          color: Color.fromRGBO(255, 139, 44, 1),
+          width: 2.0,
+        ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        borderSide: const BorderSide(
+          color: Colors.red,
+          width: 2.0,
+        ),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+        borderSide: const BorderSide(
+          color: Colors.red,
+          width: 2.0,
+        ),
       ),
-      hintStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black54),
-      labelStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
-      errorStyle: GoogleFonts.poppins(fontSize: 14.0, color: Colors.red),
+      hintStyle: GoogleFonts.poppins(
+        fontSize: 16.0,
+        color: Colors.black54,
+      ),
+      labelStyle: GoogleFonts.poppins(
+        fontSize: 16.0,
+        color: Colors.black,
+      ),
+      errorStyle: GoogleFonts.poppins(
+        fontSize: 14.0,
+        color: Colors.red,
+      ),
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: Colors.white,
@@ -269,14 +283,16 @@ ThemeData get lightTheme {
     ),
     datePickerTheme: DatePickerThemeData(
       backgroundColor: Colors.white,
-      dayForegroundColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return Colors.white;
-        } else if (states.contains(WidgetState.disabled)) {
-          return Colors.grey;
-        }
-        return Colors.black;
-      }),
+      dayForegroundColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          } else if (states.contains(WidgetState.disabled)) {
+            return Colors.grey;
+          }
+          return Colors.black;
+        },
+      ),
       dividerColor: Colors.black,
       yearForegroundColor: WidgetStateProperty.resolveWith(
         (states) {
@@ -301,62 +317,6 @@ ThemeData get lightTheme {
 
 var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
 var pagePaddingWithScore = const EdgeInsets.fromLTRB(26, 50, 26, 26);
-
-var markdownStyleSheetWhite = MarkdownStyleSheet(
-  h1: GoogleFonts.poppins(
-    // Heading 1
-    fontSize: 32.0,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-  h2: GoogleFonts.poppins(
-    // Heading 2
-    fontSize: 24.0,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-  h3: GoogleFonts.poppins(
-    // Heading 3
-    fontSize: 18.0,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-  p: GoogleFonts.poppins(
-    // Paragraph
-    fontSize: 16.0,
-    color: Colors.white,
-  ),
-  strong: const TextStyle(
-    // Bold text
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-  em: const TextStyle(
-    // Italic text
-    fontStyle: FontStyle.italic,
-    color: Colors.white,
-  ),
-  a: const TextStyle(
-    // Link
-    color: Colors.blue,
-    decoration: TextDecoration.underline,
-  ),
-  code: GoogleFonts.robotoMono(
-    // Code block
-    backgroundColor: Colors.grey[800],
-    color: Colors.white,
-  ),
-  blockquote: const TextStyle(
-    // Blockquote
-    color: Colors.grey,
-    fontStyle: FontStyle.italic,
-  ),
-  listBullet: const TextStyle(
-    // Unordered list
-    color: Colors.white,
-  ),
-  blockSpacing: 24.0, // Spacing between blocks
-);
 
 var markdownStyleSheetBlack = MarkdownStyleSheet(
   h1: GoogleFonts.poppins(

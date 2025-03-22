@@ -7,6 +7,7 @@ class ScoreCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final score = ref.watch(scoreProvider);
     final user = ref.watch(userProvider);
+    final colors = ref.watch(appColorsProvider);
     final String score0 = score.value.toString();
     return Row(
       key: Key('scorecard'),
@@ -23,7 +24,7 @@ class ScoreCard extends ConsumerWidget {
             padding: EdgeInsets.fromLTRB(16, 16, 26, 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(26),
-              color: Colors.black12,
+              color: colors.pillClr,
             ),
             child: score0 == "null"
                 ? Text(

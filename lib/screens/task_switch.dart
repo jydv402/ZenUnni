@@ -67,7 +67,10 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           title,
           style: isSelected
               ? Theme.of(context).textTheme.headlineLarge
-              : headM.copyWith(color: Colors.grey),
+              : Theme.of(context)
+                  .textTheme
+                  .headlineMedium
+                  ?.copyWith(color: Colors.grey),
         ),
       ),
     );
@@ -232,8 +235,11 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                 Text(
                   task.name,
                   style: task.expired
-                      ? headM.copyWith(color: Colors.white)
-                      : headM.copyWith(
+                      ? Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(color: Colors.white)
+                      : Theme.of(context).textTheme.headlineMedium?.copyWith(
                           color: Colors.grey,
                           decoration: TextDecoration.lineThrough,
                           decorationColor: Colors.white,
