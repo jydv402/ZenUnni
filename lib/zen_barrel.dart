@@ -44,6 +44,7 @@ export 'screens/task_switch.dart';
 
 //services
 export 'services/ai_serv.dart';
+export 'services/appclrs_serv.dart';
 export 'services/chat_serv.dart';
 export 'services/gamify_serve.dart';
 export 'services/habit_serv.dart';

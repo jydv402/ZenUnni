@@ -1,10 +1,10 @@
 import 'package:delightful_toast/toast/utils/enums.dart';
-import 'package:flutter/material.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:delightful_toast/delight_toast.dart';
-import 'package:zen/theme/text_theme.dart';
+import 'package:zen/zen_barrel.dart';
 
-void showHeadsupNoti(BuildContext context, String message) {
+void showHeadsupNoti(BuildContext context, WidgetRef ref, String message) {
+  final colors = ref.watch(appColorsProvider);
   return DelightToastBar(
     position: DelightSnackbarPosition.top,
     autoDismiss: true,
@@ -13,16 +13,16 @@ void showHeadsupNoti(BuildContext context, String message) {
       padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
-        color: Colors.white,
+        color: colors.toastBg,
         border: Border.all(color: Color(0xFFFF8C2B)),
       ),
       child: ToastCard(
         shadowColor: Colors.transparent,
-        color: Colors.white,
+        color: colors.toastBg,
         leading: Image.asset('assets/icon/icon_up.png', width: 20, height: 20),
         title: Text(
           message,
-          style: labelS,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     ),

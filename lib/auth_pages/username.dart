@@ -134,7 +134,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
             Navigator.pop(context);
           }
         } else {
-          showHeadsupNoti(context, "Please enter a username first.");
+          showHeadsupNoti(context, ref, "Please enter a username first.");
         }
       }, widget.isUpdate! ? 'Update Profile' : 'Continue to Home', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

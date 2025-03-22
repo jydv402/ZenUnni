@@ -82,8 +82,11 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         ).future);
 
         if (context.mounted) {
-          showHeadsupNoti(context,
-              "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}");
+          showHeadsupNoti(
+            context,
+            ref,
+            "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}",
+          );
         }
 
         updatePgIndex(ref, 3, 3);

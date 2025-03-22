@@ -47,11 +47,11 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
     try {
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
       if (mounted) {
-        showHeadsupNoti(context, "Verification email resent!");
+        showHeadsupNoti(context, ref, "Verification email resent!");
       }
     } catch (e) {
       if (mounted) {
-        showHeadsupNoti(context, "Error: ${e.toString()}");
+        showHeadsupNoti(context, ref, "Error: ${e.toString()}");
       }
     }
   }

@@ -212,11 +212,17 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                                 score = 10;
                               }
                               if (value) {
-                                showHeadsupNoti(context,
-                                    "Hurray! Task Completed.\n$score Points Earned");
+                                showHeadsupNoti(
+                                  context,
+                                  ref,
+                                  "Hurray! Task Completed.\n$score Points Earned",
+                                );
                               } else {
                                 showHeadsupNoti(
-                                    context, "Oops! Lost $score Points");
+                                  context,
+                                  ref,
+                                  "Oops! Lost $score Points",
+                                );
                               }
                             },
                           )

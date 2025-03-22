@@ -208,9 +208,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               }
               resetDialogFields();
               Navigator.pop(context);
-              showHeadsupNoti(context, "Task saved successfully!");
+              showHeadsupNoti(context, ref, "Task saved successfully!");
             } else {
-              showHeadsupNoti(context, "Please fill in all fields!");
+              showHeadsupNoti(context, ref, "Please fill in all fields!");
             }
           }, widget.taskToEdit != null ? "Update Task" : "Save Task", 0)
         ],

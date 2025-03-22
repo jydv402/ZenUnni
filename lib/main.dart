@@ -11,13 +11,13 @@ Future<void> main() async {
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
 
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.dark,
-    ),
-  );
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   const SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent,
+  //     statusBarIconBrightness: Brightness.dark,
+  //     statusBarBrightness: Brightness.dark,
+  //   ),
+  // );
   runApp(
     const ProviderScope(
       child: MyApp(),
