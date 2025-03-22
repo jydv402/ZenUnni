@@ -30,11 +30,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       showLoadingDialog(context, "Logging you in...");
 
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      if (mounted) {
+        // Close loading dialog
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      }
 
       stateInvalidator(ref);
+      await ref.read(userProvider.notifier).loadUserDetails();
+
       if (mounted) {
-        Navigator.pop(context); // Close loading dialog
         Navigator.pushReplacementNamed(context, '/nav');
       }
     } on FirebaseAuthException catch (e) {
