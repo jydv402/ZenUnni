@@ -162,11 +162,13 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             );
 
             if (pickTime != null) {
-              setState(() {
-                localTime = pickTime; // saves to local variable
-                _time = pickTime; // saves to global variable
-                print("Selected time: $localTime");
-              });
+              setState(
+                () {
+                  localTime = pickTime; // saves to local variable
+                  _time = pickTime; // saves to global variable
+                  print("Selected time: $localTime");
+                },
+              );
             }
           }, "Set due time", 16),
           const SizedBox(height: 30),
@@ -299,38 +301,41 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   }
 
 //TODO: use a segmented button
-  Widget _dialogPrioritySelect(
-      void Function(
-        void Function(),
-      ) setState) {
-    return Center(
-      child: Wrap(
-        spacing: 2,
-        children: ['High', 'Medium', 'Low'].map((String value) {
-          return ChoiceChip(
-            padding: EdgeInsets.fromLTRB(16, 24, 16, 24),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(26),
-            ),
-            label: Text(value),
-            selected: localPrior == value,
-            onSelected: (bool selected) {
-              setState(() {
-                if (selected) {
-                  localPrior = value;
-                  _prior = value;
-                }
-              });
+  Widget _dialogPrioritySelect(void Function(void Function()) setState) {
+    return SizedBox(
+      width: double.infinity,
+      child: SegmentedButton<String>(
+        showSelectedIcon: false,
+        style: ButtonStyle(
+          padding: WidgetStatePropertyAll(
+            EdgeInsets.fromLTRB(26, 26, 26, 26),
+          ),
+          textStyle:
+              WidgetStatePropertyAll(Theme.of(context).textTheme.bodySmall),
+        ),
+        segments: <ButtonSegment<String>>[
+          ButtonSegment<String>(
+            value: 'High',
+            label: Text('High'),
+          ),
+          ButtonSegment<String>(
+            value: 'Medium',
+            label: Text('Medium'),
+          ),
+          ButtonSegment<String>(
+            value: 'Low',
+            label: Text('Low'),
+          ),
+        ],
+        selected: {localPrior},
+        onSelectionChanged: (Set<String> value) {
+          setState(
+            () {
+              localPrior = value.first;
+              _prior = value.first;
             },
-            showCheckmark: false,
-            selectedColor: Colors.blue.shade200,
-            backgroundColor: Colors.grey,
-            labelStyle: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: Colors.black),
           );
-        }).toList(),
+        },
       ),
     );
   }

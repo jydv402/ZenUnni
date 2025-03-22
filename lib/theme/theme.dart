@@ -96,16 +96,46 @@ ThemeData get darkTheme {
         },
       ),
     ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        side: WidgetStatePropertyAll(
+          BorderSide(color: Colors.white),
+        ),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(26),
+          ),
+        ),
+        backgroundColor: WidgetStateProperty.resolveWith(
+          (states) {
+            if (states.contains(WidgetState.selected)) {
+              return const Color.fromRGBO(255, 139, 44, 1);
+            }
+            return Colors.transparent;
+          },
+        ),
+        foregroundColor: WidgetStateProperty.resolveWith(
+          (states) {
+            if (states.contains(WidgetState.selected)) {
+              return Colors.black;
+            }
+            return Colors.white;
+          },
+        ),
+      ),
+    ),
     datePickerTheme: DatePickerThemeData(
       backgroundColor: const Color(0xFF202124),
-      dayForegroundColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return Colors.black;
-        } else if (states.contains(WidgetState.disabled)) {
-          return Colors.grey;
-        }
-        return Colors.white;
-      }),
+      dayForegroundColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.black;
+          } else if (states.contains(WidgetState.disabled)) {
+            return Colors.grey;
+          }
+          return Colors.white;
+        },
+      ),
       dividerColor: Colors.white,
       yearForegroundColor: WidgetStateProperty.resolveWith(
         (states) {

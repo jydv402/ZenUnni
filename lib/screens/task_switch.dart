@@ -105,7 +105,6 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           return Padding(
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
             child: Column(
-              spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const ScoreCard(),
@@ -186,8 +185,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                             side:
                                 const BorderSide(color: Colors.white, width: 2),
                             activeColor: Colors.white,
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.white),
+                            overlayColor: WidgetStatePropertyAll(Colors.white),
                             focusColor: Colors.white,
                             checkColor: Colors.black,
                             onChanged: (bool? value) {
@@ -347,7 +345,6 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           return Padding(
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
             child: Column(
-              spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const ScoreCard(),
@@ -396,10 +393,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
       padding: pagePaddingWithScore,
       children: [
         const ScoreCard(),
-        Text(
-          "Schedule",
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
+        _tabSwitcher(),
         const SizedBox(height: 75),
         Text(
             "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
