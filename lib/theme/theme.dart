@@ -89,6 +89,11 @@ ThemeData get lightTheme {
           GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
     ),
     datePickerTheme: DatePickerThemeData(
+      // rangePickerHeaderHeadlineStyle: GoogleFonts.poppins(
+      //   color: Colors.white,
+      //   fontSize: 26,
+      //   fontWeight: FontWeight.bold,
+      // ),
       backgroundColor: const Color(0xFF202124),
       dayForegroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
@@ -132,7 +137,7 @@ ThemeData get lightTheme {
       yearForegroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.selected)) {
-            return Colors.black;
+            return const Color.fromRGBO(0, 0, 0, 1);
           }
           return Colors.white;
         },
@@ -153,6 +158,12 @@ ThemeData get lightTheme {
       ),
     ),
     timePickerTheme: TimePickerThemeData(
+        dayPeriodBorderSide: BorderSide(color: Colors.white),
+        confirmButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            return const Color(0xFFff8b2c);
+          }),
+        ),
         cancelButtonStyle: ButtonStyle(
           foregroundColor: WidgetStateProperty.resolveWith((states) {
             return const Color(0xFFff8b2c);
@@ -169,13 +180,13 @@ ThemeData get lightTheme {
         hourMinuteColor: Color(0xFFff8b2c),
         dialBackgroundColor: const Color(0xFF202124), // Background color
         backgroundColor: const Color(0xFF202124), // Background color
-        dialHandColor: const Color(0xFFff8b2c),
+        dialHandColor: Color(0xFFFF8B2C),
         dialTextColor: WidgetStateColor.resolveWith(
           (states) => states.contains(WidgetState.selected)
               ? Colors.white
               : const Color.fromARGB(255, 255, 255, 255),
         ),
-        entryModeIconColor: const Color(0xFFff8b2c),
+        entryModeIconColor: const Color(0xFFffffff),
         dayPeriodColor: const Color(0xFFFFffff)),
   );
 }
