@@ -186,6 +186,22 @@ ThemeData get newTheme {
         ),
       ),
     ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(26),
+          ),
+        ),
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const Color.fromRGBO(255, 139, 44, 1);
+          }
+          return Colors.transparent;
+        }),
+        foregroundColor: WidgetStatePropertyAll(Colors.black),
+      ),
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
       elevation: 0,

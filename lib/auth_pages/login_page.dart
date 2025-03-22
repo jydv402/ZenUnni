@@ -86,10 +86,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 padding: const EdgeInsets.only(right: 26),
                 onPressed: _toggleObscure,
                 icon: Icon(
-                  _obsureText
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: Colors.white,
+                  _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
                 ),
                 highlightColor: Colors.transparent,
               ),

@@ -117,6 +117,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
   Widget rankView(List<SearchModel> users) {
     return ListView.builder(
       shrinkWrap: true,
+      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
       itemCount: users.length + 2,
       itemBuilder: (context, index) {
         if (index == 0) {

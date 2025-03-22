@@ -6,6 +6,7 @@ void stateInvalidator(WidgetRef ref) {
   ref.invalidate(pgIndexProvider); //nav_serv.dart
   ref.invalidate(subPgIndexProvider); //nav_serv.dart
   ref.invalidate(userNameProvider); //user_serv.dart
+  ref.invalidate(userProvider); //user_serv.dart
   ref.invalidate(scoreProvider); //gamify_serv.dart
   ref.invalidate(moodProvider); //mood_serv.dart
   ref.invalidate(motivationalMessageProvider); //mood_serv.dart

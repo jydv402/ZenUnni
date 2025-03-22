@@ -19,6 +19,7 @@ export 'components/loading_anims.dart';
 export 'components/scorecard.dart';
 
 //consts
+export 'consts/avtlist.dart';
 export 'consts/moodlist.dart';
 
 //models
@@ -26,6 +27,7 @@ export 'models/habit_model.dart';
 export 'models/search_model.dart';
 export 'models/schedule_model.dart';
 export 'models/todo_model.dart';
+export 'models/user_model.dart';
 
 //screens
 export 'screens/add_todo.dart';

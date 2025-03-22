@@ -6,6 +6,7 @@ class ScoreCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final score = ref.watch(scoreProvider);
+    final user = ref.watch(userProvider);
     final String score0 = score.value.toString();
     return Row(
       key: Key('scorecard'),
@@ -41,11 +42,17 @@ class ScoreCard extends ConsumerWidget {
             ref.read(navStackProvider.notifier).push(4);
           },
           child: Container(
-            height: 54,
-            width: 54,
+            height: 56,
+            width: 56,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/icon/avt.png'),
+                image: user.value!.gender == 0
+                    ? AssetImage(
+                        males.values.elementAt(user.value!.avatar),
+                      )
+                    : AssetImage(
+                        females.values.elementAt(user.value!.avatar),
+                      ),
               ),
               shape: BoxShape.circle,
             ),
