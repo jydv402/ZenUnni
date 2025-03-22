@@ -37,7 +37,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
       _prior = widget.taskToEdit!.priority;
       localPrior = widget.taskToEdit!.priority;
       isDone = widget.taskToEdit!.isDone;
-      isRecurring = widget.taskToEdit!.isDone;
+      isRecurring = widget.taskToEdit!.isRecurring;
     }
   }
 
@@ -59,12 +59,18 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
 
   bool validateTaskFields() {
     // Add null checks for controllers
-    return nameController.text.isNotEmpty &&
-        descController.text.isNotEmpty &&
-        _date != null &&
-        _time != null &&
-        (_prior.isNotEmpty ||
-            localPrior.isNotEmpty); // Check both prior variables
+    if (isRecurring) {
+      // do date/time validation if recurring
+      return nameController.text.isNotEmpty && descController.text.isNotEmpty;
+    } else {
+      // do date, time, and priority for non-recurring tasks
+      return nameController.text.isNotEmpty &&
+          descController.text.isNotEmpty &&
+          _date != null &&
+          _time != null &&
+          (_prior.isNotEmpty ||
+              localPrior.isNotEmpty); // Check both prior variables
+    }
   }
 
   @override
@@ -83,103 +89,103 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           //Task description text field
           _dialogTextFields(context, descController, "Task description"),
           const SizedBox(height: 30),
-          _selectedDateText(),
-          const SizedBox(height: 15),
-          //TODO:remove this later
-          // ElevatedButton(onPressed: (){
-          //   NotifServ().showNotification(
-          //     title: "TITLE",
-          //     body: "Body"
-          //   );
-          // }, child: Text('notif test button')),
-          //Set due date button
-          fabButton(context, () async {
-            DateTime? pickDate = await showDatePicker(
-              context: context,
-              firstDate: DateTime.now(),
-              lastDate: DateTime(2100),
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    textTheme: TextTheme(
-                      headlineLarge: GoogleFonts.poppins(
-                          fontSize: 26.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                      labelLarge: GoogleFonts.poppins(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                      bodyLarge: GoogleFonts.poppins(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    colorScheme: ColorScheme.dark(
-                      primary: Colors.blue.shade200,
-                      surface: Colors.black, // Change the header color
-                      onPrimary: Colors.white, // Change the header text color
-                      onSurface: Colors.white, // Change the day text color
-                    ),
-                  ),
-                  child: child!,
-                );
-              },
-            );
-            if (pickDate != null) {
-              setState(() {
-                localDate = pickDate; //saves to local variable
-                _date = pickDate; //to save it to global variable
-                print("Selected date: $localDate");
-              });
-            }
-          }, "Set due date", 16),
-          const SizedBox(height: 30),
-          _selectedTimeText(),
-          const SizedBox(height: 15),
-          //Set due time button
-          fabButton(context, () async {
-            TimeOfDay? pickTime = await showTimePicker(
-              context: context,
-              initialTime: TimeOfDay.now(),
-            );
-            if (pickTime != null) {
-              setState(() {
-                localTime = pickTime; // saves to local variable
-                _time = pickTime; // saves to global variable
-                print("Selected time: $localTime");
-              });
-            }
-          }, "Set due time", 16),
-          const SizedBox(height: 30),
-          Text(
-            "Select task priority",
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          _dialogPrioritySelect(setState),
-          const SizedBox(height: 30),
           _isRecurringCheckBox(),
+          const SizedBox(height: 30),
+          if (!isRecurring) ...[
+            _selectedDateText(),
+            const SizedBox(height: 15),
+            fabButton(context, () async {
+              DateTime? pickDate = await showDatePicker(
+                context: context,
+                firstDate: DateTime.now(),
+                lastDate: DateTime(2100),
+                builder: (BuildContext context, Widget? child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      textTheme: TextTheme(
+                        headlineLarge: GoogleFonts.poppins(
+                            fontSize: 26.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                        labelLarge: GoogleFonts.poppins(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                        ),
+                        bodyLarge: GoogleFonts.poppins(
+                          fontSize: 16.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      colorScheme: ColorScheme.dark(
+                        primary: Colors.blue.shade200,
+                        surface: Colors.black, // Change the header color
+                        onPrimary: Colors.white, // Change the header text color
+                        onSurface: Colors.white, // Change the day text color
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+              if (pickDate != null) {
+                setState(() {
+                  localDate = pickDate; //saves to local variable
+                  _date = pickDate; //to save it to global variable
+                  print("Selected date: $localDate");
+                });
+              }
+            }, "Set due date", 16),
+            const SizedBox(height: 30),
+            _selectedTimeText(),
+            const SizedBox(height: 15),
+            //Set due time button
+            fabButton(context, () async {
+              TimeOfDay? pickTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              if (pickTime != null) {
+                setState(() {
+                  localTime = pickTime; // saves to local variable
+                  _time = pickTime; // saves to global variable
+                  print("Selected time: $localTime");
+                });
+              }
+            }, "Set due time", 16),
+            const SizedBox(height: 30),
+            Text(
+              "Select task priority",
+              style: Theme.of(context).textTheme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            _dialogPrioritySelect(setState),
+          ],
+
           const SizedBox(height: 60),
           fabButton(context, () {
             if (validateTaskFields()) {
-              DateTime dateTime = DateTime(
-                _date!.year,
-                _date!.month,
-                _date!.day,
-                _time!.hour,
-                _time!.minute,
-              );
+              DateTime? dateTime;
+              if (!isRecurring && _date != null && _time != null) {
+                dateTime = DateTime(
+                  _date!.year,
+                  _date!.month,
+                  _date!.day,
+                  _time!.hour,
+                  _time!.minute,
+                );
+              }
+
               TodoModel task = TodoModel(
                 name: nameController.text,
                 description: descController.text,
-                date: dateTime,
-                priority: _prior,
+                date: dateTime ?? DateTime.now(),
+                priority: isRecurring ? "" : _prior,
                 isDone: isDone,
                 isRecurring: isRecurring,
-                expired: true,
+                expired: false,
               );
+
               if (widget.taskToEdit != null) {
                 // Update existing task
                 ref.read(
@@ -285,23 +291,20 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   }
 
   Widget _isRecurringCheckBox() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text(
-          'Is this a recurring task ?',
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        Checkbox(
-            activeColor: Colors.white,
-            focusColor: Colors.white,
-            value: isRecurring,
-            onChanged: (bool? value) {
-              setState(() {
-                isRecurring = value ?? false;
-              });
-            })
-      ],
+    return SwitchListTile(
+      title: Text('Recurring Task?',
+          style: Theme.of(context).textTheme.headlineSmall),
+      value: isRecurring,
+      onChanged: (value) {
+        setState(() {
+          isRecurring = value;
+          if (isRecurring) {
+            _date = null;
+            _time = null;
+            _prior = "";
+          }
+        });
+      },
     );
   }
 }
