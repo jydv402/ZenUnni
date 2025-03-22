@@ -32,7 +32,10 @@ class CurrentMood extends ConsumerWidget {
       padding: pagePaddingWithScore,
       children: [
         const ScoreCard(),
-        const Text("Mood", style: headL),
+        Text(
+          "Mood",
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
         const SizedBox(height: 60),
         _currMoodCard(context, mood),
         const SizedBox(height: 50),

@@ -62,7 +62,8 @@ class LandPage extends ConsumerWidget {
   }
 
   Text _showGreeting(BuildContext context, String greeting, user) {
-    return Text("Good $greeting, \n$user", style: headL);
+    return Text("Good $greeting, \n$user",
+        style: Theme.of(context).textTheme.headlineLarge);
   }
 
   GestureDetector _msgContainer(

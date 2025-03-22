@@ -51,6 +51,7 @@ export 'services/mood_serv.dart';
 export 'services/pomodoro_serve.dart';
 export 'services/schedule_serv.dart';
 export 'services/search_serv.dart';
+export 'services/theme_serv.dart';
 export 'services/todo_serv.dart';
 export 'services/user_serv.dart';
 

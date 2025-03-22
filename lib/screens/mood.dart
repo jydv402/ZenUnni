@@ -19,9 +19,9 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         padding: pagePaddingWithScore,
         children: [
           const ScoreCard(),
-          const Text(
+          Text(
             "How are you\nfeeling today?",
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 50),
           // Mood Icon

@@ -222,9 +222,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const ScoreCard(),
-          const Text(
+          Text(
             'Leaderboard',
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 26),
         ],

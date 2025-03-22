@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/theme/text_theme.dart';
 
 // Light theme for the app
-ThemeData get lightTheme {
+ThemeData get darkTheme {
   return ThemeData(
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
@@ -145,7 +145,7 @@ ThemeData get lightTheme {
   );
 }
 
-ThemeData get newTheme {
+ThemeData get lightTheme {
   return ThemeData(
     colorScheme: ColorScheme(
       brightness: Brightness.light,
@@ -200,6 +200,24 @@ ThemeData get newTheme {
           return Colors.transparent;
         }),
         foregroundColor: WidgetStatePropertyAll(Colors.black),
+      ),
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+          return Colors.black54;
+        },
+      ),
+      trackOutlineColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Color(0xFFFF8B2C);
+          }
+          return Colors.black54;
+        },
       ),
     ),
     appBarTheme: const AppBarTheme(

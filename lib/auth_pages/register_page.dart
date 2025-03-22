@@ -93,9 +93,9 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       body: ListView(
         padding: pagePadding,
         children: [
-          const Text(
+          Text(
             "Register",
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 40),
           TextFormField(

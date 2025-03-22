@@ -152,9 +152,9 @@ class _HabitState extends ConsumerState<HabitPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const ScoreCard(),
-                const Text(
+                Text(
                   'Habits',
-                  style: headL,
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
               ],
             ),

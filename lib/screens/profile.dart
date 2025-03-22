@@ -1,20 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zen/zen_barrel.dart';
 
-class ProfilePage extends ConsumerWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
 
-  void logoutUser(BuildContext context, WidgetRef ref) async {
-    await FirebaseAuth.instance.signOut();
-    if (context.mounted) {
-      // Navigate to the root page after logging out
-      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-    }
-  }
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
+}
+
+void logoutUser(BuildContext context, WidgetRef ref) async {
+  await FirebaseAuth.instance.signOut();
+  if (context.mounted) {
+    // Navigate to the root page after logging out
+    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+  }
+}
+
+class _ProfilePageState extends ConsumerState<ProfilePage> {
+  @override
+  Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
+    final themeMode = ref.watch(themeProvider);
+    final isDarkMode = themeMode == ThemeMode.dark;
 
     return userState.when(
       data: (user) {
@@ -31,9 +38,9 @@ class ProfilePage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const ScoreCard(),
-                  const Text(
+                  Text(
                     "Profile",
-                    style: headL,
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
                 ],
               ),
@@ -61,7 +68,7 @@ class ProfilePage extends ConsumerWidget {
 
             Text(
               user.username,
-              style: headL,
+              style: Theme.of(context).textTheme.headlineLarge,
               textAlign: TextAlign.center,
             ),
 
@@ -125,8 +132,10 @@ class ProfilePage extends ConsumerWidget {
             buttonBg(
               SwitchListTile(
                 title: const Text("Dark Mode", style: bodyM),
-                value: false,
-                onChanged: (value) {},
+                value: isDarkMode,
+                onChanged: (value) {
+                  ref.read(themeProvider.notifier).toggleTheme();
+                },
               ),
             ),
           ],
@@ -145,7 +154,7 @@ class ProfilePage extends ConsumerWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(32),
-        color: Colors.black12,
+        color: Colors.grey[300],
       ),
       child: child,
     );

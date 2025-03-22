@@ -32,9 +32,9 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
       body: ListView(
         padding: pagePadding,
         children: [
-          const Text(
+          Text(
             "What should\nwe call you?",
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 40),
           TextField(

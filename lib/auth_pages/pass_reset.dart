@@ -65,9 +65,9 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
     return ListView(
       padding: pagePadding,
       children: [
-        const Text(
+        Text(
           "Forgot Your Password?",
-          style: headL,
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         const SizedBox(height: 10),
         Text(

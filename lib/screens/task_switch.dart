@@ -65,7 +65,9 @@ class _TaskPageState extends ConsumerState<TaskPage> {
         duration: const Duration(milliseconds: 200),
         child: Text(
           title,
-          style: isSelected ? headL : headM.copyWith(color: Colors.grey),
+          style: isSelected
+              ? Theme.of(context).textTheme.headlineLarge
+              : headM.copyWith(color: Colors.grey),
         ),
       ),
     );
@@ -382,9 +384,9 @@ class _TaskPageState extends ConsumerState<TaskPage> {
       padding: pagePaddingWithScore,
       children: [
         const ScoreCard(),
-        const Text(
+        Text(
           "Schedule",
-          style: headL,
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         const SizedBox(height: 75),
         Text(
