@@ -38,7 +38,7 @@ class CurrentMood extends ConsumerWidget {
         const SizedBox(height: 50),
         fabButton(context, () {
           updatePgIndex(ref, 5, 3);
-          ref.read(navStackProvider.notifier).push(3);
+          ref.read(navStackProvider.notifier).push(5);
         }, 'Update Mood', 0),
         const SizedBox(height: 20),
         if (moodExists) _motivationContainer(context, mood, ref),

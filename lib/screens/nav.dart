@@ -94,19 +94,15 @@ class _NavbarState extends ConsumerState<Navbar> {
                 onDestinationSelected: (int index) {
                   setState(
                     () {
-                      if (index == 2) {
-                        ref
-                            .read(navStackProvider.notifier)
-                            .reset(); // Reset to Home
-                      } else if (ref.read(navStackProvider).last != index) {
-                        ref
-                            .read(navStackProvider.notifier)
-                            .push(index); // Add to stack
+                      if (ref.read(navStackProvider).last != index &&
+                          index != 2) {
+                        ref.read(navStackProvider.notifier).push(index);
+                      } else {
+                        ref.read(navStackProvider.notifier).reset();
                       }
                       updatePgIndex(ref, index, index);
                     },
                   );
-                  print(navStack);
                 },
               ),
         // floatingActionButton: pgIndex != 2
