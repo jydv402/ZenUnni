@@ -13,8 +13,12 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
-  await NotificationService.init();
   tz.initializeTimeZones();
+  await NotificationService.init();
+
+
+  // Schedule notifications for incomplete tasks on startup
+  await scheduleNotificationsForIncompleteTasks();
   runApp(
     const ProviderScope(
       child: MyApp(),

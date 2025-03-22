@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:zen/zen_barrel.dart';
+import 'package:zen/notification/notif.dart';
 
 // Task model
 final taskProvider = StreamProvider<List<TodoModel>>(
@@ -90,3 +92,43 @@ final taskDeleteProvider = FutureProvider.family<void, TodoModel>(
     }
   },
 );
+
+
+//to get the incomplete tasks to schedule notifications
+Future<void> scheduleNotificationsForIncompleteTasks() async {
+  try {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Fetch incomplete tasks
+    final tasksSnapshot = await firestore
+        .collection('tasks')
+        .where('isCompleted', isEqualTo: false)
+        .get();
+
+    final now = DateTime.now();
+
+    for (var doc in tasksSnapshot.docs) {
+      final data = doc.data();
+      final taskName = data['task'];
+      final dueDate = (data['dueDate'] as Timestamp).toDate();
+
+      // Schedule notification 2 hours before the due date
+      final notificationTime = dueDate.subtract(Duration(hours: 2));
+
+      if (notificationTime.isAfter(now)) {
+        await NotificationService.sheduleNotification(
+          doc.id.hashCode,  // Unique ID based on task ID
+          "Task Reminder",
+          "Your task '$taskName' is due at ${DateFormat('hh:mm a').format(dueDate)}.",
+          notificationTime,
+        );
+        print("Scheduled notification for: $taskName at $notificationTime");
+      } else {
+        print("Skipped past-due task: $taskName");
+      }
+    }
+
+  } catch (e) {
+    print("Error scheduling notifications: $e");
+  }
+}

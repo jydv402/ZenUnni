@@ -8,13 +8,15 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   static Future<void> onDidReceiveNotification(
-      NotificationResponse notificationResponse) async {}
+      NotificationResponse notificationResponse) async {
+        //TODO: handle notification interaction
+      }
 
   //initialize
   static Future<void> init() async {
     //define android initialization settings
     const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings("@mipmap/ic_launcher");
+        AndroidInitializationSettings("@mipmap/launcher_icon");
 
     //define the ios initialization settings
     const DarwinInitializationSettings iOSInitializationSettings =
@@ -52,14 +54,16 @@ class NotificationService {
   }
 
   //show a schedule notification
-  static Future<void> sheduleNotification(
+  static Future<void> sheduleNotification(int id,
       String title, String body, DateTime scheduledDate) async {
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    if(scheduledDate.isAfter(DateTime.now())){
+      const NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: AndroidNotificationDetails("channel_ID", "channel_Name",
             importance: Importance.high, priority: Priority.high),
         iOS: DarwinNotificationDetails());
-    await flutterLocalNotificationsPlugin.zonedSchedule(0, title, body,
+    await flutterLocalNotificationsPlugin.zonedSchedule(id, title, body,//add notif id
         tz.TZDateTime.from(scheduledDate, tz.local), platformChannelSpecifics,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,matchDateTimeComponents: DateTimeComponents.dateAndTime);
+    }
   }
 }
