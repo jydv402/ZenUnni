@@ -49,6 +49,20 @@ final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
     await taskDoc.add(
       task.toMap(),
     );
+
+    // Schedule a notification for the newly added task
+    if (task.date.isAfter(DateTime.now())) {
+      final notificationTime = task.date.subtract(Duration(minutes: 10));
+      if (notificationTime.isAfter(DateTime.now())) {
+        await NotificationService.sheduleNotification(
+          taskDoc.id.hashCode,
+          "Task Reminder",
+          "Your task '${task.name}' is due at ${DateFormat('hh:mm a').format(task.date)}.",
+          notificationTime,
+        );
+        print("Scheduled notification for: ${task.name} at $notificationTime");
+      }
+    }
   },
 );
 
@@ -69,6 +83,19 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
       await taskDoc.doc(docId).update(
             task.toMap(),
           );
+           // Schedule a notification for the updated task
+      if (task.date.isAfter(DateTime.now())) {
+        final notificationTime = task.date.subtract(Duration(minutes: 10));
+        if (notificationTime.isAfter(DateTime.now())) {
+          await NotificationService.sheduleNotification(
+            taskDoc.id.hashCode, 
+            "Task Reminder",
+            "Your updated task '${task.name}' is due at ${DateFormat('hh:mm a').format(task.date)}.",
+            notificationTime,
+          );
+          print("Scheduled notification for updated task: ${task.name} at $notificationTime");
+        }
+      }
     }
   },
 );
@@ -98,11 +125,13 @@ final taskDeleteProvider = FutureProvider.family<void, TodoModel>(
 Future<void> scheduleNotificationsForIncompleteTasks() async {
   try {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+    final FirebaseAuth auth = FirebaseAuth.instance;
     // Fetch incomplete tasks
     final tasksSnapshot = await firestore
-        .collection('tasks')
-        .where('isCompleted', isEqualTo: false)
+    .collection('users')
+    .doc(auth.currentUser?.uid)
+        .collection('task')
+        .where('isDone', isEqualTo: false)
         .get();
 
     final now = DateTime.now();
@@ -110,12 +139,15 @@ Future<void> scheduleNotificationsForIncompleteTasks() async {
     for (var doc in tasksSnapshot.docs) {
       final data = doc.data();
       final taskName = data['task'];
-      final dueDate = (data['dueDate'] as Timestamp).toDate();
+      final dueDate = (data['date'] as Timestamp).toDate();
 
-      // Schedule notification 2 hours before the due date
-      final notificationTime = dueDate.subtract(Duration(hours: 2));
+      //  Cancel existing notification to prevent duplicates
+ // await NotificationService.cancelNotification(taskId.hashCode);
 
-      if (notificationTime.isAfter(now)) {
+      // Schedule notification 10 minutes before the due date
+      final notificationTime = dueDate.subtract(Duration(minutes:10));
+
+      if (notificationTime.isAfter(now)&& dueDate.isAfter(now) ) {
         await NotificationService.sheduleNotification(
           doc.id.hashCode,  // Unique ID based on task ID
           "Task Reminder",
