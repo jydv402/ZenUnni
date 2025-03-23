@@ -1,4 +1,3 @@
-import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:intl/intl.dart';
 import 'package:timeline_tile_plus/timeline_tile_plus.dart';
 import 'package:zen/zen_barrel.dart';
@@ -57,9 +56,11 @@ class _TaskPageState extends ConsumerState<TaskPage> {
     final bool isSelected = _selectedTab == index;
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _selectedTab = index;
-        });
+        setState(
+          () {
+            _selectedTab = index;
+          },
+        );
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -377,7 +378,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
             endChild: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                '${item.taskName}\n${DateFormat('hh:mm a').format(item.startTime)} - ${DateFormat('hh:mm a').format(item.endTime)}\n${DateFormat('dd/MM/yyyy').format(item.startTime)}\n${item.duration} minutes',
+                '${item.taskName}\n${DateFormat('hh:mm a').format(item.startTime)} - ${DateFormat('hh:mm a').format(item.endTime)}\n${DateFormat('dd/MM/yyyy').format(item.startTime)}\n${item.duration ~/ 60} hrs ${item.duration % 60} mins',
                 style: TextStyle(fontSize: 16),
               ),
             ),
@@ -399,7 +400,8 @@ class _TaskPageState extends ConsumerState<TaskPage> {
             "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
             style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: 10),
-        Text("Psst! Checking your \ninternet connection may help... 🙂",
+        Text(
+            "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
             style: Theme.of(context).textTheme.bodySmall),
       ],
     );

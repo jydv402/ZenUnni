@@ -20,4 +20,11 @@ class ScheduleItem {
       duration: json['duration'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'taskName': taskName,
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime.toIso8601String(),
+        'duration': duration,
+      };
 }
