@@ -188,6 +188,25 @@ ThemeData get darkTheme {
       enableFeedback: true,
       splashColor: Color(0xFFFF8B2C),
     ),
+
+    popupMenuTheme: PopupMenuThemeData(
+      color: Colors.white,
+      labelTextStyle: WidgetStateProperty.all(
+        TextStyle(
+          fontFamily: 'Pop',
+          fontSize: 16.0,
+          color: Colors.white,
+        ),
+      ),
+      textStyle: TextStyle(
+        fontFamily: 'Pop',
+        fontSize: 16.0,
+        color: Colors.white,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(26),
+      ),
+    ),
   );
 }
 
@@ -370,6 +389,25 @@ ThemeData get lightTheme {
       backgroundColor: Colors.white,
       hourMinuteColor: Colors.black,
       dialHandColor: Color.fromRGBO(255, 139, 44, 1),
+    ),
+    popupMenuTheme: PopupMenuThemeData(
+      color: Colors.white,
+      iconColor: Colors.black,
+      labelTextStyle: WidgetStateProperty.all(
+        TextStyle(
+          fontFamily: 'Pop',
+          fontSize: 16.0,
+          color: Colors.white,
+        ),
+      ),
+      textStyle: TextStyle(
+        fontFamily: 'Pop',
+        fontSize: 16.0,
+        color: Colors.white,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(26),
+      ),
     ),
   );
 }

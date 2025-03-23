@@ -6,10 +6,10 @@ class TaskPage extends ConsumerStatefulWidget {
   const TaskPage({super.key});
 
   @override
-  _TaskPageState createState() => _TaskPageState();
+  TaskPageState createState() => TaskPageState();
 }
 
-class _TaskPageState extends ConsumerState<TaskPage> {
+class TaskPageState extends ConsumerState<TaskPage> {
   int _selectedTab = 0; // 0 = Todo, 1 = Schedule
 
   @override
@@ -30,10 +30,17 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                 ),
               );
             }, "Add New Tasks", 26)
-          : fabButton(context, () {
-              clearScheduleData(ref, tasks.value ?? []);
-            }, "Regenerate Schedule", 26),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          : FloatingActionButton(
+              onPressed: () {},
+              child: schedulePopUp(context),
+            ),
+      // fabButton(context, () {
+      //     clearScheduleData(ref, tasks.value ?? []);
+      //   }, "Regenerate Schedule", 26),
+      floatingActionButtonLocation: _selectedTab == 0
+          ? FloatingActionButtonLocation.centerFloat
+          : FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
     );
   }
 
@@ -493,6 +500,51 @@ class _TaskPageState extends ConsumerState<TaskPage> {
         Text(
             "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
             style: Theme.of(context).textTheme.bodySmall),
+      ],
+    );
+  }
+
+  Widget schedulePopUp(BuildContext context) {
+    return PopupMenuButton<int>(
+      popUpAnimationStyle: AnimationStyle(
+        curve: Curves.easeInOut,
+        duration: Duration(milliseconds: 300),
+        reverseCurve: Curves.easeInOut,
+        reverseDuration: Duration(milliseconds: 200),
+      ),
+      offset: const Offset(-60, -130),
+      icon: Icon(LucideIcons.plus),
+      itemBuilder: (context) => <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          value: 0,
+          child: menuItem(
+            context,
+            ref,
+            "Edit Available Time",
+            LucideIcons.pen,
+            () {},
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 1,
+          child: menuItem(
+            context,
+            ref,
+            "Edit Schedule",
+            LucideIcons.pencil,
+            () {},
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 2,
+          child: menuItem(
+            context,
+            ref,
+            "Regenerate Schedule",
+            LucideIcons.refresh_ccw,
+            () {},
+          ),
+        ),
       ],
     );
   }

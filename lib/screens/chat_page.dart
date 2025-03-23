@@ -196,9 +196,11 @@ class ChatPage extends ConsumerWidget {
               shadowColor: WidgetStateProperty.all(Colors.white),
               alignment: const Alignment(-5.5, 16),
               backgroundColor: WidgetStateProperty.all(Colors.white),
-              shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
-              )),
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                ),
+              ),
             ),
             builder: (context, controller, child) {
               return IconButton(
