@@ -244,6 +244,189 @@ ThemeData get darkTheme {
   );
 }
 
+ThemeData get lightTheme {
+  return ThemeData(
+    colorScheme: ColorScheme(
+      brightness: Brightness.light,
+      primary: const Color.fromRGBO(255, 139, 44, 1), // Orange
+      onPrimary: Colors.white,
+      secondary: const Color(0xFFFFA54F), // Lighter shade of orange
+      onSecondary: Colors.white,
+      surface: Colors.white, // Light background
+      onSurface: Colors.black,
+      error: Colors.red,
+      onError: Colors.white,
+    ),
+    textTheme: TextTheme(
+      headlineLarge: GoogleFonts.poppins(
+        fontSize: 44,
+        fontWeight: FontWeight.w600,
+        color: Colors.black,
+      ),
+      headlineMedium: GoogleFonts.poppins(
+        fontSize: 24.0,
+        fontWeight: FontWeight.w400,
+        color: Colors.black,
+      ),
+      headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.black),
+      labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
+      labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
+      bodyMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
+      bodySmall: GoogleFonts.poppins(fontSize: 13.0, color: Colors.black),
+      titleMedium: prfDivTxt,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromRGBO(255, 139, 44, 1),
+        foregroundColor: Colors.white,
+        shadowColor: Colors.orangeAccent,
+        padding: const EdgeInsets.all(26),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(26),
+        ),
+      ),
+    ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(26),
+          ),
+        ),
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const Color.fromRGBO(255, 139, 44, 1);
+          }
+          return Colors.transparent;
+        }),
+        foregroundColor: WidgetStatePropertyAll(Colors.black),
+      ),
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+          return Colors.black54;
+        },
+      ),
+      trackOutlineColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Color(0xFFFF8B2C);
+          }
+          return Colors.black54;
+        },
+      ),
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.black),
+      titleTextStyle: TextStyle(
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      // systemOverlayStyle: SystemUiOverlayStyle(
+      //   statusBarColor: Colors.transparent,
+      //   statusBarIconBrightness: Brightness.dark,
+      //   statusBarBrightness: Brightness.dark,
+      // ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      contentPadding: const EdgeInsets.all(32),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(
+          color: Colors.black54,
+          width: 2.0,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(
+          color: Colors.black54,
+          width: 2.0,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(
+          color: Color.fromRGBO(255, 139, 44, 1),
+          width: 2.0,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(
+          color: Colors.red,
+          width: 2.0,
+        ),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(26),
+        borderSide: const BorderSide(
+          color: Colors.red,
+          width: 2.0,
+        ),
+      ),
+      hintStyle: GoogleFonts.poppins(
+        fontSize: 16.0,
+        color: Colors.black54,
+      ),
+      labelStyle: GoogleFonts.poppins(
+        fontSize: 16.0,
+        color: Colors.black,
+      ),
+      errorStyle: GoogleFonts.poppins(
+        fontSize: 14.0,
+        color: Colors.red,
+      ),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: Colors.white,
+      labelTextStyle: WidgetStateProperty.all(bodyS),
+      iconTheme: WidgetStateProperty.all(
+        const IconThemeData(color: Colors.black),
+      ),
+    ),
+    datePickerTheme: DatePickerThemeData(
+      backgroundColor: Colors.white,
+      dayForegroundColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          } else if (states.contains(WidgetState.disabled)) {
+            return Colors.grey;
+          }
+          return Colors.black;
+        },
+      ),
+      dividerColor: Colors.black,
+      yearForegroundColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+          return Colors.black;
+        },
+      ),
+      yearStyle: GoogleFonts.poppins(
+        fontSize: 16,
+        color: Colors.black,
+      ),
+    ),
+    timePickerTheme: const TimePickerThemeData(
+      backgroundColor: Colors.white,
+      hourMinuteColor: Colors.black,
+      dialHandColor: Color.fromRGBO(255, 139, 44, 1),
+    ),
+  );
+}
+
 var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
 var pagePaddingWithScore = const EdgeInsets.fromLTRB(26, 50, 26, 26);
 
