@@ -41,7 +41,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         }
       }
 
-      stateInvalidator(ref);
+      stateInvalidator(ref, true);
       await ref.read(userProvider.notifier).loadUserDetails();
 
       if (mounted) {

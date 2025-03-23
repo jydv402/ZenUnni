@@ -110,3 +110,17 @@ class UserNotifier extends StateNotifier<AsyncValue<UserModel?>> {
     }
   }
 }
+
+//Obtain all the usernames
+final existingUsersProvider = StreamProvider<List<String>>(
+  (ref) {
+    //return only the doc
+    return FirebaseFirestore.instance.collection('users').snapshots().map(
+          (snapshot) => snapshot.docs.map(
+            (doc) {
+              return doc.data()['usernameLower'] as String;
+            },
+          ).toList(),
+        );
+  },
+);

@@ -124,7 +124,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     () {
                       Navigator.of(context).pop();
                       logoutUser(context, ref);
-                      stateInvalidator(ref);
+                      stateInvalidator(ref, true);
                     },
                   );
                 },

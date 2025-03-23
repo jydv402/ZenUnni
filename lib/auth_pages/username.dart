@@ -26,7 +26,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: define methods to check if username already exist
+    final List existingUsers = ref.watch(existingUsersProvider).value ?? [];
     final avatars = gender.contains(0) ? males : females;
     return Scaffold(
       body: ListView(
@@ -122,22 +122,29 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
         ],
       ),
       floatingActionButton: fabButton(context, () async {
-        stateInvalidator(ref);
         String username = userNameController.text.trim();
 
-        if (username.isNotEmpty && !widget.isUpdate!) {
+        if (username.isNotEmpty &&
+            !widget.isUpdate! &&
+            !existingUsers.contains(username.toLowerCase())) {
+          stateInvalidator(ref, true);
           await createUserDoc(username, gender.contains(0) ? 0 : 1, slctdAvt!);
           if (context.mounted) {
             Navigator.pushNamed(context, '/nav');
           }
-        } else if (username.isNotEmpty && widget.isUpdate!) {
+        } else if (username.isNotEmpty &&
+            widget.isUpdate! &&
+            !existingUsers.contains(username.toLowerCase())) {
+          stateInvalidator(ref, false);
           await updateUserDoc(username, gender.contains(0) ? 0 : 1, slctdAvt!);
           if (context.mounted) {
             Navigator.pop(context);
             showHeadsupNoti(context, ref, "Profile updated successfully.");
           }
+        } else if (existingUsers.contains(username.toLowerCase())) {
+          showHeadsupNoti(context, ref, "Username already exists.");
         } else {
-          showHeadsupNoti(context, ref, "Please enter a username first.");
+          showHeadsupNoti(context, ref, "Please enter a username.");
         }
       }, widget.isUpdate! ? 'Update Profile' : 'Continue to Home', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
