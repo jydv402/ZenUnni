@@ -10,6 +10,9 @@ class TodoModel {
   String priority;
   bool isDone;
   bool isRecurring;
+  DateTime fromTime;
+  DateTime toTime;
+  List<String> selectedWeekdays;
   bool expired;
   final Function(bool?)? onChanged;
   //constructor
@@ -20,6 +23,9 @@ class TodoModel {
       required this.priority,
       required this.isDone,
       required this.isRecurring,
+      required this.fromTime,
+      required this.toTime,
+      required this.selectedWeekdays,
       this.onChanged,
       required this.expired});
 
@@ -30,7 +36,10 @@ class TodoModel {
       'date': date,
       'priority': priority,
       'isDone': isDone,
-      'isRecurring':isRecurring
+      'isRecurring':isRecurring,
+      'fromTime':fromTime,
+      'toTime':toTime,
+      'selectedWeekdays':selectedWeekdays
       //todo :'updatedOn': now
     };
   }
@@ -43,6 +52,11 @@ class TodoModel {
       priority: map['priority'] ?? '',
       isDone: map['isDone'] ?? false,
       isRecurring: map['isRecurring']??false,
+      fromTime: (map['fromTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      toTime: (map['toTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      selectedWeekdays: map['selectedWeekdays'] != null
+          ? List<String>.from(map['selectedWeekdays'])
+          : [],
       expired: expired,
     );
   }
@@ -53,6 +67,9 @@ class TodoModel {
     DateTime? date,
     String? priority,
     bool? isDone,
+    DateTime? fromTime,
+    DateTime? toTime,
+    List<String>? selectedWeekdays,  
     bool? isRecurring,
   }) {
     return TodoModel(
@@ -62,6 +79,11 @@ class TodoModel {
         priority: priority ?? this.priority,
         isDone: isDone ?? this.isDone,
         isRecurring: isRecurring ?? this.isRecurring,
+        fromTime: fromTime?? this.fromTime,
+        toTime: toTime?? this.toTime,
+        selectedWeekdays: selectedWeekdays?? this.selectedWeekdays,
         expired: expired);
   }
+
+
 }

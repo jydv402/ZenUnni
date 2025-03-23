@@ -278,6 +278,10 @@ class TodoListPage extends ConsumerWidget {
                                 isDone: value ?? false,
                                 isRecurring: task.isRecurring,
                                 expired: task.expired,
+                                fromTime: task.fromTime,
+                                toTime: task.toTime,
+                                selectedWeekdays: task.selectedWeekdays,
+
                               );
                               if(context.mounted){
                                  ref.read(
