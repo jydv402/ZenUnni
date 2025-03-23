@@ -114,6 +114,9 @@ ThemeData get darkTheme {
         },
       ),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Color(0xFFFF8B2C),
+    ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(
         side: WidgetStatePropertyAll(
