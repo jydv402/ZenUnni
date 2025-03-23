@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:line_icons/line_icons.dart';
-
 import 'package:zen/zen_barrel.dart';
 
 class HabitPage extends ConsumerStatefulWidget {
@@ -25,6 +21,7 @@ class _HabitState extends ConsumerState<HabitPage> {
     final habitsAsyncValue = ref.watch(habitProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: habitsAsyncValue.when(
         data: (habits) => heatmaplistview(habits),
         loading: () => Center(
@@ -133,7 +130,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                   Navigator.of(context).pop();
                 }
               } else {
-                showHeadsupNoti(context, "Please enter a habit name.");
+                showHeadsupNoti(context, ref, "Please enter a habit name.");
               }
             }, isEdit ? 'Update Habit' : 'Add Habit', 0),
           ],
@@ -154,10 +151,10 @@ class _HabitState extends ConsumerState<HabitPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ScoreCard(),
-                const Text(
+                const ScoreCard(),
+                Text(
                   'Habits',
-                  style: headL,
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
               ],
             ),
@@ -208,7 +205,11 @@ class _HabitState extends ConsumerState<HabitPage> {
                           },
                         );
                       },
-                      icon: Icon(LineIcons.alternateTrash, color: habitColor),
+                      icon: Icon(
+                        LucideIcons.trash_2,
+                        color: habitColor,
+                        size: 22,
+                      ),
                     ),
                     IconButton(
                       onPressed: () {
@@ -219,7 +220,8 @@ class _HabitState extends ConsumerState<HabitPage> {
                         );
                       },
                       icon: Icon(
-                        LineIcons.pen,
+                        LucideIcons.square_pen,
+                        size: 22,
                         color: habitColor,
                       ),
                     ),
@@ -242,6 +244,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                           //Show heads up
                           showHeadsupNoti(
                             context,
+                            ref,
                             "Oops! You missed a habit.\n10 points deducted.",
                           );
                           updatedCompletedDates[dateOnly] = false;
@@ -254,6 +257,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                           //Show heads up
                           showHeadsupNoti(
                             context,
+                            ref,
                             "Great job! Keep it going.\n10 points added.",
                           );
                           //Update completed dates
@@ -268,7 +272,7 @@ class _HabitState extends ConsumerState<HabitPage> {
                         } catch (e) {
                           if (context.mounted) {
                             showHeadsupNoti(
-                                context, "Failed to update habit: $e");
+                                context, ref, "Failed to update habit: $e");
                           }
                         }
                       },
@@ -328,7 +332,7 @@ class _HabitState extends ConsumerState<HabitPage> {
         defaultColor: Colors.grey.shade800,
         colorsets: {1: habitColor},
         onClick: (value) {
-          showHeadsupNoti(context, value.toString());
+          showHeadsupNoti(context, ref, value.toString());
         },
       );
     } catch (e) {

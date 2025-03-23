@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
@@ -91,13 +89,14 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appColorsProvider);
     return Scaffold(
       body: ListView(
         padding: pagePadding,
         children: [
-          const Text(
+          Text(
             "Register",
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 40),
           TextFormField(
@@ -116,10 +115,8 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                 padding: EdgeInsets.only(right: 26),
                 onPressed: () => _toggleObscure(),
                 icon: Icon(
-                  _obsureText
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: Colors.white,
+                  _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
+                  color: colors.iconClr,
                 ),
                 highlightColor: Colors.transparent,
               ),
@@ -136,10 +133,8 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                 padding: EdgeInsets.only(right: 26),
                 onPressed: () => _toggleObscure(),
                 icon: Icon(
-                  _obsureText
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: Colors.white,
+                  _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
+                  color: colors.iconClr,
                 ),
                 highlightColor: Colors.transparent,
               ),

@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/zen_barrel.dart';
@@ -180,6 +178,10 @@ class ChatPage extends ConsumerWidget {
                 hintText: 'Chat with Unni...',
                 hintStyle: Theme.of(context).textTheme.labelMedium,
                 border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
               ),
             ),

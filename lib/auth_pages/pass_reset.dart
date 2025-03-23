@@ -1,6 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 class PassResetPage extends ConsumerStatefulWidget {
@@ -67,9 +65,9 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
     return ListView(
       padding: pagePadding,
       children: [
-        const Text(
+        Text(
           "Forgot Your Password?",
-          style: headL,
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         const SizedBox(height: 10),
         Text(

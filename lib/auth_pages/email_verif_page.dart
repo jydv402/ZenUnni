@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:zen/zen_barrel.dart';
 
@@ -49,11 +47,11 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
     try {
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
       if (mounted) {
-        showHeadsupNoti(context, "Verification email resent!");
+        showHeadsupNoti(context, ref, "Verification email resent!");
       }
     } catch (e) {
       if (mounted) {
-        showHeadsupNoti(context, "Error: ${e.toString()}");
+        showHeadsupNoti(context, ref, "Error: ${e.toString()}");
       }
     }
   }
@@ -64,9 +62,9 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
       body: ListView(
         padding: pagePadding,
         children: [
-          const Text(
+          Text(
             'Verify Your Email',
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           SizedBox(height: 20),
           Text(

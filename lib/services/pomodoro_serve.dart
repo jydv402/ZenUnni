@@ -1,6 +1,5 @@
 // lib/services/pomodoro_notifier.dart
 import 'dart:async';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 class PomodoroState {

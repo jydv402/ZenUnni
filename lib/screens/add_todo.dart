@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
 
 class AddTaskPage extends ConsumerStatefulWidget {
@@ -68,12 +65,13 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           Text(widget.taskToEdit != null ? "Edit Task" : "Add Task",
-              style: headL),
+              style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 25),
           //Task name text field
           _dialogTextFields(context, nameController, "Task name"),
@@ -121,11 +119,13 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             );
 
             if (pickTime != null) {
-              setState(() {
-                localTime = pickTime; // saves to local variable
-                _time = pickTime; // saves to global variable
-                print("Selected time: $localTime");
-              });
+              setState(
+                () {
+                  localTime = pickTime; // saves to local variable
+                  _time = pickTime; // saves to global variable
+                  print("Selected time: $localTime");
+                },
+              );
             }
           }, "Set due time", 16),
           const SizedBox(height: 30),
@@ -136,7 +136,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           ),
           const SizedBox(height: 16),
           _dialogPrioritySelect(setState),
-          const SizedBox(height: 75),
+          const SizedBox(height: 30),
           fabButton(context, () {
             if (validateTaskFields()) {
               DateTime dateTime = DateTime(
@@ -167,12 +167,48 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               }
               resetDialogFields();
               Navigator.pop(context);
+              showHeadsupNoti(context, ref, "Task saved successfully!");
             } else {
-              print("error fields must not be empty");
+              showHeadsupNoti(context, ref, "Please fill in all fields!");
             }
           }, widget.taskToEdit != null ? "Update Task" : "Save Task", 0)
         ],
       ),
+      // floatingActionButton: fabButton(context, () {
+      //   if (validateTaskFields()) {
+      //     DateTime dateTime = DateTime(
+      //       _date!.year,
+      //       _date!.month,
+      //       _date!.day,
+      //       _time!.hour,
+      //       _time!.minute,
+      //     );
+      //     TodoModel task = TodoModel(
+      //       name: nameController.text,
+      //       description: descController.text,
+      //       date: dateTime,
+      //       priority: _prior,
+      //       isDone: isDone,
+      //       expired: true,
+      //     );
+      //     if (widget.taskToEdit != null) {
+      //       // Update existing task
+      //       ref.read(
+      //         taskUpdateFullProvider(task),
+      //       );
+      //     } else {
+      //       // Add new task
+      //       ref.read(
+      //         taskAddProvider(task),
+      //       );
+      //     }
+      //     resetDialogFields();
+      //     Navigator.pop(context);
+      //   } else {
+      //     print("error fields must not be empty");
+      //   }
+      // }, widget.taskToEdit != null ? "Update Task" : "Save Task", 26),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -222,38 +258,41 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   }
 
 //TODO: use a segmented button
-  Widget _dialogPrioritySelect(
-      void Function(
-        void Function(),
-      ) setState) {
-    return Center(
-      child: Wrap(
-        spacing: 2,
-        children: ['High', 'Medium', 'Low'].map((String value) {
-          return ChoiceChip(
-            padding: EdgeInsets.fromLTRB(16, 24, 16, 24),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(26),
-            ),
-            label: Text(value),
-            selected: localPrior == value,
-            onSelected: (bool selected) {
-              setState(() {
-                if (selected) {
-                  localPrior = value;
-                  _prior = value;
-                }
-              });
+  Widget _dialogPrioritySelect(void Function(void Function()) setState) {
+    return SizedBox(
+      width: double.infinity,
+      child: SegmentedButton<String>(
+        showSelectedIcon: false,
+        style: ButtonStyle(
+          padding: WidgetStatePropertyAll(
+            EdgeInsets.fromLTRB(26, 26, 26, 26),
+          ),
+          textStyle:
+              WidgetStatePropertyAll(Theme.of(context).textTheme.bodySmall),
+        ),
+        segments: <ButtonSegment<String>>[
+          ButtonSegment<String>(
+            value: 'High',
+            label: Text('High'),
+          ),
+          ButtonSegment<String>(
+            value: 'Medium',
+            label: Text('Medium'),
+          ),
+          ButtonSegment<String>(
+            value: 'Low',
+            label: Text('Low'),
+          ),
+        ],
+        selected: {localPrior},
+        onSelectionChanged: (Set<String> value) {
+          setState(
+            () {
+              localPrior = value.first;
+              _prior = value.first;
             },
-            showCheckmark: false,
-            selectedColor: const Color(0xFFff8b2c),
-            backgroundColor: Colors.grey,
-            labelStyle: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: Colors.black),
           );
-        }).toList(),
+        },
       ),
     );
   }

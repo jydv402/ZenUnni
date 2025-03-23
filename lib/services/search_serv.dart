@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 final rankedUserSearchProvider = StreamProvider<List<SearchModel>>((ref) {
@@ -14,6 +13,8 @@ final rankedUserSearchProvider = StreamProvider<List<SearchModel>>((ref) {
                 score: user.score,
                 rank: rank++,
                 isUser: user.username == username,
+                gender: user.gender,
+                avatar: user.avatar,
               );
             },
           ).toList();

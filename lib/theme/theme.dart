@@ -2,27 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:zen/theme/text_theme.dart';
 
 // Light theme for the app
-ThemeData get lightTheme {
+ThemeData get darkTheme {
   return ThemeData(
+    //NOTE: Dark colorscheme
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
       primary: const Color(0xFFEEEEEE), // Light gray
       onPrimary: Colors.black,
       secondary: const Color(0xFF673AB7), // Darker purple
       onSecondary: Colors.white,
-      surface: //Colors.black,
-          const Color.fromARGB(255, 23, 25, 27),
+      surface: const Color.fromARGB(255, 23, 25, 27),
       onSurface: Colors.black,
       error: Colors.red,
       onError: Colors.white,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-        elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(36),
-        )),
     textTheme: TextTheme(
       headlineLarge: GoogleFonts.poppins(
         fontSize: 44,
@@ -30,18 +26,37 @@ ThemeData get lightTheme {
         color: Colors.white,
       ),
       headlineMedium: GoogleFonts.poppins(
-          fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
-      headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
-      labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
-      labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
-      bodyMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      bodySmall: GoogleFonts.poppins(fontSize: 13.0, color: Colors.white),
+        fontSize: 24.0,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+      ),
+      headlineSmall: GoogleFonts.poppins(
+        fontSize: 18.0,
+        color: Colors.white,
+      ),
+      labelMedium: GoogleFonts.poppins(
+        fontSize: 16.0,
+        color: Colors.black,
+      ),
+      labelSmall: GoogleFonts.poppins(
+        fontSize: 14.0,
+        color: Colors.black,
+      ),
+      bodyMedium: GoogleFonts.poppins(
+        fontSize: 16.0,
+        color: Colors.white,
+      ),
+      bodySmall: GoogleFonts.poppins(
+        fontSize: 13.0,
+        color: Colors.white,
+      ),
+      titleMedium: prfDivTxtD,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFff8b2c),
+        backgroundColor: Color(0xFFFF8B2C),
         foregroundColor: Colors.white,
-        shadowColor: const Color.fromARGB(255, 255, 139, 44),
+        shadowColor: Colors.orangeAccent,
         padding: const EdgeInsets.all(26),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(26),
@@ -68,7 +83,7 @@ ThemeData get lightTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.white, width: 2.0),
+        borderSide: const BorderSide(color: Color(0xFFFF8B2C), width: 2.0),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
@@ -87,6 +102,45 @@ ThemeData get lightTheme {
       errorStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.red),
       floatingLabelStyle:
           GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      labelTextStyle: WidgetStateProperty.all(bodySD),
+      iconTheme: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return const IconThemeData(color: Colors.black);
+          }
+          return const IconThemeData(color: Colors.white);
+        },
+      ),
+    ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        side: WidgetStatePropertyAll(
+          BorderSide(color: Colors.white),
+        ),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(26),
+          ),
+        ),
+        backgroundColor: WidgetStateProperty.resolveWith(
+          (states) {
+            if (states.contains(WidgetState.selected)) {
+              return const Color.fromRGBO(255, 139, 44, 1);
+            }
+            return Colors.transparent;
+          },
+        ),
+        foregroundColor: WidgetStateProperty.resolveWith(
+          (states) {
+            if (states.contains(WidgetState.selected)) {
+              return Colors.black;
+            }
+            return Colors.white;
+          },
+        ),
+      ),
     ),
     datePickerTheme: DatePickerThemeData(
       // rangePickerBackgroundColor: Color(0xFF202124),
@@ -132,6 +186,7 @@ ThemeData get lightTheme {
         }
         return Colors.transparent;
       }),
+
       yearForegroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.selected)) {
@@ -191,62 +246,6 @@ ThemeData get lightTheme {
 
 var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
 var pagePaddingWithScore = const EdgeInsets.fromLTRB(26, 50, 26, 26);
-
-var markdownStyleSheetWhite = MarkdownStyleSheet(
-  h1: GoogleFonts.poppins(
-    // Heading 1
-    fontSize: 32.0,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-  h2: GoogleFonts.poppins(
-    // Heading 2
-    fontSize: 24.0,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-  h3: GoogleFonts.poppins(
-    // Heading 3
-    fontSize: 18.0,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-  p: GoogleFonts.poppins(
-    // Paragraph
-    fontSize: 16.0,
-    color: Colors.white,
-  ),
-  strong: const TextStyle(
-    // Bold text
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  ),
-  em: const TextStyle(
-    // Italic text
-    fontStyle: FontStyle.italic,
-    color: Colors.white,
-  ),
-  a: const TextStyle(
-    // Link
-    color: Colors.blue,
-    decoration: TextDecoration.underline,
-  ),
-  code: GoogleFonts.robotoMono(
-    // Code block
-    backgroundColor: Colors.grey[800],
-    color: Colors.white,
-  ),
-  blockquote: const TextStyle(
-    // Blockquote
-    color: Colors.grey,
-    fontStyle: FontStyle.italic,
-  ),
-  listBullet: const TextStyle(
-    // Unordered list
-    color: Colors.white,
-  ),
-  blockSpacing: 24.0, // Spacing between blocks
-);
 
 var markdownStyleSheetBlack = MarkdownStyleSheet(
   h1: GoogleFonts.poppins(
