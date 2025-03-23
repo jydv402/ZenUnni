@@ -357,34 +357,124 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           return const SizedBox(height: 140);
         } else {
           final item = scheduleItems[index - 1];
-          return TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineXY: 0.1,
-            isFirst: index == 1,
-            isLast: index == scheduleItems.length,
-            indicatorStyle: IndicatorStyle(
-              width: 20,
-              color: Colors.blue,
-              padding: const EdgeInsets.all(6),
-              iconStyle: IconStyle(
-                color: Colors.white,
-                iconData: Icons.check,
-              ),
-            ),
-            beforeLineStyle: const LineStyle(
-              color: Colors.blue,
-              thickness: 3,
-            ),
-            endChild: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                '${item.taskName}\n${DateFormat('hh:mm a').format(item.startTime)} - ${DateFormat('hh:mm a').format(item.endTime)}\n${DateFormat('dd/MM/yyyy').format(item.startTime)}\n${item.duration ~/ 60} hrs ${item.duration % 60} mins',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-          );
+          return scheduleCard(item);
+          // return TimelineTile(
+          //   alignment: TimelineAlign.manual,
+          //   lineXY: 0.1,
+          //   isFirst: index == 1,
+          //   isLast: index == scheduleItems.length,
+          //   indicatorStyle: IndicatorStyle(
+          //     width: 40,
+          //     height: item.duration.toDouble(),
+          //     indicator: Container(
+          //       height: item.duration.toDouble(),
+          //       decoration: BoxDecoration(
+          //         color: colors.pillClr,
+          //         shape: BoxShape.circle,
+          //       ),
+          //       child: Icon(LucideIcons.check),
+          //     ),
+          //     padding: const EdgeInsets.all(6),
+          //   ),
+          //   beforeLineStyle: const LineStyle(
+          //     color: Color.fromRGBO(255, 139, 44, 1),
+          //     thickness: 3,
+          //   ),
+          //   afterLineStyle: const LineStyle(
+          //     color: Color.fromRGBO(255, 139, 44, 1),
+          //     thickness: 3,
+          //   ),
+          //   endChild: Padding(
+          //     padding: EdgeInsets.symmetric(vertical: 12),
+          //     child: Row(
+          //       children: [
+          //         Text(
+          //           DateFormat('hh:mm a').format(item.startTime),
+          //           style: TextStyle(color: Colors.white54, fontSize: 14),
+          //         ),
+          //         SizedBox(width: 20),
+          //         Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //             Text(
+          //               item.taskName,
+          //               style: TextStyle(
+          //                   color: Colors.white,
+          //                   fontSize: 18,
+          //                   fontWeight: FontWeight.bold),
+          //             ),
+          //             Text(
+          //               "${item.duration} min",
+          //               style: TextStyle(color: Colors.white, fontSize: 14),
+          //             ),
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+
+          // );
         }
       },
+    );
+  }
+
+  Widget scheduleCard(ScheduleItem item) {
+    final colors = ref.watch(appColorsProvider);
+    return Stack(
+      alignment: Alignment.centerLeft,
+      children: [
+        Positioned(
+          top: 26,
+          left: 16,
+          child: Text(
+            DateFormat('hh:mm a').format(item.startTime),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.fromLTRB(90, 16, 26, 16),
+          height: item.duration.toDouble() * 1.5,
+          width: 40,
+          decoration: BoxDecoration(
+            color: colors.pillClr,
+            borderRadius: BorderRadius.circular(26),
+          ),
+        ),
+        Positioned(
+          bottom: 26,
+          left: 16,
+          child: Text(
+            DateFormat('hh:mm a').format(item.endTime),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+        Positioned(
+          top: item.duration.toDouble() * 0.75,
+          left: 26,
+          child: Text(
+            '${item.duration ~/ 60} hrs\n${item.duration % 60 > 0 ? '${item.duration % 60} min' : ''}',
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Positioned(
+          top: 22,
+          left: 146,
+          child: Text(
+            DateFormat('dd MMM yyyy').format(item.startTime),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+        Positioned(
+          top: item.duration.toDouble() * 0.75 - 8,
+          left: 146,
+          child: Text(
+            item.taskName,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        )
+      ],
     );
   }
 
