@@ -12,7 +12,8 @@ final taskProvider = StreamProvider<List<TodoModel>>(
     final todoDoc = FirebaseFirestore.instance
         .collection('users')
         .doc(auth.currentUser?.uid)
-        .collection('task');
+        .collection('task')
+        .where('isRecurring', isEqualTo: false);
 
     //final querySnapshot = todoDoc.where('isDone', isEqualTo: false).snapshots();
     //maybe for reccuring tasks all we need is another stream provider with different querying condition
@@ -26,7 +27,7 @@ final taskProvider = StreamProvider<List<TodoModel>>(
           date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
           priority: data['priority'] ?? '',
           isDone: data['isDone'] ?? false,
-          isRecurring: data['isRecurring']?? false,
+          isRecurring: data['isRecurring'] ?? false,
           expired: ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
               .isAfter(DateTime.now()),
         );
@@ -35,6 +36,32 @@ final taskProvider = StreamProvider<List<TodoModel>>(
     }
   },
 );
+
+//recurringTaskProvider
+final recurringTaskProvider = StreamProvider<List<TodoModel>>((ref) async* {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final todoDoc = FirebaseFirestore.instance
+      .collection('users')
+      .doc(auth.currentUser?.uid)
+      .collection('task')
+      .where('isRecurring', isEqualTo: true);
+
+  await for (final snapshot in todoDoc.snapshots()) {
+    final tasks = snapshot.docs.map((doc) {
+      final data = doc.data();
+      return TodoModel(
+        name: data['task'] ?? '',
+        description: data['description'] ?? '',
+        date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
+        priority: data['priority'] ?? '',
+        isDone: data['isDone'] ?? false,
+        isRecurring: data['isRecurring'] ?? true,
+        expired: false,
+      );
+    }).toList();
+    yield tasks;
+  }
+});
 
 // Add task
 final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
@@ -51,7 +78,7 @@ final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
     );
 
     // Schedule a notification for the newly added task
-    if (task.date.isAfter(DateTime.now())) {
+    if (!task.isRecurring && task.date.isAfter(DateTime.now())) {
       final notificationTime = task.date.subtract(Duration(minutes: 10));
       if (notificationTime.isAfter(DateTime.now())) {
         await NotificationService.sheduleNotification(
@@ -83,17 +110,18 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
       await taskDoc.doc(docId).update(
             task.toMap(),
           );
-           // Schedule a notification for the updated task
-      if (task.date.isAfter(DateTime.now())) {
+      // Schedule a notification for the updated task
+      if (!task.isRecurring && task.date.isAfter(DateTime.now())) {
         final notificationTime = task.date.subtract(Duration(minutes: 10));
         if (notificationTime.isAfter(DateTime.now())) {
           await NotificationService.sheduleNotification(
-            taskDoc.id.hashCode, 
+            taskDoc.id.hashCode,
             "Task Reminder",
             "Your updated task '${task.name}' is due at ${DateFormat('hh:mm a').format(task.date)}.",
             notificationTime,
           );
-          print("Scheduled notification for updated task: ${task.name} at $notificationTime");
+          print(
+              "Scheduled notification for updated task: ${task.name} at $notificationTime");
         }
       }
     }
@@ -120,7 +148,6 @@ final taskDeleteProvider = FutureProvider.family<void, TodoModel>(
   },
 );
 
-
 //to get the incomplete tasks to schedule notifications
 Future<void> scheduleNotificationsForIncompleteTasks() async {
   try {
@@ -128,10 +155,11 @@ Future<void> scheduleNotificationsForIncompleteTasks() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     // Fetch incomplete tasks
     final tasksSnapshot = await firestore
-    .collection('users')
-    .doc(auth.currentUser?.uid)
+        .collection('users')
+        .doc(auth.currentUser?.uid)
         .collection('task')
         .where('isDone', isEqualTo: false)
+        .where('isRecurring',isEqualTo: false)
         .get();
 
     final now = DateTime.now();
@@ -142,14 +170,14 @@ Future<void> scheduleNotificationsForIncompleteTasks() async {
       final dueDate = (data['date'] as Timestamp).toDate();
 
       //  Cancel existing notification to prevent duplicates
- // await NotificationService.cancelNotification(taskId.hashCode);
+      // await NotificationService.cancelNotification(taskId.hashCode);
 
       // Schedule notification 10 minutes before the due date
-      final notificationTime = dueDate.subtract(Duration(minutes:10));
+      final notificationTime = dueDate.subtract(Duration(minutes: 10));
 
-      if (notificationTime.isAfter(now)&& dueDate.isAfter(now) ) {
+      if (notificationTime.isAfter(now) && dueDate.isAfter(now)) {
         await NotificationService.sheduleNotification(
-          doc.id.hashCode,  // Unique ID based on task ID
+          doc.id.hashCode, // Unique ID based on task ID
           "Task Reminder",
           "Your task '$taskName' is due at ${DateFormat('hh:mm a').format(dueDate)}.",
           notificationTime,
@@ -159,7 +187,6 @@ Future<void> scheduleNotificationsForIncompleteTasks() async {
         print("Skipped past-due task: $taskName");
       }
     }
-
   } catch (e) {
     print("Error scheduling notifications: $e");
   }
