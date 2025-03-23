@@ -124,6 +124,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     () {
                       Navigator.of(context).pop();
                       logoutUser(context, ref);
+                      stateInvalidator(ref);
                     },
                   );
                 },
@@ -145,7 +146,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           ],
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => Center(
+        child: showRunningIndicator(
+          context,
+          "Getting your profile...",
+        ),
+      ),
       error: (err, _) => Center(child: Text("Error: $err")),
     );
   }

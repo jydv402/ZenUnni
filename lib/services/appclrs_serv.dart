@@ -15,17 +15,17 @@ class AppColors {
 
 // Light and Dark Colors
 class LightColors {
-  final Color mdText = Colors.black;
-  final Color pillClr = Colors.grey[300]!;
-  final Color toastBg = Colors.white;
-  final Color iconClr = Colors.black;
+  final Color mdText = const Color.fromRGBO(0, 0, 0, 1); //black
+  final Color pillClr = const Color.fromRGBO(224, 224, 224, 1); //gray 300
+  final Color toastBg = const Color.fromRGBO(255, 255, 255, 1); //white
+  final Color iconClr = const Color.fromRGBO(0, 0, 0, 1); //black
 }
 
 class DarkColors {
-  final Color mdText = Colors.white;
-  final Color pillClr = Colors.grey[800]!;
-  final Color toastBg = Colors.black;
-  final Color iconClr = Colors.white;
+  final Color mdText = const Color.fromRGBO(255, 255, 255, 1); //white
+  final Color pillClr = const Color.fromRGBO(66, 66, 66, 1); //gray 800
+  final Color toastBg = const Color.fromARGB(255, 23, 25, 27); // gray app bg
+  final Color iconClr = const Color.fromRGBO(255, 255, 255, 1); //white
 }
 
 // Riverpod Provider for AppColors

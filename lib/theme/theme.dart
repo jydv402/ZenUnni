@@ -83,7 +83,7 @@ ThemeData get darkTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Colors.white, width: 2.0),
+        borderSide: const BorderSide(color: Color(0xFFFF8B2C), width: 2.0),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
@@ -182,6 +182,12 @@ ThemeData get darkTheme {
       //   ),
     ),
     timePickerTheme: TimePickerThemeData(),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Color(0xFFFF8B2C),
+      foregroundColor: Colors.black,
+      enableFeedback: true,
+      splashColor: Color(0xFFFF8B2C),
+    ),
   );
 }
 

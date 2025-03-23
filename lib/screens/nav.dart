@@ -110,8 +110,14 @@ class _NavbarState extends ConsumerState<Navbar> {
                 onPressed: () {
                   Navigator.pushNamed(context, '/chat');
                 },
-                label:
-                    Text(' Unni', style: Theme.of(context).textTheme.bodySmall),
+                label: const Text(
+                  ' Unni',
+                  style: TextStyle(
+                    fontFamily: 'Pop',
+                    fontSize: 13.0,
+                    color: Colors.black,
+                  ),
+                ),
                 icon: const Icon(
                   LucideIcons.message_square_dot,
                   color: Colors.black,

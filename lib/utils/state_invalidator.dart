@@ -5,8 +5,6 @@ void stateInvalidator(WidgetRef ref) {
   ref.invalidate(navStackProvider); //nav_serv.dart
   ref.invalidate(pgIndexProvider); //nav_serv.dart
   ref.invalidate(subPgIndexProvider); //nav_serv.dart
-  ref.invalidate(userNameProvider); //user_serv.dart
-  ref.invalidate(userProvider); //user_serv.dart
   ref.invalidate(scoreProvider); //gamify_serv.dart
   ref.invalidate(moodProvider); //mood_serv.dart
   ref.invalidate(motivationalMessageProvider); //mood_serv.dart
@@ -16,4 +14,6 @@ void stateInvalidator(WidgetRef ref) {
   ref.invalidate(habitProvider); //habit_serv.dart
   ref.invalidate(pomoProvider); //pomodoro_serv.dart
   ref.invalidate(userSearchProvider); //search_serv.dart
+  ref.invalidate(userNameProvider); //user_serv.dart
+  ref.invalidate(userProvider); //user_serv.dart
 }
