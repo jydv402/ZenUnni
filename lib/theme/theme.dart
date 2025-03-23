@@ -7,14 +7,14 @@ import 'package:zen/theme/text_theme.dart';
 // Light theme for the app
 ThemeData get darkTheme {
   return ThemeData(
+    //NOTE: Dark colorscheme
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
       primary: const Color(0xFFEEEEEE), // Light gray
       onPrimary: Colors.black,
       secondary: const Color(0xFF673AB7), // Darker purple
       onSecondary: Colors.white,
-      surface: //Colors.black,
-          const Color.fromARGB(255, 23, 25, 27),
+      surface: const Color.fromARGB(255, 23, 25, 27),
       onSurface: Colors.black,
       error: Colors.red,
       onError: Colors.white,
@@ -26,12 +26,30 @@ ThemeData get darkTheme {
         color: Colors.white,
       ),
       headlineMedium: GoogleFonts.poppins(
-          fontSize: 24.0, fontWeight: FontWeight.w400, color: Colors.white),
-      headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.white),
-      labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
-      labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
-      bodyMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      bodySmall: GoogleFonts.poppins(fontSize: 13.0, color: Colors.white),
+        fontSize: 24.0,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+      ),
+      headlineSmall: GoogleFonts.poppins(
+        fontSize: 18.0,
+        color: Colors.white,
+      ),
+      labelMedium: GoogleFonts.poppins(
+        fontSize: 16.0,
+        color: Colors.black,
+      ),
+      labelSmall: GoogleFonts.poppins(
+        fontSize: 14.0,
+        color: Colors.black,
+      ),
+      bodyMedium: GoogleFonts.poppins(
+        fontSize: 16.0,
+        color: Colors.white,
+      ),
+      bodySmall: GoogleFonts.poppins(
+        fontSize: 13.0,
+        color: Colors.white,
+      ),
       titleMedium: prfDivTxtD,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
