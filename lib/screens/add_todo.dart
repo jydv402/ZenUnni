@@ -89,12 +89,12 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               context: context,
               firstDate: DateTime.now(),
               lastDate: DateTime(2100),
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: lightTheme, // Apply global theme
-                  child: child!,
-                );
-              },
+              //builder: (BuildContext context, Widget? child) {
+              //     return Theme(
+              //       theme: lightTheme(), // Apply global theme
+              //       child: child!,
+              //     );
+              //   },
             );
             if (pickDate != null) {
               setState(() {
@@ -112,12 +112,12 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             TimeOfDay? pickTime = await showTimePicker(
               context: context,
               initialTime: TimeOfDay.now(),
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: lightTheme, // Apply the global theme
-                  child: child!,
-                );
-              },
+              //builder: (BuildContext context, Widget? child) {
+              //   return Theme(
+              //     data: lightTheme, // Apply the global theme
+              //     child: child!,
+              //   );
+              // },
             );
 
             if (pickTime != null) {

@@ -89,11 +89,13 @@ ThemeData get lightTheme {
           GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
     ),
     datePickerTheme: DatePickerThemeData(
-      // rangePickerHeaderHeadlineStyle: GoogleFonts.poppins(
-      //   color: Colors.white,
-      //   fontSize: 26,
-      //   fontWeight: FontWeight.bold,
-      // ),
+      // rangePickerBackgroundColor: Color(0xFF202124),
+      // rangePickerHeaderBackgroundColor: Color(0xFF202124),
+      // rangePickerShadowColor: Color(0xFF202124),
+
+      //
+      rangePickerHeaderForegroundColor: Colors.white,
+      headerForegroundColor: Colors.white,
       backgroundColor: const Color(0xFF202124),
       dayForegroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
@@ -103,23 +105,13 @@ ThemeData get lightTheme {
         }
         return Colors.white;
       }),
-      headerHelpStyle: GoogleFonts.poppins(
-        color: Colors.white,
-        fontSize: 16,
-      ),
+
       dayBackgroundColor: WidgetStateColor.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
           return const Color(0xFFff8b2c);
         }
         return Colors.transparent;
       }),
-      //rangePickerHeaderForegroundColor: Color(0xFFff8b2c),
-      //rangePickerHeaderBackgroundColor: Color(0xFFff8b2c),
-
-      //rangePickerSurfaceTintColor: Color(0xFFff8b2c),
-
-      //rangeSelectionBackgroundColor: Color(0xFFff8b2c),
-      //rangeSelectionBackgroundColor: const Color(0xFFff8b2c),
       dividerColor: Colors.white,
       headerHeadlineStyle: GoogleFonts.poppins(
         color: Colors.white,
@@ -134,12 +126,18 @@ ThemeData get lightTheme {
         color: Colors.white,
         fontSize: 16,
       ),
+      yearBackgroundColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const Color(0xFFff8b2c);
+        }
+        return Colors.transparent;
+      }),
       yearForegroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.selected)) {
             return const Color.fromRGBO(0, 0, 0, 1);
           }
-          return Colors.white;
+          return const Color.fromARGB(255, 255, 255, 255);
         },
       ),
       yearStyle: GoogleFonts.poppins(
