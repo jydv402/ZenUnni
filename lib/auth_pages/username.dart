@@ -38,6 +38,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
           ),
           const SizedBox(height: 40),
           TextField(
+            maxLength: 10,
             controller: userNameController,
             style: Theme.of(context).textTheme.bodyMedium,
             decoration: const InputDecoration(
@@ -49,12 +50,13 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
           // Gender Selector
           SegmentedButton<int>(
             style: ButtonStyle(
-                padding: WidgetStateProperty.all(
-                  const EdgeInsets.symmetric(horizontal: 26, vertical: 28),
-                ),
-                textStyle: WidgetStatePropertyAll(
-                  Theme.of(context).textTheme.bodySmall,
-                )),
+              padding: WidgetStateProperty.all(
+                const EdgeInsets.symmetric(horizontal: 26, vertical: 28),
+              ),
+              textStyle: WidgetStatePropertyAll(
+                Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
             showSelectedIcon: false,
             emptySelectionAllowed: false,
             multiSelectionEnabled: false,
@@ -132,6 +134,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
           await updateUserDoc(username, gender.contains(0) ? 0 : 1, slctdAvt!);
           if (context.mounted) {
             Navigator.pop(context);
+            showHeadsupNoti(context, ref, "Profile updated successfully.");
           }
         } else {
           showHeadsupNoti(context, ref, "Please enter a username first.");
