@@ -10,14 +10,6 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env"); //load the .env file
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
-
-  // SystemChrome.setSystemUIOverlayStyle(
-  //   const SystemUiOverlayStyle(
-  //     statusBarColor: Colors.transparent,
-  //     statusBarIconBrightness: Brightness.dark,
-  //     statusBarBrightness: Brightness.dark,
-  //   ),
-  // );
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -31,6 +23,17 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
+
+    // Set the system status bar color
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // Transparent status bar
+        statusBarIconBrightness: themeMode == ThemeMode.dark
+            ? Brightness.light // White icons for dark mode
+            : Brightness.dark, // Black icons for light mode
+      ),
+    );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,

@@ -105,18 +105,20 @@ class _NavbarState extends ConsumerState<Navbar> {
                   );
                 },
               ),
-        // floatingActionButton: pgIndex != 2
-        //     ? FloatingActionButton(
-        //         onPressed: () {
-        //           Navigator.pushNamed(context, '/chat');
-        //         },
-        //         child: const Icon(
-        //           LucideIcons.message_square_dot,
-        //           color: Colors.black,
-        //         ),
-        //       )
-        //     : null,
-        // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: pgIndex == 2
+            ? FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/chat');
+                },
+                label:
+                    Text(' Unni', style: Theme.of(context).textTheme.bodySmall),
+                icon: const Icon(
+                  LucideIcons.message_square_dot,
+                  color: Colors.black,
+                ),
+              )
+            : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }

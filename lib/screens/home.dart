@@ -25,11 +25,10 @@ class LandPage extends ConsumerWidget {
         );
       },
     );
-    // floatingActionButton: CustomFAB(),
-    // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
   }
 
-  Widget homeScreen(BuildContext context, WidgetRef ref, String? user, mood) {
+  Widget homeScreen(
+      BuildContext context, WidgetRef ref, String? user, String? mood) {
     final now = DateTime.now().hour;
     final greeting = now < 12
         ? 'Morning'
@@ -39,45 +38,73 @@ class LandPage extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       children: [
+        //Top score card
         Padding(
           padding: const EdgeInsets.only(right: 10),
           child: const ScoreCard(),
         ),
+        //Greeting text
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-          child: _showGreeting(context, greeting, user),
-        ),
-        if (mood == null)
-          //Show add mood msg
-          _msgContainer(
-            context,
-            "No mood added yet, add it now? 👀",
-            () => updatePgIndex(ref, 5, 3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Good $greeting,",
+                  style: Theme.of(context).textTheme.headlineMedium),
+              Text(user!, style: Theme.of(context).textTheme.headlineLarge),
+            ],
           ),
-        const SizedBox(height: 8),
+        ),
         _bentoBoxes(context),
-        const SizedBox(height: 135),
+        const SizedBox(height: 85),
       ],
     );
   }
 
-  Text _showGreeting(BuildContext context, String greeting, user) {
-    return Text("Good $greeting, \n$user",
-        style: Theme.of(context).textTheme.headlineLarge);
-  }
+  // Widget homeScreen(BuildContext context, WidgetRef ref, String? user, mood) {
+  //   final now = DateTime.now().hour;
+  //   final greeting = now < 12
+  //       ? 'Morning'
+  //       : now < 17
+  //           ? 'Afternoon'
+  //           : 'Evening';
+  //   return ListView(
+  //     padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.only(right: 10),
+  //         child: const ScoreCard(),
+  //       ),
+  //       Padding(
+  //         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+  //         child: _showGreeting(context, greeting, user),
+  //       ),
+  //       if (mood == null)
+  //         //Show add mood msg
+  //         _msgContainer(
+  //           context,
+  //           "No mood added yet, add it now? 👀",
+  //           () => updatePgIndex(ref, 5, 3),
+  //         ),
+  //       const SizedBox(height: 8),
+  //       _bentoBoxes(context),
+  //       const SizedBox(height: 135),
+  //     ],
+  //   );
+  // }
 
-  GestureDetector _msgContainer(
-      BuildContext context, String msg, GestureTapCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(26), color: Colors.white30),
-        child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
-      ),
-    );
-  }
+  // GestureDetector _msgContainer(
+  //     BuildContext context, String msg, GestureTapCallback onTap) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+  //       decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(26), color: Colors.white30),
+  //       child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
+  //     ),
+  //   );
+  // }
 
   Column _bentoBoxes(BuildContext context) {
     //Centralized variables for easy fiddling
