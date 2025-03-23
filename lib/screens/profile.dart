@@ -23,7 +23,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final themeMode = ref.watch(themeProvider);
     final colors = ref.watch(appColorsProvider);
     final isDarkMode = themeMode == ThemeMode.dark;
-
+    const div16 = SizedBox(height: 16);
     return userState.when(
       data: (user) {
         if (user == null) {
@@ -47,10 +47,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
             ),
 
+            div16,
+
             // User Avatar
             Container(
-              height: 180,
-              width: 180,
+              height: 150,
+              width: 150,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -65,7 +67,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            div16,
 
             Text(
               user.username,
@@ -81,7 +83,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             //   textAlign: TextAlign.center,
             // ),
 
-            const SizedBox(height: 26),
+            div16,
 
             // Account Settings
             divTxt("Account"),
@@ -173,7 +175,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   Padding divTxt(String title) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(26, 26, 26, 2),
+      padding: EdgeInsets.fromLTRB(26, 20, 26, 2),
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleMedium,
