@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
 
@@ -26,10 +24,10 @@ class PomodoroPage extends ConsumerWidget {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
-          const Text(
+          const ScoreCard(),
+          Text(
             'Pomodoro Timer',
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           space50,
           _text(context, "Focus duration : "),
@@ -152,14 +150,14 @@ class CountdownScreen extends ConsumerWidget {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           Text(
             pomo.isRunning
                 ? pomo.isBreak
                     ? 'Break Session ${pomo.rounds - pomo.currentRound + 1}'
                     : 'Focus Session ${pomo.rounds - pomo.currentRound + 1}'
                 : 'Session Ended',
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 56),
           _showTime(context, pomo.timeRemaining ~/ 60), //Pass minutes

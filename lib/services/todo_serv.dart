@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
+
+final editProvider = StateProvider<TodoModel?>((ref) => null);
 
 // Task model
 final taskProvider = StreamProvider<List<TodoModel>>(

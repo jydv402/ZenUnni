@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:zen/zen_barrel.dart';
 
@@ -11,29 +9,26 @@ class LandPage extends ConsumerWidget {
     final user = ref.watch(userNameProvider);
     final mood = ref.watch(moodProvider);
 
-    return Scaffold(
-      body: user.when(
-        data: (data) {
-          return homeScreen(context, user.value, mood.value);
-        },
-        error: (error, stackTrace) {
-          return Center(
-            child: Text('Error: $error'),
-          );
-        },
-        loading: () {
-          return Center(
-            child: showRunningIndicator(
-                context, "Setting things up...\nJust for you..!"),
-          );
-        },
-      ),
-      floatingActionButton: CustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    return user.when(
+      data: (data) {
+        return homeScreen(context, ref, user.value, mood.value);
+      },
+      error: (error, stackTrace) {
+        return Center(
+          child: Text('Error: $error'),
+        );
+      },
+      loading: () {
+        return Center(
+          child: showRunningIndicator(
+              context, "Setting things up...\nJust for you..!"),
+        );
+      },
     );
   }
 
-  Widget homeScreen(BuildContext context, String? user, mood) {
+  Widget homeScreen(
+      BuildContext context, WidgetRef ref, String? user, String? mood) {
     final now = DateTime.now().hour;
     final greeting = now < 12
         ? 'Morning'
@@ -43,43 +38,73 @@ class LandPage extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       children: [
+        //Top score card
         Padding(
           padding: const EdgeInsets.only(right: 10),
-          child: ScoreCard(),
+          child: const ScoreCard(),
         ),
+        //Greeting text
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-          child: _showGreeting(context, greeting, user),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Good $greeting,",
+                  style: Theme.of(context).textTheme.headlineMedium),
+              Text(user!, style: Theme.of(context).textTheme.headlineLarge),
+            ],
+          ),
         ),
-        if (mood == null)
-          //Show add mood msg
-          _msgContainer(context, "No mood added yet, add it now? 👀", () {
-            Navigator.pushNamed(context, '/mood1');
-            Navigator.pushNamed(context, '/mood2');
-          }),
-        const SizedBox(height: 8),
         _bentoBoxes(context),
-        const SizedBox(height: 135),
+        const SizedBox(height: 85),
       ],
     );
   }
 
-  Text _showGreeting(BuildContext context, String greeting, user) {
-    return Text("Good $greeting, \n$user", style: headL);
-  }
+  // Widget homeScreen(BuildContext context, WidgetRef ref, String? user, mood) {
+  //   final now = DateTime.now().hour;
+  //   final greeting = now < 12
+  //       ? 'Morning'
+  //       : now < 17
+  //           ? 'Afternoon'
+  //           : 'Evening';
+  //   return ListView(
+  //     padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.only(right: 10),
+  //         child: const ScoreCard(),
+  //       ),
+  //       Padding(
+  //         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+  //         child: _showGreeting(context, greeting, user),
+  //       ),
+  //       if (mood == null)
+  //         //Show add mood msg
+  //         _msgContainer(
+  //           context,
+  //           "No mood added yet, add it now? 👀",
+  //           () => updatePgIndex(ref, 5, 3),
+  //         ),
+  //       const SizedBox(height: 8),
+  //       _bentoBoxes(context),
+  //       const SizedBox(height: 135),
+  //     ],
+  //   );
+  // }
 
-  GestureDetector _msgContainer(
-      BuildContext context, String msg, GestureTapCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(26), color: Colors.white30),
-        child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
-      ),
-    );
-  }
+  // GestureDetector _msgContainer(
+  //     BuildContext context, String msg, GestureTapCallback onTap) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+  //       decoration: BoxDecoration(
+  //           borderRadius: BorderRadius.circular(26), color: Colors.white30),
+  //       child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
+  //     ),
+  //   );
+  // }
 
   Column _bentoBoxes(BuildContext context) {
     //Centralized variables for easy fiddling
@@ -204,7 +229,7 @@ class LandPage extends ConsumerWidget {
               fit: FlexFit.tight,
               child: _bentoBox(
                   context,
-                  '/search',
+                  '/leader',
                   Colors.deepPurple,
                   bentoHeight,
                   bentoWidth,

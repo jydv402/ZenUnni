@@ -1,18 +1,21 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/zen_barrel.dart';
 
 class ChatPage extends ConsumerWidget {
-  const ChatPage({super.key});
+  ChatPage({super.key});
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatMsgs = ref.watch(msgProvider);
+
     const msgs = {
       "Say Hi to Unni !": "Hi",
+      "Ask Unni anything": "Can I ask you something?",
+      "Share it with Unni": "Can I tell you anything?",
       "Get motivational message": "Motivate me",
       "Hit me with a fact": "Hit me with a fact",
       "Tell me a story": "Tell me a story",
@@ -49,6 +52,7 @@ class ChatPage extends ConsumerWidget {
                   SizedBox(
                     height: 40,
                     child: ListView.builder(
+                      controller: _scrollController,
                       itemCount: msgs.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -106,7 +110,7 @@ class ChatPage extends ConsumerWidget {
                       msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.75,
+                      maxWidth: MediaQuery.of(context).size.width * 0.9,
                     ),
                     decoration: BoxDecoration(
                       color: msg.isUser
@@ -174,6 +178,10 @@ class ChatPage extends ConsumerWidget {
                 hintText: 'Chat with Unni...',
                 hintStyle: Theme.of(context).textTheme.labelMedium,
                 border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
               ),
             ),
@@ -207,18 +215,26 @@ class ChatPage extends ConsumerWidget {
             menuChildren: [
               //Clear chat item
               if (!isEmpty)
-                menuItem(context, ref, "Clear Chat", LineIcons.eraser, () {
-                  showConfirmDialog(
+                menuItem(
+                  context,
+                  ref,
+                  "Clear Chat",
+                  LineIcons.eraser,
+                  () {
+                    showConfirmDialog(
                       context,
                       "Clear Chat ?",
                       "Are you sure you want to clear the chat ?",
                       "Clear",
-                      Colors.red, () {
-                    ref.read(msgProvider.notifier).clearMessages();
-                    Navigator.of(context).pop();
-                  });
-                  menucontroller.close();
-                }),
+                      Colors.red,
+                      () {
+                        ref.read(msgProvider.notifier).clearMessages();
+                        Navigator.of(context).pop();
+                      },
+                    );
+                    menucontroller.close();
+                  },
+                ),
               //Generate schedule item
               menuItem(context, ref, "Generate Schedule", LineIcons.penSquare,
                   () {

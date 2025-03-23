@@ -48,7 +48,7 @@ dependencies:
   langchain_google: ^0.6.4+2
   flutter_riverpod: ^2.6.1
   flutter_markdown: ^0.7.6+2
-  flutter_local_notifications: ^18.0.1
+  flutter_local_notifications: ^19.0.0
   flutter_heatmap_calendar: ^1.0.5
   flutter_colorpicker: ^1.1.0
   glassmorphism: ^3.0.0
@@ -56,6 +56,8 @@ dependencies:
   intl: ^0.20.2
   logger: ^2.5.0
   delightful_toast: ^1.1.0
+  flutter_lucide: ^1.6.2
+  json_store: ^2.0.2
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +87,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/avt/
     - assets/emoji/
     - assets/fonts/
     - assets/loading/
@@ -103,8 +106,8 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-fonts:
-    - family: Poppins
+  fonts:
+    - family: Pop
       fonts:
         - asset: assets/fonts/Poppins-BlackItalic.ttf
           style: italic

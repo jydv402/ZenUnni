@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 class ConnectPage extends ConsumerStatefulWidget {
@@ -16,8 +14,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
   Widget build(BuildContext context) {
     final String searchQuery = searchNameController.text.toLowerCase();
     final searchResults = ref.watch(rankedUserSearchProvider);
+    final colors = ref.watch(appColorsProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: searchResults.when(
         data: (users) {
           final filteredUsers = users.where((user) {
@@ -38,7 +38,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     padding: const EdgeInsets.all(40),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(26),
-                      color: Colors.black,
+                      color: colors.pillClr,
                     ),
                     child: Text(
                       "No users found matching \n\" $searchQuery \"",
@@ -98,6 +98,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
                 hintText: 'Enter a username',
                 hintStyle: Theme.of(context).textTheme.labelMedium,
                 border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
               ),
             ),
@@ -114,6 +118,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
   Widget rankView(List<SearchModel> users) {
     return ListView.builder(
       shrinkWrap: true,
+      padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
       itemCount: users.length + 2,
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -138,6 +143,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     100,
                     18,
                     "1",
+                    users[0].gender == 0
+                        ? males.values.elementAt(users[0].avatar)
+                        : females.values.elementAt(users[0].avatar),
                     users[0].username.toString(),
                     users[0].score.toString(),
                     users[0].isUser ?? false,
@@ -152,6 +160,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     80,
                     14,
                     "2",
+                    users[1].gender == 0
+                        ? males.values.elementAt(users[1].avatar)
+                        : females.values.elementAt(users[1].avatar),
                     users[1].username.toString(),
                     users[1].score.toString(),
                     users[1].isUser ?? false,
@@ -166,6 +177,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     80,
                     14,
                     "3",
+                    users[2].gender == 0
+                        ? males.values.elementAt(users[2].avatar)
+                        : females.values.elementAt(users[2].avatar),
                     users[2].username.toString(),
                     users[2].score.toString(),
                     users[2].isUser ?? false,
@@ -208,10 +222,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ScoreCard(),
-          const Text(
+          const ScoreCard(),
+          Text(
             'Leaderboard',
-            style: headL,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 26),
         ],
@@ -219,8 +233,18 @@ class _SearchState extends ConsumerState<ConnectPage> {
     );
   }
 
-  Positioned rankCard(double top, double right, double left, double dp,
-      double fSize, String rank, String username, String score, bool isUser) {
+  Positioned rankCard(
+      double top,
+      double right,
+      double left,
+      double dp,
+      double fSize,
+      String rank,
+      String path,
+      String username,
+      String score,
+      bool isUser) {
+    final colors = ref.watch(appColorsProvider);
     return Positioned(
       top: top,
       right: right,
@@ -234,11 +258,11 @@ class _SearchState extends ConsumerState<ConnectPage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: isUser ? Colors.white : Colors.transparent,
+                      color: isUser ? Color(0xFFFF8C2B) : Colors.transparent,
                       width: 4),
                 ),
                 child: Image.asset(
-                  'assets/icon/avt.png',
+                  path,
                   height: dp,
                   width: dp,
                   fit: BoxFit.contain,
@@ -251,7 +275,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   padding: EdgeInsets.all(fSize - 4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black,
+                    color: colors.pillClr,
                   ),
                   child: Text(
                     rank,
@@ -265,18 +289,19 @@ class _SearchState extends ConsumerState<ConnectPage> {
             ],
           ),
           const SizedBox(height: 4),
-          Text.rich(
-            TextSpan(
-              text: username,
-              style: Theme.of(context).textTheme.headlineMedium,
-              children: [
-                TextSpan(
-                  text: isUser ? '[You]' : '',
-                  style: Theme.of(context).textTheme.bodySmall,
+          Text(
+            username,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontSize: 18,
                 ),
-              ],
-            ),
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
           ),
+          if (isUser)
+            Text(
+              '[You]',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           Text(
             "$score pts",
             style: Theme.of(context).textTheme.bodySmall,
@@ -287,14 +312,17 @@ class _SearchState extends ConsumerState<ConnectPage> {
   }
 
   Container rankListCards(user) {
+    final colors = ref.watch(appColorsProvider);
+
     return Container(
       margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
       height: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-            color: user.isUser ? Colors.white : Colors.transparent, width: 2),
-        color: Colors.black,
+            color: user.isUser ? Color(0xFFFF8C2B) : Colors.transparent,
+            width: 2),
+        color: colors.pillClr,
       ),
       child: Stack(
         children: [
@@ -312,15 +340,17 @@ class _SearchState extends ConsumerState<ConnectPage> {
           ),
           //User details
           Positioned(
-            left: 75,
-            top: 30,
+            left: 60,
+            top: 20,
             child: Row(
               spacing: 12,
               children: [
                 Image.asset(
-                  'assets/icon/avt.png',
-                  height: 40,
-                  width: 40,
+                  user.gender == 0
+                      ? males.values.elementAt(user.avatar)
+                      : females.values.elementAt(user.avatar),
+                  height: 60,
+                  width: 60,
                   fit: BoxFit.contain,
                 ),
                 Text.rich(
