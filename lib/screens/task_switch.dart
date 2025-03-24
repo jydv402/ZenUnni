@@ -402,7 +402,9 @@ class TaskPageState extends ConsumerState<TaskPage> {
 
   Widget scheduleCard(ScheduleItem item) {
     final colors = ref.watch(appColorsProvider);
+    final contHt = item.duration.toDouble() * 1.5;
     return Stack(
+      fit: StackFit.loose,
       alignment: Alignment.centerLeft,
       children: [
         Positioned(
@@ -415,7 +417,11 @@ class TaskPageState extends ConsumerState<TaskPage> {
         ),
         Container(
           margin: const EdgeInsets.fromLTRB(90, 16, 26, 16),
-          height: item.duration.toDouble() * 1.5,
+          height: contHt < 180
+              ? 180
+              : contHt > 600
+                  ? 600
+                  : contHt,
           width: 40,
           decoration: BoxDecoration(
             color: colors.pillClr,
@@ -431,10 +437,14 @@ class TaskPageState extends ConsumerState<TaskPage> {
           ),
         ),
         Positioned(
-          top: item.duration.toDouble() * 0.75,
           left: 26,
           child: Text(
-            '${item.duration ~/ 60} hrs\n${item.duration % 60 > 0 ? '${item.duration % 60} min' : ''}',
+            // '${item.duration ~/ 60 > 0 ? '${item.duration ~/ 60} min' : 'Only'}\n${item.duration % 60 > 0 ? '${item.duration % 60} mins' : 'only'}',
+            item.duration ~/ 60 == 0
+                ? '${item.duration % 60} mins'
+                : item.duration % 60 == 0
+                    ? '${item.duration ~/ 60} hrs'
+                    : '${item.duration ~/ 60} hrs\n${item.duration % 60} mins',
             style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.center,
           ),
@@ -448,11 +458,35 @@ class TaskPageState extends ConsumerState<TaskPage> {
           ),
         ),
         Positioned(
-          top: item.duration.toDouble() * 0.75 - 8,
           left: 146,
-          child: Text(
-            item.taskName,
-            style: Theme.of(context).textTheme.headlineMedium,
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '${item.taskName}\n',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                TextSpan(
+                  text:
+                      'Due date : ${DateFormat('dd MMM yyyy').format(item.dueDate)}\n',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                TextSpan(
+                  text: 'Priority : ',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                TextSpan(
+                  text: item.priority,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: item.priority == "High"
+                            ? Colors.red
+                            : item.priority == "Medium"
+                                ? Colors.yellow
+                                : Colors.green,
+                      ),
+                ),
+              ],
+            ),
           ),
         )
       ],
