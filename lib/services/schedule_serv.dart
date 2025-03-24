@@ -4,15 +4,19 @@ import 'package:json_store/json_store.dart';
 import 'package:logger/logger.dart';
 
 final JsonStore _jsonStore = JsonStore();
-const String _scheduleKey = 'saved_sched';
+//const String _scheduleKey = 'saved_sched';
 
 final scheduleProvider =
     FutureProvider.family<List<ScheduleItem>, List<TodoModel>>(
   (ref, tasks) async {
+    final username = ref.watch(userNameProvider);
+    final String scheduleKey = 'saved_sched_${username.value}';
+
     var logger = Logger();
+    logger.d(scheduleKey);
     final DateTime now = DateTime.now();
     //Check if schedule exists
-    final storedSchedule = await _jsonStore.getItem(_scheduleKey);
+    final storedSchedule = await _jsonStore.getItem(scheduleKey);
     if (storedSchedule != null) {
       logger.d("Loading schedule from local storage...");
       return (storedSchedule['schedule'] as List)
@@ -55,7 +59,7 @@ final scheduleProvider =
         )
         .toList();
 
-    await _jsonStore.setItem(_scheduleKey,
+    await _jsonStore.setItem(scheduleKey,
         {'schedule': scheduleItems.map((item) => item.toJson()).toList()});
 
     return scheduleItems;
@@ -64,6 +68,8 @@ final scheduleProvider =
 
 /// Clears the cached schedule data so that the scheduleProvider can be re-run.
 void clearScheduleData(WidgetRef ref, List<TodoModel> tasks) async {
-  await _jsonStore.deleteItem(_scheduleKey);
+  final username = ref.watch(userNameProvider);
+  final scheduleKey = 'saved_sched_${username.value}';
+  await _jsonStore.deleteItem(scheduleKey);
   ref.invalidate(scheduleProvider(tasks));
 }

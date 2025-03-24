@@ -192,19 +192,25 @@ class AIService {
         "taskName": taskName,  
         "startTime": "2025-03-08 16:00:00.000",  
         "endTime": "2025-03-08 16:30:00.000", 
-        "duration": 30  
+        "duration": 30
+        "due_date": "2025-03-08 18:00:00.000"
+        "priority": "Medium
       },  
       "2": {  
         "taskName": taskName,  
         "startTime": "2025-03-08 17:00:00.000",  
         "endTime": "2025-03-08 19:30:00.000",  
-        "duration": 150  
+        "duration": 150
+        "due_date": "2025-03-09 09:00:00.000"
+        "priority": "High"
       },  
       "3": {  
         "taskName": taskName,  
         "startTime": "2025-03-08 09:00:00.000",  
         "endTime": "2025-03-08 09:15:00.000",  
         "duration": 15
+        "due_date": "2025-03-08 09:30:00.000"
+        "priority": "Low"
       }  
     }  
     Ensure the final output strictly follows the JSON format above, without additional explanations or unnecessary text.

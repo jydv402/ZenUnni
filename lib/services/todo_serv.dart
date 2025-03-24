@@ -25,7 +25,7 @@ final taskProvider = StreamProvider<List<TodoModel>>(
           date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
           priority: data['priority'] ?? '',
           isDone: data['isDone'] ?? false,
-          expired: ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
+          notExpired: ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
               .isAfter(DateTime.now()),
         );
       }).toList();
