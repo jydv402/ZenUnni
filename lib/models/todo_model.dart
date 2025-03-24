@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 final now = DateTime.now();
 
@@ -10,8 +11,8 @@ class TodoModel {
   String priority;
   bool isDone;
   bool isRecurring;
-  DateTime fromTime;
-  DateTime toTime;
+  String fromTime;
+  String toTime;
   List<String> selectedWeekdays;
   bool expired;
   final Function(bool?)? onChanged;
@@ -29,6 +30,18 @@ class TodoModel {
       this.onChanged,
       required this.expired});
 
+
+ // Convert TimeOfDay to String
+  static String timeOfDayToString(TimeOfDay time) {
+    return '${time.hour}:${time.minute}';
+  }
+
+
+    // Convert String to TimeOfDay
+  static TimeOfDay stringToTimeOfDay(String time) {
+    final parts = time.split(':');
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+  }
   Map<String, dynamic> toMap() {
     return {
       'task': name,
@@ -52,8 +65,8 @@ class TodoModel {
       priority: map['priority'] ?? '',
       isDone: map['isDone'] ?? false,
       isRecurring: map['isRecurring']??false,
-      fromTime: (map['fromTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      toTime: (map['toTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      fromTime:map['fromTime'] ??'',
+      toTime: map['toTime'] ?? '',
       selectedWeekdays: map['selectedWeekdays'] != null
           ? List<String>.from(map['selectedWeekdays'])
           : [],
@@ -67,8 +80,8 @@ class TodoModel {
     DateTime? date,
     String? priority,
     bool? isDone,
-    DateTime? fromTime,
-    DateTime? toTime,
+    String? fromTime,
+    String? toTime,
     List<String>? selectedWeekdays,  
     bool? isRecurring,
   }) {

@@ -155,13 +155,13 @@ class TodoListPage extends ConsumerWidget {
                   style: Theme.of(context)
                       .textTheme
                       .headlineMedium
-                      ?.copyWith(color: Colors.grey),
+                      ?.copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   task.description,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.grey,
+                        color: Colors.white,
                       ),
                 ),
               ],

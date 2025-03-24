@@ -14,11 +14,14 @@ class AddTaskPage extends ConsumerStatefulWidget {
 class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
-  DateTime? _date;
-  TimeOfDay? _time;
+  DateTime? _date;  // for non- recurring task date
+  TimeOfDay? _time; // for non- recurring task time 
   String _prior = "";
   bool isDone = false;
   bool isRecurring = false;
+  TimeOfDay? _fromTime; //for recurring tasks from time 
+  TimeOfDay? _toTime;   // for recurring tasks to time 
+  List<String> selectedWeekdays = [];
 
   DateTime? localDate;
   TimeOfDay? localTime;
@@ -34,6 +37,12 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
       localDate = widget.taskToEdit!.date;
       _time = TimeOfDay.fromDateTime(widget.taskToEdit!.date);
       localTime = TimeOfDay.fromDateTime(widget.taskToEdit!.date);
+      _fromTime = widget.taskToEdit!.fromTime.isNotEmpty
+        ? TodoModel.stringToTimeOfDay(widget.taskToEdit!.fromTime)
+        : null;
+    _toTime = widget.taskToEdit!.toTime.isNotEmpty
+        ? TodoModel.stringToTimeOfDay(widget.taskToEdit!.toTime)
+        : null;
       _prior = widget.taskToEdit!.priority;
       localPrior = widget.taskToEdit!.priority;
       isDone = widget.taskToEdit!.isDone;
@@ -55,19 +64,27 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
     nameController.text = "";
     descController.text = "";
     localPrior = "";
+    _fromTime = null;
+    _toTime = null;
+    localPrior = "";
+    selectedWeekdays.clear();
   }
 
   bool validateTaskFields() {
     // Add null checks for controllers
     if (isRecurring) {
-      // do date/time validation if recurring
-      return nameController.text.isNotEmpty && descController.text.isNotEmpty;
+      // do date,time,selectedweekdays validation if recurring
+      return nameController.text.isNotEmpty &&
+            descController.text.isNotEmpty &&
+           (_fromTime !=null) &&
+           (_toTime != null )&&
+           selectedWeekdays.isNotEmpty;
     } else {
       // do date, time, and priority for non-recurring tasks
       return nameController.text.isNotEmpty &&
           descController.text.isNotEmpty &&
-          _date != null &&
-          _time != null &&
+          (_date != null) &&
+          (_time != null )&&
           (_prior.isNotEmpty ||
               localPrior.isNotEmpty); // Check both prior variables
     }
@@ -91,6 +108,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           const SizedBox(height: 30),
           _isRecurringCheckBox(),
           const SizedBox(height: 30),
+
           if (!isRecurring) ...[
             _selectedDateText(),
             const SizedBox(height: 15),
@@ -160,6 +178,44 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             ),
             const SizedBox(height: 16),
             _dialogPrioritySelect(setState),
+          ] else ...[
+            _weekdaySelector(),
+            const SizedBox(height: 20,),
+
+            // from time picker
+               Text(
+              "From Time: ${_fromTime != null ? _fromTime!.format(context) : 'No time selected'}",
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            fabButton(context, () async {
+              TimeOfDay? picked = await showTimePicker(
+                context: context,
+                initialTime: _fromTime ?? TimeOfDay.now(),
+              );
+              if (picked != null) {
+                setState(() => _fromTime = picked);
+              }
+            }, "Set From Time", 16),
+
+            const SizedBox(height: 20),
+            //to time picker
+              Text(
+              "To Time: ${_toTime != null ? _toTime!.format(context) : 'No time selected'}",
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+             const SizedBox(height: 10),
+            fabButton(context, () async {
+              TimeOfDay? picked = await showTimePicker(
+                context: context,
+                initialTime: _toTime ?? TimeOfDay.now(),
+              );
+              if (picked != null) {
+                setState(() => _toTime = picked);
+              }
+            }, "Set To Time", 16),
           ],
 
           const SizedBox(height: 60),
@@ -183,9 +239,22 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 priority: isRecurring ? "" : _prior,
                 isDone: isDone,
                 isRecurring: isRecurring,
+                 fromTime: isRecurring && _fromTime != null
+          ? TodoModel.timeOfDayToString(_fromTime!)
+          : '',
+                 
+                toTime: isRecurring && _toTime != null
+          ? TodoModel.timeOfDayToString(_toTime!)
+          : '',
+          
+                selectedWeekdays: isRecurring ? selectedWeekdays : [],
                 expired: false,
               );
-
+               print("Recurring task added: ${task.date}"); 
+               print("Recurring task added: ${task.isRecurring}"); 
+               print("Recurring task added: ${task.fromTime}");
+               print("Recurring task added: ${task.toTime}");
+               print("Recurring task added: ${task.selectedWeekdays}");
               if (widget.taskToEdit != null) {
                 // Update existing task
                 ref.read(
@@ -196,6 +265,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 ref.read(
                   taskAddProvider(task),
                 );
+                print("Task Map: ${task.toMap()}");
               }
               resetDialogFields();
               Navigator.pop(context);
@@ -307,4 +377,53 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
       },
     );
   }
+
+ Widget _weekdaySelector() {
+  const List<String> weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  List<bool> isSelected = List.generate(7, (index) => selectedWeekdays.contains(index.toString()));
+
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: List.generate(weekdays.length, (index) {
+      bool selected = selectedWeekdays.contains(weekdays[index]);
+
+      return GestureDetector(
+        onTap: () {
+          setState(() {
+            if (selected) {
+              selectedWeekdays.remove(weekdays[index]);
+            } else {
+              selectedWeekdays.add(weekdays[index]);
+            }
+          });
+        },
+        child: Container(
+          width: 45,
+          height: 45,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: selected ? Colors.blue.shade200 : Colors.grey.shade200,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              weekdays[index],
+              style: TextStyle(
+                color: selected ? Colors.white : Colors.black54,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+      );
+    }),
+  );
+}
 }

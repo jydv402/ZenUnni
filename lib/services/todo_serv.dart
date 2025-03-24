@@ -28,6 +28,10 @@ final taskProvider = StreamProvider<List<TodoModel>>(
           priority: data['priority'] ?? '',
           isDone: data['isDone'] ?? false,
           isRecurring: data['isRecurring'] ?? false,
+          fromTime: data['fromTime'] ?? '', // Keep as String
+      toTime: data['toTime'] ?? '', 
+        selectedWeekdays: List<String>.from(data['selectedWeekdays'] ?? []),
+          
         //   expired: !data['isDone'] && 
         //  ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now()) 
         //     .isBefore(DateTime.now()),
@@ -59,6 +63,9 @@ final recurringTaskProvider = StreamProvider<List<TodoModel>>((ref) async* {
         priority: data['priority'] ?? '',
         isDone: data['isDone'] ?? false,
         isRecurring: data['isRecurring'] ?? true,
+          fromTime: data['fromTime'] ?? '', // Keep as String
+      toTime: data['toTime'] ?? '',
+        selectedWeekdays: List<String>.from(data['selectedWeekdays'] ?? []),
         expired: false,
       );
     }).toList();
