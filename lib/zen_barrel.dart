@@ -40,6 +40,7 @@ export 'screens/mood.dart';
 export 'screens/pomodoro_page.dart';
 export 'screens/profile.dart';
 export 'screens/nav.dart';
+export 'screens/sched_edit.dart';
 export 'screens/task_switch.dart';
 
 //services

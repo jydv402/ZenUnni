@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:timeline_tile_plus/timeline_tile_plus.dart';
 import 'package:zen/zen_barrel.dart';
 
 class TaskPage extends ConsumerStatefulWidget {
@@ -76,9 +75,6 @@ class TaskPageState extends ConsumerState<TaskPage> {
               onPressed: () {},
               child: schedulePopUp(context, tasks.value ?? []),
             ),
-      // fabButton(context, () {
-      //     clearScheduleData(ref, tasks.value ?? []);
-      //   }, "Regenerate Schedule", 26),
       floatingActionButtonLocation: _selectedTab == 0
           ? FloatingActionButtonLocation.centerFloat
           : FloatingActionButtonLocation.endFloat,
@@ -324,30 +320,32 @@ class TaskPageState extends ConsumerState<TaskPage> {
                 ),
                 const SizedBox(height: 10),
                 Text.rich(
-                  TextSpan(children: [
-                    TextSpan(
-                      text: "•  Priority: ",
-                      style: !task.notExpired
-                          ? taskExpiredBodyS
-                          : task.isDone
-                              ? taskCompletedBodyS
-                              : bodySD,
-                    ),
-                    TextSpan(
-                      text: task.priority,
-                      style: !task.notExpired
-                          ? taskExpiredBodyS
-                          : task.isDone
-                              ? taskCompletedBodyS
-                              : bodySD.copyWith(
-                                  color: task.priority == "High"
-                                      ? Colors.red
-                                      : task.priority == "Medium"
-                                          ? Colors.yellow
-                                          : Colors.green,
-                                ),
-                    ),
-                  ]),
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "•  Priority: ",
+                        style: !task.notExpired
+                            ? taskExpiredBodyS
+                            : task.isDone
+                                ? taskCompletedBodyS
+                                : bodySD,
+                      ),
+                      TextSpan(
+                        text: task.priority,
+                        style: !task.notExpired
+                            ? taskExpiredBodyS
+                            : task.isDone
+                                ? taskCompletedBodyS
+                                : bodySD.copyWith(
+                                    color: task.priority == "High"
+                                        ? Colors.red
+                                        : task.priority == "Medium"
+                                            ? Colors.yellow
+                                            : Colors.green,
+                                  ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -407,6 +405,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
       fit: StackFit.loose,
       alignment: Alignment.centerLeft,
       children: [
+        //Start Time
         Positioned(
           top: 26,
           left: 16,
@@ -415,6 +414,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ),
+        //Timeline
         Container(
           margin: const EdgeInsets.fromLTRB(90, 16, 26, 16),
           height: contHt < 180
@@ -428,6 +428,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
             borderRadius: BorderRadius.circular(26),
           ),
         ),
+        //End Time
         Positioned(
           bottom: 26,
           left: 16,
@@ -436,10 +437,10 @@ class TaskPageState extends ConsumerState<TaskPage> {
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ),
+        //Duration
         Positioned(
           left: 26,
           child: Text(
-            // '${item.duration ~/ 60 > 0 ? '${item.duration ~/ 60} min' : 'Only'}\n${item.duration % 60 > 0 ? '${item.duration % 60} mins' : 'only'}',
             item.duration ~/ 60 == 0
                 ? '${item.duration % 60} mins'
                 : item.duration % 60 == 0
@@ -449,6 +450,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
             textAlign: TextAlign.center,
           ),
         ),
+        //Scheduled Date
         Positioned(
           top: 22,
           left: 146,
@@ -457,6 +459,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ),
+        //Task Details
         Positioned(
           left: 146,
           child: Text.rich(
