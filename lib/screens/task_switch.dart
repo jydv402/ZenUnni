@@ -1,17 +1,57 @@
-import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:intl/intl.dart';
-import 'package:timeline_tile_plus/timeline_tile_plus.dart';
 import 'package:zen/zen_barrel.dart';
 
 class TaskPage extends ConsumerStatefulWidget {
   const TaskPage({super.key});
 
   @override
-  _TaskPageState createState() => _TaskPageState();
+  TaskPageState createState() => TaskPageState();
 }
 
-class _TaskPageState extends ConsumerState<TaskPage> {
+class TaskPageState extends ConsumerState<TaskPage> {
   int _selectedTab = 0; // 0 = Todo, 1 = Schedule
+
+  final TextStyle taskExpiredBodyS = bodySD.copyWith(
+    color: Colors.grey,
+    decoration: TextDecoration.lineThrough,
+    decorationColor: Colors.white,
+    decorationThickness: 2,
+  );
+
+  final TextStyle taskCompletedBodyS = bodySD.copyWith(
+    color: Colors.grey,
+    decoration: TextDecoration.lineThrough,
+    decorationColor: Colors.white,
+    decorationThickness: 2,
+  );
+
+  final TextStyle taskExpiredHeadM = headMD.copyWith(
+    color: Colors.grey,
+    decoration: TextDecoration.lineThrough,
+    decorationColor: Colors.white,
+    decorationThickness: 2,
+  );
+
+  final TextStyle taskCompletedHeadM = headMD.copyWith(
+    color: Colors.grey,
+    decoration: TextDecoration.lineThrough,
+    decorationColor: Colors.white,
+    decorationThickness: 2,
+  );
+
+  final TextStyle taskExpiredHeadS = headSD.copyWith(
+    color: Colors.grey,
+    decoration: TextDecoration.lineThrough,
+    decorationColor: Colors.white,
+    decorationThickness: 2,
+  );
+
+  final TextStyle taskCompletedHeadS = headSD.copyWith(
+    color: Colors.grey,
+    decoration: TextDecoration.lineThrough,
+    decorationColor: Colors.white,
+    decorationThickness: 2,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +71,14 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                 ),
               );
             }, "Add New Tasks", 26)
-          : fabButton(context, () {
-              clearScheduleData(ref, tasks.value ?? []);
-            }, "Regenerate Schedule", 26),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          : FloatingActionButton(
+              onPressed: () {},
+              child: schedulePopUp(context, tasks.value ?? []),
+            ),
+      floatingActionButtonLocation: _selectedTab == 0
+          ? FloatingActionButtonLocation.centerFloat
+          : FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
     );
   }
 
@@ -57,9 +101,11 @@ class _TaskPageState extends ConsumerState<TaskPage> {
     final bool isSelected = _selectedTab == index;
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _selectedTab = index;
-        });
+        setState(
+          () {
+            _selectedTab = index;
+          },
+        );
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -129,13 +175,20 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    task.expired
-                        ? Text(
-                            "Task Pending",
-                            style: bodyM.copyWith(
-                                color: Colors.grey,
-                                fontStyle: FontStyle.italic),
-                          )
+                    task.notExpired
+                        ? task.isDone
+                            ? Text(
+                                "Task Completed",
+                                style: bodyM.copyWith(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic),
+                              )
+                            : Text(
+                                "Task Pending",
+                                style: bodyM.copyWith(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic),
+                              )
                         : Text(
                             "Task Expired",
                             style: bodyM.copyWith(
@@ -179,7 +232,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                         color: Colors.white,
                       ),
                     ),
-                    task.expired
+                    task.notExpired
                         ? Checkbox(
                             value: task.isDone,
                             side:
@@ -195,7 +248,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                                 date: task.date,
                                 priority: task.priority,
                                 isDone: value ?? false,
-                                expired: task.expired,
+                                notExpired: task.notExpired,
                               );
                               ref.read(taskUpdateFullProvider(updatedTask));
                               if (task.priority == "High") {
@@ -232,84 +285,67 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                 ),
                 Text(
                   task.name,
-                  style: task.expired
-                      ? Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.copyWith(color: Colors.white)
-                      : Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.white,
-                          decorationThickness: 2),
+                  style: !task.notExpired
+                      ? taskExpiredHeadM
+                      : task.isDone
+                          ? taskCompletedHeadM
+                          : headMD,
                 ),
                 const SizedBox(height: 10),
                 Text(
                   task.description,
-                  style: task.expired
-                      ? headS.copyWith(color: Colors.white)
-                      : headS.copyWith(
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.white,
-                          decorationThickness: 2),
+                  style: !task.notExpired
+                      ? taskExpiredHeadS
+                      : task.isDone
+                          ? taskCompletedHeadS
+                          : headSD,
                 ),
                 const SizedBox(height: 26),
                 Text(
                   "•  Due Date: ${DateFormat('dd MMM y').format(task.date)}",
-                  style: task.expired
-                      ? bodyS.copyWith(color: Colors.white)
-                      : bodyS.copyWith(
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.white,
-                          decorationThickness: 2),
+                  style: !task.notExpired
+                      ? taskExpiredBodyS
+                      : task.isDone
+                          ? taskCompletedBodyS
+                          : bodySD,
                 ),
                 const SizedBox(height: 10),
                 Text(
                   "•  Due Time: ${DateFormat('hh:mm a').format(task.date)}",
-                  style: task.expired
-                      ? bodyS.copyWith(color: Colors.white)
-                      : bodyS.copyWith(
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.white,
-                          decorationThickness: 2),
+                  style: !task.notExpired
+                      ? taskExpiredBodyS
+                      : task.isDone
+                          ? taskCompletedBodyS
+                          : bodySD,
                 ),
                 const SizedBox(height: 10),
                 Text.rich(
-                  TextSpan(children: [
-                    TextSpan(
-                      text: "•  Priority: ",
-                      style: task.expired
-                          ? bodyS.copyWith(color: Colors.white)
-                          : bodyS.copyWith(
-                              color: Colors.grey,
-                              decoration: TextDecoration.lineThrough,
-                              decorationColor: Colors.white,
-                              decorationThickness: 2),
-                    ),
-                    TextSpan(
-                      text: task.priority,
-                      style: task.expired
-                          ? bodyS.copyWith(
-                              color: task.priority == "High"
-                                  ? Colors.red.shade200
-                                  : task.priority == "Medium"
-                                      ? Colors.orange.shade200
-                                      : Colors.green.shade200,
-                            )
-                          : bodyS.copyWith(
-                              color: task.priority == "High"
-                                  ? Colors.red.shade200
-                                  : task.priority == "Medium"
-                                      ? Colors.orange.shade200
-                                      : Colors.green.shade200,
-                              decoration: TextDecoration.lineThrough,
-                              decorationColor: Colors.white,
-                              decorationThickness: 2),
-                    ),
-                  ]),
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "•  Priority: ",
+                        style: !task.notExpired
+                            ? taskExpiredBodyS
+                            : task.isDone
+                                ? taskCompletedBodyS
+                                : bodySD,
+                      ),
+                      TextSpan(
+                        text: task.priority,
+                        style: !task.notExpired
+                            ? taskExpiredBodyS
+                            : task.isDone
+                                ? taskCompletedBodyS
+                                : bodySD.copyWith(
+                                    color: task.priority == "High"
+                                        ? Colors.red
+                                        : task.priority == "Medium"
+                                            ? Colors.yellow
+                                            : Colors.green,
+                                  ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -328,7 +364,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
       data: (scheduleItems) {
         return _scheduleListView(scheduleItems);
       },
-      error: (error, stackTrace) => _scheduleFailListView(context),
+      error: (error, stackTrace) => _scheduleFailListView(context, error),
       loading: () => Center(
         child: showRunningIndicator(context, "Generating Schedule..."),
       ),
@@ -356,38 +392,111 @@ class _TaskPageState extends ConsumerState<TaskPage> {
           return const SizedBox(height: 140);
         } else {
           final item = scheduleItems[index - 1];
-          return TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineXY: 0.1,
-            isFirst: index == 1,
-            isLast: index == scheduleItems.length,
-            indicatorStyle: IndicatorStyle(
-              width: 20,
-              color: Colors.blue,
-              padding: const EdgeInsets.all(6),
-              iconStyle: IconStyle(
-                color: Colors.white,
-                iconData: Icons.check,
-              ),
-            ),
-            beforeLineStyle: const LineStyle(
-              color: Colors.blue,
-              thickness: 3,
-            ),
-            endChild: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                '${item.taskName}\n${DateFormat('hh:mm a').format(item.startTime)} - ${DateFormat('hh:mm a').format(item.endTime)}\n${DateFormat('dd/MM/yyyy').format(item.startTime)}\n${item.duration} minutes',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-          );
+          return scheduleCard(item);
         }
       },
     );
   }
 
-  Widget _scheduleFailListView(BuildContext context) {
+  Widget scheduleCard(ScheduleItem item) {
+    final colors = ref.watch(appColorsProvider);
+    final contHt = item.duration.toDouble() * 1.5;
+    return Stack(
+      fit: StackFit.loose,
+      alignment: Alignment.centerLeft,
+      children: [
+        //Start Time
+        Positioned(
+          top: 26,
+          left: 16,
+          child: Text(
+            DateFormat('hh:mm a').format(item.startTime),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+        //Timeline
+        Container(
+          margin: const EdgeInsets.fromLTRB(90, 16, 26, 16),
+          height: contHt < 180
+              ? 180
+              : contHt > 600
+                  ? 600
+                  : contHt,
+          width: 40,
+          decoration: BoxDecoration(
+            color: colors.pillClr,
+            borderRadius: BorderRadius.circular(26),
+          ),
+        ),
+        //End Time
+        Positioned(
+          bottom: 26,
+          left: 16,
+          child: Text(
+            DateFormat('hh:mm a').format(item.endTime),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+        //Duration
+        Positioned(
+          left: 26,
+          child: Text(
+            item.duration ~/ 60 == 0
+                ? '${item.duration % 60} mins'
+                : item.duration % 60 == 0
+                    ? '${item.duration ~/ 60} hrs'
+                    : '${item.duration ~/ 60} hrs\n${item.duration % 60} mins',
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        //Scheduled Date
+        Positioned(
+          top: 22,
+          left: 146,
+          child: Text(
+            DateFormat('dd MMM yyyy').format(item.startTime),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+        //Task Details
+        Positioned(
+          left: 146,
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '${item.taskName}\n',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                TextSpan(
+                  text:
+                      'Due date : ${DateFormat('dd MMM yyyy').format(item.dueDate)}\n',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                TextSpan(
+                  text: 'Priority : ',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                TextSpan(
+                  text: item.priority,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: item.priority == "High"
+                            ? Colors.red
+                            : item.priority == "Medium"
+                                ? Colors.yellow
+                                : Colors.green,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _scheduleFailListView(BuildContext context, error) {
     return ListView(
       shrinkWrap: true,
       padding: pagePaddingWithScore,
@@ -399,8 +508,61 @@ class _TaskPageState extends ConsumerState<TaskPage> {
             "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
             style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: 10),
-        Text("Psst! Checking your \ninternet connection may help... 🙂",
+        Text(
+            "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
             style: Theme.of(context).textTheme.bodySmall),
+        const SizedBox(height: 10),
+        Text("Error: $error", style: Theme.of(context).textTheme.bodySmall),
+      ],
+    );
+  }
+
+  Widget schedulePopUp(BuildContext context, List<TodoModel> tasks) {
+    return PopupMenuButton<int>(
+      popUpAnimationStyle: AnimationStyle(
+        curve: Curves.easeInOut,
+        duration: Duration(milliseconds: 300),
+        reverseCurve: Curves.easeInOut,
+        reverseDuration: Duration(milliseconds: 200),
+      ),
+      offset: const Offset(-60, -130),
+      icon: Icon(LucideIcons.plus),
+      itemBuilder: (context) => <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          value: 0,
+          child: menuItem(
+            context,
+            ref,
+            "Edit Available Time",
+            LucideIcons.pen,
+            () {},
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 1,
+          child: menuItem(
+            context,
+            ref,
+            "Edit Schedule",
+            LucideIcons.pencil,
+            () {
+              Navigator.pushNamed(context, '/man_sched');
+            },
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 2,
+          child: menuItem(
+            context,
+            ref,
+            "Regenerate Schedule",
+            LucideIcons.refresh_ccw,
+            () {
+              clearScheduleData(ref, tasks);
+              Navigator.pop(context);
+            },
+          ),
+        ),
       ],
     );
   }

@@ -5,6 +5,7 @@ import 'package:zen/zen_barrel.dart';
 
 void showHeadsupNoti(BuildContext context, WidgetRef ref, String message) {
   final colors = ref.watch(appColorsProvider);
+  final theme = ref.watch(themeProvider);
   return DelightToastBar(
     position: DelightSnackbarPosition.top,
     autoDismiss: true,
@@ -19,7 +20,8 @@ void showHeadsupNoti(BuildContext context, WidgetRef ref, String message) {
       child: ToastCard(
         shadowColor: Colors.transparent,
         color: colors.toastBg,
-        leading: Image.asset('assets/icon/icon_up.png', width: 20, height: 20),
+        leading: Image.asset('assets/icon/heads_${theme == ThemeMode.dark}.png',
+            width: 20, height: 20),
         title: Text(
           message,
           style: Theme.of(context).textTheme.bodyMedium,

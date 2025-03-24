@@ -106,37 +106,6 @@ class AIService {
     No matter what, your goal is to leave users feeling **uplifted, motivated, and valued** after every interaction.  
 
   ''';
-    // const systemPrompt = '''
-    // You are Unni, a helpful and informative AI assistant.
-    // Your core purpose is to provide positive, fun, and encouraging messages to users,
-    // helping them stay motivated and engaged.
-
-    // To do this effectively, you should be able to adapt your responses
-    // to the user's current mood.
-
-    // If the user expresses feeling happy, excited, or enthusiastic, mirror their
-    // energy with equally positive and uplifting messages.
-
-    // If the user expresses feeling sad, down, or discouraged, offer words of
-    // comfort, support, and encouragement. Remind them of their strengths and
-    // past successes, and help them focus on the positive aspects of their situation.
-
-    // Regardless of the user's mood, always maintain an upbeat and supportive
-    // tone. Use humor and empathy to connect with users and make them feel
-    // understood.
-
-    // Keep your responses concise and to the point, but elaborate when necessary
-    // to provide more context or helpful information.
-
-    // For example, you could say:
-
-    // * **Happy:** "That's awesome! Keep that positive energy flowing!"
-    // * **Sad:** "I'm here for you. Remember, even the darkest nights will eventually give way to dawn."
-    // * **Neutral:** "How can I brighten your day today?"
-
-    // Avoid negative or discouraging language. Always focus on the positive
-    // and help users see the best in themselves and their situations. Mention the user's name to personalise their experience.
-    // ''';
 
     final promptTemplate = '''
     System: $systemPrompt
@@ -173,9 +142,16 @@ class AIService {
     final systemPrompt = '''
     You are Unni, a highly intelligent and organized AI assistant specializing in generating optimized daily schedules based on a user's provided task list. Your goal is to create a balanced, efficient, and realistic schedule that considers task purpose, time constraints, and logical sequencing.  
 
-    ## **User Input Format:**  
-    The user provides a list of tasks in the following format:  
+    ## **User Input**  
+    Here is the pending tasks for the user: 
     **$userTasks**  
+
+    ## **Reply Guidelines**
+    1. **No tasks provider**
+      - Response with a cannot provide schedule message and state the reason why.
+      - Do not generate a schedule.
+      - Use the following json format
+      {"error" : error message}
 
     ## **Scheduling Guidelines:**  
     1. **Time Allocation:**  
@@ -213,22 +189,28 @@ class AIService {
     ```json  
     {  
       "1": {  
-        "taskName": "Go to the grocery store",  
+        "taskName": taskName,  
         "startTime": "2025-03-08 16:00:00.000",  
-        "endTime": "2025-03-08 16:30:00.000",  
-        "duration": 30  
+        "endTime": "2025-03-08 16:30:00.000", 
+        "duration": 30
+        "due_date": "2025-03-08 18:00:00.000"
+        "priority": "Medium
       },  
       "2": {  
-        "taskName": "Go to the gym",  
+        "taskName": taskName,  
         "startTime": "2025-03-08 17:00:00.000",  
         "endTime": "2025-03-08 19:30:00.000",  
-        "duration": 150  
+        "duration": 150
+        "due_date": "2025-03-09 09:00:00.000"
+        "priority": "High"
       },  
       "3": {  
-        "taskName": "Drink water",  
+        "taskName": taskName,  
         "startTime": "2025-03-08 09:00:00.000",  
         "endTime": "2025-03-08 09:15:00.000",  
         "duration": 15
+        "due_date": "2025-03-08 09:30:00.000"
+        "priority": "Low"
       }  
     }  
     Ensure the final output strictly follows the JSON format above, without additional explanations or unnecessary text.
@@ -243,13 +225,22 @@ class AIService {
       ''',
     );
 
-    final llm = ChatGoogleGenerativeAI(apiKey: apiKey);
+    final llm = ChatGoogleGenerativeAI(
+      apiKey: apiKey,
+      defaultOptions: ChatGoogleGenerativeAIOptions(
+        temperature: 0.3,
+        topP: 0.9,
+        topK: 50,
+      ),
+    );
     final chain = LLMChain(llm: llm, prompt: promptTemplate);
-    final response = await chain.run({
-      'userTasks': userTasks,
-      'systemPrompt': systemPrompt,
-      'now': now,
-    });
+    final response = await chain.run(
+      {
+        'userTasks': userTasks,
+        'systemPrompt': systemPrompt,
+        'now': now,
+      },
+    );
     return response;
   }
 }

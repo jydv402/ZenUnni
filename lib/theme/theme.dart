@@ -114,6 +114,9 @@ ThemeData get darkTheme {
         },
       ),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Color(0xFFFF8B2C),
+    ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(
         side: WidgetStatePropertyAll(
@@ -143,50 +146,122 @@ ThemeData get darkTheme {
       ),
     ),
     datePickerTheme: DatePickerThemeData(
+      // rangePickerBackgroundColor: Color(0xFF202124),
+      // rangePickerHeaderBackgroundColor: Color(0xFF202124),
+      // rangePickerShadowColor: Color(0xFF202124),
+
+      //
+      rangePickerHeaderForegroundColor: Colors.white,
+      headerForegroundColor: Colors.white,
       backgroundColor: const Color(0xFF202124),
-      dayForegroundColor: WidgetStateProperty.resolveWith(
-        (states) {
-          if (states.contains(WidgetState.selected)) {
-            return Colors.black;
-          } else if (states.contains(WidgetState.disabled)) {
-            return Colors.grey;
-          }
-          return Colors.white;
-        },
-      ),
+      dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.black;
+        } else if (states.contains(WidgetState.disabled)) {
+          return Colors.grey;
+        }
+        return Colors.white;
+      }),
+
+      dayBackgroundColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const Color(0xFFff8b2c);
+        }
+        return Colors.transparent;
+      }),
       dividerColor: Colors.white,
+      headerHeadlineStyle: GoogleFonts.poppins(
+        color: Colors.white,
+        fontSize: 26,
+        fontWeight: FontWeight.bold,
+      ),
+      weekdayStyle: GoogleFonts.poppins(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+      dayStyle: GoogleFonts.poppins(
+        color: Colors.white,
+        fontSize: 16,
+      ),
+      yearBackgroundColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const Color(0xFFff8b2c);
+        }
+        return Colors.transparent;
+      }),
+
       yearForegroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.selected)) {
-            return Colors.black;
+            return const Color.fromRGBO(0, 0, 0, 1);
           }
-          return Colors.white;
+          return const Color.fromARGB(255, 255, 255, 255);
         },
       ),
       yearStyle: GoogleFonts.poppins(
         fontSize: 16,
         color: Colors.white,
       ),
-      //   confirmButtonStyle: ButtonStyle(
-      //     textStyle: WidgetStateTextStyle.resolveWith((states) {
-
-      //     }),
-      //     foregroundColor: WidgetStateProperty.resolveWith((states) {
-      //       return Colors.blue.shade200;
-      //     }),
-      //   ),
-      //   cancelButtonStyle: ButtonStyle(
-      //     foregroundColor: WidgetStateProperty.resolveWith((states) {
-      //       return Colors.blue.shade200;
-      //     }),
-      //   ),
+      confirmButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          return const Color(0xFFff8b2c);
+        }),
+      ),
+      cancelButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          return const Color(0xFFff8b2c);
+        }),
+      ),
     ),
-    timePickerTheme: TimePickerThemeData(),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFFFF8B2C),
-      foregroundColor: Colors.black,
-      enableFeedback: true,
-      splashColor: Color(0xFFFF8B2C),
+    timePickerTheme: TimePickerThemeData(
+        dayPeriodBorderSide: BorderSide(color: Colors.white),
+        confirmButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            return const Color(0xFFff8b2c);
+          }),
+        ),
+        cancelButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            return const Color(0xFFff8b2c);
+          }),
+        ),
+        dayPeriodTextColor: Color.fromRGBO(0, 0, 0, 1),
+        timeSelectorSeparatorColor: WidgetStateColor.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return Colors.grey;
+          }
+          return Colors.white;
+        }),
+        hourMinuteTextColor: Color(0xFFFfffff),
+        hourMinuteColor: Color(0xFFff8b2c),
+        dialBackgroundColor: const Color(0xFF202124), // Background color
+        backgroundColor: const Color(0xFF202124), // Background color
+        dialHandColor: Color(0xFFFF8B2C),
+        dialTextColor: WidgetStateColor.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? Colors.white
+              : const Color.fromARGB(255, 255, 255, 255),
+        ),
+        entryModeIconColor: const Color(0xFFffffff),
+        dayPeriodColor: const Color(0xFFFFffff)),
+
+    popupMenuTheme: PopupMenuThemeData(
+      color: Colors.white,
+      labelTextStyle: WidgetStateProperty.all(
+        TextStyle(
+          fontFamily: 'Pop',
+          fontSize: 16.0,
+          color: Colors.white,
+        ),
+      ),
+      textStyle: TextStyle(
+        fontFamily: 'Pop',
+        fontSize: 16.0,
+        color: Colors.white,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(26),
+      ),
     ),
   );
 }
@@ -370,6 +445,25 @@ ThemeData get lightTheme {
       backgroundColor: Colors.white,
       hourMinuteColor: Colors.black,
       dialHandColor: Color.fromRGBO(255, 139, 44, 1),
+    ),
+    popupMenuTheme: PopupMenuThemeData(
+      color: Colors.white,
+      iconColor: Colors.black,
+      labelTextStyle: WidgetStateProperty.all(
+        TextStyle(
+          fontFamily: 'Pop',
+          fontSize: 16.0,
+          color: Colors.white,
+        ),
+      ),
+      textStyle: TextStyle(
+        fontFamily: 'Pop',
+        fontSize: 16.0,
+        color: Colors.white,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(26),
+      ),
     ),
   );
 }

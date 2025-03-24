@@ -26,7 +26,20 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List existingUsers = ref.watch(existingUsersProvider).value ?? [];
+    final username = ref.watch(userNameProvider);
+
+    //Get all the existing users
+    final existingUsers = List.from(
+      ref.watch(existingUsersProvider).value ?? [],
+    );
+
+    // Remove the username from existing users
+    existingUsers.removeWhere(
+      (user) => user.toString().toLowerCase() == username.value?.toLowerCase(),
+    );
+
+    //print(existingUsers);
+
     final avatars = gender.contains(0) ? males : females;
     return Scaffold(
       body: ListView(

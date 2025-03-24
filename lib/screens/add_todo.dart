@@ -1,4 +1,3 @@
-import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
 
 class AddTaskPage extends ConsumerStatefulWidget {
@@ -88,33 +87,12 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               context: context,
               firstDate: DateTime.now(),
               lastDate: DateTime(2100),
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    textTheme: TextTheme(
-                      headlineLarge: GoogleFonts.poppins(
-                          fontSize: 26.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                      labelLarge: GoogleFonts.poppins(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                      bodyLarge: GoogleFonts.poppins(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    colorScheme: ColorScheme.dark(
-                      primary: Colors.blue.shade200,
-                      surface: Colors.black, // Change the header color
-                      onPrimary: Colors.white, // Change the header text color
-                      onSurface: Colors.white, // Change the day text color
-                    ),
-                  ),
-                  child: child!,
-                );
-              },
+              //builder: (BuildContext context, Widget? child) {
+              //     return Theme(
+              //       theme: lightTheme(), // Apply global theme
+              //       child: child!,
+              //     );
+              //   },
             );
             if (pickDate != null) {
               setState(() {
@@ -132,33 +110,12 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             TimeOfDay? pickTime = await showTimePicker(
               context: context,
               initialTime: TimeOfDay.now(),
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    textTheme: TextTheme(
-                      headlineLarge: GoogleFonts.poppins(
-                          fontSize: 26.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                      labelLarge: GoogleFonts.poppins(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                      bodyLarge: GoogleFonts.poppins(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                    colorScheme: ColorScheme.dark(
-                      primary: Colors.blue.shade200, // Accent color
-                      surface: Color(0xFF202124), // Background color
-                      onPrimary: Colors.white, // Header text color
-                      onSurface: Colors.white, // Time text color
-                    ),
-                  ),
-                  child: child!,
-                );
-              },
+              //builder: (BuildContext context, Widget? child) {
+              //   return Theme(
+              //     data: lightTheme, // Apply the global theme
+              //     child: child!,
+              //   );
+              // },
             );
 
             if (pickTime != null) {
@@ -195,7 +152,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 date: dateTime,
                 priority: _prior,
                 isDone: isDone,
-                expired: true,
+                notExpired: true,
               );
               if (widget.taskToEdit != null) {
                 // Update existing task
@@ -232,7 +189,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
       //       date: dateTime,
       //       priority: _prior,
       //       isDone: isDone,
-      //       expired: true,
+      //       notExpired: true,
       //     );
       //     if (widget.taskToEdit != null) {
       //       // Update existing task
