@@ -545,7 +545,9 @@ class TaskPageState extends ConsumerState<TaskPage> {
             ref,
             "Edit Schedule",
             LucideIcons.pencil,
-            () {},
+            () {
+              Navigator.pushNamed(context, '/man_sched');
+            },
           ),
         ),
         PopupMenuItem<int>(
