@@ -20,37 +20,15 @@ ThemeData get darkTheme {
       onError: Colors.white,
     ),
     textTheme: TextTheme(
-      headlineLarge: GoogleFonts.poppins(
-        fontSize: 44,
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
-      ),
-      headlineMedium: GoogleFonts.poppins(
-        fontSize: 24.0,
-        fontWeight: FontWeight.w400,
-        color: Colors.white,
-      ),
-      headlineSmall: GoogleFonts.poppins(
-        fontSize: 18.0,
-        color: Colors.white,
-      ),
-      labelMedium: GoogleFonts.poppins(
-        fontSize: 16.0,
-        color: Colors.black,
-      ),
-      labelSmall: GoogleFonts.poppins(
-        fontSize: 14.0,
-        color: Colors.black,
-      ),
-      bodyMedium: GoogleFonts.poppins(
-        fontSize: 16.0,
-        color: Colors.white,
-      ),
-      bodySmall: GoogleFonts.poppins(
-        fontSize: 13.0,
-        color: Colors.white,
-      ),
+      headlineLarge: headLD,
+      headlineMedium: headMD,
+      headlineSmall: headSD,
+      labelMedium: labelMD,
+      labelSmall: labelSD,
+      bodyMedium: bodyMD,
+      bodySmall: bodySD,
       titleMedium: prfDivTxtD,
+      titleLarge: counterD,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -93,15 +71,14 @@ ThemeData get darkTheme {
         borderRadius: BorderRadius.circular(26),
         borderSide: const BorderSide(color: Colors.red, width: 2.0),
       ),
-      hintStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      labelStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      helperStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      prefixStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      suffixStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      counterStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
-      errorStyle: GoogleFonts.poppins(fontSize: 16.0, color: Colors.red),
-      floatingLabelStyle:
-          GoogleFonts.poppins(fontSize: 16.0, color: Colors.white),
+      hintStyle: hintD,
+      labelStyle: hintD,
+      helperStyle: hintD,
+      prefixStyle: hintD,
+      suffixStyle: hintD,
+      counterStyle: hintD,
+      errorStyle: hintD.copyWith(color: Colors.red),
+      floatingLabelStyle: hintD,
     ),
     navigationBarTheme: NavigationBarThemeData(
       labelTextStyle: WidgetStateProperty.all(bodySD),
@@ -214,6 +191,7 @@ ThemeData get darkTheme {
       ),
     ),
     timePickerTheme: TimePickerThemeData(
+        dayPeriodTextStyle: headS,
         dayPeriodBorderSide: BorderSide(color: Colors.white),
         confirmButtonStyle: ButtonStyle(
           foregroundColor: WidgetStateProperty.resolveWith((states) {
@@ -225,7 +203,11 @@ ThemeData get darkTheme {
             return const Color(0xFFff8b2c);
           }),
         ),
-        dayPeriodTextColor: Color.fromRGBO(0, 0, 0, 1),
+        dayPeriodTextColor: WidgetStateColor.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? const Color.fromARGB(255, 0, 0, 0)
+              : const Color.fromARGB(255, 255, 255, 255),
+        ),
         timeSelectorSeparatorColor: WidgetStateColor.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
             return Colors.grey;
@@ -280,22 +262,15 @@ ThemeData get lightTheme {
       onError: Colors.white,
     ),
     textTheme: TextTheme(
-      headlineLarge: GoogleFonts.poppins(
-        fontSize: 44,
-        fontWeight: FontWeight.w600,
-        color: Colors.black,
-      ),
-      headlineMedium: GoogleFonts.poppins(
-        fontSize: 24.0,
-        fontWeight: FontWeight.w400,
-        color: Colors.black,
-      ),
-      headlineSmall: GoogleFonts.poppins(fontSize: 18.0, color: Colors.black),
-      labelMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
-      labelSmall: GoogleFonts.poppins(fontSize: 14.0, color: Colors.black),
-      bodyMedium: GoogleFonts.poppins(fontSize: 16.0, color: Colors.black),
-      bodySmall: GoogleFonts.poppins(fontSize: 13.0, color: Colors.black),
+      headlineLarge: headL,
+      headlineMedium: headM,
+      headlineSmall: headS,
+      labelMedium: labelM,
+      labelSmall: labelS,
+      bodyMedium: bodyM,
+      bodySmall: bodyS,
       titleMedium: prfDivTxt,
+      titleLarge: counter,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -395,18 +370,14 @@ ThemeData get lightTheme {
           width: 2.0,
         ),
       ),
-      hintStyle: GoogleFonts.poppins(
-        fontSize: 16.0,
-        color: Colors.black54,
-      ),
-      labelStyle: GoogleFonts.poppins(
-        fontSize: 16.0,
-        color: Colors.black,
-      ),
-      errorStyle: GoogleFonts.poppins(
-        fontSize: 14.0,
-        color: Colors.red,
-      ),
+      hintStyle: hint.copyWith(color: Colors.black54),
+      labelStyle: hint,
+      helperStyle: hint,
+      prefixStyle: hint,
+      suffixStyle: hint,
+      counterStyle: hint,
+      errorStyle: hint.copyWith(color: Colors.red),
+      floatingLabelStyle: hint,
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: Colors.white,
@@ -442,8 +413,10 @@ ThemeData get lightTheme {
       ),
     ),
     timePickerTheme: const TimePickerThemeData(
+      dayPeriodTextStyle: headS,
+      hourMinuteTextColor: Color(0xFFFfffff),
+      hourMinuteColor: Color(0xFFff8b2c),
       backgroundColor: Colors.white,
-      hourMinuteColor: Colors.black,
       dialHandColor: Color.fromRGBO(255, 139, 44, 1),
     ),
     popupMenuTheme: PopupMenuThemeData(

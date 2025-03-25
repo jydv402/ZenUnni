@@ -1,5 +1,11 @@
-import 'package:google_fonts/google_fonts.dart';
+//import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+void playPomodoroEndSound() async {
+  final player = AudioPlayer();
+  await player.play(AssetSource('sounds/timer.mp3'));
+}
 
 class PomodoroPage extends ConsumerWidget {
   const PomodoroPage({super.key});
@@ -146,6 +152,11 @@ class CountdownScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pomo = ref.watch(pomoProvider);
 
+// 🔥 Play sound when timer reaches zero
+    if (pomo.timeRemaining == 0) {
+      playPomodoroEndSound();
+    }
+
     return Scaffold(
       body: ListView(
         padding: pagePaddingWithScore,
@@ -176,10 +187,8 @@ class CountdownScreen extends ConsumerWidget {
   Text _showTime(BuildContext context, int seconds) {
     return Text(
       seconds.toString().padLeft(2, '0'), // Display time remaining
-      style: GoogleFonts.bebasNeue(
-          fontSize: MediaQuery.of(context).size.width * 0.70,
-          color: Colors.white,
-          height: 0.8),
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          fontSize: MediaQuery.of(context).size.width * 0.70, height: 0.8),
       textAlign: TextAlign.center,
     );
   }

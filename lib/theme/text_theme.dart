@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 //Light Theme Texts
+
+const TextStyle counter = TextStyle(
+  fontFamily: 'Bebas',
+  fontSize: 400,
+  color: Colors.black,
+);
 // Headlines
 const TextStyle headL = TextStyle(
   fontFamily: 'Pop',
@@ -50,6 +56,14 @@ const TextStyle prfDivTxt = TextStyle(
   color: Colors.black,
 );
 
+const TextStyle hint = TextStyle(
+  fontFamily: 'Pop',
+  fontSize: 16,
+  color: Colors.black,
+);
+
+//For Dark theme
+
 // Headlines
 const TextStyle headLD = TextStyle(
   fontFamily: 'Pop',
@@ -73,12 +87,12 @@ const TextStyle headSD = TextStyle(
 const TextStyle labelMD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 16.0,
-  color: Colors.white,
+  color: Colors.black,
 );
 const TextStyle labelSD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 14.0,
-  color: Colors.white,
+  color: Colors.black,
 );
 
 // Body
@@ -97,4 +111,16 @@ const TextStyle prfDivTxtD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 30.0,
   color: Colors.white,
+);
+
+const TextStyle hintD = TextStyle(
+  fontFamily: 'Pop',
+  fontSize: 16,
+  color: Colors.white,
+);
+
+const TextStyle counterD = TextStyle(
+  fontFamily: 'Bebas',
+  fontSize: 400,
+  color: Color.fromARGB(255, 255, 255, 255),
 );

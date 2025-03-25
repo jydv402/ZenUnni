@@ -70,13 +70,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final colors = ref.watch(appColorsProvider);
+    final theme = ref.watch(themeProvider);
     return Scaffold(
       body: ListView(
         padding: pagePadding,
         children: [
-          Text(
-            "Login",
-            style: Theme.of(context).textTheme.headlineLarge,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Login",
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              //Dark theme toggle
+              toggleThemeButton(
+                () => ref.read(themeProvider.notifier).toggleTheme(),
+                theme == ThemeMode.light,
+                colors.iconClr,
+              ),
+            ],
           ),
           const SizedBox(
             height: 40,
@@ -93,14 +105,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             controller: _passwordController,
             decoration: InputDecoration(
               labelText: 'Password',
-              suffixIcon: IconButton(
-                padding: const EdgeInsets.only(right: 26),
-                onPressed: _toggleObscure,
-                icon: Icon(
-                  _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
-                  color: colors.iconClr,
-                ),
-                highlightColor: Colors.transparent,
+              suffixIcon: togglePassButton(
+                () => _toggleObscure(),
+                _obsureText,
+                colors.iconClr,
               ),
             ),
             obscureText: _obsureText,

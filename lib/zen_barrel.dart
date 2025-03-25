@@ -17,6 +17,8 @@ export 'components/fab_button.dart';
 export 'components/headsup_noti.dart';
 export 'components/loading_anims.dart';
 export 'components/scorecard.dart';
+export 'components/toggle_pass_button.dart';
+export 'components/toggle_theme_auth.dart';
 
 //consts
 export 'consts/avtlist.dart';
