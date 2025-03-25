@@ -190,6 +190,7 @@ ThemeData get darkTheme {
       ),
     ),
     timePickerTheme: TimePickerThemeData(
+        dayPeriodTextStyle: headS,
         dayPeriodBorderSide: BorderSide(color: Colors.white),
         confirmButtonStyle: ButtonStyle(
           foregroundColor: WidgetStateProperty.resolveWith((states) {
@@ -201,7 +202,11 @@ ThemeData get darkTheme {
             return const Color(0xFFff8b2c);
           }),
         ),
-        dayPeriodTextColor: Color.fromRGBO(0, 0, 0, 1),
+        dayPeriodTextColor: WidgetStateColor.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? const Color.fromARGB(255, 0, 0, 0)
+              : const Color.fromARGB(255, 255, 255, 255),
+        ),
         timeSelectorSeparatorColor: WidgetStateColor.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
             return Colors.grey;
@@ -406,8 +411,10 @@ ThemeData get lightTheme {
       ),
     ),
     timePickerTheme: const TimePickerThemeData(
+      dayPeriodTextStyle: headS,
+      hourMinuteTextColor: Color(0xFFFfffff),
+      hourMinuteColor: Color(0xFFff8b2c),
       backgroundColor: Colors.white,
-      hourMinuteColor: Colors.black,
       dialHandColor: Color.fromRGBO(255, 139, 44, 1),
     ),
     popupMenuTheme: PopupMenuThemeData(
