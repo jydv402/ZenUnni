@@ -28,6 +28,7 @@ ThemeData get darkTheme {
       bodyMedium: bodyMD,
       bodySmall: bodySD,
       titleMedium: prfDivTxtD,
+      titleLarge: counterD,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -269,6 +270,7 @@ ThemeData get lightTheme {
       bodyMedium: bodyM,
       bodySmall: bodyS,
       titleMedium: prfDivTxt,
+      titleLarge: counter,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

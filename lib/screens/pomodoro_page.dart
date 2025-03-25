@@ -1,4 +1,4 @@
-import 'package:google_fonts/google_fonts.dart';
+//import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
 
 class PomodoroPage extends ConsumerWidget {
@@ -176,10 +176,8 @@ class CountdownScreen extends ConsumerWidget {
   Text _showTime(BuildContext context, int seconds) {
     return Text(
       seconds.toString().padLeft(2, '0'), // Display time remaining
-      style: GoogleFonts.bebasNeue(
-          fontSize: MediaQuery.of(context).size.width * 0.70,
-          color: Colors.white,
-          height: 0.8),
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          fontSize: MediaQuery.of(context).size.width * 0.70, height: 0.8),
       textAlign: TextAlign.center,
     );
   }

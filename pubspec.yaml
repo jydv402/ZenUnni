@@ -106,7 +106,15 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
+  
   fonts:
+    - family: Bebas
+      fonts:
+        - asset: assets/fonts/BebasNeue-Regular.ttf
+          weight: 900
+          style: italic
+
+            
     - family: Pop
       fonts:
         - asset: assets/fonts/Poppins-BlackItalic.ttf
@@ -152,6 +160,9 @@ flutter:
         - asset: assets/fonts/Poppins-ThinItalic.ttf
           style: italic
           weight: 100
+
+    
+    
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
