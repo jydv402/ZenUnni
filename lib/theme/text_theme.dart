@@ -50,6 +50,14 @@ const TextStyle prfDivTxt = TextStyle(
   color: Colors.black,
 );
 
+const TextStyle hint = TextStyle(
+  fontFamily: 'Pop',
+  fontSize: 16,
+  color: Colors.black,
+);
+
+//For Dark theme
+
 // Headlines
 const TextStyle headLD = TextStyle(
   fontFamily: 'Pop',
@@ -73,12 +81,12 @@ const TextStyle headSD = TextStyle(
 const TextStyle labelMD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 16.0,
-  color: Colors.white,
+  color: Colors.black,
 );
 const TextStyle labelSD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 14.0,
-  color: Colors.white,
+  color: Colors.black,
 );
 
 // Body
@@ -96,5 +104,11 @@ const TextStyle bodySD = TextStyle(
 const TextStyle prfDivTxtD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 30.0,
+  color: Colors.white,
+);
+
+const TextStyle hintD = TextStyle(
+  fontFamily: 'Pop',
+  fontSize: 16,
   color: Colors.white,
 );
