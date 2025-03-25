@@ -1,5 +1,11 @@
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+void playPomodoroEndSound() async {
+  final player = AudioPlayer();
+  await player.play(AssetSource('sounds/timer.mp3'));
+}
 
 class PomodoroPage extends ConsumerWidget {
   const PomodoroPage({super.key});
@@ -145,6 +151,11 @@ class CountdownScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pomo = ref.watch(pomoProvider);
+
+// 🔥 Play sound when timer reaches zero
+    if (pomo.timeRemaining == 0) {
+      playPomodoroEndSound();
+    }
 
     return Scaffold(
       body: ListView(
