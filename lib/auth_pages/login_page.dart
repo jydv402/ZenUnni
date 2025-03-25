@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zen/zen_barrel.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -28,16 +26,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     try {
       setState(() => _isLoading = true);
-      stateInvalidator(ref);
 
       showLoadingDialog(context, "Logging you in...");
 
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
       if (mounted) {
-        Navigator.pop(context); // Close loading dialog
-        Navigator.pushReplacementNamed(context, '/home');
+        // Close loading dialog
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      }
+
+      stateInvalidator(ref, true);
+      await ref.read(userProvider.notifier).loadUserDetails();
+
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/nav');
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
@@ -61,6 +69,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appColorsProvider);
     return Scaffold(
       body: ListView(
         padding: pagePadding,
@@ -88,10 +97,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 padding: const EdgeInsets.only(right: 26),
                 onPressed: _toggleObscure,
                 icon: Icon(
-                  _obsureText
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: Colors.white,
+                  _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
+                  color: colors.iconClr,
                 ),
                 highlightColor: Colors.transparent,
               ),

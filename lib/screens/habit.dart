@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:line_icons/line_icons.dart';
-
 import 'package:zen/zen_barrel.dart';
 
 class HabitPage extends ConsumerStatefulWidget {
@@ -25,6 +21,7 @@ class _HabitState extends ConsumerState<HabitPage> {
     final habitsAsyncValue = ref.watch(habitProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: habitsAsyncValue.when(
         data: (habits) => heatmaplistview(habits),
         loading: () => Center(
@@ -35,6 +32,8 @@ class _HabitState extends ConsumerState<HabitPage> {
         ),
       ),
       floatingActionButton: fabButton(context, () {
+        habitNameController.clear();
+        selectedColor = Colors.pink.shade100;
         showDialog(
           context: context,
           builder: (BuildContext context) =>
@@ -115,17 +114,23 @@ class _HabitState extends ConsumerState<HabitPage> {
                       .toARGB32()
                       .toRadixString(16)
                       .padLeft(8, '0'),
-                  createdAt: DateTime.now(),
-                  completedDates: {},
+                  createdAt: isEdit ? habit!.createdAt : DateTime.now(),
+                  completedDates: isEdit ? habit!.completedDates : {},
+                  oldname: isEdit ? habit!.habitName : habitNameController.text,
                 );
-                await ref.read(habitAddProvider(newHabit).future);
-                habitNameController.clear();
-                selectedColor = Colors.pink.shade100;
+                //Adding to firestore
+                if (isEdit) {
+                  //update
+                  await ref.read(habitNameUpdateProvider(newHabit).future);
+                } else {
+                  //add new
+                  await ref.read(habitAddProvider(newHabit).future);
+                }
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }
               } else {
-                showHeadsupNoti(context, "Enter habit name");
+                showHeadsupNoti(context, ref, "Please enter a habit name.");
               }
             }, isEdit ? 'Update Habit' : 'Add Habit', 0),
           ],
@@ -146,7 +151,7 @@ class _HabitState extends ConsumerState<HabitPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ScoreCard(),
+                const ScoreCard(),
                 Text(
                   'Habits',
                   style: Theme.of(context).textTheme.headlineLarge,
@@ -200,7 +205,11 @@ class _HabitState extends ConsumerState<HabitPage> {
                           },
                         );
                       },
-                      icon: Icon(LineIcons.alternateTrash, color: habitColor),
+                      icon: Icon(
+                        LucideIcons.trash_2,
+                        color: habitColor,
+                        size: 22,
+                      ),
                     ),
                     IconButton(
                       onPressed: () {
@@ -211,57 +220,61 @@ class _HabitState extends ConsumerState<HabitPage> {
                         );
                       },
                       icon: Icon(
-                        LineIcons.pen,
+                        LucideIcons.square_pen,
+                        size: 22,
                         color: habitColor,
                       ),
                     ),
                     IconButton(
-                      onPressed: () {
-                        showConfirmDialog(
-                          context,
-                          "Mark as done ?",
-                          "Are you sure you want to mark this habit as complete ?",
-                          "Yes",
-                          habitColor,
-                          () async {
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
+                      onPressed: () async {
+                        final today = DateTime.now();
+                        final dateOnly =
+                            DateTime(today.year, today.month, today.day);
 
-                            final today = DateTime.now();
-                            final dateOnly =
-                                DateTime(today.year, today.month, today.day);
+                        final updatedCompletedDates =
+                            Map<DateTime, bool>.from(habit.completedDates);
 
-                            final updatedCompletedDates =
-                                Map<DateTime, bool>.from(habit.completedDates);
+                        if (updatedCompletedDates.containsKey(dateOnly) &&
+                            updatedCompletedDates[dateOnly] == true) {
+                          //Habit unchecked
+                          //Increment score
+                          ref.read(
+                            scoreIncrementProvider(-10),
+                          );
+                          //Show heads up
+                          showHeadsupNoti(
+                            context,
+                            ref,
+                            "Oops! You missed a habit.\n10 points deducted.",
+                          );
+                          updatedCompletedDates[dateOnly] = false;
+                        } else {
+                          //Habit completed
+                          //Increment score
+                          ref.read(
+                            scoreIncrementProvider(10),
+                          );
+                          //Show heads up
+                          showHeadsupNoti(
+                            context,
+                            ref,
+                            "Great job! Keep it going.\n10 points added.",
+                          );
+                          //Update completed dates
+                          updatedCompletedDates[dateOnly] = true;
+                        }
+                        final updatedHabit = habit.copyWith(
+                            completedDates: updatedCompletedDates);
 
-                            if (updatedCompletedDates.containsKey(dateOnly) &&
-                                updatedCompletedDates[dateOnly] == true) {
-                              updatedCompletedDates[dateOnly] = false;
-                            } else {
-                              updatedCompletedDates[dateOnly] = true;
-                            }
-                            final updatedHabit = habit.copyWith(
-                                completedDates: updatedCompletedDates);
-
-                            try {
-                              await ref.read(
-                                  habitUpdateProvider(updatedHabit).future);
-                            } catch (e) {
-                              if (context.mounted) {
-                                showHeadsupNoti(
-                                    context, "Failed to update habit: $e");
-                              }
-                            }
-                            ref.read(
-                              scoreIncrementProvider(10),
-                            );
-                            if (context.mounted) {
-                              showHeadsupNoti(context,
-                                  "Great job! Keep it going.\n10 points added.");
-                            }
-                          },
-                        );
+                        try {
+                          await ref
+                              .read(habitUpdateProvider(updatedHabit).future);
+                        } catch (e) {
+                          if (context.mounted) {
+                            showHeadsupNoti(
+                                context, ref, "Failed to update habit: $e");
+                          }
+                        }
                       },
                       icon: Icon(habit.completedDates.containsKey(
                                 DateTime(DateTime.now().year,
@@ -319,7 +332,7 @@ class _HabitState extends ConsumerState<HabitPage> {
         defaultColor: Colors.grey.shade800,
         colorsets: {1: habitColor},
         onClick: (value) {
-          showHeadsupNoti(context, value.toString());
+          showHeadsupNoti(context, ref, value.toString());
         },
       );
     } catch (e) {

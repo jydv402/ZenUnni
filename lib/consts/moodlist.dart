@@ -1,4 +1,4 @@
-const moodList = {
+const Map<String, String> moodList = {
   "assets/emoji/chill.json": "Relaxed",
   "assets/emoji/happy.json": "Happy",
   "assets/emoji/halo.json": "Under Control",
@@ -12,7 +12,7 @@ const moodList = {
   "assets/emoji/sick.json": "Sick",
 };
 
-const reversedMoodList = {
+const Map<String, String> reversedMoodList = {
   "Relaxed": "assets/emoji/chill.json",
   "Happy": "assets/emoji/happy.json",
   "Under Control": "assets/emoji/halo.json",

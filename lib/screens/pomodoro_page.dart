@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
 
@@ -26,7 +24,7 @@ class PomodoroPage extends ConsumerWidget {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           Text(
             'Pomodoro Timer',
             style: Theme.of(context).textTheme.headlineLarge,
@@ -152,7 +150,7 @@ class CountdownScreen extends ConsumerWidget {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           Text(
             pomo.isRunning
                 ? pomo.isBreak
