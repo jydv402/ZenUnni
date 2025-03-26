@@ -4,7 +4,6 @@ import 'package:timeline_tile_plus/timeline_tile_plus.dart';
 import 'package:zen/components/fab_button.dart';
 import 'package:zen/components/scorecard.dart';
 import 'package:zen/models/schedule_model.dart';
-import 'package:zen/services/schedule_fire_serv.dart';
 import 'package:zen/services/schedule_serv.dart';
 import 'package:zen/services/todo_serv.dart';
 
@@ -15,15 +14,6 @@ class SchedPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tasks = ref.watch(taskProvider);
     final schedule = ref.watch(scheduleProvider(tasks.value ?? []));
-
-    void addSchedule(List<ScheduleItem> scheduleItems) {
-      // final data = {
-      //   'date': DateTime.now().toIso8601String(),
-      //   'items': scheduleItems,
-      // };
-      ref.read(scheduleAddProvider(scheduleItems));
-    }
-
     return Scaffold(
       body: schedule.when(
         data: (scheduleItems) {
@@ -33,14 +23,9 @@ class SchedPage extends ConsumerWidget {
             style: Theme.of(context).textTheme.bodyMedium),
         loading: () => Center(child: const CircularProgressIndicator()),
       ),
-      floatingActionButton: schedule.when(
-        data: (scheduleItems) => fabButton(context, () {
-          addSchedule(scheduleItems);
-          clearScheduleData(ref, tasks.value ?? []);
-        }, "Regenerate Schedule", 26),
-        error: (error, stackTrace) => null,
-        loading: () => null,
-      ),
+      floatingActionButton: fabButton(context, () {
+        clearScheduleData(ref, tasks.value ?? []);
+      }, "Regenerate Schedule", 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
