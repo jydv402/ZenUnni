@@ -1,5 +1,6 @@
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
+import 'package:intl/intl.dart';
 import 'package:zen/zen_barrel.dart';
 
 class HabitPage extends ConsumerStatefulWidget {
@@ -332,7 +333,8 @@ class _HabitState extends ConsumerState<HabitPage> {
         defaultColor: Colors.grey.shade800,
         colorsets: {1: habitColor},
         onClick: (value) {
-          showHeadsupNoti(context, ref, value.toString());
+          showHeadsupNoti(
+              context, ref, DateFormat('dd MMM yyyy').format(value));
         },
       );
     } catch (e) {
