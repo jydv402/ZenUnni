@@ -249,6 +249,10 @@ class TaskPageState extends ConsumerState<TaskPage> {
                                 priority: task.priority,
                                 isDone: value ?? false,
                                 notExpired: task.notExpired,
+                                isRecurring: task.isRecurring,
+                                fromTime: task.fromTime,
+                                toTime: task.toTime,
+                                selectedWeekdays: task.selectedWeekdays,
                               );
                               ref.read(taskUpdateFullProvider(updatedTask));
                               if (task.priority == "High") {
