@@ -17,6 +17,8 @@ export 'components/fab_button.dart';
 export 'components/headsup_noti.dart';
 export 'components/loading_anims.dart';
 export 'components/scorecard.dart';
+export 'components/toggle_pass_button.dart';
+export 'components/toggle_theme_auth.dart';
 
 //consts
 export 'consts/avtlist.dart';
@@ -33,6 +35,7 @@ export 'models/user_model.dart';
 export 'screens/add_todo.dart';
 export 'screens/chat_page.dart';
 export 'screens/currmood.dart';
+export 'screens/desc.dart';
 export 'screens/habit.dart';
 export 'screens/home.dart';
 export 'screens/leaderboard.dart';
@@ -56,6 +59,7 @@ export 'services/search_serv.dart';
 export 'services/theme_serv.dart';
 export 'services/todo_serv.dart';
 export 'services/user_serv.dart';
+export 'services/desc_serv.dart';
 
 export 'services/nav_serv.dart';
 

@@ -28,6 +28,7 @@ ThemeData get darkTheme {
       bodyMedium: bodyMD,
       bodySmall: bodySD,
       titleMedium: prfDivTxtD,
+      titleLarge: counterD,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -190,6 +191,7 @@ ThemeData get darkTheme {
       ),
     ),
     timePickerTheme: TimePickerThemeData(
+        dayPeriodTextStyle: headS,
         dayPeriodBorderSide: BorderSide(color: Colors.white),
         confirmButtonStyle: ButtonStyle(
           foregroundColor: WidgetStateProperty.resolveWith((states) {
@@ -201,7 +203,11 @@ ThemeData get darkTheme {
             return const Color(0xFFff8b2c);
           }),
         ),
-        dayPeriodTextColor: Color.fromRGBO(0, 0, 0, 1),
+        dayPeriodTextColor: WidgetStateColor.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? const Color.fromARGB(255, 0, 0, 0)
+              : const Color.fromARGB(255, 255, 255, 255),
+        ),
         timeSelectorSeparatorColor: WidgetStateColor.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
             return Colors.grey;
@@ -264,6 +270,7 @@ ThemeData get lightTheme {
       bodyMedium: bodyM,
       bodySmall: bodyS,
       titleMedium: prfDivTxt,
+      titleLarge: counter,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -406,8 +413,10 @@ ThemeData get lightTheme {
       ),
     ),
     timePickerTheme: const TimePickerThemeData(
+      dayPeriodTextStyle: headS,
+      hourMinuteTextColor: Color(0xFFFfffff),
+      hourMinuteColor: Color(0xFFff8b2c),
       backgroundColor: Colors.white,
-      hourMinuteColor: Colors.black,
       dialHandColor: Color.fromRGBO(255, 139, 44, 1),
     ),
     popupMenuTheme: PopupMenuThemeData(
@@ -461,31 +470,36 @@ var markdownStyleSheetBlack = MarkdownStyleSheet(
   ),
   strong: const TextStyle(
     // Bold text
+    fontFamily: 'Pop',
     fontWeight: FontWeight.bold,
     color: Colors.black,
   ),
   em: const TextStyle(
     // Italic text
+    fontFamily: 'Pop',
     fontStyle: FontStyle.italic,
     color: Colors.black,
   ),
   a: const TextStyle(
     // Link
+    fontFamily: 'Pop',
     color: Colors.blue,
     decoration: TextDecoration.underline,
   ),
   code: GoogleFonts.robotoMono(
     // Code block
-    backgroundColor: Colors.grey[800],
+    backgroundColor: Colors.white,
     color: Colors.black,
   ),
   blockquote: const TextStyle(
     // Blockquote
+    fontFamily: 'Pop',
     color: Colors.grey,
     fontStyle: FontStyle.italic,
   ),
   listBullet: const TextStyle(
     // Unordered list
+    fontFamily: 'Pop',
     color: Colors.black,
   ),
   blockSpacing: 24.0, // Spacing between blocks

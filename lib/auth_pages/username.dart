@@ -143,7 +143,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
           stateInvalidator(ref, true);
           await createUserDoc(username, gender.contains(0) ? 0 : 1, slctdAvt!);
           if (context.mounted) {
-            Navigator.pushNamed(context, '/nav');
+            Navigator.pushNamed(context, '/desc');
           }
         } else if (username.isNotEmpty &&
             widget.isUpdate! &&
@@ -159,7 +159,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
         } else {
           showHeadsupNoti(context, ref, "Please enter a username.");
         }
-      }, widget.isUpdate! ? 'Update Profile' : 'Continue to Home', 26),
+      }, widget.isUpdate! ? 'Update Profile' : 'Continue', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

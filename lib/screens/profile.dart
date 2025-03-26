@@ -85,11 +85,46 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
             div16,
 
+            // Theme Toggle
+            _divTxt("Theme"),
+            buttonBg(
+              SwitchListTile(
+                title: Text("Dark Mode",
+                    style: Theme.of(context).textTheme.bodyMedium),
+                value: isDarkMode,
+                onChanged: (value) {
+                  ref.read(themeProvider.notifier).toggleTheme();
+                },
+              ),
+            ),
+
             // Account Settings
-            divTxt("Account"),
+            _divTxt("Account"),
             buttonBg(
               ListTile(
                 title: Text("Change account details",
+                    style: Theme.of(context).textTheme.bodyMedium),
+                trailing: Icon(
+                  LucideIcons.user_round_cog,
+                  color: colors.iconClr,
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UsernamePage(
+                        isUpdate: true,
+                        user: user,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            buttonBg(
+              ListTile(
+                title: Text("Edit personal details",
                     style: Theme.of(context).textTheme.bodyMedium),
                 trailing: Icon(
                   LucideIcons.user_round_pen,
@@ -99,8 +134,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UsernamePage(
-                        isUpdate: true,
+                      builder: (context) => DescPage(
+                        isEdit: true,
                         user: user,
                       ),
                     ),
@@ -132,19 +167,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 },
               ),
             ),
-
-            // Theme Toggle
-            divTxt("Theme"),
-            buttonBg(
-              SwitchListTile(
-                title: Text("Dark Mode",
-                    style: Theme.of(context).textTheme.bodyMedium),
-                value: isDarkMode,
-                onChanged: (value) {
-                  ref.read(themeProvider.notifier).toggleTheme();
-                },
-              ),
-            ),
           ],
         );
       },
@@ -173,7 +195,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     );
   }
 
-  Padding divTxt(String title) {
+  Padding _divTxt(String title) {
     return Padding(
       padding: EdgeInsets.fromLTRB(26, 20, 26, 2),
       child: Text(

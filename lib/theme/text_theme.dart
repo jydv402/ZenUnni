@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 //Light Theme Texts
+
+const TextStyle counter = TextStyle(
+  fontFamily: 'Bebas',
+  fontSize: 400,
+  color: Colors.black,
+);
 // Headlines
 const TextStyle headL = TextStyle(
   fontFamily: 'Pop',
@@ -23,6 +29,7 @@ const TextStyle headS = TextStyle(
 // Labels
 const TextStyle labelM = TextStyle(
   fontFamily: 'Pop',
+  fontWeight: FontWeight.w400,
   fontSize: 16.0,
   color: Colors.black,
 );
@@ -111,4 +118,10 @@ const TextStyle hintD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 16,
   color: Colors.white,
+);
+
+const TextStyle counterD = TextStyle(
+  fontFamily: 'Bebas',
+  fontSize: 400,
+  color: Color.fromARGB(255, 255, 255, 255),
 );

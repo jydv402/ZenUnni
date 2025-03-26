@@ -90,13 +90,24 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final colors = ref.watch(appColorsProvider);
+    final theme = ref.watch(themeProvider);
     return Scaffold(
       body: ListView(
         padding: pagePadding,
         children: [
-          Text(
-            "Register",
-            style: Theme.of(context).textTheme.headlineLarge,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Register",
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              toggleThemeButton(
+                () => ref.read(themeProvider.notifier).toggleTheme(),
+                theme == ThemeMode.light,
+                colors.iconClr,
+              ),
+            ],
           ),
           const SizedBox(height: 40),
           TextFormField(
@@ -111,14 +122,10 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
             controller: _passwordController,
             decoration: InputDecoration(
               labelText: 'Password',
-              suffixIcon: IconButton(
-                padding: EdgeInsets.only(right: 26),
-                onPressed: () => _toggleObscure(),
-                icon: Icon(
-                  _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
-                  color: colors.iconClr,
-                ),
-                highlightColor: Colors.transparent,
+              suffixIcon: togglePassButton(
+                () => _toggleObscure(),
+                _obsureText,
+                colors.iconClr,
               ),
             ),
             obscureText: _obsureText,
@@ -129,14 +136,10 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
             controller: _confirmPasswordController,
             decoration: InputDecoration(
               labelText: 'Confirm Password',
-              suffixIcon: IconButton(
-                padding: EdgeInsets.only(right: 26),
-                onPressed: () => _toggleObscure(),
-                icon: Icon(
-                  _obsureText ? LucideIcons.eye_closed : LucideIcons.eye,
-                  color: colors.iconClr,
-                ),
-                highlightColor: Colors.transparent,
+              suffixIcon: togglePassButton(
+                () => _toggleObscure(),
+                _obsureText,
+                colors.iconClr,
               ),
             ),
             obscureText: _obsureText,

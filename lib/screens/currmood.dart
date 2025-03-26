@@ -131,32 +131,37 @@ class CurrentMood extends ConsumerWidget {
             ),
             strong: TextStyle(
               // Bold text
+              fontFamily: 'Pop',
               fontWeight: FontWeight.bold,
               color: colors.mdText,
             ),
             em: TextStyle(
               // Italic text
+              fontFamily: 'Pop',
               fontStyle: FontStyle.italic,
               color: colors.mdText,
             ),
             a: const TextStyle(
               // Link
+              fontFamily: 'Pop',
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),
             //TODO: Add roboto local font
             code: GoogleFonts.robotoMono(
               // Code block
-              backgroundColor: Colors.grey[800],
+              backgroundColor: Colors.white,
               color: colors.mdText,
             ),
             blockquote: const TextStyle(
               // Blockquote
+              fontFamily: 'Pop',
               color: Colors.grey,
               fontStyle: FontStyle.italic,
             ),
             listBullet: TextStyle(
               // Unordered list
+              fontFamily: 'Pop',
               color: colors.mdText,
             ),
             blockSpacing: 24.0, // Spacing between blocks
