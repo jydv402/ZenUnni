@@ -46,8 +46,6 @@ class TodoListPage extends ConsumerWidget {
                 if (normalTasks.isNotEmpty) ...[
                   _taskListView(normalTasks, ref),
                 ],
-                
-                
               ],
             ),
           );
@@ -210,10 +208,10 @@ class TodoListPage extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    task.expired
+                    task.notExpired
                         ? const Spacer()
                         : Text(
-                            "Task Expired",
+                            "Task notExpired",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -257,7 +255,7 @@ class TodoListPage extends ConsumerWidget {
                         color: Colors.white,
                       ),
                     ),
-                    task.expired
+                    task.notExpired
                         ? Checkbox(
                             value: task.isDone,
                             side:
@@ -267,27 +265,26 @@ class TodoListPage extends ConsumerWidget {
                             focusColor: Colors.white,
                             checkColor: Colors.black,
                             onChanged: (bool? value) async {
-                              if (!context.mounted)
-                               { return; }
+                              if (!context.mounted) {
+                                return;
+                              }
                               //to prevent performing updation befor the widget is stable in the widget tree
                               final updatedTask = TodoModel(
-                                name: task.name,
-                                description: task.description,
-                                date: task.date,
-                                priority: task.priority,
-                                isDone: value ?? false,
-                                isRecurring: task.isRecurring,
-                                expired: task.expired,
-                                fromTime: task.fromTime,
-                                toTime: task.toTime,
-                                selectedWeekdays: task.selectedWeekdays,
-                                oldname: task.oldname
-
-                              );
-                              if(context.mounted){
-                                 ref.read(
-                                taskUpdateFullProvider(updatedTask),
-                              );
+                                  name: task.name,
+                                  description: task.description,
+                                  date: task.date,
+                                  priority: task.priority,
+                                  isDone: value ?? false,
+                                  isRecurring: task.isRecurring,
+                                  notExpired: task.notExpired,
+                                  fromTime: task.fromTime,
+                                  toTime: task.toTime,
+                                  selectedWeekdays: task.selectedWeekdays,
+                                  oldname: task.oldname);
+                              if (context.mounted) {
+                                ref.read(
+                                  taskUpdateFullProvider(updatedTask),
+                                );
                               }
                               if (task.priority == "High") {
                                 ref.read(
@@ -310,11 +307,11 @@ class TodoListPage extends ConsumerWidget {
                                 score = 10;
                               }
                               if (value) {
-                                showHeadsupNoti(context,
+                                showHeadsupNoti(context, ref,
                                     "Hurray! Task Completed.\n$score Points Earned");
                               } else {
                                 showHeadsupNoti(
-                                    context, "Oops! Lost $score Points");
+                                    context, ref, "Oops! Lost $score Points");
                               }
                             },
                           )
@@ -323,7 +320,7 @@ class TodoListPage extends ConsumerWidget {
                 ),
                 Text(
                   task.name,
-                  style: task.expired
+                  style: task.notExpired
                       ? Theme.of(context).textTheme.headlineMedium
                       : Theme.of(context).textTheme.headlineMedium?.copyWith(
                           color: Colors.grey,
@@ -334,7 +331,7 @@ class TodoListPage extends ConsumerWidget {
                 const SizedBox(height: 10),
                 Text(
                   task.description,
-                  style: task.expired
+                  style: task.notExpired
                       ? Theme.of(context).textTheme.headlineSmall
                       : Theme.of(context).textTheme.headlineSmall?.copyWith(
                             color: Colors.grey,
@@ -346,7 +343,7 @@ class TodoListPage extends ConsumerWidget {
                 const SizedBox(height: 26),
                 Text(
                   "•  Due Date: ${DateFormat('dd MMM y').format(task.date)}",
-                  style: task.expired
+                  style: task.notExpired
                       ? Theme.of(context).textTheme.bodySmall
                       : Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.grey,
@@ -357,7 +354,7 @@ class TodoListPage extends ConsumerWidget {
                 const SizedBox(height: 10),
                 Text(
                   "•  Due Time: ${DateFormat('hh:mm a').format(task.date)}",
-                  style: task.expired
+                  style: task.notExpired
                       ? Theme.of(context).textTheme.bodySmall
                       : Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.grey,
@@ -370,7 +367,7 @@ class TodoListPage extends ConsumerWidget {
                   TextSpan(children: [
                     TextSpan(
                       text: "•  Priority: ",
-                      style: task.expired
+                      style: task.notExpired
                           ? Theme.of(context).textTheme.bodySmall
                           : Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Colors.grey,
@@ -380,7 +377,7 @@ class TodoListPage extends ConsumerWidget {
                     ),
                     TextSpan(
                       text: task.priority,
-                      style: task.expired
+                      style: task.notExpired
                           ? Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: task.priority == "High"
                                     ? Colors.red.shade200
