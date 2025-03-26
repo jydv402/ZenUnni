@@ -122,11 +122,40 @@ class TaskPageState extends ConsumerState<TaskPage> {
     );
   }
 
+  // Combines both task and recurring task providers
+  final combinedTasksProvider = FutureProvider<List<TodoModel>>((ref) async {
+    final normalTasks = await ref.watch(taskProvider.future);
+    final recurringTasks = await ref.watch(recurringTaskProvider.future);
+
+    // Merging both lists, with recurring tasks first
+    return [...recurringTasks, ...normalTasks];
+  });
+
   // Todo List
   Widget todoListPage() {
-    final taskList = ref.watch(taskProvider);
-    return taskList.when(
-      data: (tasks) => _taskListView(tasks),
+    final combinedTaskList = ref.watch(combinedTasksProvider);
+    return combinedTaskList.when(
+      data: (tasks) {
+        //to separate recurring and normal tasks
+        final recurringTasks = tasks.where((task) => task.isRecurring).toList();
+        final normalTasks = tasks.where((task) => !task.isRecurring).toList();
+
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              //normal Task List
+              if (normalTasks.isNotEmpty) ...[
+                _taskListView(normalTasks),
+              ],
+
+              //recurring Task List
+              if (recurringTasks.isNotEmpty) ...[
+                _recurringTaskListView(recurringTasks),
+              ],
+            ],
+          ),
+        );
+      },
       loading: () => Center(
         child: showRunningIndicator(context, "Loading Todo data..."),
       ),
@@ -139,13 +168,112 @@ class TaskPageState extends ConsumerState<TaskPage> {
     );
   }
 
+  Widget _recurringTaskListView(List<TodoModel> tasks) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+      itemCount: tasks.length + 2,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Recurring Tasks',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ],
+            ),
+          );
+        } else if (index == tasks.length + 1) {
+          return const SizedBox(height: 140);
+        } else {
+          final task = tasks[index - 1];
+          return Container(
+            padding: const EdgeInsets.fromLTRB(26, 6, 10, 26),
+            margin: const EdgeInsets.fromLTRB(6, 6, 6, 0),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(26),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        showConfirmDialog(
+                          context,
+                          "Delete Task ?",
+                          "Are you sure you want to delete this task ?",
+                          "Delete",
+                          Colors.red,
+                          () {
+                            ref.read(
+                              taskDeleteProvider(task),
+                            );
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        LucideIcons.trash_2,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddTaskPage(taskToEdit: task),
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        LucideIcons.pen,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  task.name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(color: Colors.white),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  task.description,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Colors.white,
+                      ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
   // Task List
   Widget _taskListView(List<TodoModel> tasks) {
     int score = 0;
     return ListView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-      itemCount: tasks.length + 2,
+      itemCount: tasks.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
           return Padding(
@@ -158,8 +286,6 @@ class TaskPageState extends ConsumerState<TaskPage> {
               ],
             ),
           );
-        } else if (index == tasks.length + 1) {
-          return const SizedBox(height: 140);
         } else {
           final task = tasks[index - 1];
           return Container(
@@ -515,8 +641,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
         Text(
             "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
             style: Theme.of(context).textTheme.bodySmall),
-        const SizedBox(height: 10),
-        Text("Error: $error", style: Theme.of(context).textTheme.bodySmall),
+        // const SizedBox(height: 10),
+        // Text("Error: $error", style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
