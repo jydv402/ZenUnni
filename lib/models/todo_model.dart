@@ -44,7 +44,7 @@ class TodoModel {
   }
   Map<String, dynamic> toMap() {
     return {
-      'task': name,
+      'name': name,
       'description': description,
       'date': date,
       'priority': priority,
@@ -59,7 +59,7 @@ class TodoModel {
 
   factory TodoModel.fromMap(Map<String, dynamic> map, bool expired) {
     return TodoModel(
-      name: map['task'] ?? '',
+      name: map['name'] ?? '',
       description: map['description'] ?? '',
       date: (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
       priority: map['priority'] ?? '',
