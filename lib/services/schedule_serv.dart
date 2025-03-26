@@ -10,6 +10,7 @@ final scheduleProvider =
     FutureProvider.family<List<ScheduleItem>, List<TodoModel>>(
   (ref, tasks) async {
     final username = ref.watch(userNameProvider);
+    final user = ref.watch(userProvider);
     final String scheduleKey = 'saved_sched_${username.value}';
 
     var logger = Logger();
@@ -42,7 +43,12 @@ final scheduleProvider =
         .join();
     final aiService = AIService();
     logger.d(userTasks);
-    final response = await aiService.schedGenIsolate(userTasks);
+    final response = await aiService.schedGenIsolate(
+      userTasks,
+      user.value?.about ?? '',
+      user.value?.freeTime ?? '',
+      user.value?.bedtime ?? '',
+    );
     logger.d(response);
 
     final cleanedResponse = response

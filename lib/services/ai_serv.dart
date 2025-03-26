@@ -58,14 +58,15 @@ class AIService {
     return response;
   }
 
-  Future<String> chatIsolate(
-      String message, List history, String username, String mood) async {
+  Future<String> chatIsolate(String message, List history, String username,
+      String about, String mood) async {
     final result = await compute(
       _chatWorker,
       {
         'message': message,
         'history': history,
         'username': username,
+        'about': about,
         'mood': mood,
         'apiKey': dotenv.env['KEY']!,
       },
@@ -77,6 +78,7 @@ class AIService {
     final DateTime now = DateTime.now();
     final message = args['message'] as String;
     final username = args['username'] as String;
+    final about = args['about'] as String;
     final historyString = args['history']
         .map((msg) => '${msg.isUser ? username : 'AI'}: ${msg.text}')
         .join('\n');
@@ -117,6 +119,7 @@ class AIService {
     Time: $now
     History: $historyString
     User's mood: $mood
+    About user: $about
     $username : {message}
     AI:
     ''';
@@ -131,10 +134,14 @@ class AIService {
     return response;
   }
 
-  Future<String> schedGenIsolate(String userTasks) async {
+  Future<String> schedGenIsolate(
+      String userTasks, String about, String freeTime, String bedtime) async {
     final result = await compute(_schedGenWorker, {
       'userTasks': userTasks,
       'apiKey': dotenv.env['KEY']!,
+      'about': about,
+      'freeTime': freeTime,
+      'bedtime': bedtime
     });
     return result;
   }
@@ -142,16 +149,23 @@ class AIService {
   Future<String> _schedGenWorker(Map<String, dynamic> args) async {
     final userTasks = args['userTasks'] as String;
     final apiKey = args['apiKey'] as String;
+    final about = args['about'] as String;
+    final freeTime = args['freeTime'] as String;
+    final bedtime = args['bedtime'] as String;
     final now = "${DateTime.now().hour}:${DateTime.now().minute}";
+
+    print("$about\n$freeTime\n$bedtime");
 
     String systemPrompt = """
     You are Unni, an intelligent and organized AI assistant specializing in **realistic and efficient scheduling** based on the user's tasks, priorities, and availability. Your goal is to create a balanced schedule that respects the user's **free time, bedtime, and logical sequencing** while prioritizing important tasks.  
 
     ## **User Input:**  
-    The user has provided:  
-    - **Task List:** $userTasks  
-    - **Free Time Slots:** 8:30 pm to 11:00pm  
-    - **Bedtime:** 11:00 pm
+    The user has provided:
+    - **Current Time:** $now
+    - **About User:** $about
+    - **Task List:** $userTasks
+    - **Free Time of User:** $freeTime 
+    - **Bedtime:** $bedtime
 
     ## **Scheduling Rules:**  
     1. **Task Allocation:**  
