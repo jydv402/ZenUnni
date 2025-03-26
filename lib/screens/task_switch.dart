@@ -418,7 +418,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
         Container(
           margin: const EdgeInsets.fromLTRB(90, 16, 26, 16),
           height: contHt < 180
-              ? 180
+              ? 200
               : contHt > 600
                   ? 600
                   : contHt,

@@ -59,6 +59,7 @@ class MyApp extends ConsumerWidget {
         '/email_verif': (context) => const EmailVerifPage(),
         '/add_todo': (context) => const AddTaskPage(),
         '/man_sched': (context) => const ManualSchedEdit(),
+        '/desc': (context) => const DescPage(),
       },
     );
   }
