@@ -1,4 +1,5 @@
 import 'package:line_icons/line_icons.dart';
+import 'package:zen/notification/notif.dart';
 import 'package:zen/zen_barrel.dart';
 
 class LandPage extends ConsumerWidget {
