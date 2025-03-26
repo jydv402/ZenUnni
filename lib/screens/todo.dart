@@ -46,6 +46,8 @@ class TodoListPage extends ConsumerWidget {
                 if (normalTasks.isNotEmpty) ...[
                   _taskListView(normalTasks, ref),
                 ],
+                
+                
               ],
             ),
           );
@@ -158,10 +160,9 @@ class TodoListPage extends ConsumerWidget {
                 const SizedBox(height: 10),
                 Text(
                   task.description,
-                  style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(color: Colors.white,),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Colors.white,
+                      ),
                 ),
               ],
             ),
@@ -266,9 +267,9 @@ class TodoListPage extends ConsumerWidget {
                             focusColor: Colors.white,
                             checkColor: Colors.black,
                             onChanged: (bool? value) async {
-                              if (!context.mounted) return;
+                              if (!context.mounted)
+                                return; 
                               //to prevent performing updation befor the widget is stable in the widget tree
-                              //recheck this
                               final updatedTask = TodoModel(
                                 name: task.name,
                                 description: task.description,
@@ -280,11 +281,12 @@ class TodoListPage extends ConsumerWidget {
                                 fromTime: task.fromTime,
                                 toTime: task.toTime,
                                 selectedWeekdays: task.selectedWeekdays,
+
                               );
-                              if (context.mounted) {
-                                ref.read(
-                                  taskUpdateFullProvider(updatedTask),
-                                );
+                              if(context.mounted){
+                                 ref.read(
+                                taskUpdateFullProvider(updatedTask),
+                              );
                               }
                               if (task.priority == "High") {
                                 ref.read(

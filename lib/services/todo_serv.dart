@@ -22,7 +22,7 @@ final taskProvider = StreamProvider<List<TodoModel>>(
       final tasks = snapshot.docs.map((doc) {
         final data = doc.data();
         return TodoModel(
-          name: data['name'] ?? '',
+          name: data['task'] ?? '',
           description: data['description'] ?? '',
           date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
           priority: data['priority'] ?? '',
@@ -57,7 +57,7 @@ final recurringTaskProvider = StreamProvider<List<TodoModel>>((ref) async* {
     final tasks = snapshot.docs.map((doc) {
       final data = doc.data();
       return TodoModel(
-        name: data['name'] ?? '',
+        name: data['task'] ?? '',
         description: data['description'] ?? '',
         date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
         priority: data['priority'] ?? '',
@@ -113,7 +113,7 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
         .collection('task');
 
     final querySnapshot =
-        await taskDoc.where('name', isEqualTo: task.name).get();
+        await taskDoc.where('task', isEqualTo: task.name).get();
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
@@ -149,7 +149,7 @@ final taskDeleteProvider = FutureProvider.family<void, TodoModel>(
 
     // Query to find the document with matching task name
     final querySnapshot =
-        await taskDoc.where('name', isEqualTo: task.name).get();
+        await taskDoc.where('task', isEqualTo: task.name).get();
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
@@ -176,7 +176,7 @@ Future<void> scheduleNotificationsForIncompleteTasks() async {
 
     for (var doc in tasksSnapshot.docs) {
       final data = doc.data();
-      final taskName = data['name'];
+      final taskName = data['task'];
       final dueDate = (data['date'] as Timestamp).toDate();
 
       //  Cancel existing notification to prevent duplicates
