@@ -515,8 +515,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
         Text(
             "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
             style: Theme.of(context).textTheme.bodySmall),
-        const SizedBox(height: 10),
-        Text("Error: $error", style: Theme.of(context).textTheme.bodySmall),
+        // const SizedBox(height: 10),
+        // Text("Error: $error", style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
