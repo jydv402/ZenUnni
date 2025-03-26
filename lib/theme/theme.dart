@@ -470,31 +470,36 @@ var markdownStyleSheetBlack = MarkdownStyleSheet(
   ),
   strong: const TextStyle(
     // Bold text
+    fontFamily: 'Pop',
     fontWeight: FontWeight.bold,
     color: Colors.black,
   ),
   em: const TextStyle(
     // Italic text
+    fontFamily: 'Pop',
     fontStyle: FontStyle.italic,
     color: Colors.black,
   ),
   a: const TextStyle(
     // Link
+    fontFamily: 'Pop',
     color: Colors.blue,
     decoration: TextDecoration.underline,
   ),
   code: GoogleFonts.robotoMono(
     // Code block
-    backgroundColor: Colors.grey[800],
+    backgroundColor: Colors.white,
     color: Colors.black,
   ),
   blockquote: const TextStyle(
     // Blockquote
+    fontFamily: 'Pop',
     color: Colors.grey,
     fontStyle: FontStyle.italic,
   ),
   listBullet: const TextStyle(
     // Unordered list
+    fontFamily: 'Pop',
     color: Colors.black,
   ),
   blockSpacing: 24.0, // Spacing between blocks

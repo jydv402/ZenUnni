@@ -257,7 +257,6 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           );
   }
 
-//TODO: use a segmented button
   Widget _dialogPrioritySelect(void Function(void Function()) setState) {
     return SizedBox(
       width: double.infinity,

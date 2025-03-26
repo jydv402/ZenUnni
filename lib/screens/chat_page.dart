@@ -1,5 +1,4 @@
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/zen_barrel.dart';
 
@@ -11,6 +10,7 @@ class ChatPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatMsgs = ref.watch(msgProvider);
+    final theme = ref.watch(themeProvider);
 
     const msgs = {
       "Say Hi to Unni!": "Hey Unni! How's it going?",
@@ -48,10 +48,11 @@ class ChatPage extends ConsumerWidget {
                   ),
                   Text(
                     'Ask me anything !',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(color: Colors.grey.shade400),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: theme == ThemeMode.dark
+                              ? Colors.grey.shade400
+                              : Colors.grey.shade600,
+                        ),
                   ),
                   const SizedBox(height: 2),
                   SizedBox(
@@ -79,10 +80,14 @@ class ChatPage extends ConsumerWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Colors.white10,
+                              color: theme == ThemeMode.dark
+                                  ? Colors.white10
+                                  : Colors.black12,
                               borderRadius: BorderRadius.circular(24),
                               border: Border.all(
-                                color: Colors.white30,
+                                color: theme == ThemeMode.dark
+                                    ? Colors.white30
+                                    : Colors.black26,
                               ),
                             ),
                             child: Text(
@@ -92,7 +97,9 @@ class ChatPage extends ConsumerWidget {
                                   .bodySmall
                                   ?.copyWith(
                                     height: 0,
-                                    color: Colors.grey.shade400,
+                                    color: theme == ThemeMode.dark
+                                        ? Colors.grey.shade400
+                                        : Colors.grey.shade700,
                                   ),
                             ),
                           ),
@@ -105,42 +112,52 @@ class ChatPage extends ConsumerWidget {
               ),
             )
           : ListView.builder(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 150),
-              itemCount: chatMsgs.length,
+              padding: const EdgeInsets.fromLTRB(0, 70, 0, 150),
+              itemCount: chatMsgs.length + 1,
               itemBuilder: (context, index) {
-                final msg = chatMsgs[index];
-                return Align(
-                  key: ValueKey(msg.text),
-                  alignment:
-                      msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.9,
-                    ),
-                    decoration: BoxDecoration(
-                      color: msg.isUser
-                          ? Colors.green.shade200 //User msg pill
-                          : Colors.blue.shade200, //AI msg pill
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: const Radius.circular(28),
-                        bottomRight: const Radius.circular(28),
-                        topLeft: msg.isUser
-                            ? const Radius.circular(28)
-                            : const Radius.circular(2),
-                        topRight: msg.isUser
-                            ? const Radius.circular(2)
-                            : const Radius.circular(28),
+                if (index == 0) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 26, bottom: 30),
+                    child: Text("Unni",
+                        style: Theme.of(context).textTheme.headlineLarge),
+                  );
+                } else {
+                  final msg = chatMsgs[index - 1];
+                  return Align(
+                    key: ValueKey(msg.text),
+                    alignment: msg.isUser
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.9,
+                      ),
+                      decoration: BoxDecoration(
+                        color: msg.isUser
+                            ? Colors.green.shade200 //User msg pill
+                            : Colors.blue.shade200, //AI msg pill
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: const Radius.circular(28),
+                          bottomRight: const Radius.circular(28),
+                          topLeft: msg.isUser
+                              ? const Radius.circular(28)
+                              : const Radius.circular(2),
+                          topRight: msg.isUser
+                              ? const Radius.circular(2)
+                              : const Radius.circular(28),
+                        ),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
+                      child: MarkdownBody(
+                        selectable: true,
+                        data: msg.text,
+                        styleSheet: markdownStyleSheetBlack,
                       ),
                     ),
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    child: MarkdownBody(
-                      data: msg.text,
-                      styleSheet: markdownStyleSheetBlack,
-                    ),
-                  ),
-                );
+                  );
+                }
               },
             ),
       floatingActionButton: fabField(context, ref, chatMsgs.isEmpty),
@@ -153,9 +170,7 @@ class ChatPage extends ConsumerWidget {
     WidgetRef ref,
     bool isEmpty,
   ) {
-    final MenuController menucontroller = MenuController();
     final TextEditingController controller = TextEditingController();
-    final tasks = ref.watch(taskProvider);
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -194,64 +209,30 @@ class ChatPage extends ConsumerWidget {
           const SizedBox(
             width: 8,
           ),
-          MenuAnchor(
-            controller: menucontroller,
-            alignmentOffset: Offset(-10, 18),
-            style: MenuStyle(
-              shadowColor: WidgetStateProperty.all(Colors.white),
-              alignment: const Alignment(-5.5, 16),
-              backgroundColor: WidgetStateProperty.all(Colors.white),
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                ),
+          if (!isEmpty)
+            IconButton(
+              tooltip: 'Clear chat',
+              padding: const EdgeInsets.all(0),
+              onPressed: () {
+                showConfirmDialog(
+                  context,
+                  "Clear Chat ?",
+                  "Are you sure you want to clear the chat ?",
+                  "Clear",
+                  Colors.red,
+                  () {
+                    ref.read(msgProvider.notifier).clearMessages();
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+              icon: const Icon(
+                LucideIcons.eraser,
+                size: 22,
               ),
             ),
-            builder: (context, controller, child) {
-              return IconButton(
-                padding: const EdgeInsets.all(0),
-                onPressed: () {
-                  controller.isOpen ? controller.close() : controller.open();
-                },
-                icon: const Icon(
-                  LineIcons.verticalEllipsis,
-                  size: 26,
-                ),
-              );
-            },
-            menuChildren: [
-              //Clear chat item
-              if (!isEmpty)
-                menuItem(
-                  context,
-                  ref,
-                  "Clear Chat",
-                  LineIcons.eraser,
-                  () {
-                    showConfirmDialog(
-                      context,
-                      "Clear Chat ?",
-                      "Are you sure you want to clear the chat ?",
-                      "Clear",
-                      Colors.red,
-                      () {
-                        ref.read(msgProvider.notifier).clearMessages();
-                        Navigator.of(context).pop();
-                      },
-                    );
-                    menucontroller.close();
-                  },
-                ),
-              //Generate schedule item
-              menuItem(context, ref, "Generate Schedule", LineIcons.penSquare,
-                  () {
-                ref.read(scheduleProvider(tasks.value ?? []).future);
-                //schedGen(tasks.value ?? [], "user");
-                menucontroller.close();
-              }),
-            ],
-          ),
           IconButton(
+            tooltip: 'Send',
             padding: const EdgeInsets.all(0),
             onPressed: () async {
               if (controller.text.isNotEmpty) {
@@ -266,8 +247,8 @@ class ChatPage extends ConsumerWidget {
               controller.clear();
             },
             icon: const Icon(
-              LineIcons.share,
-              size: 26,
+              LucideIcons.forward,
+              size: 22,
             ),
           ),
         ],
