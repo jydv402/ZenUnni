@@ -113,7 +113,7 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
         .collection('task');
 
     final querySnapshot =
-        await taskDoc.where('task', isEqualTo: task.name).get();
+        await taskDoc.where('task', isEqualTo: task.oldname).get();
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;

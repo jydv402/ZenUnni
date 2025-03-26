@@ -268,7 +268,7 @@ class TodoListPage extends ConsumerWidget {
                             checkColor: Colors.black,
                             onChanged: (bool? value) async {
                               if (!context.mounted)
-                                return; 
+                               { return; }
                               //to prevent performing updation befor the widget is stable in the widget tree
                               final updatedTask = TodoModel(
                                 name: task.name,
@@ -281,6 +281,7 @@ class TodoListPage extends ConsumerWidget {
                                 fromTime: task.fromTime,
                                 toTime: task.toTime,
                                 selectedWeekdays: task.selectedWeekdays,
+                                oldname: task.oldname
 
                               );
                               if(context.mounted){

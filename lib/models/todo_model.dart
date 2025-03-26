@@ -6,6 +6,7 @@ final now = DateTime.now();
 class TodoModel {
   //todo :change name to taskName
   String name;
+  String? oldname;
   String description;
   DateTime date;
   String priority;
@@ -27,6 +28,7 @@ class TodoModel {
       required this.fromTime,
       required this.toTime,
       required this.selectedWeekdays,
+      this.oldname,
       this.onChanged,
       required this.expired});
 
@@ -53,7 +55,7 @@ class TodoModel {
       'fromTime':fromTime,
       'toTime':toTime,
       'selectedWeekdays':selectedWeekdays
-      //todo :'updatedOn': now
+      //TODO :'updatedOn': now
     };
   }
 

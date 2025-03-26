@@ -31,7 +31,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   void initState() {
     super.initState();
     if (widget.taskToEdit != null) {
+      
       nameController.text = widget.taskToEdit!.name;
+      
       descController.text = widget.taskToEdit!.description;
       _date = widget.taskToEdit!.date;
       localDate = widget.taskToEdit!.date;
@@ -233,6 +235,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               }
 
               TodoModel task = TodoModel(
+                
                 name: nameController.text,
                 description: descController.text,
                 date: dateTime ?? DateTime.now(),
@@ -249,6 +252,8 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           
                 selectedWeekdays: isRecurring ? selectedWeekdays : [],
                 expired: false,
+
+                oldname: widget.taskToEdit != null ? widget.taskToEdit!.name : null,
               );
                print("Recurring task added: ${task.date}"); 
                print("Recurring task added: ${task.isRecurring}"); 
@@ -258,6 +263,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               if (widget.taskToEdit != null) {
                 // Update existing task
                 ref.read(
+
                   taskUpdateFullProvider(task),
                 );
               } else {
