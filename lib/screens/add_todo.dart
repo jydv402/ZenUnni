@@ -105,8 +105,8 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           //Task description text field
           _dialogTextFields(context, descController, "Task description"),
           const SizedBox(height: 30),
-          _isRecurringCheckBox(),
-          const SizedBox(height: 30),
+          //_isRecurringCheckBox(),
+          //const SizedBox(height: 30),
 
           if (!isRecurring) ...[
             _selectedDateText(),
@@ -393,23 +393,23 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
     );
   }
 
-  Widget _isRecurringCheckBox() {
-    return SwitchListTile(
-      title: Text('Recurring Task?',
-          style: Theme.of(context).textTheme.headlineSmall),
-      value: isRecurring,
-      onChanged: (value) {
-        setState(() {
-          isRecurring = value;
-          if (isRecurring) {
-            _date = null;
-            _time = null;
-            _prior = "";
-          }
-        });
-      },
-    );
-  }
+  // Widget _isRecurringCheckBox() {
+  //   return SwitchListTile(
+  //     title: Text('Recurring Task?',
+  //         style: Theme.of(context).textTheme.headlineSmall),
+  //     value: isRecurring,
+  //     onChanged: (value) {
+  //       setState(() {
+  //         isRecurring = value;
+  //         if (isRecurring) {
+  //           _date = null;
+  //           _time = null;
+  //           _prior = "";
+  //         }
+  //       });
+  //     },
+  //   );
+  // }
 
   Widget _weekdaySelector() {
     const List<String> weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];

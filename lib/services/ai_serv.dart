@@ -152,16 +152,14 @@ class AIService {
     final about = args['about'] as String;
     final freeTime = args['freeTime'] as String;
     final bedtime = args['bedtime'] as String;
-    final now = "${DateTime.now().hour}:${DateTime.now().minute}";
-
-    print("$about\n$freeTime\n$bedtime");
+    final now = DateTime.now();
 
     String systemPrompt = """
     You are Unni, an intelligent and organized AI assistant specializing in **realistic and efficient scheduling** based on the user's tasks, priorities, and availability. Your goal is to create a balanced schedule that respects the user's **free time, bedtime, and logical sequencing** while prioritizing important tasks.  
 
     ## **User Input:**  
     The user has provided:
-    - **Current Time:** $now
+    - **Current Date & Time:** $now
     - **About User:** $about
     - **Task List:** $userTasks
     - **Free Time of User:** $freeTime 
@@ -208,11 +206,11 @@ class AIService {
 
     """;
 
+    print(systemPrompt);
     final promptTemplate = PromptTemplate(
       inputVariables: const {'userTasks', 'systemPrompt', 'now'},
       template: '''
       System: {systemPrompt}
-      Time: {now}
       AI:
       ''',
     );
