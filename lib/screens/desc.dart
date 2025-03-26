@@ -86,6 +86,8 @@ class _DescPageState extends ConsumerState<DescPage> {
   Widget _buildTextField(TextEditingController controller, String hintText) {
     return TextField(
       controller: controller,
+      minLines: null,
+      maxLines: null,
       style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
         labelText: hintText,
