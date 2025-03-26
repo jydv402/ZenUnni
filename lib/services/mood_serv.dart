@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/services/ai_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 final moodProvider = StreamProvider<String?>((ref) async* {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -20,7 +19,10 @@ final moodProvider = StreamProvider<String?>((ref) async* {
 
   final querySnapshot = moodDoc
       .where('updatedOn', isGreaterThanOrEqualTo: today)
-      .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
+      .where('updatedOn',
+          isLessThan: today.add(
+            const Duration(days: 1),
+          ))
       .limit(1)
       .snapshots();
 
@@ -49,7 +51,10 @@ final moodAddProvider = FutureProvider.autoDispose.family<void, String>(
     // }
     final query = await moodDoc
         .where('updatedOn', isGreaterThanOrEqualTo: today)
-        .where('updatedOn', isLessThan: today.add(const Duration(days: 1)))
+        .where('updatedOn',
+            isLessThan: today.add(
+              const Duration(days: 1),
+            ))
         .limit(1)
         .get();
 
@@ -64,7 +69,10 @@ final moodAddProvider = FutureProvider.autoDispose.family<void, String>(
   },
 );
 
-final motivationalMessageProvider =
-    FutureProvider.family<String, String>((ref, mood) async {
-  return await AIService().getMotivationalMessageIsolate(mood);
-});
+final motivationalMessageProvider = FutureProvider.family<String, String>(
+  (ref, mood) async {
+    final username = ref.watch(userNameProvider);
+    return await AIService()
+        .getMotivationalMessageIsolate(mood, username.value ?? 'user');
+  },
+);

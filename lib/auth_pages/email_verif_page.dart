@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/theme/light.dart';
+
+import 'package:zen/zen_barrel.dart';
 
 class EmailVerifPage extends ConsumerStatefulWidget {
   const EmailVerifPage({super.key});
@@ -20,8 +18,10 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
   void initState() {
     super.initState();
     checkEmailVerification();
-    timer =
-        Timer.periodic(Duration(seconds: 3), (_) => checkEmailVerification());
+    timer = Timer.periodic(
+      Duration(seconds: 3),
+      (_) => checkEmailVerification(),
+    );
   }
 
   Future<void> checkEmailVerification() async {
@@ -30,20 +30,29 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
     if (user != null && user.emailVerified) {
       setState(() => isEmailVerified = true);
       timer?.cancel();
-      Navigator.pushReplacementNamed(context, '/username');
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const UsernamePage(
+              isUpdate: false,
+            ),
+          ),
+        );
+      }
     }
   }
 
   Future<void> resendVerificationEmail() async {
     try {
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Verification email resent!')),
-      );
+      if (mounted) {
+        showHeadsupNoti(context, ref, "Verification email resent!");
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+      if (mounted) {
+        showHeadsupNoti(context, ref, "Error: ${e.toString()}");
+      }
     }
   }
 

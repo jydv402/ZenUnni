@@ -1,36 +1,37 @@
 class ScheduleItem {
   final String taskName;
+  final DateTime startTime;
+  final DateTime endTime;
+  final int duration;
   final String priority;
-  final String startTime;
-  final String endTime;
+  final DateTime dueDate;
 
   ScheduleItem({
     required this.taskName,
-    required this.priority,
     required this.startTime,
     required this.endTime,
+    required this.duration,
+    required this.priority,
+    required this.dueDate,
   });
 
   factory ScheduleItem.fromJson(Map<String, dynamic> json) {
     return ScheduleItem(
       taskName: json['taskName'],
+      startTime: DateTime.parse(json['startTime']),
+      endTime: DateTime.parse(json['endTime']),
+      duration: json['duration'],
       priority: json['priority'],
-      startTime: json['startTime'],
-      endTime: json['endTime'],
+      dueDate: DateTime.parse(json['due_date']),
     );
   }
 
-  
-  Map<String, dynamic> toMap() {
-    return {
-      'taskName': taskName,
-      'priority': priority,
-      'startTime': startTime,
-      'endTime': endTime,
-    };
-  }
-
-  static List<Map<String, dynamic>> listToMap(List<ScheduleItem> items) {
-    return items.map((item) => item.toMap()).toList();
-  }
+  Map<String, dynamic> toJson() => {
+        'taskName': taskName,
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime.toIso8601String(),
+        'duration': duration,
+        'priority': priority,
+        'due_date': dueDate.toIso8601String(),
+      };
 }

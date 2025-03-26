@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/pomodoro_serve.dart';
-import 'package:zen/theme/light.dart';
+//import 'package:google_fonts/google_fonts.dart';
+import 'package:zen/zen_barrel.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+void playPomodoroEndSound() async {
+  final player = AudioPlayer();
+  await player.play(AssetSource('sounds/timer.mp3'));
+}
 
 class PomodoroPage extends ConsumerWidget {
   const PomodoroPage({super.key});
@@ -26,10 +27,11 @@ class PomodoroPage extends ConsumerWidget {
     rounds.text = pomo.rounds.toString();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           Text(
             'Pomodoro Timer',
             style: Theme.of(context).textTheme.headlineLarge,
@@ -52,7 +54,7 @@ class PomodoroPage extends ConsumerWidget {
           //       breakDuration.text.isNotEmpty &&
           //       rounds.text.isNotEmpty) {
           //     pomoNotifier.setTimer(int.parse(duration.text),
-          //         int.parse(breakDuration.text), int.parse(rounds.text));
+          //         int.parse(breakDuration.text), int.parse(rounds.text),);
           //     pomoNotifier.startTimer();
           //     Navigator.pushNamed(context, '/counter');
           //   }
@@ -63,7 +65,7 @@ class PomodoroPage extends ConsumerWidget {
           //       breakDuration.text.isNotEmpty &&
           //       rounds.text.isNotEmpty) {
           //     pomoNotifier.setTimer(int.parse(duration.text),
-          //         int.parse(breakDuration.text), int.parse(rounds.text));
+          //         int.parse(breakDuration.text), int.parse(rounds.text),);
           //     pomoNotifier.startTimer();
           //     Navigator.pushNamed(context, '/counter');
           //   }
@@ -98,7 +100,7 @@ class PomodoroPage extends ConsumerWidget {
           //               pomoNotifier.setTimer(
           //                   int.parse(duration.text),
           //                   int.parse(breakDuration.text),
-          //                   int.parse(rounds.text));
+          //                   int.parse(rounds.text),);
           //               pomoNotifier.startTimer();
           //               Navigator.pushNamed(context, '/counter');
           //             }
@@ -115,8 +117,11 @@ class PomodoroPage extends ConsumerWidget {
         if (duration.text.isNotEmpty &&
             breakDuration.text.isNotEmpty &&
             rounds.text.isNotEmpty) {
-          pomoNotifier.setTimer(int.parse(duration.text),
-              int.parse(breakDuration.text), int.parse(rounds.text));
+          pomoNotifier.setTimer(
+            int.parse(duration.text),
+            int.parse(breakDuration.text),
+            int.parse(rounds.text),
+          );
           pomoNotifier.startTimer();
           Navigator.pushNamed(context, '/counter');
         }
@@ -148,10 +153,17 @@ class CountdownScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pomo = ref.watch(pomoProvider);
 
+// 🔥 Play sound when timer reaches zero
+    if (pomo.timeRemaining == 0) {
+      playPomodoroEndSound();
+    }
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
-        padding: pagePadding,
+        padding: pagePaddingWithScore,
         children: [
+          const ScoreCard(),
           Text(
             pomo.isRunning
                 ? pomo.isBreak
@@ -177,10 +189,8 @@ class CountdownScreen extends ConsumerWidget {
   Text _showTime(BuildContext context, int seconds) {
     return Text(
       seconds.toString().padLeft(2, '0'), // Display time remaining
-      style: GoogleFonts.bebasNeue(
-          fontSize: MediaQuery.of(context).size.width * 0.75,
-          color: Colors.white,
-          height: 0.9),
+      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          fontSize: MediaQuery.of(context).size.width * 0.70, height: 0.8),
       textAlign: TextAlign.center,
     );
   }

@@ -5,12 +5,14 @@ class HabitModel {
   final String color;
   final DateTime createdAt;
   final Map<DateTime, bool> completedDates;
+  String? oldname;
 
   HabitModel({
     required this.habitName,
     required this.color,
     required this.createdAt,
     required this.completedDates,
+    this.oldname,
   });
 
   Map<String, dynamic> toMap() {
@@ -46,9 +48,10 @@ class HabitModel {
       DateTime? createdAt,
       Map<DateTime, bool>? completedDates}) {
     return HabitModel(
-        habitName: habitName ?? this.habitName,
-        color: color ?? this.color,
-        createdAt: createdAt ?? this.createdAt,
-        completedDates: completedDates ?? this.completedDates);
+      habitName: habitName ?? this.habitName,
+      color: color ?? this.color,
+      createdAt: createdAt ?? this.createdAt,
+      completedDates: completedDates ?? this.completedDates,
+    );
   }
 }

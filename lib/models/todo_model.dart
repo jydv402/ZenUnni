@@ -1,14 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 final now = DateTime.now();
 
 class TodoModel {
   //todo :change name to taskName
   String name;
+  String? oldname;
   String description;
   DateTime date;
   String priority;
   bool isDone;
+  bool isRecurring;
+  String fromTime;
+  String toTime;
+  List<String> selectedWeekdays;
+  bool notExpired;
   final Function(bool?)? onChanged;
   //constructor
   TodoModel(
@@ -17,7 +24,24 @@ class TodoModel {
       required this.date,
       required this.priority,
       required this.isDone,
-      this.onChanged});
+      required this.isRecurring,
+      required this.fromTime,
+      required this.toTime,
+      required this.selectedWeekdays,
+      this.oldname,
+      this.onChanged,
+      required this.notExpired});
+
+  // Convert TimeOfDay to String
+  static String timeOfDayToString(TimeOfDay time) {
+    return '${time.hour}:${time.minute}';
+  }
+
+  // Convert String to TimeOfDay
+  static TimeOfDay stringToTimeOfDay(String time) {
+    final parts = time.split(':');
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -26,17 +50,28 @@ class TodoModel {
       'date': date,
       'priority': priority,
       'isDone': isDone,
-      //todo :'updatedOn': now
+      'isRecurring': isRecurring,
+      'fromTime': fromTime,
+      'toTime': toTime,
+      'selectedWeekdays': selectedWeekdays
+      //TODO :'updatedOn': now
     };
   }
 
-  factory TodoModel.fromMap(Map<String, dynamic> map) {
+  factory TodoModel.fromMap(Map<String, dynamic> map, bool notExpired) {
     return TodoModel(
       name: map['task'] ?? '',
       description: map['description'] ?? '',
       date: (map['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
       priority: map['priority'] ?? '',
       isDone: map['isDone'] ?? false,
+      isRecurring: map['isRecurring'] ?? false,
+      fromTime: map['fromTime'] ?? '',
+      toTime: map['toTime'] ?? '',
+      selectedWeekdays: map['selectedWeekdays'] != null
+          ? List<String>.from(map['selectedWeekdays'])
+          : [],
+      notExpired: notExpired,
     );
   }
 
@@ -46,12 +81,21 @@ class TodoModel {
     DateTime? date,
     String? priority,
     bool? isDone,
+    String? fromTime,
+    String? toTime,
+    List<String>? selectedWeekdays,
+    bool? isRecurring,
   }) {
     return TodoModel(
         name: name ?? this.name,
         description: description ?? this.description,
         date: date ?? this.date,
         priority: priority ?? this.priority,
-        isDone: isDone ?? this.isDone);
+        isDone: isDone ?? this.isDone,
+        isRecurring: isRecurring ?? this.isRecurring,
+        fromTime: fromTime ?? this.fromTime,
+        toTime: toTime ?? this.toTime,
+        selectedWeekdays: selectedWeekdays ?? this.selectedWeekdays,
+        notExpired: notExpired);
   }
 }

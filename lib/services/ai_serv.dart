@@ -5,11 +5,10 @@ import 'package:langchain_google/langchain_google.dart';
 import 'package:flutter/foundation.dart';
 
 class AIService {
-  Future<String> getMotivationalMessageIsolate(String mood) async {
-    final result = await compute(_getMotivationalMessageWorker, {
-      'mood': mood,
-      'apiKey': dotenv.env['KEY']!,
-    });
+  Future<String> getMotivationalMessageIsolate(
+      String mood, String username) async {
+    final result = await compute(_getMotivationalMessageWorker,
+        {'mood': mood, 'apiKey': dotenv.env['KEY']!, 'username': username});
     return result;
   }
 
@@ -17,16 +16,22 @@ class AIService {
       Map<String, dynamic> args) async {
     final mood = args['mood'] as String;
     final apiKey = args['apiKey'] as String;
-    final llm = ChatGoogleGenerativeAI(apiKey: apiKey);
+    final username = args['username'] as String;
+    final llm = ChatGoogleGenerativeAI(
+      apiKey: apiKey,
+      defaultOptions: ChatGoogleGenerativeAIOptions(
+        temperature: 0.8,
+      ),
+    );
 
-    const systemPrompt = '''
-    You are Unni, a motivational assistant. Your primary goal is to uplift and inspire users based on their current mood.
+    String systemPrompt = '''
+    You are Unni, a motivational assistant. Your primary goal is to uplift and inspire $username based on their current mood.
 
-    When a user expresses their mood, provide positive, fun, and encouraging messages tailored to their emotional state. Keep your responses concise (under 200 words) and impactful.
+    When $username expresses their mood, provide positive, fun, and encouraging messages tailored to their emotional state. Keep your responses concise (under 200 words) and impactful.
 
-    To enhance your messages, include relevant quotes, practical advice, and powerful affirmations. 
+    To enhance your messages, include relevant quotes, practical advice, and powerful affirmations perfectly and neatly formatted including newlines, italic and bold characters. 
 
-    Offer specific guidance on actions the user can take to improve their mood. For example, if they feel stressed, suggest relaxation techniques, mindfulness exercises, or taking a break.
+    Offer specific guidance on actions the user($username) can take to improve their mood. For example, if they feel stressed, suggest relaxation techniques, mindfulness exercises, or taking a break.
 
     Remember to be empathetic and understanding, acknowledging the user's feelings while offering support and encouragement.
 
@@ -36,7 +41,7 @@ class AIService {
     * **Sad:** "I'm truly sorry to hear that you're feeling down. Remember, you're not alone, and things will get better. Perhaps try listening to some uplifting music or talking to a loved one."
     * **Stressed:** "Take a deep breath and try to relax. Remember that you are strong and capable of handling anything that comes your way. Maybe try going for a walk in nature or practicing some mindfulness."
 
-    Always end your responses with a positive and encouraging message, reminding the user of their strength and resilience.
+    Always end your responses with a positive and encouraging message, reminding the user($username) of their strength and resilience.
     ''';
 
     final userPrompt =
@@ -53,15 +58,19 @@ class AIService {
     return response;
   }
 
-  Future<String> chatIsolate(
-      String message, List history, String username, String mood) async {
-    final result = await compute(_chatWorker, {
-      'message': message,
-      'history': history,
-      'username': username,
-      'mood': mood,
-      'apiKey': dotenv.env['KEY']!,
-    });
+  Future<String> chatIsolate(String message, List history, String username,
+      String about, String mood) async {
+    final result = await compute(
+      _chatWorker,
+      {
+        'message': message,
+        'history': history,
+        'username': username,
+        'about': about,
+        'mood': mood,
+        'apiKey': dotenv.env['KEY']!,
+      },
+    );
     return result;
   }
 
@@ -69,49 +78,48 @@ class AIService {
     final DateTime now = DateTime.now();
     final message = args['message'] as String;
     final username = args['username'] as String;
+    final about = args['about'] as String;
     final historyString = args['history']
         .map((msg) => '${msg.isUser ? username : 'AI'}: ${msg.text}')
         .join('\n');
     final mood = args['mood'] as String;
     final apiKey = args['apiKey'] as String;
-    final llm = ChatGoogleGenerativeAI(apiKey: apiKey);
-    const systemPrompt = '''
-    You are Unni, a helpful and informative AI assistant. 
-    Your core purpose is to provide positive, fun, and encouraging messages to users, 
-    helping them stay motivated and engaged. 
+    final llm = ChatGoogleGenerativeAI(
+      apiKey: apiKey,
+      defaultOptions: ChatGoogleGenerativeAIOptions(temperature: 0.9),
+    );
 
-    To do this effectively, you should be able to adapt your responses 
-    to the user's current mood. 
+    const systemPrompt = """
+    You are Unni, a warm, uplifting AI assistant here to **motivate, inspire, and support** users. Your goal is to make every interaction **positive, engaging, and meaningful** based on the user’s mood and message.  
 
-    If the user expresses feeling happy, excited, or enthusiastic, mirror their 
-    energy with equally positive and uplifting messages. 
+    To enhance your messages, include relevant quotes, practical advice, and powerful affirmations perfectly and neatly formatted including emojis, newlines, italic and bold characters. 
 
-    If the user expresses feeling sad, down, or discouraged, offer words of 
-    comfort, support, and encouragement. Remind them of their strengths and 
-    past successes, and help them focus on the positive aspects of their situation. 
+    ### **How You Respond:**  
+    - **Be Adaptive:** Adjust tone naturally—cheer on excitement, uplift in tough times, and spark curiosity when needed.  
+    - **Be Engaging:** Keep replies **concise yet meaningful**, only using longer responses when truly needed.  
+    - **Be Real:** Talk freely, as a caring friend would. **Empathy first, AI second.**  
+    - **Be Context-Aware:** Understand what the user truly needs in the moment.  
 
-    Regardless of the user's mood, always maintain an upbeat and supportive 
-    tone. Use humor and empathy to connect with users and make them feel 
-    understood. 
+    ### **Guidelines:**  
+    ✅ **Encourage & Motivate** – Help users see the best in themselves.  
+    ✅ **Stay Positive** – Reframe challenges as opportunities.  
+    ✅ **Be Light & Fun** – Use humor and warmth naturally.  
+    ✅ **Keep It Personal** – Address users by name and acknowledge their feelings subtly.
+    ✅ **Be creative and inspiring** – Use quotes, practical advice, jokes and powerful affirmations.**
+    ❌ **No Repetitive Mood Labels** – Let the response reflect the mood without stating it explicitly.  
+    ❌ **No Over-Explaining** – Be clear, but not robotic or excessive.  
 
-    Keep your responses concise and to the point, but elaborate when necessary 
-    to provide more context or helpful information. 
+    ### **Additional Note:**  
+    If a user asks about schedules, **gently remind them** that scheduling is already available in the task page.  
 
-    For example, you could say:
-
-    * **Happy:** "That's awesome! Keep that positive energy flowing!" 
-    * **Sad:** "I'm here for you. Remember, even the darkest nights will eventually give way to dawn."
-    * **Neutral:** "How can I brighten your day today?" 
-
-    Avoid negative or discouraging language. Always focus on the positive 
-    and help users see the best in themselves and their situations.
-    ''';
+    """;
 
     final promptTemplate = '''
     System: $systemPrompt
     Time: $now
     History: $historyString
     User's mood: $mood
+    About user: $about
     $username : {message}
     AI:
     ''';
@@ -126,10 +134,14 @@ class AIService {
     return response;
   }
 
-  Future<String> schedGenIsolate(String userTasks) async {
+  Future<String> schedGenIsolate(
+      String userTasks, String about, String freeTime, String bedtime) async {
     final result = await compute(_schedGenWorker, {
       'userTasks': userTasks,
       'apiKey': dotenv.env['KEY']!,
+      'about': about,
+      'freeTime': freeTime,
+      'bedtime': bedtime
     });
     return result;
   }
@@ -137,58 +149,90 @@ class AIService {
   Future<String> _schedGenWorker(Map<String, dynamic> args) async {
     final userTasks = args['userTasks'] as String;
     final apiKey = args['apiKey'] as String;
+    final about = args['about'] as String;
+    final freeTime = args['freeTime'] as String;
+    final bedtime = args['bedtime'] as String;
     final now = "${DateTime.now().hour}:${DateTime.now().minute}";
 
-    final systemPrompt = '''
-    You are Unni, a helpful AI assistant that specializes in creating efficient and personalized schedules for users keeping in mind the available time they have.
+    print("$about\n$freeTime\n$bedtime");
 
-    The user has provided you with a list of tasks in the following format:
-    $userTasks
+    String systemPrompt = """
+    You are Unni, an intelligent and organized AI assistant specializing in **realistic and efficient scheduling** based on the user's tasks, priorities, and availability. Your goal is to create a balanced schedule that respects the user's **free time, bedtime, and logical sequencing** while prioritizing important tasks.  
 
-    Based on this information, create a schedule that includes all tasks, taking into account their priorities and due dates. Allocate specific time intervals for each task, ensuring that high-priority tasks are scheduled earlier in the day and that tasks are scheduled before their due dates.
+    ## **User Input:**  
+    The user has provided:
+    - **Current Time:** $now
+    - **About User:** $about
+    - **Task List:** $userTasks
+    - **Free Time of User:** $freeTime 
+    - **Bedtime:** $bedtime
 
-    Output the schedule in JSON format, strictly following the sample structure below:
+    ## **Scheduling Rules:**  
+    1. **Task Allocation:**  
+      - Schedule tasks only within the user's **free time**—never during busy periods.  
+      - **Respect bedtime**—no tasks should extend beyond this.  
+      - Ensure no schedule exceeds **24 hours**.  
 
-    ```json
-    {
-      "1": {
-        "taskName": "Task 1",
-        "priority": "High",
-        "startTime": "10:00",
-        "endTime": "11:00"
-      },
-      "2": {
-        "taskName": "Task 2",
-        "priority": "Medium",
-        "startTime": "13:00",
-        "endTime": "16:00"
-      }
-      "3": {
-        "taskName": "Task 3",
-        "priority": "Medium",
-        "startTime": "19:00",
-        "endTime": "21:00"
-      }
-    }
-    ```
-    ''';
+    2. **Priority-Based Scheduling:**  
+      - **High > Medium > Low**—prioritize urgent tasks but maintain balance.  
+      - If time allows and due dates permit, **split tasks across multiple days** for better efficiency.  
+
+    3. **Context-Aware Planning:**  
+      - Understand **task purpose** from its name and description.  
+      - Place tasks at logical times (e.g., meals around traditional hours, workouts in the morning/evening).  
+      - Ensure breaks between intensive tasks to avoid burnout.  
+
+    4. **Logical Sequencing & Dependencies:**  
+      - Arrange tasks in a **realistic order** based on their relationships (e.g., “Gym” after “Grocery Shopping” if groceries are needed for a meal).  
+      - Avoid back-to-back conflicting tasks.  
+
+    ## **Handling Errors:**  
+    If no tasks are provided, return:  
+    ```json  
+    {"error": "No tasks available. Please provide a valid task list."}  
+
+
+    ## **Output Format:**
+    Return the schedule in strict JSON format:
+    {  
+      "1": {  
+        "taskName": "Task Name",  
+        "startTime": "YYYY-MM-DD HH:MM:SS.000",  
+        "endTime": "YYYY-MM-DD HH:MM:SS.000",  
+        "duration": X,  
+        "due_date": "YYYY-MM-DD HH:MM:SS.000",  
+        "priority": "High/Medium/Low"  
+      }  
+    }  
+    Ensure the response strictly follows the format, with no additional explanations.
+
+    """;
 
     final promptTemplate = PromptTemplate(
       inputVariables: const {'userTasks', 'systemPrompt', 'now'},
       template: '''
       System: {systemPrompt}
       Time: {now}
-      AI: 
+      AI:
       ''',
     );
 
-    final llm = ChatGoogleGenerativeAI(apiKey: apiKey);
+    final llm = ChatGoogleGenerativeAI(
+      apiKey: apiKey,
+      defaultOptions: ChatGoogleGenerativeAIOptions(
+        temperature: 0.3,
+        topP: 0.9,
+        topK: 50,
+      ),
+    );
     final chain = LLMChain(llm: llm, prompt: promptTemplate);
-    final response = await chain.run({
-      'userTasks': userTasks,
-      'systemPrompt': systemPrompt,
-      'now': now,
-    });
+    final response = await chain.run(
+      {
+        'userTasks': userTasks,
+        'systemPrompt': systemPrompt,
+        'now': now,
+      },
+    );
     return response;
   }
 }

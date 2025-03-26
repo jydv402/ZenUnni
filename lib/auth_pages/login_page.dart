@@ -1,30 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:zen/components/confirm_box.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/theme/light.dart';
+import 'package:zen/zen_barrel.dart';
 
-// why is loginpage stateful
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obsureText = true;
-
-  void displayMessageToUser(String message, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(message),
-            ));
-  }
+  bool _isLoading = false;
 
   void _toggleObscure() {
     setState(() {
@@ -33,30 +22,34 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void loginUser() async {
-    //show loading circle
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-    //try sign in
+    if (_isLoading) return; // Prevent multiple attempts
+
     try {
+      setState(() => _isLoading = true);
+
+      showLoadingDialog(context, "Logging you in...");
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
-      //pop loading circle
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
       if (mounted) {
-        Navigator.pop(context);
-        //navigate to home page
-        Navigator.pushReplacementNamed(
-          context,
-          '/home',
-        );
+        // Close loading dialog
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      }
+
+      stateInvalidator(ref, true);
+      await ref.read(userProvider.notifier).loadUserDetails();
+
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/nav');
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
-        //pop loading circle
-        Navigator.pop(context);
+        Navigator.pop(context); // Close loading dialog
         showConfirmDialog(
             context, "Error", e.code.replaceAll("-", " "), "Retry", Colors.red,
             () {
@@ -67,18 +60,35 @@ class _LoginPageState extends State<LoginPage> {
           });
         });
       }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = ref.watch(appColorsProvider);
+    final theme = ref.watch(themeProvider);
     return Scaffold(
       body: ListView(
         padding: pagePadding,
         children: [
-          Text(
-            "Login",
-            style: Theme.of(context).textTheme.headlineLarge,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Login",
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              //Dark theme toggle
+              toggleThemeButton(
+                () => ref.read(themeProvider.notifier).toggleTheme(),
+                theme == ThemeMode.light,
+                colors.iconClr,
+              ),
+            ],
           ),
           const SizedBox(
             height: 40,
@@ -95,16 +105,10 @@ class _LoginPageState extends State<LoginPage> {
             controller: _passwordController,
             decoration: InputDecoration(
               labelText: 'Password',
-              suffixIcon: IconButton(
-                padding: EdgeInsets.only(right: 26),
-                onPressed: () => _toggleObscure(),
-                icon: Icon(
-                  _obsureText
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: Colors.white,
-                ),
-                highlightColor: Colors.transparent,
+              suffixIcon: togglePassButton(
+                () => _toggleObscure(),
+                _obsureText,
+                colors.iconClr,
               ),
             ),
             obscureText: _obsureText,
@@ -119,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  //navigate to password reset page
+                  // navigate to password reset page
                   Navigator.pushNamed(context, '/pass_reset');
                 },
             ),
@@ -137,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                         ?.copyWith(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        //navigate to register page
+                        // navigate to register page
                         Navigator.pushReplacementNamed(context, '/register');
                       })
               ],

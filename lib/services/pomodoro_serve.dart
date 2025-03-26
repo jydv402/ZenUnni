@@ -1,6 +1,6 @@
 // lib/services/pomodoro_notifier.dart
 import 'dart:async';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zen/zen_barrel.dart';
 
 class PomodoroState {
   final int duration;
@@ -43,9 +43,13 @@ class PomodoroState {
 }
 
 class PomodoroNotifier extends StateNotifier<PomodoroState> {
+  final Ref ref;
   Timer? _timer;
 
-  PomodoroNotifier() : super(PomodoroState());
+  PomodoroNotifier(this.ref)
+      : super(
+          PomodoroState(),
+        );
 
   void setTimer(int duration, int breakDuration, int rounds) {
     state = state.copyWith(
@@ -112,6 +116,9 @@ class PomodoroNotifier extends StateNotifier<PomodoroState> {
     } else {
       state = state.copyWith(
           isBreak: true, timeRemaining: state.breakDuration * 60);
+      ref.read(
+        scoreIncrementProvider(20), //Low priority score
+      );
     }
   }
 
@@ -123,5 +130,5 @@ class PomodoroNotifier extends StateNotifier<PomodoroState> {
 }
 
 final pomoProvider = StateNotifierProvider<PomodoroNotifier, PomodoroState>(
-  (ref) => PomodoroNotifier(),
+  (ref) => PomodoroNotifier(ref),
 );

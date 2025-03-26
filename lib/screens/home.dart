@@ -1,46 +1,34 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:zen/components/customfab.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/mood_serv.dart';
-import 'package:zen/services/user_serv.dart';
+import 'package:zen/zen_barrel.dart';
 
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});
-
-  void logoutUser(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    if (context.mounted) {
-      // Navigate to the root page after logging out
-      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userNameProvider);
     final mood = ref.watch(moodProvider);
 
-    return Scaffold(
-      body: user.when(
-        data: (data) {
-          return homeScreen(context, user.value, mood.value);
-        },
-        error: (error, stackTrace) {
-          return Center(child: Text('Error: $error'));
-        },
-        loading: () {
-          return const Center(child: CircularProgressIndicator());
-        },
-      ),
-      floatingActionButton: CustomFAB(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    return user.when(
+      data: (data) {
+        return homeScreen(context, ref, user.value, mood.value);
+      },
+      error: (error, stackTrace) {
+        return Center(
+          child: Text('Error: $error'),
+        );
+      },
+      loading: () {
+        return Center(
+          child: showRunningIndicator(
+              context, "Setting things up...\nJust for you..!"),
+        );
+      },
     );
   }
 
-  Widget homeScreen(BuildContext context, String? user, mood) {
+  Widget homeScreen(
+      BuildContext context, WidgetRef ref, String? user, String? mood) {
     final now = DateTime.now().hour;
     final greeting = now < 12
         ? 'Morning'
@@ -50,30 +38,39 @@ class LandPage extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       children: [
+        //Top score card
         Padding(
           padding: const EdgeInsets.only(right: 10),
-          child: ScoreCard(),
+          child: const ScoreCard(),
         ),
+        const SizedBox(height: 20),
+        //Greeting text
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-          child: _showGreeting(context, greeting, user),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Good $greeting,",
+                  style: Theme.of(context).textTheme.headlineMedium),
+              Text(user!, style: Theme.of(context).textTheme.headlineLarge),
+            ],
+          ),
         ),
         if (mood == null)
           //Show add mood msg
-          _msgContainer(context, "No mood added yet, add it now? 👀", () {
-            Navigator.pushNamed(context, '/mood1');
-            Navigator.pushNamed(context, '/mood2');
-          }),
+          _msgContainer(
+            context,
+            "No mood added yet, add it now? 👀",
+            () {
+              updatePgIndex(ref, 5, 3);
+              ref.read(navStackProvider.notifier).push(3);
+            },
+          ),
         const SizedBox(height: 8),
-        _bentoBoxes(context),
-        const SizedBox(height: 135),
+        _bentoBoxes(context, ref),
+        const SizedBox(height: 85),
       ],
     );
-  }
-
-  Text _showGreeting(BuildContext context, String greeting, user) {
-    return Text("Good $greeting, \n$user",
-        style: Theme.of(context).textTheme.headlineLarge);
   }
 
   GestureDetector _msgContainer(
@@ -81,7 +78,7 @@ class LandPage extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.fromLTRB(16, 26, 26, 26),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(26), color: Colors.white30),
         child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
@@ -89,7 +86,7 @@ class LandPage extends ConsumerWidget {
     );
   }
 
-  Column _bentoBoxes(BuildContext context) {
+  Column _bentoBoxes(BuildContext context, WidgetRef ref) {
     //Centralized variables for easy fiddling
     //defines height of the box
     const double bentoHeight = 150;
@@ -112,7 +109,9 @@ class LandPage extends ConsumerWidget {
               fit: FlexFit.tight,
               child: _bentoBox(
                 context,
-                '/chat',
+                () {
+                  Navigator.pushNamed(context, '/chat');
+                },
                 Color(0xFF7F5EDF),
                 bentoHeight * 2 + 8,
                 bentoWidth,
@@ -130,7 +129,10 @@ class LandPage extends ConsumerWidget {
                 children: [
                   _bentoBox(
                     context,
-                    '/mood1',
+                    () {
+                      updatePgIndex(ref, 3, 3);
+                      ref.read(navStackProvider.notifier).push(3);
+                    },
                     Color(0xFF339DF0),
                     bentoHeight,
                     bentoWidth,
@@ -141,7 +143,10 @@ class LandPage extends ConsumerWidget {
                   ),
                   _bentoBox(
                     context,
-                    '/todo',
+                    () {
+                      updatePgIndex(ref, 0, 0);
+                      ref.read(navStackProvider.notifier).push(0);
+                    },
                     Color(0xFF2BBC87),
                     bentoHeight,
                     bentoWidth,
@@ -161,30 +166,20 @@ class LandPage extends ConsumerWidget {
             Flexible(
               flex: 1,
               fit: FlexFit.tight,
-              child: _bentoBox(
-                  context,
-                  '/pomo',
-                  Colors.teal,
-                  bentoHeight,
-                  bentoWidth,
-                  "Pomodoro",
-                  LineIcons.clock,
-                  iconSize + 10,
-                  iconPos),
+              child: _bentoBox(context, () {
+                updatePgIndex(ref, 1, 1);
+                ref.read(navStackProvider.notifier).push(1);
+              }, Colors.blueAccent, bentoHeight, bentoWidth, "Habit Tracker",
+                  LineIcons.peace, iconSize + 10, iconPos + 14),
             ),
             Flexible(
               flex: 1,
               fit: FlexFit.tight,
-              child: _bentoBox(
-                  context,
-                  '/schedule',
-                  Colors.red,
-                  bentoHeight,
-                  bentoWidth,
-                  "Schedule",
-                  LineIcons.calendar,
-                  iconSize + 10,
-                  iconPos),
+              child: _bentoBox(context, () {
+                updatePgIndex(ref, 0, 0);
+                ref.read(navStackProvider.notifier).push(0);
+              }, Colors.red, bentoHeight, bentoWidth, "Schedule",
+                  LineIcons.calendar, iconSize + 10, iconPos),
             ),
           ],
         ),
@@ -195,31 +190,21 @@ class LandPage extends ConsumerWidget {
             Flexible(
               flex: 1,
               fit: FlexFit.tight,
-              child: _bentoBox(
-                  context,
-                  '/habit',
-                  Colors.blueAccent,
-                  bentoHeight,
-                  bentoWidth,
-                  "Habit Tracker",
-                  LineIcons.peace,
-                  iconSize + 10,
-                  iconPos + 14),
+              child: _bentoBox(context, () {
+                updatePgIndex(ref, 7, 4);
+                ref.read(navStackProvider.notifier).push(4);
+              }, Colors.teal, bentoHeight, bentoWidth, "Pomodoro",
+                  LineIcons.clock, iconSize + 10, iconPos),
             ),
             //temp nav for search page
             Flexible(
               flex: 1,
               fit: FlexFit.tight,
-              child: _bentoBox(
-                  context,
-                  '/search',
-                  Colors.deepPurple,
-                  bentoHeight,
-                  bentoWidth,
-                  "Connect",
-                  LineIcons.users,
-                  iconSize + 10,
-                  iconPos + 4),
+              child: _bentoBox(context, () {
+                updatePgIndex(ref, 6, 4);
+                ref.read(navStackProvider.notifier).push(4);
+              }, Colors.deepPurple, bentoHeight, bentoWidth, "Leaderboard",
+                  LineIcons.users, iconSize + 10, iconPos + 4),
             ),
           ],
         )
@@ -229,7 +214,7 @@ class LandPage extends ConsumerWidget {
 
   GestureDetector _bentoBox(
       BuildContext context,
-      String route,
+      GestureTapCallback onTap,
       Color color,
       double height,
       double width,
@@ -239,9 +224,7 @@ class LandPage extends ConsumerWidget {
       double iconPos) {
     const double pos = 16;
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, route);
-      },
+      onTap: onTap,
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -265,26 +248,28 @@ class LandPage extends ConsumerWidget {
                 label,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
               ),
             ),
             Positioned(
-                top: -iconPos,
-                left: -iconPos,
-                child: Icon(
-                  icon,
-                  color: Colors.black26,
-                  size: iconSize,
-                )),
+              top: -iconPos,
+              left: -iconPos,
+              child: Icon(
+                icon,
+                color: Colors.black26,
+                size: iconSize,
+              ),
+            ),
             Positioned(
-                top: pos,
-                right: pos,
-                child: Icon(
-                  Icons.arrow_outward_rounded,
-                  color: Colors.black,
-                  size: 32,
-                ))
+              top: pos,
+              right: pos,
+              child: Icon(
+                Icons.arrow_outward_rounded,
+                color: Colors.black,
+                size: 32,
+              ),
+            )
           ],
         ),
       ),

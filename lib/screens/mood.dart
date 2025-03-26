@@ -1,11 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:zen/components/fab_button.dart';
-import 'package:zen/components/scorecard.dart';
-import 'package:zen/services/mood_serv.dart';
-import 'package:zen/consts/moodlist.dart';
-import 'package:zen/theme/light.dart';
+
+import 'package:zen/zen_barrel.dart';
 
 class MoodPage extends ConsumerStatefulWidget {
   const MoodPage({super.key});
@@ -23,12 +18,12 @@ class _MoodPageState extends ConsumerState<MoodPage> {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          ScoreCard(),
+          const ScoreCard(),
           Text(
             "How are you\nfeeling today?",
             style: Theme.of(context).textTheme.headlineLarge,
           ),
-          const SizedBox(height: 80),
+          const SizedBox(height: 50),
           // Mood Icon
           Center(
             child: Lottie.asset(
@@ -37,15 +32,12 @@ class _MoodPageState extends ConsumerState<MoodPage> {
               width: 200,
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 30),
           // Mood Name Display
           Center(
             child: Text(
               moodList.values.elementAt(_currentMoodIndex),
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
           Center(
@@ -55,13 +47,13 @@ class _MoodPageState extends ConsumerState<MoodPage> {
                   style: Theme.of(context).textTheme.bodyMedium),
             ),
           ),
-          const SizedBox(height: 80),
+          const SizedBox(height: 50),
           SliderTheme(
             data: SliderThemeData(
                 trackHeight: 50,
                 activeTickMarkColor: Colors.black,
                 inactiveTickMarkColor: Colors.white,
-                activeTrackColor: Colors.white,
+                activeTrackColor: const Color.fromRGBO(255, 139, 44, 1),
                 inactiveTrackColor: Colors.black,
                 thumbColor:
                     _currentMoodIndex == 0 ? Colors.white : Colors.black),
@@ -85,12 +77,20 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         ],
       ),
       floatingActionButton: fabButton(context, () async {
-        await ref.read(
-            moodAddProvider(moodList.values.elementAt(_currentMoodIndex))
-                .future);
+        await ref.read(moodAddProvider(
+          moodList.values.elementAt(_currentMoodIndex),
+        ).future);
+
         if (context.mounted) {
-          Navigator.pop(context);
+          showHeadsupNoti(
+            context,
+            ref,
+            "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}",
+          );
         }
+
+        updatePgIndex(ref, 3, 3);
+        ref.read(navStackProvider.notifier).push(3);
       }, "Add Mood", 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
