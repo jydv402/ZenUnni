@@ -248,7 +248,7 @@ class LandPage extends ConsumerWidget {
                 label,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: Colors.black,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                     ),
               ),
             ),

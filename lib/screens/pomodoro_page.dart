@@ -27,6 +27,7 @@ class PomodoroPage extends ConsumerWidget {
     rounds.text = pomo.rounds.toString();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
@@ -158,6 +159,7 @@ class CountdownScreen extends ConsumerWidget {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePaddingWithScore,
         children: [

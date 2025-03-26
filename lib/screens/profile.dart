@@ -86,7 +86,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             div16,
 
             // Account Settings
-            divTxt("Account"),
+            _divTxt("Account"),
             buttonBg(
               ListTile(
                 title: Text("Change account details",
@@ -134,7 +134,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ),
 
             // Theme Toggle
-            divTxt("Theme"),
+            _divTxt("Theme"),
             buttonBg(
               SwitchListTile(
                 title: Text("Dark Mode",
@@ -173,7 +173,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     );
   }
 
-  Padding divTxt(String title) {
+  Padding _divTxt(String title) {
     return Padding(
       padding: EdgeInsets.fromLTRB(26, 20, 26, 2),
       child: Text(

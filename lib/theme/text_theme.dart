@@ -29,6 +29,7 @@ const TextStyle headS = TextStyle(
 // Labels
 const TextStyle labelM = TextStyle(
   fontFamily: 'Pop',
+  fontWeight: FontWeight.w400,
   fontSize: 16.0,
   color: Colors.black,
 );
