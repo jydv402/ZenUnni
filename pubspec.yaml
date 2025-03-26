@@ -59,7 +59,6 @@ dependencies:
   flutter_lucide: ^1.6.2
   json_store: ^2.0.2
   audioplayers: ^6.4.0
-  flutter_local_notifications: ^19.0.0
   timezone: ^0.10.0
 
 dev_dependencies:

@@ -67,7 +67,7 @@ final recurringTaskProvider = StreamProvider<List<TodoModel>>((ref) async* {
         fromTime: data['fromTime'] ?? '', // Keep as String
         toTime: data['toTime'] ?? '',
         selectedWeekdays: List<String>.from(data['selectedWeekdays'] ?? []),
-        expired: false,
+        notExpired: false,
       );
     }).toList();
     yield tasks;

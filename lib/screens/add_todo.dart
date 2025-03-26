@@ -240,12 +240,16 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 priority: isRecurring ? "" : _prior,
                 isDone: isDone,
                 notExpired: true,
+                isRecurring: isRecurring,
+                fromTime: _fromTime != null ? _fromTime!.format(context) : "",
+                toTime: _toTime != null ? _toTime!.format(context) : "",
+                selectedWeekdays: selectedWeekdays,
               );
-              print("Recurring task added: ${task.date}");
-              print("Recurring task added: ${task.isRecurring}");
-              print("Recurring task added: ${task.fromTime}");
-              print("Recurring task added: ${task.toTime}");
-              print("Recurring task added: ${task.selectedWeekdays}");
+              // print("Recurring task added: ${task.date}");
+              // print("Recurring task added: ${task.isRecurring}");
+              // print("Recurring task added: ${task.fromTime}");
+              // print("Recurring task added: ${task.toTime}");
+              // print("Recurring task added: ${task.selectedWeekdays}");
               if (widget.taskToEdit != null) {
                 // Update existing task
                 ref.read(
