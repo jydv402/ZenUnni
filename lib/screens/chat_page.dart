@@ -13,13 +13,18 @@ class ChatPage extends ConsumerWidget {
     final chatMsgs = ref.watch(msgProvider);
 
     const msgs = {
-      "Say Hi to Unni !": "Hi",
-      "Ask Unni anything": "Can I ask you something?",
-      "Share it with Unni": "Can I tell you anything?",
-      "Get motivational message": "Motivate me",
-      "Hit me with a fact": "Hit me with a fact",
-      "Tell me a story": "Tell me a story",
-      "Tell me a joke": "Tell me a joke",
+      "Say Hi to Unni!": "Hey Unni! How's it going?",
+      "Ask Unni anything": "Hey Unni, I need your help with something.",
+      "Share it with Unni": "Can I share something with you?",
+      "Get a motivational boost": "I could use some motivation right now.",
+      "Tell me a fun fact": "Give me a cool fact I can share!",
+      "Tell me a story": "Can you tell me a short, interesting story?",
+      "Make me laugh": "Tell me a joke!",
+      "Help me decide": "I need help making a decision.",
+      "What's on your mind?": "Unni, surprise me with something fun!",
+      "Give me some wisdom": "Drop some words of wisdom on me.",
+      "Let’s chat!": "Unni, let’s just talk about something random.",
+      "Inspire me": "Hit me with something inspiring!",
     };
 
     return Scaffold(
