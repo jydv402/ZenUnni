@@ -436,7 +436,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             height: 45,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: selected ? Colors.blue.shade200 : Colors.grey.shade200,
+              color: selected ? Color(0xFFff8b2c) : Colors.grey.shade200,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black12,
@@ -448,11 +448,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             child: Center(
               child: Text(
                 weekdays[index],
-                style: TextStyle(
-                  color: selected ? Colors.white : Colors.black54,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: selected ? Colors.white : Colors.black,
+                    ),
               ),
             ),
           ),
