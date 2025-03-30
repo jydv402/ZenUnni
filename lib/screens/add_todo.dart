@@ -436,7 +436,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             height: 45,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: selected ? Color(0xFFff8b2c) : Colors.grey.shade200,
+              color: selected
+                  ? Color.fromRGBO(255, 139, 44, 1)
+                  : Colors.grey.shade200,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black12,

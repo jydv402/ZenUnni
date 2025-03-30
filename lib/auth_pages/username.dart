@@ -121,8 +121,9 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     border: Border.all(
-                      color:
-                          isSelected ? Color(0XFFFF8C2B) : Colors.transparent,
+                      color: isSelected
+                          ? Color.fromRGBO(255, 140, 43, 1)
+                          : Colors.transparent,
                       width: 5,
                     ),
                   ),

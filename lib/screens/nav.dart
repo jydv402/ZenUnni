@@ -18,6 +18,7 @@ class _NavbarState extends ConsumerState<Navbar> {
     const ConnectPage(), // index 6: Leaderboard
     const PomodoroPage(), // index 7: Pomodoro
     const AddTaskPage(), // index 8: Add task
+    const NotesList(), // index 9: Notes list
   ];
 
   List<Widget> destinations = [

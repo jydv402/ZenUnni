@@ -1,6 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:zen/zen_barrel.dart';
 
+//Provider for page switching
+final selectedTabProvider = StateProvider<int>((ref) => 0);
+
 class TaskPage extends ConsumerStatefulWidget {
   const TaskPage({super.key});
 
@@ -9,8 +12,6 @@ class TaskPage extends ConsumerStatefulWidget {
 }
 
 class TaskPageState extends ConsumerState<TaskPage> {
-  int _selectedTab = 0; // 0 = Todo, 1 = Schedule
-
   final TextStyle taskExpiredBodyS = bodySD.copyWith(
     color: Colors.grey,
     decoration: TextDecoration.lineThrough,
@@ -55,14 +56,15 @@ class TaskPageState extends ConsumerState<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedTab = ref.watch(selectedTabProvider);
     final tasks = ref.watch(taskProvider);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        child: _selectedTab == 0 ? todoListPage() : schedulePage(),
+        child: selectedTab == 0 ? todoListPage() : schedulePage(),
       ),
-      floatingActionButton: _selectedTab == 0
+      floatingActionButton: selectedTab == 0
           ? fabButton(context, () {
               Navigator.push(
                 context,
@@ -75,7 +77,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
               onPressed: () {},
               child: schedulePopUp(context, tasks.value ?? []),
             ),
-      floatingActionButtonLocation: _selectedTab == 0
+      floatingActionButtonLocation: selectedTab == 0
           ? FloatingActionButtonLocation.centerFloat
           : FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
@@ -98,14 +100,11 @@ class TaskPageState extends ConsumerState<TaskPage> {
 
   /// Tab Button
   Widget _tabButton(String title, int index) {
-    final bool isSelected = _selectedTab == index;
+    final selectedTab = ref.watch(selectedTabProvider);
+    final bool isSelected = selectedTab == index;
     return GestureDetector(
       onTap: () {
-        setState(
-          () {
-            _selectedTab = index;
-          },
-        );
+        ref.read(selectedTabProvider.notifier).state = index;
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

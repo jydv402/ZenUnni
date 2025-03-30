@@ -258,7 +258,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: isUser ? Color(0xFFFF8C2B) : Colors.transparent,
+                      color: isUser
+                          ? Color.fromRGBO(255, 140, 43, 1)
+                          : Colors.transparent,
                       width: 4),
                 ),
                 child: Image.asset(
@@ -320,7 +322,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-            color: user.isUser ? Color(0xFFFF8C2B) : Colors.transparent,
+            color: user.isUser
+                ? Color.fromRGBO(255, 140, 43, 1)
+                : Colors.transparent,
             width: 2),
         color: colors.pillClr,
       ),
@@ -353,19 +357,24 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   width: 60,
                   fit: BoxFit.contain,
                 ),
-                Text.rich(
-                  TextSpan(
-                    text: "${user.username} ",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium
-                        ?.copyWith(fontSize: 22),
-                    children: [
-                      TextSpan(
-                        text: user.isUser ? '[You]' : '',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 3.5,
+                  child: Text.rich(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    TextSpan(
+                      text: "${user.username} ",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(fontSize: 22),
+                      children: [
+                        TextSpan(
+                          text: user.isUser ? '[You]' : '',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

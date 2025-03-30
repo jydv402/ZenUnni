@@ -10,9 +10,9 @@ ThemeData get darkTheme {
     //NOTE: Dark colorscheme
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
-      primary: const Color(0xFFEEEEEE), // Light gray
+      primary: const Color.fromRGBO(238, 238, 238, 1), // Light gray
       onPrimary: Colors.black,
-      secondary: const Color(0xFF673AB7), // Darker purple
+      secondary: const Color.fromRGBO(103, 58, 183, 1), // Darker purple
       onSecondary: Colors.white,
       surface: const Color.fromARGB(255, 23, 25, 27),
       onSurface: Colors.black,
@@ -32,7 +32,7 @@ ThemeData get darkTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFFF8B2C),
+        backgroundColor: Color.fromRGBO(255, 139, 44, 1),
         foregroundColor: Colors.white,
         shadowColor: Colors.orangeAccent,
         padding: const EdgeInsets.all(26),
@@ -61,7 +61,8 @@ ThemeData get darkTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(color: Color(0xFFFF8B2C), width: 2.0),
+        borderSide: const BorderSide(
+            color: Color.fromRGBO(255, 139, 44, 1), width: 2.0),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
@@ -92,7 +93,7 @@ ThemeData get darkTheme {
       ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFFFF8B2C),
+      backgroundColor: Color.fromRGBO(255, 139, 44, 1),
     ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(
@@ -130,7 +131,7 @@ ThemeData get darkTheme {
       //
       rangePickerHeaderForegroundColor: Colors.white,
       headerForegroundColor: Colors.white,
-      backgroundColor: const Color(0xFF202124),
+      backgroundColor: const Color.fromRGBO(32, 33, 36, 1),
       dayForegroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
           return Colors.black;
@@ -142,7 +143,7 @@ ThemeData get darkTheme {
 
       dayBackgroundColor: WidgetStateColor.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const Color(0xFFff8b2c);
+          return const Color.fromRGBO(255, 139, 44, 1);
         }
         return Colors.transparent;
       }),
@@ -162,7 +163,7 @@ ThemeData get darkTheme {
       ),
       yearBackgroundColor: WidgetStateColor.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const Color(0xFFff8b2c);
+          return const Color.fromRGBO(255, 139, 44, 1);
         }
         return Colors.transparent;
       }),
@@ -181,12 +182,12 @@ ThemeData get darkTheme {
       ),
       confirmButtonStyle: ButtonStyle(
         foregroundColor: WidgetStateProperty.resolveWith((states) {
-          return const Color(0xFFff8b2c);
+          return const Color.fromRGBO(255, 139, 44, 1);
         }),
       ),
       cancelButtonStyle: ButtonStyle(
         foregroundColor: WidgetStateProperty.resolveWith((states) {
-          return const Color(0xFFff8b2c);
+          return const Color.fromRGBO(255, 139, 44, 1);
         }),
       ),
     ),
@@ -195,12 +196,12 @@ ThemeData get darkTheme {
         dayPeriodBorderSide: BorderSide(color: Colors.white),
         confirmButtonStyle: ButtonStyle(
           foregroundColor: WidgetStateProperty.resolveWith((states) {
-            return const Color(0xFFff8b2c);
+            return const Color.fromRGBO(255, 139, 44, 1);
           }),
         ),
         cancelButtonStyle: ButtonStyle(
           foregroundColor: WidgetStateProperty.resolveWith((states) {
-            return const Color(0xFFff8b2c);
+            return const Color.fromRGBO(255, 139, 44, 1);
           }),
         ),
         dayPeriodTextColor: WidgetStateColor.resolveWith(
@@ -214,18 +215,20 @@ ThemeData get darkTheme {
           }
           return Colors.white;
         }),
-        hourMinuteTextColor: Color(0xFFFfffff),
-        hourMinuteColor: Color(0xFFff8b2c),
-        dialBackgroundColor: const Color(0xFF202124), // Background color
-        backgroundColor: const Color(0xFF202124), // Background color
-        dialHandColor: Color(0xFFFF8B2C),
+        hourMinuteTextColor: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
+        hourMinuteColor: Color.fromRGBO(255, 139, 44, 1),
+        dialBackgroundColor:
+            const Color.fromRGBO(32, 33, 36, 1), // Background color
+        backgroundColor:
+            const Color.fromRGBO(32, 33, 36, 1), // Background color
+        dialHandColor: Color.fromRGBO(255, 139, 44, 1),
         dialTextColor: WidgetStateColor.resolveWith(
           (states) => states.contains(WidgetState.selected)
               ? Colors.white
               : const Color.fromARGB(255, 255, 255, 255),
         ),
-        entryModeIconColor: const Color(0xFFffffff),
-        dayPeriodColor: const Color(0xFFFFffff)),
+        entryModeIconColor: const Color.fromRGBO(255, 255, 255, 1),
+        dayPeriodColor: const Color.fromRGBO(255, 255, 255, 1)),
 
     popupMenuTheme: PopupMenuThemeData(
       color: Colors.white,
@@ -254,7 +257,8 @@ ThemeData get lightTheme {
       brightness: Brightness.light,
       primary: const Color.fromRGBO(255, 139, 44, 1), // Orange
       onPrimary: Colors.white,
-      secondary: const Color(0xFFFFA54F), // Lighter shade of orange
+      secondary:
+          const Color.fromRGBO(255, 165, 79, 1), // Lighter shade of orange
       onSecondary: Colors.white,
       surface: Colors.white, // Light background
       onSurface: Colors.black,
@@ -311,7 +315,7 @@ ThemeData get lightTheme {
       trackOutlineColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.selected)) {
-            return Color(0xFFFF8B2C);
+            return Color.fromRGBO(255, 139, 44, 1);
           }
           return Colors.black54;
         },
@@ -414,8 +418,8 @@ ThemeData get lightTheme {
     ),
     timePickerTheme: const TimePickerThemeData(
       dayPeriodTextStyle: headS,
-      hourMinuteTextColor: Color(0xFFFfffff),
-      hourMinuteColor: Color(0xFFff8b2c),
+      hourMinuteTextColor: Color.fromRGBO(255, 255, 255, 1),
+      hourMinuteColor: Color.fromRGBO(255, 139, 44, 1),
       backgroundColor: Colors.white,
       dialHandColor: Color.fromRGBO(255, 139, 44, 1),
     ),
