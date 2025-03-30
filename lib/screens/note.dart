@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:zen/zen_barrel.dart';
+import 'package:json_store/json_store.dart';
 
 class NotePage extends ConsumerStatefulWidget {
   const NotePage({super.key});
@@ -10,6 +12,7 @@ class NotePage extends ConsumerStatefulWidget {
 class _NotePageState extends ConsumerState<NotePage> {
   final TextEditingController _headingController = TextEditingController();
   final TextEditingController _controller = TextEditingController();
+  final JsonStore _jsonStore = JsonStore();
 
   @override
   void dispose() {
@@ -18,10 +21,20 @@ class _NotePageState extends ConsumerState<NotePage> {
     super.dispose();
   }
 
+  Future<void> saveNote() async {
+    final note = {
+      'heading': _headingController.text,
+      'content': _controller.text,
+      'timestamp': DateTime.now().toIso8601String(),
+    };
+    await _jsonStore.setItem('noteKey', note);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -54,7 +67,7 @@ class _NotePageState extends ConsumerState<NotePage> {
                 maxLines: null,
                 minLines: null,
                 keyboardType: TextInputType.multiline,
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyMedium,
                 decoration: const InputDecoration(
                   hintText: 'Write your note here...',
                   border: InputBorder.none,
@@ -69,6 +82,10 @@ class _NotePageState extends ConsumerState<NotePage> {
           ],
         ),
       ),
+      floatingActionButton: fabButton(context, () {
+        saveNote();
+      }, 'Save Note', 26),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
