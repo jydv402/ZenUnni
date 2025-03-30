@@ -51,7 +51,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
           ),
           const SizedBox(height: 40),
           TextField(
-            maxLength: 10,
+            maxLength: 16,
             controller: userNameController,
             style: Theme.of(context).textTheme.bodyMedium,
             decoration: const InputDecoration(

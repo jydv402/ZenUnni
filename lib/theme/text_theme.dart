@@ -88,6 +88,7 @@ const TextStyle headSD = TextStyle(
 const TextStyle labelMD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 16.0,
+  fontWeight: FontWeight.w400,
   color: Colors.black,
 );
 const TextStyle labelSD = TextStyle(

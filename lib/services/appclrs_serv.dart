@@ -8,6 +8,7 @@ class AppColors {
   final _dark = DarkColors();
 
   Color get mdText => isDarkMode ? _dark.mdText : _light.mdText;
+
   Color get pillClr => isDarkMode ? _dark.pillClr : _light.pillClr;
   Color get toastBg => isDarkMode ? _dark.toastBg : _light.toastBg;
   Color get iconClr => isDarkMode ? _dark.iconClr : _light.iconClr;
