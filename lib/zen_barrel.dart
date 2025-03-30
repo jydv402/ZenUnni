@@ -40,6 +40,8 @@ export 'screens/habit.dart';
 export 'screens/home.dart';
 export 'screens/leaderboard.dart';
 export 'screens/mood.dart';
+export 'screens/note.dart';
+export 'screens/notes_list.dart';
 export 'screens/pomodoro_page.dart';
 export 'screens/profile.dart';
 export 'screens/nav.dart';

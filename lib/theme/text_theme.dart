@@ -60,7 +60,7 @@ const TextStyle prfDivTxt = TextStyle(
 const TextStyle hint = TextStyle(
   fontFamily: 'Pop',
   fontSize: 16,
-  color: Colors.black,
+  color: Colors.black45,
 );
 
 //For Dark theme
@@ -88,6 +88,7 @@ const TextStyle headSD = TextStyle(
 const TextStyle labelMD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 16.0,
+  fontWeight: FontWeight.w400,
   color: Colors.black,
 );
 const TextStyle labelSD = TextStyle(
@@ -117,7 +118,7 @@ const TextStyle prfDivTxtD = TextStyle(
 const TextStyle hintD = TextStyle(
   fontFamily: 'Pop',
   fontSize: 16,
-  color: Colors.white,
+  color: Colors.white38,
 );
 
 const TextStyle counterD = TextStyle(

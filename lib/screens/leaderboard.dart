@@ -245,6 +245,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
       String score,
       bool isUser) {
     final colors = ref.watch(appColorsProvider);
+    final theme = ref.watch(themeProvider);
     return Positioned(
       top: top,
       right: right,
@@ -254,18 +255,33 @@ class _SearchState extends ConsumerState<ConnectPage> {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              Container(
+              Tooltip(
+                message: username,
+                enableFeedback: true,
+                textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color:
+                          theme == ThemeMode.dark ? Colors.black : Colors.white,
+                    ),
+                padding: const EdgeInsets.fromLTRB(26, 16, 26, 16),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                      color: isUser ? Color(0xFFFF8C2B) : Colors.transparent,
-                      width: 4),
+                  color: colors.mdText,
+                  borderRadius: BorderRadius.circular(26),
                 ),
-                child: Image.asset(
-                  path,
-                  height: dp,
-                  width: dp,
-                  fit: BoxFit.contain,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: isUser
+                            ? Color.fromRGBO(255, 140, 43, 1)
+                            : Colors.transparent,
+                        width: 4),
+                  ),
+                  child: Image.asset(
+                    path,
+                    height: dp,
+                    width: dp,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               Positioned(
@@ -311,76 +327,106 @@ class _SearchState extends ConsumerState<ConnectPage> {
     );
   }
 
-  Container rankListCards(user) {
+  Tooltip rankListCards(user) {
     final colors = ref.watch(appColorsProvider);
+    final theme = ref.watch(themeProvider);
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-      height: 100,
+    return Tooltip(
+      message: user.username,
+      enableFeedback: true,
+      textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+          ),
+      padding: const EdgeInsets.fromLTRB(26, 16, 26, 16),
       decoration: BoxDecoration(
+        color: colors.mdText,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-            color: user.isUser ? Color(0xFFFF8C2B) : Colors.transparent,
-            width: 2),
-        color: colors.pillClr,
       ),
-      child: Stack(
-        children: [
-          //Rank text
-          Positioned(
-            top: 38,
-            left: 26,
-            child: Text(
-              "${user.rank}",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+        height: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(26),
+          border: Border.all(
+              color: user.isUser
+                  ? Color.fromRGBO(255, 140, 43, 1)
+                  : Colors.transparent,
+              width: 2),
+          color: colors.pillClr,
+        ),
+        child: Stack(
+          children: [
+            //Rank text
+            Positioned(
+              top: 38,
+              left: 22,
+              child: Text(
+                "${user.rank}",
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          //User details
-          Positioned(
-            left: 60,
-            top: 20,
-            child: Row(
-              spacing: 12,
-              children: [
-                Image.asset(
-                  user.gender == 0
-                      ? males.values.elementAt(user.avatar)
-                      : females.values.elementAt(user.avatar),
-                  height: 60,
-                  width: 60,
-                  fit: BoxFit.contain,
-                ),
-                Text.rich(
-                  TextSpan(
-                    text: "${user.username} ",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium
-                        ?.copyWith(fontSize: 22),
-                    children: [
-                      TextSpan(
-                        text: user.isUser ? '[You]' : '',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
+            //User details
+            Positioned(
+              left: 54,
+              top: 20,
+              child: Row(
+                spacing: 12,
+                children: [
+                  Image.asset(
+                    user.gender == 0
+                        ? males.values.elementAt(user.avatar)
+                        : females.values.elementAt(user.avatar),
+                    height: 60,
+                    width: 60,
+                    fit: BoxFit.contain,
                   ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Text.rich(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      TextSpan(
+                        text: "${user.username} ",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(fontSize: 22),
+                        children: [
+                          TextSpan(
+                            text: user.isUser ? '[You]' : '',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            //Score
+            Positioned(
+              top: 40,
+              right: 20,
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "${user.score}",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    TextSpan(
+                      text: "pts",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-          //Score
-          Positioned(
-            top: 40,
-            right: 26,
-            child: Text(
-              "${user.score} pts",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -15,7 +15,7 @@ void showHeadsupNoti(BuildContext context, WidgetRef ref, String message) {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         color: colors.toastBg,
-        border: Border.all(color: Color(0xFFFF8C2B)),
+        border: Border.all(color: Color.fromRGBO(255, 140, 43, 1)),
       ),
       child: ToastCard(
         shadowColor: Colors.transparent,

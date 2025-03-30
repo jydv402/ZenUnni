@@ -15,7 +15,6 @@ Future<void> main() async {
   tz.initializeTimeZones();
   await NotificationService.init();
 
-
   // Schedule notifications for incomplete tasks on startup
   await scheduleNotificationsForIncompleteTasks();
   runApp(
@@ -68,6 +67,7 @@ class MyApp extends ConsumerWidget {
         '/add_todo': (context) => const AddTaskPage(),
         '/man_sched': (context) => const ManualSchedEdit(),
         '/desc': (context) => const DescPage(),
+        '/note': (context) => const NotePage(),
       },
     );
   }
