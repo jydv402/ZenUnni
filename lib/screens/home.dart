@@ -221,7 +221,7 @@ class LandPage extends ConsumerWidget {
               context,
               1,
               () {
-                updatePgIndex(ref, 10, 4);
+                updatePgIndex(ref, 9, 4);
                 ref.read(navStackProvider.notifier).push(4);
               },
               colors.pillClr,
