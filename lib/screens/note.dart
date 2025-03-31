@@ -41,25 +41,51 @@ class _NotePageState extends ConsumerState<NotePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ref.watch(themeProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(noteId == null ? "New Note" : "Edit Note")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        padding: const EdgeInsets.fromLTRB(0, 100, 0, 2),
+        color: Theme.of(context).scaffoldBackgroundColor,
         child: Column(
           children: [
             TextField(
               controller: _headingController,
-              decoration: const InputDecoration(labelText: 'Note Heading'),
+              style: Theme.of(context).textTheme.headlineLarge,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(26, 0, 26, 0),
+                hintText: 'Note Heading...',
+                hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      color: theme == ThemeMode.dark
+                          ? Colors.white38
+                          : Colors.black45,
+                    ),
+                border: InputBorder.none,
+                errorBorder: InputBorder.none,
+                focusedErrorBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+              ),
             ),
-            const SizedBox(height: 10),
             Expanded(
               child: TextField(
                 controller: _contentController,
-                maxLines: null,
                 expands: true,
+                maxLines: null,
+                minLines: null,
                 keyboardType: TextInputType.multiline,
-                decoration:
-                    const InputDecoration(labelText: 'Write your note...'),
+                style: Theme.of(context).textTheme.bodyMedium,
+                decoration: const InputDecoration(
+                  hintText: 'Write your note here...',
+                  border: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                ),
               ),
             ),
           ],
