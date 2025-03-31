@@ -1,3 +1,4 @@
+import 'package:lottie/lottie.dart';
 import 'package:zen/zen_barrel.dart';
 
 class LandPage extends ConsumerWidget {
@@ -64,19 +65,23 @@ class LandPage extends ConsumerWidget {
             () => updatePgIndex(ref, 5, 3),
           ),
         const SizedBox(height: 8),
-        _bentos(
-          context,
-          1,
-          () {},
-          colors.pillClr,
-          const EdgeInsets.fromLTRB(0, 0, 0, 8),
-          Center(
-            child: Text(
-              "Quote",
-              style: Theme.of(context).textTheme.headlineMedium,
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            _bentos(
+              context,
+              1,
+              () {},
+              colors.pillClr,
+              const EdgeInsets.fromLTRB(0, 0, 0, 8),
+              Stack(
+                children: [
+                  _bgText(-15, "Quote", colors.homeBgTxt, top: 25),
+                ],
+              ),
+              height: 200,
             ),
-          ),
-          height: 200,
+          ],
         ),
         //1st row
         Row(
@@ -90,11 +95,49 @@ class LandPage extends ConsumerWidget {
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 0, 4, 4),
-              Center(
-                child: Text(
-                  'Mood',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              Stack(
+                children: [
+                  _bgText(-8, "Mood", colors.homeBgTxt),
+                  Center(
+                    child: mood == null
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 8,
+                              children: [
+                                Lottie.asset(reversedMoodList["Empty"]!,
+                                    height: 120, width: 120),
+                                Text("So empty...",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium,
+                                    textAlign: TextAlign.center),
+                                Text(
+                                  "Add a mood now?",
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 8,
+                              children: [
+                                Lottie.asset(reversedMoodList[mood]!,
+                                    height: 120, width: 120),
+                                Text(mood,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium,
+                                    textAlign: TextAlign.center),
+                              ],
+                            ),
+                          ),
+                  ),
+                ],
               ),
             ),
             _bentos(
@@ -106,11 +149,10 @@ class LandPage extends ConsumerWidget {
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(4, 0, 0, 4),
-              Center(
-                child: Text(
-                  "Rank",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              Stack(
+                children: [
+                  _bgText(-30, "Rank", colors.homeBgTxt),
+                ],
               ),
             )
           ],
@@ -129,11 +171,10 @@ class LandPage extends ConsumerWidget {
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(0, 4, 4, 4),
-              Center(
-                child: Text(
-                  "gen sched",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              Stack(
+                children: [
+                  _bgText(-28, "Schedule", colors.homeBgTxt),
+                ],
               ),
             ),
             _bentos(
@@ -146,11 +187,10 @@ class LandPage extends ConsumerWidget {
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(4, 4, 0, 4),
-              Center(
-                child: Text(
-                  "No. tasks",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              Stack(
+                children: [
+                  _bgText(-15, "Tasks", colors.homeBgTxt),
+                ],
               ),
             ),
           ],
@@ -167,11 +207,10 @@ class LandPage extends ConsumerWidget {
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 4, 4, 0),
-              Center(
-                child: Text(
-                  "No. Habits",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              Stack(
+                children: [
+                  _bgText(-40, "Habits", colors.homeBgTxt),
+                ],
               ),
             ),
             _bentos(
@@ -183,11 +222,10 @@ class LandPage extends ConsumerWidget {
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(4, 4, 0, 0),
-              Center(
-                child: Text(
-                  "Profile",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              Stack(
+                children: [
+                  _bgText(-25, "Profile", colors.homeBgTxt),
+                ],
               ),
             ),
           ],
@@ -210,11 +248,10 @@ class LandPage extends ConsumerWidget {
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 4, 4, 0),
-              Center(
-                child: Text(
-                  "Pomodoro",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              Stack(
+                children: [
+                  _bgText(-10, "Pomodoro", colors.homeBgTxt),
+                ],
               ),
             ),
             _bentos(
@@ -226,11 +263,10 @@ class LandPage extends ConsumerWidget {
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(4, 4, 0, 0),
-              Center(
-                child: Text(
-                  "Notes",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+              Stack(
+                children: [
+                  _bgText(-22, "Notes", colors.homeBgTxt),
+                ],
               ),
             ),
           ],
@@ -256,6 +292,23 @@ class LandPage extends ConsumerWidget {
           width: MediaQuery.sizeOf(context).width,
           child: child,
         ),
+      ),
+    );
+  }
+
+  Positioned _bgText(double left, String label, Color color, {double? top}) {
+    return Positioned(
+      top: top ?? 40,
+      left: left,
+      child: Text(
+        label,
+        softWrap: false,
+        style: TextStyle(
+            fontFamily: "Pop",
+            fontSize: 100,
+            letterSpacing: -5,
+            fontWeight: FontWeight.w600,
+            color: color),
       ),
     );
   }
