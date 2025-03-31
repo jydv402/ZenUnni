@@ -30,6 +30,7 @@ class LandPage extends ConsumerWidget {
   Widget homeScreen(
       BuildContext context, WidgetRef ref, String? user, String? mood) {
     final colors = ref.watch(appColorsProvider);
+    final userDetails = ref.watch(rankedUserSearchProvider).value;
     final now = DateTime.now().hour;
     final greeting = now < 12
         ? 'Morning'
@@ -57,38 +58,40 @@ class LandPage extends ConsumerWidget {
             ],
           ),
         ),
-        if (mood == null)
-          //Show add mood msg
-          _msgContainer(
-            context,
-            "No mood added yet, add it now? 👀",
-            () => updatePgIndex(ref, 5, 3),
-          ),
+        // Mood not added yet msg
+        // if (mood == null)
+        //   //Show add mood msg
+        //   _msgContainer(
+        //     context,
+        //     "No mood added yet, add it now? 👀",
+        //     () => updatePgIndex(ref, 5, 3),
+        //   ),
         const SizedBox(height: 8),
-        Flex(
-          direction: Axis.horizontal,
-          children: [
-            _bentos(
-              context,
-              1,
-              () {},
-              colors.pillClr,
-              const EdgeInsets.fromLTRB(0, 0, 0, 8),
-              Stack(
-                children: [
-                  _bgText(-15, "Quote", colors.homeBgTxt, top: 25),
-                ],
-              ),
-              height: 200,
-            ),
-          ],
-        ),
+        //TODO: Add a quote of the day, maybe?
+        // Flex(
+        //   direction: Axis.horizontal,
+        //   children: [
+        //     _bentos(
+        //       context,
+        //       1,
+        //       () {},
+        //       colors.pillClr,
+        //       const EdgeInsets.fromLTRB(0, 0, 0, 8),
+        //       Stack(
+        //         children: [
+        //           _bgText(-15, "Quote", colors.homeBgTxt, top: 25),
+        //         ],
+        //       ),
+        //       height: 200,
+        //     ),
+        //   ],
+        // ),
         //1st row
         Row(
           children: [
             _bentos(
               context,
-              2,
+              3,
               () {
                 updatePgIndex(ref, 3, 3);
                 ref.read(navStackProvider.notifier).push(3);
@@ -128,11 +131,24 @@ class LandPage extends ConsumerWidget {
                               children: [
                                 Lottie.asset(reversedMoodList[mood]!,
                                     height: 120, width: 120),
-                                Text(mood,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium,
-                                    textAlign: TextAlign.center),
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: "Mood :\n",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
+                                      TextSpan(
+                                        text: mood,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -142,7 +158,7 @@ class LandPage extends ConsumerWidget {
             ),
             _bentos(
               context,
-              1,
+              2,
               () {
                 updatePgIndex(ref, 6, 4);
                 ref.read(navStackProvider.notifier).push(4);
@@ -151,7 +167,46 @@ class LandPage extends ConsumerWidget {
               EdgeInsets.fromLTRB(4, 0, 0, 4),
               Stack(
                 children: [
-                  _bgText(-30, "Rank", colors.homeBgTxt),
+                  _bgText(-25, "Rank", colors.homeBgTxt),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    //spacing: 26,
+                    children: [
+                      const SizedBox(height: 12),
+                      Center(
+                        child: Lottie.asset("assets/emoji/trophy.json",
+                            height: 100, width: 100),
+                      ),
+                      const SizedBox(height: 14),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "Rank :\n",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            TextSpan(
+                              text: userDetails?.any((element) =>
+                                          element.username == user) ==
+                                      true
+                                  ? "${userDetails!.firstWhere((element) => element.username == user).rank}"
+                                  : "0",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                            TextSpan(
+                              text: " / ${userDetails?.length}",
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             )
