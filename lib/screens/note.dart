@@ -19,29 +19,30 @@ class _NotePageState extends ConsumerState<NotePage> {
     super.initState();
     noteId = widget.noteId;
     if (noteId != null) {
-      _loadNote();
+      _loadNote(ref.read(userNameProvider).value!);
     }
   }
 
-  Future<void> _loadNote() async {
-    final notes = await _notesService.getNotes();
+  Future<void> _loadNote(String username) async {
+    final notes = await _notesService.getNotes(username);
     if (notes.containsKey(noteId)) {
       _headingController.text = notes[noteId]!['heading']!;
       _contentController.text = notes[noteId]!['content']!;
     }
   }
 
-  Future<void> _saveNote() async {
+  Future<void> _saveNote(String username) async {
     if (_headingController.text.trim().isEmpty) return;
     final newId = noteId ?? DateTime.now().millisecondsSinceEpoch;
-    await _notesService.saveNote(
-        newId, _headingController.text.trim(), _contentController.text.trim());
+    await _notesService.saveNote(newId, _headingController.text.trim(),
+        _contentController.text.trim(), username);
     if (context.mounted) Navigator.pop(context, true);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
+    final username = ref.watch(userNameProvider).value;
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -92,7 +93,9 @@ class _NotePageState extends ConsumerState<NotePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _saveNote,
+        onPressed: () {
+          _saveNote(username!);
+        },
         label: const Text("Save Note"),
         icon: const Icon(Icons.save),
       ),
