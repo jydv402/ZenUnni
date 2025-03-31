@@ -30,7 +30,9 @@ class LandPage extends ConsumerWidget {
   Widget homeScreen(
       BuildContext context, WidgetRef ref, String? user, String? mood) {
     final colors = ref.watch(appColorsProvider);
-    final userDetails = ref.watch(rankedUserSearchProvider).value;
+    final rankDetails = ref.watch(rankedUserSearchProvider).value;
+    final profileDetails = ref.watch(userProvider).value;
+
     final now = DateTime.now().hour;
     final greeting = now < 12
         ? 'Morning'
@@ -186,10 +188,10 @@ class LandPage extends ConsumerWidget {
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             TextSpan(
-                              text: userDetails?.any((element) =>
+                              text: rankDetails?.any((element) =>
                                           element.username == user) ==
                                       true
-                                  ? "${userDetails!.firstWhere((element) => element.username == user).rank}"
+                                  ? "${rankDetails!.firstWhere((element) => element.username == user).rank}"
                                   : "0",
                               style: Theme.of(context)
                                   .textTheme
@@ -199,7 +201,7 @@ class LandPage extends ConsumerWidget {
                                   ),
                             ),
                             TextSpan(
-                              text: " / ${userDetails?.length}",
+                              text: " / ${rankDetails?.length}",
                               style: Theme.of(context).textTheme.headlineSmall,
                             ),
                           ],
@@ -280,6 +282,51 @@ class LandPage extends ConsumerWidget {
               Stack(
                 children: [
                   _bgText(-25, "Profile", colors.homeBgTxt),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 13,
+                      children: [
+                        Container(
+                          height: 120,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: profileDetails?.gender == 0
+                                  ? AssetImage(
+                                      males.values
+                                          .elementAt(profileDetails!.avatar),
+                                    )
+                                  : AssetImage(
+                                      females.values
+                                          .elementAt(profileDetails!.avatar),
+                                    ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: profileDetails.username,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              TextSpan(
+                                text: "\nGo to profile",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -368,18 +415,18 @@ class LandPage extends ConsumerWidget {
     );
   }
 
-  GestureDetector _msgContainer(
-      BuildContext context, String msg, GestureTapCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(26),
-          color: Colors.white30,
-        ),
-        child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
-      ),
-    );
-  }
+  // GestureDetector _msgContainer(
+  //     BuildContext context, String msg, GestureTapCallback onTap) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(26),
+  //         color: Colors.white30,
+  //       ),
+  //       child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
+  //     ),
+  //   );
+  // }
 }
