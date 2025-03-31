@@ -55,6 +55,8 @@ export 'services/chat_serv.dart';
 export 'services/gamify_serve.dart';
 export 'services/habit_serv.dart';
 export 'services/mood_serv.dart';
+export 'services/nav_serv.dart';
+export 'services/notes_serv.dart';
 export 'services/pomodoro_serve.dart';
 export 'services/schedule_serv.dart';
 export 'services/search_serv.dart';
@@ -62,8 +64,6 @@ export 'services/theme_serv.dart';
 export 'services/todo_serv.dart';
 export 'services/user_serv.dart';
 export 'services/desc_serv.dart';
-
-export 'services/nav_serv.dart';
 
 //theme
 export 'theme/text_theme.dart';
