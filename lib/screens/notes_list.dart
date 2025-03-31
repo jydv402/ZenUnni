@@ -40,11 +40,24 @@ class _NotesListState extends ConsumerState<NotesList> {
     final username = ref.watch(userNameProvider).value;
     return Scaffold(
       body: _notes.isEmpty
-          ? Center(
-              child: Text(
-              "No notes yet. Add one!",
-              style: Theme.of(context).textTheme.headlineMedium,
-            ))
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(26, 50, 26, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ScoreCard(),
+                  Text(
+                    "Notes",
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  const SizedBox(height: 50),
+                  Text(
+                    "No notes found. Tap the button below to create a new note.",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  )
+                ],
+              ),
+            )
           : ListView.builder(
               padding: const EdgeInsets.fromLTRB(0, 50, 0, 100),
               itemCount: _notes.length + 1,
@@ -60,6 +73,7 @@ class _NotesListState extends ConsumerState<NotesList> {
                           "Notes",
                           style: Theme.of(context).textTheme.headlineLarge,
                         ),
+                        const SizedBox(height: 16),
                       ],
                     ),
                   );
