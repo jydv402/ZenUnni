@@ -521,6 +521,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
   }
 
   Widget schedulePopUp(BuildContext context, List<TodoModel> tasks) {
+    final user = ref.watch(userProvider).value;
     return PopupMenuButton<int>(
       popUpAnimationStyle: AnimationStyle(
         curve: Curves.easeInOut,
@@ -538,7 +539,17 @@ class TaskPageState extends ConsumerState<TaskPage> {
             ref,
             "Edit Available Time",
             LucideIcons.pen,
-            () {},
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DescPage(
+                    isEdit: true,
+                    user: user,
+                  ),
+                ),
+              );
+            },
           ),
         ),
         PopupMenuItem<int>(

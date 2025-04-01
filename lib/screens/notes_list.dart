@@ -38,6 +38,7 @@ class _NotesListState extends ConsumerState<NotesList> {
   @override
   Widget build(BuildContext context) {
     final username = ref.watch(userNameProvider).value;
+    final colors = ref.watch(appColorsProvider);
     return Scaffold(
       body: _notes.isEmpty
           ? Padding(
@@ -83,23 +84,35 @@ class _NotesListState extends ConsumerState<NotesList> {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
                     child: ListTile(
-                      contentPadding: const EdgeInsets.fromLTRB(16, 26, 16, 26),
+                      contentPadding: const EdgeInsets.fromLTRB(18, 16, 12, 16),
                       shape: RoundedRectangleBorder(
                         side: const BorderSide(
                           color: Color.fromRGBO(255, 140, 43, 1),
                         ),
                         borderRadius: BorderRadius.circular(26),
                       ),
-                      title: Text(note['heading'] ?? 'Untitled',
-                          style: Theme.of(context).textTheme.headlineMedium),
+                      title: Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Text(note['heading'] ?? 'Untitled',
+                            style: Theme.of(context).textTheme.headlineMedium),
+                      ),
                       subtitle: Text(note['content'] ?? 'No content',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodyMedium),
                       onTap: () => _openNotePage(key),
                       trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteNote(key, username!),
+                        icon: Icon(LucideIcons.trash_2, color: colors.iconClr),
+                        onPressed: () {
+                          showConfirmDialog(
+                            context,
+                            "Delete Note ?",
+                            "Are you sure you want to delete this note ?",
+                            "Delete",
+                            Colors.red,
+                            () => _deleteNote(key, username!),
+                          );
+                        },
                       ),
                     ),
                   );

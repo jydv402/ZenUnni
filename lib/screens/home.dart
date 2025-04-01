@@ -4,6 +4,14 @@ import 'package:zen/zen_barrel.dart';
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});
 
+  bool habitsCompleted(List<HabitModel> habits) {
+    final today = DateTime.now();
+    final dateOnly = DateTime(today.year, today.month, today.day);
+    return habits.every((habit) =>
+        habit.completedDates.containsKey(dateOnly) &&
+        habit.completedDates[dateOnly]!);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userNameProvider);
@@ -30,8 +38,12 @@ class LandPage extends ConsumerWidget {
   Widget homeScreen(
       BuildContext context, WidgetRef ref, String? user, String? mood) {
     final colors = ref.watch(appColorsProvider);
+    //For rank card
     final rankDetails = ref.watch(rankedUserSearchProvider).value;
+    //For profile card
     final profileDetails = ref.watch(userProvider).value;
+    //For habit card
+    final habitDetails = ref.watch(habitProvider).value ?? [];
 
     final now = DateTime.now().hour;
     final greeting = now < 12
@@ -88,6 +100,47 @@ class LandPage extends ConsumerWidget {
         //     ),
         //   ],
         // ),
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            _bentos(
+              context,
+              1,
+              () {
+                Navigator.pushNamed(context, "/chat");
+              },
+              colors.pillClr,
+              const EdgeInsets.fromLTRB(0, 0, 0, 8),
+              Stack(
+                children: [
+                  _bgText(-15, "Chat", colors.homeBgTxt, top: 25),
+                  Center(
+                    child: Row(
+                      spacing: 16,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Lottie.asset("assets/loading/ld_shapes.json",
+                            height: 80, width: 80),
+                        Text(
+                          "Unni",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge
+                              ?.copyWith(
+                                  fontSize: 110,
+                                  color: Colors.blue.shade200,
+                                  letterSpacing: -7),
+                        ),
+                        const SizedBox(width: 2),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              height: 200,
+            ),
+          ],
+        ),
         //1st row
         Row(
           children: [
@@ -102,7 +155,7 @@ class LandPage extends ConsumerWidget {
               const EdgeInsets.fromLTRB(0, 0, 4, 4),
               Stack(
                 children: [
-                  _bgText(-8, "Mood", colors.homeBgTxt),
+                  _bgText(-20, "Mood", colors.homeBgTxt),
                   Center(
                     child: mood == null
                         ? Padding(
@@ -231,6 +284,25 @@ class LandPage extends ConsumerWidget {
               Stack(
                 children: [
                   _bgText(-28, "Schedule", colors.homeBgTxt),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 20,
+                      children: [
+                        Lottie.asset(
+                          "assets/emoji/magic.json",
+                          height: 120,
+                          width: 120,
+                        ),
+                        Text(
+                          // "Generate a\nschedule",
+                          "Craft a schedule",
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -247,6 +319,24 @@ class LandPage extends ConsumerWidget {
               Stack(
                 children: [
                   _bgText(-15, "Tasks", colors.homeBgTxt),
+                  Center(
+                    child: Column(
+                      spacing: 22,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          "assets/emoji/rocket.json",
+                          height: 120,
+                          width: 120,
+                        ),
+                        Text(
+                          "Track your tasks",
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -267,6 +357,40 @@ class LandPage extends ConsumerWidget {
               Stack(
                 children: [
                   _bgText(-40, "Habits", colors.homeBgTxt),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // habitsCompleted(habitDetails!)
+                        //     ? Lottie.asset(
+                        //         "assets/emoji/hatched.json",
+                        //         height: 100,
+                        //         width: 100,
+                        //       )
+                        //     : Lottie.asset(
+                        //         "assets/emoji/hatching.json",
+                        //         height: 100,
+                        //         width: 100,
+                        //       ),
+                        const SizedBox(height: 6),
+                        Lottie.asset(
+                          habitsCompleted(habitDetails)
+                              ? "assets/emoji/hatched.json" // Completed animation
+                              : "assets/emoji/hatching.json", // Incomplete animation
+                          height: 120,
+                          width: 120,
+                        ),
+                        const SizedBox(height: 18),
+                        Text(
+                          habitsCompleted(habitDetails)
+                              ? "All habits completed"
+                              : "You have habits\nleft to complete",
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -353,6 +477,25 @@ class LandPage extends ConsumerWidget {
               Stack(
                 children: [
                   _bgText(-10, "Pomodoro", colors.homeBgTxt),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Lottie.asset(
+                          "assets/emoji/pomo.json",
+                          height: 150,
+                          width: 150,
+                        ),
+                        Text("Pomodoro",
+                            style: Theme.of(context).textTheme.headlineMedium),
+                        Text(
+                          "Start a new\nfocus session",
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -368,6 +511,27 @@ class LandPage extends ConsumerWidget {
               Stack(
                 children: [
                   _bgText(-22, "Notes", colors.homeBgTxt),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 18),
+                        Lottie.asset(
+                          "assets/emoji/note.json",
+                          height: 120,
+                          width: 120,
+                        ),
+                        const SizedBox(height: 18),
+                        Text("Notes",
+                            style: Theme.of(context).textTheme.headlineMedium),
+                        Text(
+                          "Add a\nnew note",
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
