@@ -7,7 +7,9 @@ class LandPage extends ConsumerWidget {
   bool habitsCompleted(List<HabitModel> habits) {
     final today = DateTime.now();
     final dateOnly = DateTime(today.year, today.month, today.day);
-    return habits.every((habit) => habit.completedDates.containsKey(dateOnly));
+    return habits.every((habit) =>
+        habit.completedDates.containsKey(dateOnly) &&
+        habit.completedDates[dateOnly]!);
   }
 
   @override
@@ -41,7 +43,7 @@ class LandPage extends ConsumerWidget {
     //For profile card
     final profileDetails = ref.watch(userProvider).value;
     //For habit card
-    // final habitDetails = ref.watch(habitProvider).value;
+    final habitDetails = ref.watch(habitProvider).value ?? [];
 
     final now = DateTime.now().hour;
     final greeting = now < 12
@@ -324,6 +326,33 @@ class LandPage extends ConsumerWidget {
               Stack(
                 children: [
                   _bgText(-15, "Tasks", colors.homeBgTxt),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 10),
+                        Lottie.asset(
+                          "assets/emoji/rocket.json",
+                          height: 110,
+                          width: 110,
+                        ),
+                        const SizedBox(height: 16),
+                        Text.rich(
+                          TextSpan(
+                            text: "Tasks\n",
+                            style: Theme.of(context).textTheme.headlineMedium,
+                            children: [
+                              TextSpan(
+                                text: "Track your tasks",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -361,7 +390,9 @@ class LandPage extends ConsumerWidget {
                         //         width: 100,
                         //       ),
                         Lottie.asset(
-                          "assets/emoji/hatching.json",
+                          habitsCompleted(habitDetails)
+                              ? "assets/emoji/hatched.json" // Completed animation
+                              : "assets/emoji/hatching.json", // Incomplete animation
                           height: 120,
                           width: 120,
                         ),
@@ -371,7 +402,9 @@ class LandPage extends ConsumerWidget {
                             style: Theme.of(context).textTheme.headlineMedium,
                             children: [
                               TextSpan(
-                                text: "Track your habits",
+                                text: habitsCompleted(habitDetails)
+                                    ? "All habits completed"
+                                    : "You have habits\nleft to complete",
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
@@ -501,6 +534,27 @@ class LandPage extends ConsumerWidget {
               Stack(
                 children: [
                   _bgText(-22, "Notes", colors.homeBgTxt),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 18),
+                        Lottie.asset(
+                          "assets/emoji/note.json",
+                          height: 120,
+                          width: 120,
+                        ),
+                        const SizedBox(height: 18),
+                        Text("Notes",
+                            style: Theme.of(context).textTheme.headlineMedium),
+                        Text(
+                          "Add a\nnew note",
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
