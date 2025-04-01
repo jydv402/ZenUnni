@@ -44,7 +44,10 @@ class ChatPage extends ConsumerWidget {
                   Text(
                     'Unni',
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontSize: 120, color: Colors.blue.shade200, height: .8),
+                        fontSize: 120,
+                        color: Colors.blue.shade200,
+                        height: .8,
+                        letterSpacing: -7),
                   ),
                   Text(
                     'Ask me anything !',
