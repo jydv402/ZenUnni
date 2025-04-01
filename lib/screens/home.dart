@@ -287,7 +287,7 @@ class LandPage extends ConsumerWidget {
                   Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 16,
+                      spacing: 20,
                       children: [
                         Lottie.asset(
                           "assets/emoji/magic.json",
@@ -295,7 +295,8 @@ class LandPage extends ConsumerWidget {
                           width: 120,
                         ),
                         Text(
-                          "Generate a\nschedule",
+                          // "Generate a\nschedule",
+                          "Craft a schedule",
                           style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
                         )
