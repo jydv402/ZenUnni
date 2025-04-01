@@ -287,24 +287,16 @@ class LandPage extends ConsumerWidget {
                   Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 10,
+                      spacing: 16,
                       children: [
                         Lottie.asset(
                           "assets/emoji/magic.json",
                           height: 120,
                           width: 120,
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Schedule\n",
-                            style: Theme.of(context).textTheme.headlineMedium,
-                            children: [
-                              TextSpan(
-                                text: "Generate schedule",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
+                        Text(
+                          "Generate a\nschedule",
+                          style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
                         )
                       ],
@@ -328,26 +320,17 @@ class LandPage extends ConsumerWidget {
                   _bgText(-15, "Tasks", colors.homeBgTxt),
                   Center(
                     child: Column(
+                      spacing: 22,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 10),
                         Lottie.asset(
                           "assets/emoji/rocket.json",
-                          height: 110,
-                          width: 110,
+                          height: 120,
+                          width: 120,
                         ),
-                        const SizedBox(height: 16),
-                        Text.rich(
-                          TextSpan(
-                            text: "Tasks\n",
-                            style: Theme.of(context).textTheme.headlineMedium,
-                            children: [
-                              TextSpan(
-                                text: "Track your tasks",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
+                        Text(
+                          "Track your tasks",
+                          style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
                         )
                       ],
@@ -375,7 +358,6 @@ class LandPage extends ConsumerWidget {
                   _bgText(-40, "Habits", colors.homeBgTxt),
                   Center(
                     child: Column(
-                      spacing: 13,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // habitsCompleted(habitDetails!)
@@ -389,6 +371,7 @@ class LandPage extends ConsumerWidget {
                         //         height: 100,
                         //         width: 100,
                         //       ),
+                        const SizedBox(height: 6),
                         Lottie.asset(
                           habitsCompleted(habitDetails)
                               ? "assets/emoji/hatched.json" // Completed animation
@@ -396,21 +379,14 @@ class LandPage extends ConsumerWidget {
                           height: 120,
                           width: 120,
                         ),
-                        Text.rich(
-                          TextSpan(
-                            text: "Habits\n",
-                            style: Theme.of(context).textTheme.headlineMedium,
-                            children: [
-                              TextSpan(
-                                text: habitsCompleted(habitDetails)
-                                    ? "All habits completed"
-                                    : "You have habits\nleft to complete",
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
+                        const SizedBox(height: 18),
+                        Text(
+                          habitsCompleted(habitDetails)
+                              ? "All habits completed"
+                              : "You have habits\nleft to complete",
+                          style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
-                        )
+                        ),
                       ],
                     ),
                   )
