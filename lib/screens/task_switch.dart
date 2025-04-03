@@ -252,6 +252,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
                                 fromTime: task.fromTime,
                                 toTime: task.toTime,
                                 selectedWeekdays: task.selectedWeekdays,
+                                oldname: task.oldname
                               );
                               ref.read(taskUpdateFullProvider(updatedTask));
                               if (task.priority == "High") {
