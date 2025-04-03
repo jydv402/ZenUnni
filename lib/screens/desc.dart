@@ -69,7 +69,7 @@ class _DescPageState extends ConsumerState<DescPage> {
             } else {
               await saveUserDesc(about, freeTime, bedtime);
               if (context.mounted) {
-                Navigator.pushNamed(context, '/nextPage');
+                Navigator.pushNamed(context, '/home');
               }
             }
           } else {
