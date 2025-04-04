@@ -52,6 +52,9 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
           ),
           const SizedBox(height: 40),
           TextField(
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
             maxLength: 16,
             controller: userNameController,
             style: Theme.of(context).textTheme.bodyMedium,

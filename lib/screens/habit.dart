@@ -79,6 +79,9 @@ class _HabitState extends ConsumerState<HabitPage> {
             ),
             const SizedBox(height: 20),
             TextField(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
               controller: habitNameController,
               style: Theme.of(context).textTheme.bodyMedium,
               decoration: InputDecoration(

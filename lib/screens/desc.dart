@@ -84,6 +84,9 @@ class _DescPageState extends ConsumerState<DescPage> {
 
   Widget _buildTextField(TextEditingController controller, String hintText) {
     return TextField(
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
       controller: controller,
       minLines: null,
       maxLines: null,

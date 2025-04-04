@@ -82,6 +82,9 @@ class _ManualSchedEditState extends ConsumerState<ManualSchedEdit> {
                       context, "Loading Saved Schedule..."),
                 )
               : TextField(
+                  onTapOutside: (event) {
+                    FocusScope.of(context).unfocus();
+                  },
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall

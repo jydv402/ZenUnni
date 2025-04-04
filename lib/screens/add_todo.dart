@@ -312,6 +312,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   Widget _dialogTextFields(
       BuildContext context, TextEditingController controller, String hintText) {
     return TextField(
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
       controller: controller,
       style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(

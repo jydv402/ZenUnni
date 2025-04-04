@@ -52,6 +52,9 @@ class _NotePageState extends ConsumerState<NotePage> {
         child: Column(
           children: [
             TextField(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
               controller: _headingController,
               style: Theme.of(context).textTheme.headlineLarge,
               decoration: InputDecoration(
@@ -72,6 +75,9 @@ class _NotePageState extends ConsumerState<NotePage> {
             ),
             Expanded(
               child: TextField(
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
                 controller: _contentController,
                 expands: true,
                 maxLines: null,
