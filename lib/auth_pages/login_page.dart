@@ -72,6 +72,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final colors = ref.watch(appColorsProvider);
     final theme = ref.watch(themeProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePadding,
         children: [

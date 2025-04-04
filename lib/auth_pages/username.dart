@@ -42,6 +42,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
 
     final avatars = gender.contains(0) ? males : females;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePadding,
         children: [
@@ -51,6 +52,9 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
           ),
           const SizedBox(height: 40),
           TextField(
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
             maxLength: 16,
             controller: userNameController,
             style: Theme.of(context).textTheme.bodyMedium,

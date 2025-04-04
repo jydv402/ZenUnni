@@ -98,7 +98,7 @@ final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
           "Your task '${task.name}' is due at ${DateFormat('hh:mm a').format(task.date)}.",
           notificationTime,
         );
-        print("Scheduled notification for: ${task.name} at $notificationTime");
+        //print("Scheduled notification for: ${task.name} at $notificationTime");
       }
     }
   },
@@ -131,8 +131,7 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
             "Your updated task '${task.name}' is due at ${DateFormat('hh:mm a').format(task.date)}.",
             notificationTime,
           );
-          print(
-              "Scheduled notification for updated task: ${task.name} at $notificationTime");
+          //print("Scheduled notification for updated task: ${task.name} at $notificationTime");
         }
       }
     }
@@ -193,12 +192,12 @@ Future<void> scheduleNotificationsForIncompleteTasks() async {
           "Your task '$taskName' is due at ${DateFormat('hh:mm a').format(dueDate)}.",
           notificationTime,
         );
-        print("Scheduled notification for: $taskName at $notificationTime");
+        //print("Scheduled notification for: $taskName at $notificationTime");
       } else {
-        print("Skipped past-due task: $taskName");
+        //print("Skipped past-due task: $taskName");
       }
     }
   } catch (e) {
-    print("Error scheduling notifications: $e");
+    //print("Error scheduling notifications: $e");
   }
 }

@@ -15,6 +15,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
@@ -60,7 +61,6 @@ class _MoodPageState extends ConsumerState<MoodPage> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
               child: Slider(
-                autofocus: true,
                 value: _currentMoodIndex.toDouble(),
                 min: 0,
                 max: moodList.length - 1.toDouble(),

@@ -206,7 +206,7 @@ class AIService {
 
     """;
 
-    print(systemPrompt);
+    //print(systemPrompt);
     final promptTemplate = PromptTemplate(
       inputVariables: const {'userTasks', 'systemPrompt', 'now'},
       template: '''

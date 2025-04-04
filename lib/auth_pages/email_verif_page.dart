@@ -59,6 +59,7 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePadding,
         children: [

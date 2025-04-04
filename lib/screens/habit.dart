@@ -22,7 +22,7 @@ class _HabitState extends ConsumerState<HabitPage> {
     final habitsAsyncValue = ref.watch(habitProvider);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: habitsAsyncValue.when(
         data: (habits) => heatmaplistview(habits),
         loading: () => Center(
@@ -79,6 +79,9 @@ class _HabitState extends ConsumerState<HabitPage> {
             ),
             const SizedBox(height: 20),
             TextField(
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
               controller: habitNameController,
               style: Theme.of(context).textTheme.bodyMedium,
               decoration: InputDecoration(
@@ -111,10 +114,7 @@ class _HabitState extends ConsumerState<HabitPage> {
               if (habitNameController.text.isNotEmpty) {
                 final newHabit = HabitModel(
                   habitName: habitNameController.text,
-                  color: selectedColor
-                      .value
-                      .toRadixString(16)
-                      .padLeft(8, '0'),
+                  color: selectedColor.value.toRadixString(16).padLeft(8, '0'),
                   createdAt: isEdit ? habit!.createdAt : DateTime.now(),
                   completedDates: isEdit ? habit!.completedDates : {},
                   oldname: isEdit ? habit!.habitName : habitNameController.text,

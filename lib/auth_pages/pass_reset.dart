@@ -54,6 +54,7 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: resetEmailContainer(context),
       floatingActionButton:
           fabButton(context, () => passwordReset(), 'Reset Password', 26),
@@ -76,6 +77,9 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
         ),
         const SizedBox(height: 40),
         TextField(
+          onTapOutside: (event) {
+            FocusScope.of(context).unfocus();
+          },
           controller: resetEmailController,
           style: Theme.of(context).textTheme.bodyMedium,
           cursorColor: Colors.white,

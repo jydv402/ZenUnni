@@ -35,7 +35,6 @@ class _DescPageState extends ConsumerState<DescPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePadding,
         children: [
@@ -69,7 +68,7 @@ class _DescPageState extends ConsumerState<DescPage> {
             } else {
               await saveUserDesc(about, freeTime, bedtime);
               if (context.mounted) {
-                Navigator.pushNamed(context, '/nextPage');
+                Navigator.pushNamed(context, '/home');
               }
             }
           } else {
@@ -85,6 +84,9 @@ class _DescPageState extends ConsumerState<DescPage> {
 
   Widget _buildTextField(TextEditingController controller, String hintText) {
     return TextField(
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
       controller: controller,
       minLines: null,
       maxLines: null,

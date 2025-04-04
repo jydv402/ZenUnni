@@ -4,12 +4,25 @@ import 'package:zen/zen_barrel.dart';
 class LandPage extends ConsumerWidget {
   const LandPage({super.key});
 
-  bool habitsCompleted(List<HabitModel> habits) {
+  List habitsCompleted(List<HabitModel> habits) {
     final today = DateTime.now();
     final dateOnly = DateTime(today.year, today.month, today.day);
-    return habits.every((habit) =>
-        habit.completedDates.containsKey(dateOnly) &&
-        habit.completedDates[dateOnly]!);
+
+    if (habits.isEmpty) {
+      // No habits added yet
+      return ["assets/emoji/hatching.json", "No habits added yet\nAdd some!"];
+    } else if (habits.every(
+      // Habits exists. check if all are completed
+      (habit) =>
+          habit.completedDates.containsKey(dateOnly) &&
+          habit.completedDates[dateOnly]!,
+    )) {
+      // All habits completed
+      return ["assets/emoji/hatched.json", "All habits completed"];
+    } else {
+      // Incomplete habits exist
+      return ["assets/emoji/hatching.json", "You have habits left to complete"];
+    }
   }
 
   @override
@@ -361,30 +374,15 @@ class LandPage extends ConsumerWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // habitsCompleted(habitDetails!)
-                        //     ? Lottie.asset(
-                        //         "assets/emoji/hatched.json",
-                        //         height: 100,
-                        //         width: 100,
-                        //       )
-                        //     : Lottie.asset(
-                        //         "assets/emoji/hatching.json",
-                        //         height: 100,
-                        //         width: 100,
-                        //       ),
                         const SizedBox(height: 6),
                         Lottie.asset(
-                          habitsCompleted(habitDetails)
-                              ? "assets/emoji/hatched.json" // Completed animation
-                              : "assets/emoji/hatching.json", // Incomplete animation
+                          habitsCompleted(habitDetails)[0],
                           height: 120,
                           width: 120,
                         ),
                         const SizedBox(height: 18),
                         Text(
-                          habitsCompleted(habitDetails)
-                              ? "All habits completed"
-                              : "You have habits\nleft to complete",
+                          habitsCompleted(habitDetails)[1],
                           style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
                         ),
@@ -485,6 +483,7 @@ class LandPage extends ConsumerWidget {
                           "assets/emoji/pomo.json",
                           height: 150,
                           width: 150,
+                          reverse: true,
                         ),
                         Text("Pomodoro",
                             style: Theme.of(context).textTheme.headlineMedium),
