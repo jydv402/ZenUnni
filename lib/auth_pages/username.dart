@@ -42,6 +42,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
 
     final avatars = gender.contains(0) ? males : females;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePadding,
         children: [

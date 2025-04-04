@@ -35,7 +35,6 @@ class _DescPageState extends ConsumerState<DescPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePadding,
         children: [

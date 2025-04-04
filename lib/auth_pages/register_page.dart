@@ -92,6 +92,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     final colors = ref.watch(appColorsProvider);
     final theme = ref.watch(themeProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePadding,
         children: [

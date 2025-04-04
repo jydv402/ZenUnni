@@ -15,6 +15,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: ListView(
         padding: pagePaddingWithScore,
         children: [

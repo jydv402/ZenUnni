@@ -12,6 +12,7 @@ class CurrentMood extends ConsumerWidget {
     final mood = ref.watch(moodProvider); // Watch the provider
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: mood.when(
         // Handle AsyncValue
         data: (moodData) => moodData == null
