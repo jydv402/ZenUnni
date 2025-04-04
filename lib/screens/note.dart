@@ -32,11 +32,24 @@ class _NotePageState extends ConsumerState<NotePage> {
   }
 
   Future<void> _saveNote(String username) async {
-    if (_headingController.text.trim().isEmpty) return;
+    if (_headingController.text.trim().isEmpty) {
+      if (_contentController.text.trim().isEmpty) {
+        if (mounted) {
+          showHeadsupNoti(context, ref, "There's nothing to save. 👀");
+        }
+      } else {
+        if (mounted) {
+          showHeadsupNoti(context, ref, "Please add a heading.");
+        }
+      }
+      return;
+    }
     final newId = noteId ?? DateTime.now().millisecondsSinceEpoch;
     await _notesService.saveNote(newId, _headingController.text.trim(),
         _contentController.text.trim(), username);
-    if (context.mounted) Navigator.pop(context, true);
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
   }
 
   @override
@@ -102,8 +115,15 @@ class _NotePageState extends ConsumerState<NotePage> {
         onPressed: () {
           _saveNote(username!);
         },
-        label: const Text("Save Note"),
-        icon: const Icon(Icons.save),
+        label: const Text(
+          "Save Note",
+          style: TextStyle(
+            fontFamily: 'Pop',
+            fontSize: 13.0,
+          ),
+        ),
+        icon: const Icon(LucideIcons.save),
+        foregroundColor: Colors.black,
       ),
     );
   }

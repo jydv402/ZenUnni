@@ -129,9 +129,32 @@ class ChatPage extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return Padding(
-                      padding: const EdgeInsets.only(left: 26, bottom: 30),
-                      child: Text("Unni",
-                          style: Theme.of(context).textTheme.headlineLarge),
+                      padding: const EdgeInsets.fromLTRB(26, 0, 16, 30),
+                      child: Row(
+                        children: [
+                          Text("Unni",
+                              style: Theme.of(context).textTheme.headlineLarge),
+                          const Spacer(),
+                          //TODO: Chat history
+                          IconButton(
+                            //Show history of the chat
+                            tooltip: 'Chat history',
+                            onPressed: () {},
+                            icon: Icon(
+                              LucideIcons.history,
+                            ),
+                          ),
+                          //TODO: Save chat
+                          IconButton(
+                            //Save the chat
+                            tooltip: 'Save chat',
+                            onPressed: () {},
+                            icon: Icon(
+                              LucideIcons.save,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   } else {
                     final msg = chatMsgs[index - 1];

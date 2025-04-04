@@ -121,8 +121,15 @@ class _NotesListState extends ConsumerState<NotesList> {
             ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openNotePage(),
-        label: const Text("New Note"),
-        icon: const Icon(Icons.add),
+        label: const Text(
+          "New Note",
+          style: TextStyle(
+            fontFamily: 'Pop',
+            fontSize: 13.0,
+          ),
+        ),
+        icon: const Icon(LucideIcons.plus),
+        foregroundColor: Colors.black,
       ),
     );
   }
