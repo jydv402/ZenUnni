@@ -483,6 +483,7 @@ class LandPage extends ConsumerWidget {
                           "assets/emoji/pomo.json",
                           height: 150,
                           width: 150,
+                          reverse: true,
                         ),
                         Text("Pomodoro",
                             style: Theme.of(context).textTheme.headlineMedium),

@@ -148,7 +148,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 setState(() {
                   localDate = pickDate; //saves to local variable
                   _date = pickDate; //to save it to global variable
-                  print("Selected date: $localDate");
+                  //print("Selected date: $localDate");
                 });
               }
             }, "Set due date", 16),
@@ -165,7 +165,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 setState(() {
                   localTime = pickTime; // saves to local variable
                   _time = pickTime; // saves to global variable
-                  print("Selected time: $localTime");
+                  //print("Selected time: $localTime");
                 });
               }
             }, "Set due time", 16),
@@ -260,7 +260,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
                 ref.read(
                   taskAddProvider(task),
                 );
-                print("Task Map: ${task.toMap()}");
+                //print("Task Map: ${task.toMap()}");
               }
               resetDialogFields();
               Navigator.pop(context);
