@@ -21,6 +21,16 @@ Zenunni is an all-in-one productivity app designed for college students and work
 ## 📸 Screenshots
 
 
+![Home Screen](screenshots/IMG-20250616-WA0003.png)  
+![Features Panel](screenshots/IMG-20250616-WA0004.png)  
+![Tasks Page](screenshots/IMG-20250616-WA0005.png)  
+![Chatbot](screenshots/IMG-20250616-WA0006.png)  
+![Pomodoro Timer](screenshots/IMG-20250616-WA0007.png)  
+![Schedule View](screenshots/IMG-20250616-WA0008.png)  
+![Mood Tracker Empty](screenshots/IMG-20250616-WA0009.png)  
+![Mood Add](screenshots/IMG-20250616-WA0010.png)  
+![Habit Tracker](screenshots/IMG-20250616-WA0011.png)
+
 
 
 
