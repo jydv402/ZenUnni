@@ -42,8 +42,8 @@ Zenunni is an all-in-one productivity app designed for college students and work
 
 ### 1. Clone the Repo
 ```bash
-git clone https://github.com/<jydv402>/zenunni.git
-cd zenunni
+git clone https://github.com/jydv402/ZenUnni.git
+cd ZenUnni
 ```
 
 ### 2. Install Dependencies
@@ -87,7 +87,7 @@ Thanks for your interest! Follow these steps:
 
 ### 1. Fork and Clone
 ```bash
-git clone https://github.com/<jydv402>/zenunni.git
+git clone https://github.com/jydv402/ZenUnni.git
 ```
 
 ### 2. Create Branch
