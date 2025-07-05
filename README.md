@@ -1,5 +1,8 @@
 # Zenunni – AI Scheduler & Student Assistant App
 
+<p align="center">
+  <img src="assets/icon/Social Banner.png" width="640"/>
+</p><br/>
 Zenunni is an all-in-one productivity app designed for college students and working professionals. It combines task management, AI assistance, habit and mood tracking, Pomodoro focus tools, and a chatbot named "Unni".
 
 
