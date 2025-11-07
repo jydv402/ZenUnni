@@ -65,6 +65,78 @@ flutter run
 
 ## 🧱 Zenunni Architecture
 
+### The ```lib/``` tree 🌳
+```
+.
+├── auth_pages
+│   ├── auth_page.dart
+│   ├── email_verif_page.dart
+│   ├── login_page.dart
+│   ├── pass_reset.dart
+│   ├── register_page.dart
+│   └── username.dart
+├── components
+│   ├── confirm_box.dart
+│   ├── fab_button.dart
+│   ├── headsup_noti.dart
+│   ├── loading_anims.dart
+│   ├── scorecard.dart
+│   ├── toggle_pass_button.dart
+│   └── toggle_theme_auth.dart
+├── consts
+│   ├── avtlist.dart
+│   └── moodlist.dart
+├── firebase_options.dart
+├── main.dart
+├── models
+│   ├── habit_model.dart
+│   ├── schedule_model.dart
+│   ├── search_model.dart
+│   ├── todo_model.dart
+│   └── user_model.dart
+├── notification
+│   └── notif.dart
+├── screens
+│   ├── add_todo.dart
+│   ├── chat_page.dart
+│   ├── currmood.dart
+│   ├── desc.dart
+│   ├── habit.dart
+│   ├── home.dart
+│   ├── leaderboard.dart
+│   ├── mood.dart
+│   ├── nav.dart
+│   ├── note.dart
+│   ├── notes_list.dart
+│   ├── pomodoro_page.dart
+│   ├── profile.dart
+│   ├── sched_edit.dart
+│   └── task_switch.dart
+├── services
+│   ├── ai_serv.dart
+│   ├── appclrs_serv.dart
+│   ├── chat_serv.dart
+│   ├── desc_serv.dart
+│   ├── gamify_serve.dart
+│   ├── habit_serv.dart
+│   ├── mood_serv.dart
+│   ├── nav_serv.dart
+│   ├── notes_serv.dart
+│   ├── pomodoro_serve.dart
+│   ├── schedule_serv.dart
+│   ├── search_serv.dart
+│   ├── theme_serv.dart
+│   ├── todo_serv.dart
+│   └── user_serv.dart
+├── theme
+│   ├── text_theme.dart
+│   └── theme.dart
+├── utils
+│   ├── color_utils.dart
+│   └── state_invalidator.dart
+└── zen_barrel.dart
+```
+
 ### 🔨 Folder Structure (lib/)
 - `auth_pages/`: Registration, login, verification
 - `components/`: UI widgets (toasts, dialogs)
