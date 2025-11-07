@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zen/models/user_model.dart';
 
-Future<void> createUserDoc(String username, int gender, int avt) async {
+Future<void> createUserDoc(String username, int? gender, int? avt) async {
   try {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw Exception('No authenticated user found');
@@ -14,8 +14,8 @@ Future<void> createUserDoc(String username, int gender, int avt) async {
       'email': user.email,
       'createdAt': FieldValue.serverTimestamp(),
       'score': 0,
-      'gender': gender,
-      'avatar': avt,
+      'gender': gender ?? 0,
+      'avatar': avt ?? 0,
     });
   } catch (e) {
     throw Exception('Failed to create user document: $e');

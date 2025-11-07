@@ -18,12 +18,12 @@ class UserModel {
   // Convert Firestore data to UserModelp
   factory UserModel.fromFirestore(Map<String, dynamic> data) {
     return UserModel(
-      username: data['username'] ?? '',
-      gender: data['gender'] ?? 0, // Default: Male
-      avatar: data['avatar'] ?? 0, // Default: First avatar
-      about: data['about'] ?? '',
-      freeTime: data['freeTime'] ?? '',
-      bedtime: data['bedtime'] ?? '',
+      username: (data['username'] ?? '') as String,
+      gender: (data['gender'] ?? 0) as int, // Default: Male
+      avatar: (data['avatar'] ?? 0) as int, // Default: First avatar
+      about: (data['about'] ?? '') as String,
+      freeTime: (data['freeTime'] ?? '') as String,
+      bedtime: (data['bedtime'] ?? '') as String,
     );
   }
 

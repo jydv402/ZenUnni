@@ -9,7 +9,11 @@ import 'package:timezone/data/latest.dart' as tz;
 Future<void> main() async {
   //to ensure firebase plugins are correctly intialised before using it
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); //load the .env file
+  try {
+    await dotenv.load(fileName: ".env"); // load .env file
+  } catch (e) {
+    // proceed without .env so the app doesn't crash
+  }
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
   tz.initializeTimeZones();
@@ -63,7 +67,7 @@ class MyApp extends ConsumerWidget {
         '/profile': (context) => const ProfilePage(),
         '/leader': (context) => const ConnectPage(),
         '/pass_reset': (context) => const PassResetPage(),
-        '/email_verif': (context) => const EmailVerifPage(),
+        // '/email_verif': (context) => const EmailVerifPage(), Removed cause the feature has become PAID !!!
         '/add_todo': (context) => const AddTaskPage(),
         '/man_sched': (context) => const ManualSchedEdit(),
         '/desc': (context) => const DescPage(),
