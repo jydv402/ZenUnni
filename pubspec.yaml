@@ -47,7 +47,6 @@ dependencies:
   langchain: ^0.7.7+2
   langchain_google: ^0.6.4+2
   flutter_riverpod: ^2.6.1
-  flutter_markdown: ^0.7.6+2
   flutter_local_notifications: ^19.0.0
   flutter_heatmap_calendar: ^1.0.5
   flutter_colorpicker: ^1.1.0
@@ -60,6 +59,7 @@ dependencies:
   json_store: ^2.0.2
   audioplayers: ^6.4.0
   timezone: ^0.10.0
+  flutter_markdown_plus: ^1.0.5
 
 dev_dependencies:
   flutter_test:
