@@ -63,7 +63,7 @@ class _NavbarState extends ConsumerState<Navbar> {
   Widget build(BuildContext context) {
     int pgIndex = ref.watch(pgIndexProvider);
     int subPgIndex = ref.watch(subPgIndexProvider);
-    List<int> navStack = ref.watch(navStackProvider);
+    List<int> navStack = ref.watch(navStackProvider) ?? [2];
 
     bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
