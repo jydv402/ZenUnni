@@ -14,10 +14,13 @@ Set<int> gender = {0};
 int? slctdAvt;
 
 class _UsernamePageState extends ConsumerState<UsernamePage> {
+  late final bool isUpdate;
+
   @override
   void initState() {
     super.initState();
-    if (widget.isUpdate == true) {
+    isUpdate = widget.isUpdate ?? false;
+    if (isUpdate == true) {
       userNameController.text = widget.user?.username ?? '';
       gender = {widget.user?.gender ?? 0};
       slctdAvt = widget.user?.avatar;
@@ -143,15 +146,19 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
         String username = userNameController.text.trim();
 
         if (username.isNotEmpty &&
-            !widget.isUpdate! &&
+            !isUpdate &&
             !existingUsers.contains(username.toLowerCase())) {
           stateInvalidator(ref, true);
+          if (slctdAvt == null) {
+            showHeadsupNoti(context, ref, "Please pick an avatar.");
+            return;
+          }
           await createUserDoc(username, gender.contains(0) ? 0 : 1, slctdAvt!);
           if (context.mounted) {
             Navigator.pushNamed(context, '/desc');
           }
         } else if (username.isNotEmpty &&
-            widget.isUpdate! &&
+            isUpdate &&
             !existingUsers.contains(username.toLowerCase())) {
           stateInvalidator(ref, false);
           await updateUserDoc(username, gender.contains(0) ? 0 : 1, slctdAvt!);
@@ -164,7 +171,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
         } else {
           showHeadsupNoti(context, ref, "Please enter a username.");
         }
-      }, widget.isUpdate! ? 'Update Profile' : 'Continue', 26),
+      }, isUpdate ? 'Update Profile' : 'Continue', 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

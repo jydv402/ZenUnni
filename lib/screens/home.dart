@@ -27,26 +27,61 @@ class LandPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userNameProvider);
-    final mood = ref.watch(moodProvider);
+    final userNameAsync = ref.watch(userNameProvider);
+    final profileAsync = ref.watch(userProvider);
 
-    return user.when(
-      data: (data) {
-        return homeScreen(context, ref, user.value, mood.value);
-      },
-      error: (error, stackTrace) {
-        return Center(
-          child: Text('Error: $error'),
-        );
-      },
-      loading: () {
-        return Center(
-          child: showRunningIndicator(
-              context, "Setting things up...\nJust for you..!"),
-        );
-      },
-    );
+    // Wait for username + profile to load
+    if (userNameAsync.isLoading || profileAsync.isLoading) {
+      return Center(
+        child: showRunningIndicator(
+            context, "Setting things up...\nJust for you..!"),
+      );
+    }
+
+    // If either failed
+    if (userNameAsync.hasError || profileAsync.hasError) {
+      return Center(
+        child: Text("Something went wrong"),
+      );
+    }
+
+    final userName = userNameAsync.value;
+    final profile = profileAsync.value;
+
+    // SAFETY: if somehow null slips through (rare), fallback
+    if (userName == null || profile == null) {
+      return Center(
+        child: showRunningIndicator(context, "Getting things ready"),
+      );
+    }
+
+    final mood = ref.watch(moodProvider).value;
+
+    return homeScreen(context, ref, userName, mood);
   }
+
+  // @override
+  // Widget build(BuildContext context, WidgetRef ref) {
+  //   final user = ref.watch(userNameProvider);
+  //   final mood = ref.watch(moodProvider);
+
+  //   return user.when(
+  //     data: (data) {
+  //       return homeScreen(context, ref, user.value, mood.value);
+  //     },
+  //     error: (error, stackTrace) {
+  //       return Center(
+  //         child: Text('Error: $error'),
+  //       );
+  //     },
+  //     loading: () {
+  //       return Center(
+  //         child: showRunningIndicator(
+  //             context, "Setting things up...\nJust for you..!"),
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget homeScreen(
       BuildContext context, WidgetRef ref, String? user, String? mood) {

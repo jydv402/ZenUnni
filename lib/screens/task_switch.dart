@@ -242,18 +242,17 @@ class TaskPageState extends ConsumerState<TaskPage> {
                             checkColor: Colors.black,
                             onChanged: (bool? value) {
                               final updatedTask = TodoModel(
-                                name: task.name,
-                                description: task.description,
-                                date: task.date,
-                                priority: task.priority,
-                                isDone: value ?? false,
-                                notExpired: task.notExpired,
-                                isRecurring: task.isRecurring,
-                                fromTime: task.fromTime,
-                                toTime: task.toTime,
-                                selectedWeekdays: task.selectedWeekdays,
-                                oldname: task.oldname
-                              );
+                                  name: task.name,
+                                  description: task.description,
+                                  date: task.date,
+                                  priority: task.priority,
+                                  isDone: value ?? false,
+                                  notExpired: task.notExpired,
+                                  isRecurring: task.isRecurring,
+                                  fromTime: task.fromTime,
+                                  toTime: task.toTime,
+                                  selectedWeekdays: task.selectedWeekdays,
+                                  oldname: task.oldname);
                               ref.read(taskUpdateFullProvider(updatedTask));
                               if (task.priority == "High") {
                                 ref.read(scoreIncrementProvider(
