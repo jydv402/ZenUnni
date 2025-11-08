@@ -35,6 +35,12 @@ jobs:
       - name: Upgrade Dependencies
         run: flutter pub upgrade
 
+      - name: Upgrade Dependencies Major Version
+        run: flutter pub upgrade --major-versions
+
+      - name: Getting Dependencies
+        run: flutter pub get
+
       - name: Building APK
         run: flutter build apk --release
 
