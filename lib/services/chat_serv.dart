@@ -30,7 +30,7 @@ final aiResponseAdder = FutureProvider.family<Message, String>(
     final user = ref.watch(userProvider);
     final mood = ref.watch(moodProvider);
 
-    final aiResponse = await AIService().chatIsolate(msg, chatMsgs,
+    final aiResponse = await AIService().unniChat(msg, chatMsgs,
         user.value?.username ?? '', user.value?.about ?? '', mood.value ?? '');
 
     return Message(

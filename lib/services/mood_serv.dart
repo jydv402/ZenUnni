@@ -73,6 +73,6 @@ final motivationalMessageProvider = FutureProvider.family<String, String>(
   (ref, mood) async {
     final username = ref.watch(userNameProvider);
     return await AIService()
-        .getMotivationalMessageIsolate(mood, username.value ?? 'user');
+        .getMotivationalMessage(mood, username.value ?? 'user');
   },
 );

@@ -43,7 +43,7 @@ final scheduleProvider =
         .join();
     final aiService = AIService();
     logger.d(userTasks);
-    final response = await aiService.schedGenIsolate(
+    final response = await aiService.schedGenerator(
       userTasks,
       user.value?.about ?? '',
       user.value?.freeTime ?? '',

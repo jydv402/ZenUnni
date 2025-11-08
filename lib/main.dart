@@ -9,11 +9,8 @@ import 'package:timezone/data/latest.dart' as tz;
 Future<void> main() async {
   //to ensure firebase plugins are correctly intialised before using it
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await dotenv.load(fileName: ".env"); // load .env file
-  } catch (e) {
-    // proceed without .env so the app doesn't crash
-  }
+  await dotenv.load(fileName: ".env"); // load .env file
+
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
   tz.initializeTimeZones();

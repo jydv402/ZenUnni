@@ -1,22 +1,12 @@
-// lib/services/ai_service.dart
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_google/langchain_google.dart';
 import 'package:flutter/foundation.dart';
 
 class AIService {
-  Future<String> getMotivationalMessageIsolate(
-      String mood, String username) async {
-    final result = await compute(_getMotivationalMessageWorker,
-        {'mood': mood, 'apiKey': dotenv.env['KEY']!, 'username': username});
-    return result;
-  }
+  final apiKey = dotenv.env['KEY']!;
 
-  Future<String> _getMotivationalMessageWorker(
-      Map<String, dynamic> args) async {
-    final mood = args['mood'] as String;
-    final apiKey = args['apiKey'] as String;
-    final username = args['username'] as String;
+  Future<String> getMotivationalMessage(String mood, String username) async {
     final llm = ChatGoogleGenerativeAI(
       apiKey: apiKey,
       defaultOptions: ChatGoogleGenerativeAIOptions(
@@ -58,32 +48,9 @@ class AIService {
     return response;
   }
 
-  Future<String> chatIsolate(String message, List history, String username,
+  Future<String> unniChat(String message, List history, String username,
       String about, String mood) async {
-    final result = await compute(
-      _chatWorker,
-      {
-        'message': message,
-        'history': history,
-        'username': username,
-        'about': about,
-        'mood': mood,
-        'apiKey': dotenv.env['KEY']!,
-      },
-    );
-    return result;
-  }
-
-  Future<String> _chatWorker(Map<String, dynamic> args) async {
     final DateTime now = DateTime.now();
-    final message = args['message'] as String;
-    final username = args['username'] as String;
-    final about = args['about'] as String;
-    final historyString = args['history']
-        .map((msg) => '${msg.isUser ? username : 'AI'}: ${msg.text}')
-        .join('\n');
-    final mood = args['mood'] as String;
-    final apiKey = args['apiKey'] as String;
     final llm = ChatGoogleGenerativeAI(
       apiKey: apiKey,
       defaultOptions: ChatGoogleGenerativeAIOptions(temperature: 0.9),
@@ -117,7 +84,7 @@ class AIService {
     final promptTemplate = '''
     System: $systemPrompt
     Time: $now
-    History: $historyString
+    History: ${history.map((msg) => '${msg.isUser ? username : 'AI'}: ${msg.text}').join('\n')}
     User's mood: $mood
     About user: $about
     $username : {message}
@@ -134,24 +101,8 @@ class AIService {
     return response;
   }
 
-  Future<String> schedGenIsolate(
-      String userTasks, String about, String freeTime, String bedtime) async {
-    final result = await compute(_schedGenWorker, {
-      'userTasks': userTasks,
-      'apiKey': dotenv.env['KEY']!,
-      'about': about,
-      'freeTime': freeTime,
-      'bedtime': bedtime
-    });
-    return result;
-  }
-
-  Future<String> _schedGenWorker(Map<String, dynamic> args) async {
-    final userTasks = args['userTasks'] as String;
-    final apiKey = args['apiKey'] as String;
-    final about = args['about'] as String;
-    final freeTime = args['freeTime'] as String;
-    final bedtime = args['bedtime'] as String;
+  Future<String> schedGenerator(
+      String userTasks, String about, String freeTime, String bedTime) async {
     final now = DateTime.now();
 
     String systemPrompt = """
@@ -163,7 +114,7 @@ class AIService {
     - **About User:** $about
     - **Task List:** $userTasks
     - **Free Time of User:** $freeTime 
-    - **Bedtime:** $bedtime
+    - **Bedtime:** $bedTime
 
     ## **Scheduling Rules:**  
     1. **Task Allocation:**  
