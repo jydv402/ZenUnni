@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:zen/zen_barrel.dart';
 import 'package:zen/notification/notif.dart';
 
-final editProvider = StateProvider<TodoModel?>((ref) => null);
+final editProvider = Provider<TodoModel?>((ref) => null);
 
 // Task model
 final taskProvider = StreamProvider<List<TodoModel>>(

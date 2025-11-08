@@ -16,7 +16,7 @@ Future<void> createUserDoc(String username, int? gender, int? avt) async {
       'score': 0,
       'gender': gender ?? 0,
       'avatar': avt ?? 0,
-    });
+    }, SetOptions(merge: true));
   } catch (e) {
     throw Exception('Failed to create user document: $e');
   }
@@ -41,73 +41,41 @@ Future<void> updateUserDoc(String username, int gender, int avt) async {
 }
 
 final userNameProvider =
-    StateNotifierProvider<UserNameNotifier, AsyncValue<String?>>((ref) {
-  return UserNameNotifier(ref);
-});
+    AsyncNotifierProvider<UserNameNotifier, String?>(UserNameNotifier.new);
 
-class UserNameNotifier extends StateNotifier<AsyncValue<String?>> {
-  UserNameNotifier(Ref ref)
-      : super(
-          const AsyncValue.loading(),
-        ) {
-    loadUserName();
-  }
-  Future<void> loadUserName() async {
+class UserNameNotifier extends AsyncNotifier<String?> {
+  @override
+  Future<String?> build() async {
     final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      state = const AsyncValue.data(null);
-      return;
-    }
+    if (user == null) return null;
+
     final doc = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
         .get();
-    //The user name is loaded into the app state
-    //Why? To be passed to the AI chat
-    state = AsyncValue.data(doc.data()?['username'] as String?);
+
+    return doc.data()?['username'] as String?;
   }
 }
 
-final userProvider =
-    StateNotifierProvider<UserNotifier, AsyncValue<UserModel?>>(
-  (ref) {
-    return UserNotifier(ref);
-  },
+final userProvider = AsyncNotifierProvider<UserNotifier, UserModel?>(
+  UserNotifier.new,
 );
 
-class UserNotifier extends StateNotifier<AsyncValue<UserModel?>> {
-  UserNotifier(Ref ref)
-      : super(
-          const AsyncValue.loading(),
-        ) {
-    loadUserDetails();
-  }
-  Future<void> loadUserDetails() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        state = const AsyncValue.data(null);
-        return;
-      }
+class UserNotifier extends AsyncNotifier<UserModel?> {
+  @override
+  Future<UserModel?> build() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
 
-      final doc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
 
-      if (doc.exists && doc.data() != null) {
-        state = AsyncValue.data(
-          UserModel.fromFirestore(doc.data()!),
-        );
-      } else {
-        state = const AsyncValue.data(null);
-      }
-    } catch (e) {
-      state = AsyncValue.error(
-        e,
-        StackTrace.current,
-      );
-    }
+    if (!doc.exists || doc.data() == null) return null;
+
+    return UserModel.fromFirestore(doc.data()!);
   }
 }
 

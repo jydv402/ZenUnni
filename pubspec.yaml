@@ -39,14 +39,14 @@ dependencies:
   line_icons: ^2.0.3
   animations: ^2.0.11
   google_fonts: ^6.2.1
-  firebase_core: ^3.10.0
-  firebase_auth: ^5.4.0
-  cloud_firestore: ^5.6.1
+  firebase_core: ^4.2.1
+  firebase_auth: ^6.1.2
+  cloud_firestore: ^6.1.0
   lottie: ^3.3.1
-  flutter_dotenv: ^5.2.1
-  langchain: ^0.7.7+2
-  langchain_google: ^0.6.4+2
-  flutter_riverpod: ^2.6.1
+  flutter_dotenv: ^6.0.0
+  langchain: ^0.8.0+1
+  langchain_google: ^0.7.0+1
+  flutter_riverpod: ^3.0.3
   flutter_local_notifications: ^19.0.0
   flutter_heatmap_calendar: ^1.0.5
   flutter_colorpicker: ^1.1.0
@@ -70,9 +70,9 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
-  custom_lint: ^0.7.5
-  riverpod_lint: ^2.6.5
+  flutter_lints: ^6.0.0
+  custom_lint: ^0.8.0
+  riverpod_lint: ^3.0.3
   flutter_launcher_icons: ^0.14.3
   change_app_package_name: ^1.4.0
 

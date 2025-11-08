@@ -1,27 +1,47 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 //Main page index
-final pgIndexProvider = StateProvider<int>((ref) => 2);
+final pgIndexProvider = NotifierProvider<PageNotifier, int>(PageNotifier.new);
+
+class PageNotifier extends Notifier<int> {
+  @override
+  int build() => 2;
+
+  void setState(int newState) {
+    state = newState;
+  }
+}
 
 //Sub page index
-final subPgIndexProvider = StateProvider<int>((ref) => 2);
+final subPgIndexProvider =
+    NotifierProvider<SubPageNotifier, int>(SubPageNotifier.new);
+
+class SubPageNotifier extends Notifier<int> {
+  @override
+  int build() => 2;
+
+  void setState(int newState) {
+    state = newState;
+  }
+}
 
 //Navigation History provider
-final navStackProvider = StateNotifierProvider<NavStackNotifier, List<int>>(
-  (ref) => NavStackNotifier(),
+final navStackProvider = NotifierProvider<NavStackNotifier, List<int>>(
+  NavStackNotifier.new,
 );
 
 // Update Page Index
 void updatePgIndex(WidgetRef ref, int newPageIndex, int subPageIndex) {
   // Update page index
-  ref.read(pgIndexProvider.notifier).state = newPageIndex;
+  ref.read(pgIndexProvider.notifier).setState(newPageIndex);
   // Update sub page index
-  ref.read(subPgIndexProvider.notifier).state = subPageIndex;
+  ref.read(subPgIndexProvider.notifier).setState(subPageIndex);
 }
 
 // Navigation History Stack
-class NavStackNotifier extends StateNotifier<List<int>> {
-  NavStackNotifier() : super([2]); // Default to Home index
+class NavStackNotifier extends Notifier<List<int>> {
+  @override
+  List<int> build() => [2]; // Default to Home index
 
   void push(int index) {
     if (state.last != index) {

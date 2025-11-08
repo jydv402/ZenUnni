@@ -1,13 +1,15 @@
 import 'package:zen/zen_barrel.dart';
 import 'package:json_store/json_store.dart';
 
-class ThemeNotifier extends StateNotifier<ThemeMode> {
+class ThemeNotifier extends Notifier<ThemeMode> {
   static const String _themeKey = "dark_mode"; // Key for storage
   final JsonStore _jsonStore = JsonStore(); // JSON Store instance
   bool _isDarkMode = false;
 
-  ThemeNotifier() : super(ThemeMode.light) {
+  @override
+  ThemeMode build() {
     _loadTheme();
+    return ThemeMode.light;
   }
 
   Future<void> _loadTheme() async {
@@ -26,6 +28,6 @@ class ThemeNotifier extends StateNotifier<ThemeMode> {
 }
 
 // Riverpod Provider for Theme
-final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>(
-  (ref) => ThemeNotifier(),
+final themeProvider = NotifierProvider<ThemeNotifier, ThemeMode>(
+  ThemeNotifier.new,
 );

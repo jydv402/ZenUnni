@@ -1,8 +1,17 @@
 import 'package:intl/intl.dart';
 import 'package:zen/zen_barrel.dart';
 
+// Simple Notifier for selected tab index
+class SelectedTabNotifier extends Notifier<int> {
+  @override
+  int build() => 0; // Default tab index
+
+  void setTab(int index) => state = index;
+}
+
 //Provider for page switching
-final selectedTabProvider = StateProvider<int>((ref) => 0);
+final selectedTabProvider =
+    NotifierProvider<SelectedTabNotifier, int>(SelectedTabNotifier.new);
 
 class TaskPage extends ConsumerStatefulWidget {
   const TaskPage({super.key});
@@ -104,7 +113,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
     final bool isSelected = selectedTab == index;
     return GestureDetector(
       onTap: () {
-        ref.read(selectedTabProvider.notifier).state = index;
+        ref.read(selectedTabProvider.notifier).setTab(index);
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

@@ -30,6 +30,7 @@ export 'models/search_model.dart';
 export 'models/schedule_model.dart';
 export 'models/todo_model.dart';
 export 'models/user_model.dart';
+export 'models/pomodoro_model.dart';
 
 //screens
 export 'screens/add_todo.dart';

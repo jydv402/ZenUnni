@@ -9,12 +9,11 @@ class Message {
 }
 
 final msgProvider =
-    StateNotifierProvider<MessageNotifier, List<Message>>((ref) {
-  return MessageNotifier();
-});
+    NotifierProvider<MessageNotifier, List<Message>>(MessageNotifier.new);
 
-class MessageNotifier extends StateNotifier<List<Message>> {
-  MessageNotifier() : super([]);
+class MessageNotifier extends Notifier<List<Message>> {
+  @override
+  List<Message> build() => [];
 
   void addMessage(Message message) {
     state = [...state, message];

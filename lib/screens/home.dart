@@ -323,7 +323,7 @@ class LandPage extends ConsumerWidget {
               context,
               2,
               () {
-                ref.read(selectedTabProvider.notifier).state = 1;
+                ref.read(selectedTabProvider.notifier).setTab(1);
                 updatePgIndex(ref, 0, 0);
                 ref.read(navStackProvider.notifier).push(0);
               },
@@ -358,7 +358,7 @@ class LandPage extends ConsumerWidget {
               context,
               3,
               () {
-                ref.read(selectedTabProvider.notifier).state = 0;
+                ref.read(selectedTabProvider.notifier).setTab(0);
                 updatePgIndex(ref, 0, 0);
                 ref.read(navStackProvider.notifier).push(0);
               },

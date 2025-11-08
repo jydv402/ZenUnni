@@ -42,11 +42,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
 
       stateInvalidator(ref, true);
-      await ref.read(userProvider.notifier).loadUserDetails();
-
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/nav');
-      }
+      ref.read(userNameProvider);
     } on FirebaseAuthException catch (e) {
       if (mounted) {
         Navigator.pop(context); // Close loading dialog
