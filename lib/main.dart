@@ -7,7 +7,7 @@ import 'package:zen/zen_barrel.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 Future<void> main() async {
-  //to ensure firebase plugins are correctly intialised before using it
+  //to ensure firebase plugins are correctly initialised before using it
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env"); // load .env file
 

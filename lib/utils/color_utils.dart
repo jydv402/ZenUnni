@@ -5,7 +5,7 @@ Color getColorFromHex(String hexColor) {
     hexColor = hexColor.substring(1); // Remove "#" if present
   }
 
-  if (hexColor.length == 8) {
+  if (hexColor.length == 8) { 
     return Color(
       int.parse("0x$hexColor"),
     ); // ARGB format
