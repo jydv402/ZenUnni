@@ -9,8 +9,8 @@ class NotificationService {
 
   static Future<void> onDidReceiveNotification(
       NotificationResponse notificationResponse) async {
-        //TODO: handle notification interaction
-      }
+    //TODO: handle notification interaction
+  }
 
   //initialize
   static Future<void> init() async {
@@ -31,7 +31,7 @@ class NotificationService {
 
     //Initialize the plugin with the specified settings
     await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: onDidReceiveNotification,
       onDidReceiveBackgroundNotificationResponse: onDidReceiveNotification,
     );
@@ -50,20 +50,29 @@ class NotificationService {
             importance: Importance.high, priority: Priority.high),
         iOS: DarwinNotificationDetails());
     await flutterLocalNotificationsPlugin.show(
-        0, title, body, platformChannelSpecifics);
+      id: 0,
+      title: title,
+      body: body,
+      notificationDetails: platformChannelSpecifics,
+    );
   }
 
   //show a schedule notification
-  static Future<void> sheduleNotification(int id,
-      String title, String body, DateTime scheduledDate) async {
-    if(scheduledDate.isAfter(DateTime.now())){
+  static Future<void> sheduleNotification(
+      int id, String title, String body, DateTime scheduledDate) async {
+    if (scheduledDate.isAfter(DateTime.now())) {
       const NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: AndroidNotificationDetails("channel_ID", "channel_Name",
-            importance: Importance.high, priority: Priority.high),
-        iOS: DarwinNotificationDetails());
-    await flutterLocalNotificationsPlugin.zonedSchedule(id, title, body,//add notif id
-        tz.TZDateTime.from(scheduledDate, tz.local), platformChannelSpecifics,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,matchDateTimeComponents: DateTimeComponents.dateAndTime);
+          android: AndroidNotificationDetails("channel_ID", "channel_Name",
+              importance: Importance.high, priority: Priority.high),
+          iOS: DarwinNotificationDetails());
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          id: id,
+          title: title,
+          body: body, //add notif id
+          scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
+          notificationDetails: platformChannelSpecifics,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          matchDateTimeComponents: DateTimeComponents.dateAndTime);
     }
   }
 }
