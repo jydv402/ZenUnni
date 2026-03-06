@@ -54,7 +54,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
           Navigator.pop(context);
           Navigator.pushReplacementNamed(
             context,
-            '/username',
+            '/email_verif',
           );
         }
         // Clear fields after successful registration

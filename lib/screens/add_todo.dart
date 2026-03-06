@@ -252,14 +252,10 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               // print("Recurring task added: ${task.selectedWeekdays}");
               if (widget.taskToEdit != null) {
                 // Update existing task
-                ref.read(
-                  taskUpdateFullProvider(task),
-                );
+                ref.read(taskProvider.notifier).updateTask(task);
               } else {
                 // Add new task
-                ref.read(
-                  taskAddProvider(task),
-                );
+                ref.read(taskProvider.notifier).addTask(task);
                 //print("Task Map: ${task.toMap()}");
               }
               resetDialogFields();
@@ -271,40 +267,6 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           }, widget.taskToEdit != null ? "Update Task" : "Save Task", 0)
         ],
       ),
-      // floatingActionButton: fabButton(context, () {
-      //   if (validateTaskFields()) {
-      //     DateTime dateTime = DateTime(
-      //       _date!.year,
-      //       _date!.month,
-      //       _date!.day,
-      //       _time!.hour,
-      //       _time!.minute,
-      //     );
-      //     TodoModel task = TodoModel(
-      //       name: nameController.text,
-      //       description: descController.text,
-      //       date: dateTime,
-      //       priority: _prior,
-      //       isDone: isDone,
-      //       notExpired: true,
-      //     );
-      //     if (widget.taskToEdit != null) {
-      //       // Update existing task
-      //       ref.read(
-      //         taskUpdateFullProvider(task),
-      //       );
-      //     } else {
-      //       // Add new task
-      //       ref.read(
-      //         taskAddProvider(task),
-      //       );
-      //     }
-      //     resetDialogFields();
-      //     Navigator.pop(context);
-      //   } else {
-      //     print("error fields must not be empty");
-      //   }
-      // }, widget.taskToEdit != null ? "Update Task" : "Save Task", 26),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -416,8 +378,6 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
 
   Widget _weekdaySelector() {
     const List<String> weekdays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-    List<bool> isSelected = List.generate(
-        7, (index) => selectedWeekdays.contains(index.toString()));
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -74,8 +74,9 @@ class _NavbarState extends ConsumerState<Navbar> {
           //Pop last element
           ref.read(navStackProvider.notifier).pop();
           //Update nav index
-          ref.read(pgIndexProvider.notifier).state =
-              ref.read(navStackProvider).last;
+          ref
+              .read(pgIndexProvider.notifier)
+              .setState(ref.read(navStackProvider).last);
         }
       },
       child: Scaffold(

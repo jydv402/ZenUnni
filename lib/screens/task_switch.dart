@@ -213,7 +213,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
                           "Delete",
                           Colors.red,
                           () {
-                            ref.read(taskDeleteProvider(task));
+                            ref.read(taskProvider.notifier).deleteTask(task);
                             Navigator.pop(context);
                           },
                         );
@@ -262,7 +262,9 @@ class TaskPageState extends ConsumerState<TaskPage> {
                                   toTime: task.toTime,
                                   selectedWeekdays: task.selectedWeekdays,
                                   oldname: task.oldname);
-                              ref.read(taskUpdateFullProvider(updatedTask));
+                              ref
+                                  .read(taskProvider.notifier)
+                                  .updateTask(updatedTask);
                               if (task.priority == "High") {
                                 ref.read(scoreIncrementProvider(
                                     value! ? 25 : -25)); // High priority score

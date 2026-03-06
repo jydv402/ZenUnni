@@ -1,20 +1,57 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:langchain/langchain.dart';
-import 'package:langchain_google/langchain_google.dart';
 import 'package:flutter/foundation.dart';
 
-class AIService {
-  final apiKey = dotenv.env['KEY']!;
+final aiServiceProvider = Provider<AIService>((ref) {
+  return AIService();
+});
 
-  Future<String> getMotivationalMessage(String mood, String username) async {
-    final llm = ChatGoogleGenerativeAI(
-      apiKey: apiKey,
-      defaultOptions: ChatGoogleGenerativeAIOptions(
-        temperature: 0.8,
-      ),
+class AIService {
+  late final String apiKey;
+
+  AIService() {
+    apiKey = dotenv.env['KEY'] ?? '';
+  }
+
+  Future<String> _generateContent(
+      String systemPrompt,
+      List<Map<String, dynamic>> history,
+      Map<String, dynamic>? generationConfig) async {
+    final url = Uri.parse(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=$apiKey');
+
+    final body = {
+      'systemInstruction': {
+        'parts': [
+          {'text': systemPrompt}
+        ]
+      },
+      'contents': history,
+      if (generationConfig != null) 'generationConfig': generationConfig,
+    };
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
     );
 
-    String systemPrompt = '''
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['candidates'] != null && data['candidates'].isNotEmpty) {
+        return data['candidates'][0]['content']['parts'][0]['text'] ?? '';
+      }
+      return 'Error generating message';
+    } else {
+      debugPrint('Gemini API Error: ${response.statusCode} - ${response.body}');
+      return 'Error communicating with AI service';
+    }
+  }
+
+  Future<String> getMotivationalMessage(String mood, String username) async {
+    final systemPrompt = '''
     You are Unni, a motivational assistant. Your primary goal is to uplift and inspire $username based on their current mood.
 
     When $username expresses their mood, provide positive, fun, and encouraging messages tailored to their emotional state. Keep your responses concise (under 200 words) and impactful.
@@ -37,26 +74,23 @@ class AIService {
     final userPrompt =
         'The user is feeling $mood. Provide a motivational message or advice.';
 
-    final prompt = PromptTemplate(
-      inputVariables: const {'mood'},
-      template: '$systemPrompt\n\n$userPrompt',
-    );
-
-    final chain = LLMChain(llm: llm, prompt: prompt);
-    final response = await chain.run(mood);
-
-    return response;
+    return _generateContent(systemPrompt, [
+      {
+        'role': 'user',
+        'parts': [
+          {'text': userPrompt}
+        ]
+      }
+    ], {
+      'temperature': 0.8,
+    });
   }
 
   Future<String> unniChat(String message, List history, String username,
       String about, String mood) async {
     final DateTime now = DateTime.now();
-    final llm = ChatGoogleGenerativeAI(
-      apiKey: apiKey,
-      defaultOptions: ChatGoogleGenerativeAIOptions(temperature: 0.9),
-    );
 
-    const systemPrompt = """
+    final systemPrompt = """
     You are Unni, a warm, uplifting AI assistant here to **motivate, inspire, and support** users. Your goal is to make every interaction **positive, engaging, and meaningful** based on the user’s mood and message.  
 
     To enhance your messages, include relevant quotes, practical advice, and powerful affirmations perfectly and neatly formatted including emojis, newlines, italic and bold characters. 
@@ -78,41 +112,47 @@ class AIService {
 
     ### **Additional Note:**  
     If a user asks about schedules, **gently remind them** that scheduling is already available in the task page.  
-
-    """;
-
-    final promptTemplate = '''
-    System: $systemPrompt
-    Time: $now
-    History: ${history.map((msg) => '${msg.isUser ? username : 'AI'}: ${msg.text}').join('\n')}
+    
+    Current Time: $now
     User's mood: $mood
     About user: $about
-    $username : {message}
-    AI:
-    ''';
+    """;
 
-    final prompt = PromptTemplate(
-      inputVariables: const {'message'},
-      template: promptTemplate,
-    );
+    // Convert history to list of maps
+    final List<Map<String, dynamic>> convertedHistory = [];
+    for (var msg in history) {
+      convertedHistory.add({
+        'role': msg.isUser ? 'user' : 'model',
+        'parts': [
+          {'text': msg.text}
+        ]
+      });
+    }
 
-    final chain = LLMChain(llm: llm, prompt: prompt);
-    final response = await chain.run({'message': message});
-    return response;
+    // Add current message to history
+    convertedHistory.add({
+      'role': 'user',
+      'parts': [
+        {'text': message}
+      ]
+    });
+
+    return _generateContent(systemPrompt, convertedHistory, {
+      'temperature': 0.9,
+    });
   }
 
   Future<String> schedGenerator(
       String userTasks, String about, String freeTime, String bedTime) async {
     final now = DateTime.now();
 
-    String systemPrompt = """
+    final systemPrompt = """
     You are Unni, an intelligent and organized AI assistant specializing in **realistic and efficient scheduling** based on the user's tasks, priorities, and availability. Your goal is to create a balanced schedule that respects the user's **free time, bedtime, and logical sequencing** while prioritizing important tasks.  
 
     ## **User Input:**  
     The user has provided:
     - **Current Date & Time:** $now
     - **About User:** $about
-    - **Task List:** $userTasks
     - **Free Time of User:** $freeTime 
     - **Bedtime:** $bedTime
 
@@ -140,7 +180,6 @@ class AIService {
     ```json  
     {"error": "No tasks available. Please provide a valid task list."}  
 
-
     ## **Output Format:**
     Return the schedule in strict JSON format:
     {  
@@ -154,34 +193,19 @@ class AIService {
       }  
     }  
     Ensure the response strictly follows the format, with no additional explanations.
-
     """;
 
-    //print(systemPrompt);
-    final promptTemplate = PromptTemplate(
-      inputVariables: const {'userTasks', 'systemPrompt', 'now'},
-      template: '''
-      System: {systemPrompt}
-      AI:
-      ''',
-    );
-
-    final llm = ChatGoogleGenerativeAI(
-      apiKey: apiKey,
-      defaultOptions: ChatGoogleGenerativeAIOptions(
-        temperature: 0.3,
-        topP: 0.9,
-        topK: 50,
-      ),
-    );
-    final chain = LLMChain(llm: llm, prompt: promptTemplate);
-    final response = await chain.run(
+    return _generateContent(systemPrompt, [
       {
-        'userTasks': userTasks,
-        'systemPrompt': systemPrompt,
-        'now': now,
-      },
-    );
-    return response;
+        'role': 'user',
+        'parts': [
+          {'text': "Task List: \n$userTasks"}
+        ]
+      }
+    ], {
+      'temperature': 0.3,
+      'topP': 0.9,
+      'topK': 50,
+    });
   }
 }

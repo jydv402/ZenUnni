@@ -138,7 +138,7 @@ class PomodoroPage extends ConsumerWidget {
     );
   }
 
-  Text _text(context, label) {
+  Text _text(BuildContext context, String label) {
     return Text(
       label,
       style: Theme.of(context).textTheme.headlineMedium,

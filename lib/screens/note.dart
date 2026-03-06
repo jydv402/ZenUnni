@@ -112,6 +112,7 @@ class _NotePageState extends ConsumerState<NotePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: "note_page_fab",
         onPressed: () {
           _saveNote(username!);
         },

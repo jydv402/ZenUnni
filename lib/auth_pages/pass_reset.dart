@@ -62,7 +62,7 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
     );
   }
 
-  Widget resetEmailContainer(context) {
+  Widget resetEmailContainer(BuildContext context) {
     return ListView(
       padding: pagePadding,
       children: [

@@ -1,5 +1,4 @@
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/zen_barrel.dart';
 
@@ -147,9 +146,9 @@ class CurrentMood extends ConsumerWidget {
               color: Colors.blue,
               decoration: TextDecoration.underline,
             ),
-            //TODO: Add roboto local font
-            code: GoogleFonts.robotoMono(
+            code: TextStyle(
               // Code block
+              fontFamily: 'Pop',
               backgroundColor: Colors.white,
               color: colors.mdText,
             ),

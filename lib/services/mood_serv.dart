@@ -72,7 +72,8 @@ final moodAddProvider = FutureProvider.autoDispose.family<void, String>(
 final motivationalMessageProvider = FutureProvider.family<String, String>(
   (ref, mood) async {
     final username = ref.watch(userNameProvider);
-    return await AIService()
+    return await ref
+        .read(aiServiceProvider)
         .getMotivationalMessage(mood, username.value ?? 'user');
   },
 );

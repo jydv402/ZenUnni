@@ -41,7 +41,7 @@ final scheduleProvider =
 
   ''')
         .join();
-    final aiService = AIService();
+    final aiService = ref.read(aiServiceProvider);
     logger.d(userTasks);
     final response = await aiService.schedGenerator(
       userTasks,
@@ -51,24 +51,30 @@ final scheduleProvider =
     );
     logger.d(response);
 
-    final cleanedResponse = response
-        .replaceAll(
-            RegExp(
-                r'AIChatMessage{|content: ```json|\n,|```|toolCalls: \[\],\n}'),
-            '')
-        .trim();
-    final Map<String, dynamic> schedJSON = jsonDecode(cleanedResponse);
+    try {
+      final jsonStart = response.indexOf('{');
+      final jsonEnd = response.lastIndexOf('}');
+      if (jsonStart == -1 || jsonEnd == -1 || jsonEnd < jsonStart) {
+        throw const FormatException("Could not find JSON object in response");
+      }
 
-    final List<ScheduleItem> scheduleItems = schedJSON.values
-        .map(
-          (item) => ScheduleItem.fromJson(item),
-        )
-        .toList();
+      final jsonString = response.substring(jsonStart, jsonEnd + 1);
+      final Map<String, dynamic> schedJSON = jsonDecode(jsonString);
 
-    await _jsonStore.setItem(scheduleKey,
-        {'schedule': scheduleItems.map((item) => item.toJson()).toList()});
+      final List<ScheduleItem> scheduleItems = schedJSON.values
+          .map(
+            (item) => ScheduleItem.fromJson(item as Map<String, dynamic>),
+          )
+          .toList();
 
-    return scheduleItems;
+      await _jsonStore.setItem(scheduleKey,
+          {'schedule': scheduleItems.map((item) => item.toJson()).toList()});
+
+      return scheduleItems;
+    } catch (e, st) {
+      logger.e("Error parsing schedule JSON", error: e, stackTrace: st);
+      rethrow;
+    }
   },
 );
 

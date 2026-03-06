@@ -327,7 +327,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
     );
   }
 
-  Tooltip rankListCards(user) {
+  Tooltip rankListCards(SearchModel user) {
     final colors = ref.watch(appColorsProvider);
     final theme = ref.watch(themeProvider);
 
@@ -348,7 +348,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(26),
           border: Border.all(
-              color: user.isUser
+              color: user.isUser == true
                   ? Color.fromRGBO(255, 140, 43, 1)
                   : Colors.transparent,
               width: 2),
@@ -396,7 +396,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
                             ?.copyWith(fontSize: 22),
                         children: [
                           TextSpan(
-                            text: user.isUser ? '[You]' : '',
+                            text: user.isUser == true ? '[You]' : '',
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],

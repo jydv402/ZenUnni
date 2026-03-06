@@ -29,35 +29,37 @@ class LandPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userNameAsync = ref.watch(userNameProvider);
     final profileAsync = ref.watch(userProvider);
+    final moodAsync = ref.watch(moodProvider);
 
-    // Wait for username + profile to load
-    if (userNameAsync.isLoading || profileAsync.isLoading) {
-      return Center(
+    return userNameAsync.when(
+      data: (userName) {
+        return profileAsync.when(
+          data: (profile) {
+            if (userName == null || profile == null) {
+              return Center(
+                child: showRunningIndicator(context, "Getting things ready"),
+              );
+            }
+            final mood = moodAsync.value;
+            return homeScreen(context, ref, userName, mood);
+          },
+          loading: () => Center(
+            child: showRunningIndicator(
+                context, "Setting things up...\nJust for you..!"),
+          ),
+          error: (e, st) => const Center(
+            child: Text("Something went wrong"),
+          ),
+        );
+      },
+      loading: () => Center(
         child: showRunningIndicator(
             context, "Setting things up...\nJust for you..!"),
-      );
-    }
-
-    // If either failed
-    if (userNameAsync.hasError || profileAsync.hasError) {
-      return Center(
+      ),
+      error: (e, st) => const Center(
         child: Text("Something went wrong"),
-      );
-    }
-
-    final userName = userNameAsync.value;
-    final profile = profileAsync.value;
-
-    // SAFETY: if somehow null slips through (rare), fallback
-    if (userName == null || profile == null) {
-      return Center(
-        child: showRunningIndicator(context, "Getting things ready"),
-      );
-    }
-
-    final mood = ref.watch(moodProvider).value;
-
-    return homeScreen(context, ref, userName, mood);
+      ),
+    );
   }
 
   // @override
@@ -129,25 +131,53 @@ class LandPage extends ConsumerWidget {
         //     () => updatePgIndex(ref, 5, 3),
         //   ),
         const SizedBox(height: 8),
-        //TODO: Add a quote of the day, maybe?
-        // Flex(
-        //   direction: Axis.horizontal,
-        //   children: [
-        //     _bentos(
-        //       context,
-        //       1,
-        //       () {},
-        //       colors.pillClr,
-        //       const EdgeInsets.fromLTRB(0, 0, 0, 8),
-        //       Stack(
-        //         children: [
-        //           _bgText(-15, "Quote", colors.homeBgTxt, top: 25),
-        //         ],
-        //       ),
-        //       height: 200,
-        //     ),
-        //   ],
-        // ),
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            _bentos(
+              context,
+              1,
+              () {},
+              colors.pillClr,
+              const EdgeInsets.fromLTRB(0, 0, 0, 8),
+              Stack(
+                children: [
+                  _bgText(-15, "Quote", colors.homeBgTxt, top: 25),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: ref
+                          .watch(motivationalMessageProvider(mood ?? "neutral"))
+                          .when(
+                            data: (quote) => Text(
+                              '"$quote"',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                            loading: () => Center(
+                              child: Lottie.asset(
+                                "assets/loading/ld_shapes.json",
+                                height: 60,
+                              ),
+                            ),
+                            error: (error, stack) => const Text(
+                              'Stay positive!',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+              height: 200,
+            ),
+          ],
+        ),
         Flex(
           direction: Axis.horizontal,
           children: [

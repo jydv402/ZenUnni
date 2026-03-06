@@ -7,12 +7,12 @@ import 'package:zen/zen_barrel.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 Future<void> main() async {
-  //to ensure firebase plugins are correctly initialised before using it
+  // To ensure firebase plugins are correctly initialised before using it
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); // load .env file
+  await dotenv.load(fileName: ".env"); // Load .env file
 
   await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform); //initialize firebase
+      options: DefaultFirebaseOptions.currentPlatform); // Initialize firebase
   tz.initializeTimeZones();
   await NotificationService.init();
 
@@ -47,7 +47,7 @@ class MyApp extends ConsumerWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeMode,
-      initialRoute: '/', //Specifies the initial page route
+      initialRoute: '/', // Specifies the initial page route
       routes: {
         '/': (context) => const AuthPage(),
         '/login': (context) => const LoginPage(),
@@ -64,7 +64,7 @@ class MyApp extends ConsumerWidget {
         '/profile': (context) => const ProfilePage(),
         '/leader': (context) => const ConnectPage(),
         '/pass_reset': (context) => const PassResetPage(),
-        // '/email_verif': (context) => const EmailVerifPage(), Removed cause the feature has become PAID !!!
+        '/email_verif': (context) => const EmailVerifPage(),
         '/add_todo': (context) => const AddTaskPage(),
         '/man_sched': (context) => const ManualSchedEdit(),
         '/desc': (context) => const DescPage(),

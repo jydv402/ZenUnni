@@ -53,8 +53,8 @@ class TodoModel {
       'isRecurring': isRecurring,
       'fromTime': fromTime,
       'toTime': toTime,
-      'selectedWeekdays': selectedWeekdays
-      //TODO :'updatedOn': now
+      'selectedWeekdays': selectedWeekdays,
+      'updatedOn': DateTime.now(),
     };
   }
 

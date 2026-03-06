@@ -6,9 +6,10 @@ import 'package:zen/notification/notif.dart';
 
 final editProvider = Provider<TodoModel?>((ref) => null);
 
-// Task model
-final taskProvider = StreamProvider<List<TodoModel>>(
-  (ref) async* {
+// Task model Notifier
+class TaskNotifier extends StreamNotifier<List<TodoModel>> {
+  @override
+  Stream<List<TodoModel>> build() async* {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final todoDoc = FirebaseFirestore.instance
         .collection('users')
@@ -16,81 +17,29 @@ final taskProvider = StreamProvider<List<TodoModel>>(
         .collection('task')
         .where('isRecurring', isEqualTo: false);
 
-    //final querySnapshot = todoDoc.where('isDone', isEqualTo: false).snapshots();
-    //maybe for reccuring tasks all we need is another stream provider with different querying condition
-
     await for (final snapshot in todoDoc.snapshots()) {
-      final tasks = snapshot.docs.map((doc) {
+      yield snapshot.docs.map((doc) {
         final data = doc.data();
-        return TodoModel(
-          name: data['task'] ?? '',
-          description: data['description'] ?? '',
-          date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
-          priority: data['priority'] ?? '',
-          isDone: data['isDone'] ?? false,
-          isRecurring: data['isRecurring'] ?? false,
-          fromTime: data['fromTime'] ?? '', // Keep as String
-          toTime: data['toTime'] ?? '',
-          selectedWeekdays: List<String>.from(data['selectedWeekdays'] ?? []),
-
-          //   expired: !data['isDone'] &&
-          //  ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
-          //     .isBefore(DateTime.now()),
-          notExpired: ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
+        return TodoModel.fromMap(
+          data,
+          ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
               .isAfter(DateTime.now()),
         );
       }).toList();
-      yield tasks;
     }
-  },
-);
-
-//recurringTaskProvider
-final recurringTaskProvider = StreamProvider<List<TodoModel>>((ref) async* {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final todoDoc = FirebaseFirestore.instance
-      .collection('users')
-      .doc(auth.currentUser?.uid)
-      .collection('task')
-      .where('isRecurring', isEqualTo: true);
-
-  await for (final snapshot in todoDoc.snapshots()) {
-    final tasks = snapshot.docs.map((doc) {
-      final data = doc.data();
-      return TodoModel(
-        name: data['task'] ?? '',
-        description: data['description'] ?? '',
-        date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
-        priority: data['priority'] ?? '',
-        isDone: data['isDone'] ?? false,
-        isRecurring: data['isRecurring'] ?? true,
-        fromTime: data['fromTime'] ?? '', // Keep as String
-        toTime: data['toTime'] ?? '',
-        selectedWeekdays: List<String>.from(data['selectedWeekdays'] ?? []),
-        notExpired: false,
-      );
-    }).toList();
-    yield tasks;
   }
-});
 
-// Add task
-final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
-  (ref, task) async {
+  Future<void> addTask(TodoModel task) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final taskDoc = FirebaseFirestore.instance
         .collection('users')
         .doc(auth.currentUser?.uid)
         .collection('task');
 
-    // Add new document
-    await taskDoc.add(
-      task.toMap(),
-    );
+    await taskDoc.add(task.toMap());
 
-    // Schedule a notification for the newly added task
     if (!task.isRecurring && task.date.isAfter(DateTime.now())) {
-      final notificationTime = task.date.subtract(Duration(minutes: 10));
+      final notificationTime = task.date.subtract(const Duration(minutes: 10));
       if (notificationTime.isAfter(DateTime.now())) {
         await NotificationService.sheduleNotification(
           taskDoc.id.hashCode,
@@ -98,15 +47,11 @@ final taskAddProvider = FutureProvider.autoDispose.family<void, TodoModel>(
           "Your task '${task.name}' is due at ${DateFormat('hh:mm a').format(task.date)}.",
           notificationTime,
         );
-        //print("Scheduled notification for: ${task.name} at $notificationTime");
       }
     }
-  },
-);
+  }
 
-// Update full task
-final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
-  (ref, task) async {
+  Future<void> updateTask(TodoModel task) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final taskDoc = FirebaseFirestore.instance
         .collection('users')
@@ -118,12 +63,11 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
-      await taskDoc.doc(docId).update(
-            task.toMap(),
-          );
-      // Schedule a notification for the updated task
+      await taskDoc.doc(docId).update(task.toMap());
+
       if (!task.isRecurring && task.date.isAfter(DateTime.now())) {
-        final notificationTime = task.date.subtract(Duration(minutes: 10));
+        final notificationTime =
+            task.date.subtract(const Duration(minutes: 10));
         if (notificationTime.isAfter(DateTime.now())) {
           await NotificationService.sheduleNotification(
             taskDoc.id.hashCode,
@@ -131,23 +75,18 @@ final taskUpdateFullProvider = FutureProvider.family<void, TodoModel>(
             "Your updated task '${task.name}' is due at ${DateFormat('hh:mm a').format(task.date)}.",
             notificationTime,
           );
-          //print("Scheduled notification for updated task: ${task.name} at $notificationTime");
         }
       }
     }
-  },
-);
+  }
 
-//Delete Task
-final taskDeleteProvider = FutureProvider.family<void, TodoModel>(
-  (ref, task) async {
+  Future<void> deleteTask(TodoModel task) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final taskDoc = FirebaseFirestore.instance
         .collection('users')
         .doc(auth.currentUser?.uid)
         .collection('task');
 
-    // Query to find the document with matching task name
     final querySnapshot =
         await taskDoc.where('task', isEqualTo: task.name).get();
 
@@ -155,8 +94,79 @@ final taskDeleteProvider = FutureProvider.family<void, TodoModel>(
       final docId = querySnapshot.docs.first.id;
       await taskDoc.doc(docId).delete();
     }
-  },
-);
+  }
+}
+
+final taskProvider = StreamNotifierProvider<TaskNotifier, List<TodoModel>>(() {
+  return TaskNotifier();
+});
+
+// recurringTaskProvider
+class RecurringTaskNotifier extends StreamNotifier<List<TodoModel>> {
+  @override
+  Stream<List<TodoModel>> build() async* {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final todoDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('task')
+        .where('isRecurring', isEqualTo: true);
+
+    await for (final snapshot in todoDoc.snapshots()) {
+      yield snapshot.docs.map((doc) {
+        final data = doc.data();
+        return TodoModel.fromMap(data, false);
+      }).toList();
+    }
+  }
+
+  Future<void> addTask(TodoModel task) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final taskDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('task');
+
+    await taskDoc.add(task.toMap());
+  }
+
+  Future<void> updateTask(TodoModel task) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final taskDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('task');
+
+    final querySnapshot =
+        await taskDoc.where('task', isEqualTo: task.oldname).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docId = querySnapshot.docs.first.id;
+      await taskDoc.doc(docId).update(task.toMap());
+    }
+  }
+
+  Future<void> deleteTask(TodoModel task) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final taskDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('task');
+
+    final querySnapshot =
+        await taskDoc.where('task', isEqualTo: task.name).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docId = querySnapshot.docs.first.id;
+      await taskDoc.doc(docId).delete();
+    }
+  }
+}
+
+final recurringTaskProvider =
+    StreamNotifierProvider<RecurringTaskNotifier, List<TodoModel>>(() {
+  return RecurringTaskNotifier();
+});
 
 //to get the incomplete tasks to schedule notifications
 Future<void> scheduleNotificationsForIncompleteTasks() async {

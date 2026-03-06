@@ -14,8 +14,11 @@ class _HabitState extends ConsumerState<HabitPage> {
   final TextEditingController habitNameController = TextEditingController();
   Color selectedColor = Colors.green;
 
-  //TODO:create dispose method
-  //TODO: rename widgets according  to convention
+  @override
+  void dispose() {
+    habitNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class _HabitState extends ConsumerState<HabitPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: habitsAsyncValue.when(
-        data: (habits) => heatmaplistview(habits),
+        data: (habits) => heatmapListView(habits),
         loading: () => Center(
           child: showRunningIndicator(context, "Loading Habit data..."),
         ),
@@ -114,7 +117,10 @@ class _HabitState extends ConsumerState<HabitPage> {
               if (habitNameController.text.isNotEmpty) {
                 final newHabit = HabitModel(
                   habitName: habitNameController.text,
-                  color: selectedColor.value.toRadixString(16).padLeft(8, '0'),
+                  color: selectedColor
+                      .toARGB32()
+                      .toRadixString(16)
+                      .padLeft(8, '0'),
                   createdAt: isEdit ? habit!.createdAt : DateTime.now(),
                   completedDates: isEdit ? habit!.completedDates : {},
                   oldname: isEdit ? habit!.habitName : habitNameController.text,
@@ -140,7 +146,7 @@ class _HabitState extends ConsumerState<HabitPage> {
     );
   }
 
-  Widget heatmaplistview(List<HabitModel> habits) {
+  Widget heatmapListView(List<HabitModel> habits) {
     return ListView.builder(
       padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
       itemCount: habits.length + 2,

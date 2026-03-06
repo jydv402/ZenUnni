@@ -12,19 +12,11 @@ class _NotesListState extends ConsumerState<NotesList> {
   Map<int, Map<String, String>> _notes = {};
 
   @override
-  @override
   void initState() {
     super.initState();
 
     // Defer until widget is fully inserted into the tree
     Future.microtask(() {
-      ref.listen(userNameProvider, (_, next) {
-        final username = next.value;
-        if (username != null) {
-          _loadNotes(username);
-        }
-      });
-
       final initialUsername = ref.read(userNameProvider).value;
       if (initialUsername != null) {
         _loadNotes(initialUsername);
@@ -52,6 +44,13 @@ class _NotesListState extends ConsumerState<NotesList> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(userNameProvider, (_, next) {
+      final username = next.value;
+      if (username != null) {
+        _loadNotes(username);
+      }
+    });
+
     final username = ref.watch(userNameProvider).value;
     final colors = ref.watch(appColorsProvider);
     return Scaffold(
@@ -135,6 +134,7 @@ class _NotesListState extends ConsumerState<NotesList> {
               },
             ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: "notes_list_fab",
         onPressed: () => _openNotePage(),
         label: const Text(
           "New Note",
