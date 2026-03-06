@@ -1,3 +1,4 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:zen/zen_barrel.dart';
 
 class Navbar extends ConsumerStatefulWidget {
@@ -8,6 +9,23 @@ class Navbar extends ConsumerStatefulWidget {
 }
 
 class _NavbarState extends ConsumerState<Navbar> {
+  final _storage = const FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkApiKey();
+  }
+
+  Future<void> _checkApiKey() async {
+    final key = await _storage.read(key: 'gemini_api_key');
+    if (key == null || key.isEmpty) {
+      if (mounted) {
+        Navigator.pushNamed(context, '/api_key');
+      }
+    }
+  }
+
   List<Widget> pages = [
     const TaskPage(), // index 0: Todo and Schedule
     const HabitPage(), // index 1: Habit

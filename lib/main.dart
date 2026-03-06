@@ -53,6 +53,7 @@ class MyApp extends ConsumerWidget {
         '/login': (context) => const LoginPage(),
         '/register': (context) => RegisterPage(),
         '/username': (context) => const UsernamePage(),
+        '/api_key': (context) => const ApiKeyPage(),
         '/nav': (context) => Navbar(),
         '/home': (context) => const LandPage(),
         '/chat': (context) => ChatPage(),

@@ -55,6 +55,8 @@ dependencies:
   flutter_markdown_plus: ^1.0.5
   langchain: ^0.8.1
   http: ^1.6.0
+  flutter_secure_storage: ^9.2.4
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

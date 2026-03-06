@@ -9,6 +9,7 @@ export 'auth_pages/email_verif_page.dart';
 export 'auth_pages/login_page.dart';
 export 'auth_pages/pass_reset.dart';
 export 'auth_pages/register_page.dart';
+export 'auth_pages/api_key_page.dart';
 export 'auth_pages/username.dart';
 
 //components

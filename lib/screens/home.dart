@@ -130,54 +130,7 @@ class LandPage extends ConsumerWidget {
         //     "No mood added yet, add it now? 👀",
         //     () => updatePgIndex(ref, 5, 3),
         //   ),
-        const SizedBox(height: 8),
-        Flex(
-          direction: Axis.horizontal,
-          children: [
-            _bentos(
-              context,
-              1,
-              () {},
-              colors.pillClr,
-              const EdgeInsets.fromLTRB(0, 0, 0, 8),
-              Stack(
-                children: [
-                  _bgText(-15, "Quote", colors.homeBgTxt, top: 25),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: ref
-                          .watch(motivationalMessageProvider(mood ?? "neutral"))
-                          .when(
-                            data: (quote) => Text(
-                              '"$quote"',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                              textAlign: TextAlign.center,
-                            ),
-                            loading: () => Center(
-                              child: Lottie.asset(
-                                "assets/loading/ld_shapes.json",
-                                height: 60,
-                              ),
-                            ),
-                            error: (error, stack) => const Text(
-                              'Stay positive!',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-              height: 200,
-            ),
-          ],
-        ),
+
         Flex(
           direction: Axis.horizontal,
           children: [
@@ -548,7 +501,6 @@ class LandPage extends ConsumerWidget {
                           "assets/emoji/pomo.json",
                           height: 150,
                           width: 150,
-                          reverse: true,
                         ),
                         Text("Pomodoro",
                             style: Theme.of(context).textTheme.headlineMedium),

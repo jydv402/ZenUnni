@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/foundation.dart';
 
 final aiServiceProvider = Provider<AIService>((ref) {
@@ -9,16 +9,20 @@ final aiServiceProvider = Provider<AIService>((ref) {
 });
 
 class AIService {
-  late final String apiKey;
+  final _storage = const FlutterSecureStorage();
 
-  AIService() {
-    apiKey = dotenv.env['KEY'] ?? '';
-  }
+  AIService();
 
   Future<String> _generateContent(
       String systemPrompt,
       List<Map<String, dynamic>> history,
       Map<String, dynamic>? generationConfig) async {
+    final apiKey = await _storage.read(key: 'gemini_api_key');
+    if (apiKey == null || apiKey.isEmpty) {
+      debugPrint('Error: Gemini API Key is missing from Secure Storage.');
+      return 'API Key not configured. Please add your key in the App Settings.';
+    }
+
     final url = Uri.parse(
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=$apiKey');
 

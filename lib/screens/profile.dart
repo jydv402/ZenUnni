@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:json_store/json_store.dart';
 import 'package:zen/zen_barrel.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -13,6 +15,55 @@ void logoutUser(BuildContext context, WidgetRef ref) async {
   if (context.mounted) {
     // Navigate to the root page after logging out
     Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+  }
+}
+
+void deleteUser(BuildContext context, WidgetRef ref) async {
+  try {
+    showLoadingDialog(context, "Deleting account data...");
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final uid = user.uid;
+      final userDoc = FirebaseFirestore.instance.collection('users').doc(uid);
+
+      // Delete subcollections
+      final subcollections = ['task', 'mood', 'habit'];
+      for (final collectionName in subcollections) {
+        final snapshots = await userDoc.collection(collectionName).get();
+        for (var doc in snapshots.docs) {
+          await doc.reference.delete();
+        }
+      }
+
+      // Delete user document
+      await userDoc.delete();
+
+      // Delete local data
+      final jsonStore = JsonStore();
+      await jsonStore.deleteItem('chat_history');
+      final username = ref.read(userProvider).value?.username;
+      if (username != null) {
+        await jsonStore.deleteItem('notes$username');
+      }
+
+      // Delete auth user
+      await user.delete();
+    }
+
+    if (context.mounted) {
+      if (Navigator.canPop(context)) Navigator.pop(context); // Pop loading
+      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+    }
+  } on FirebaseAuthException catch (e) {
+    if (context.mounted) {
+      if (Navigator.canPop(context)) Navigator.pop(context); // Pop loading
+      showHeadsupNoti(context, ref, "Error: ${e.message}");
+    }
+  } catch (e) {
+    if (context.mounted) {
+      if (Navigator.canPop(context)) Navigator.pop(context); // Pop loading
+      showHeadsupNoti(context, ref, "Error: $e");
+    }
   }
 }
 
@@ -124,6 +175,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
             buttonBg(
               ListTile(
+                title: Text("API Key Integration",
+                    style: Theme.of(context).textTheme.bodyMedium),
+                trailing: Icon(
+                  LucideIcons.key_round,
+                  color: colors.iconClr,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/api_key');
+                },
+              ),
+            ),
+            buttonBg(
+              ListTile(
                 title: Text("Edit personal details",
                     style: Theme.of(context).textTheme.bodyMedium),
                 trailing: Icon(
@@ -161,6 +225,33 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     () {
                       Navigator.of(context).pop();
                       logoutUser(context, ref);
+                      stateInvalidator(ref, true);
+                    },
+                  );
+                },
+              ),
+            ),
+            buttonBg(
+              ListTile(
+                title: Text("Delete Account",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: Colors.red)),
+                trailing: const Icon(
+                  LucideIcons.trash_2,
+                  color: Colors.red,
+                ),
+                onTap: () {
+                  showConfirmDialog(
+                    context,
+                    "Delete Account?",
+                    "Are you sure you want to permanently delete your account? This cannot be undone.",
+                    "Delete",
+                    Colors.red,
+                    () {
+                      Navigator.of(context).pop();
+                      deleteUser(context, ref);
                       stateInvalidator(ref, true);
                     },
                   );
