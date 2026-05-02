@@ -90,7 +90,6 @@ class _MoodPageState extends ConsumerState<MoodPage> {
         }
 
         updatePgIndex(ref, 3, 3);
-        ref.read(navStackProvider.notifier).push(3);
       }, "Add Mood", 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

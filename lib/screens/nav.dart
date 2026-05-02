@@ -39,113 +39,124 @@ class _NavbarState extends ConsumerState<Navbar> {
     const NotesList(), // index 9: Notes list
   ];
 
-  List<Widget> destinations = [
-    NavigationDestination(
-      icon: Icon(
-        LucideIcons.pencil_ruler,
-        size: 22,
-      ),
-      label: 'Tasks',
-    ),
-    NavigationDestination(
-      icon: Icon(
-        LucideIcons.grid_2x2_check,
-        size: 22,
-      ),
-      label: 'Habit',
-    ),
-    NavigationDestination(
-      icon: Icon(
-        LucideIcons.house,
-        size: 22,
-      ),
-      label: 'Home',
-    ),
-    NavigationDestination(
-      icon: Icon(
-        LucideIcons.smile,
-        size: 22,
-      ),
-      label: 'Mood',
-    ),
-    NavigationDestination(
-      icon: Icon(
-        LucideIcons.ellipsis,
-        size: 22,
-      ),
-      label: 'More',
-    ),
-  ];
+  void _onDrawerItemTapped(int index, WidgetRef ref) {
+    updatePgIndex(ref, index, index);
+  }
 
   @override
   Widget build(BuildContext context) {
     int pgIndex = ref.watch(pgIndexProvider);
-    int subPgIndex = ref.watch(subPgIndexProvider);
-    List<int> navStack = ref.watch(navStackProvider) ?? [2];
 
-    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
-
-    return PopScope(
-      canPop: navStack.length <= 1, // Only allow exiting when at home
-      onPopInvokedWithResult: (didPop, dynamic) {
-        if (!didPop && ref.read(navStackProvider).length > 1) {
-          //Pop last element
-          ref.read(navStackProvider.notifier).pop();
-          //Update nav index
-          ref
-              .read(pgIndexProvider.notifier)
-              .setState(ref.read(navStackProvider).last);
-        }
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: IndexedStack(index: pgIndex, children: pages),
-        bottomNavigationBar: isKeyboardOpen
-            ? null
-            : NavigationBar(
-                indicatorColor: const Color.fromRGBO(255, 139, 44, 1),
-                surfaceTintColor: Color.fromARGB(255, 150, 150, 150),
-                shadowColor: Colors.black,
-                elevation: 16,
-                labelBehavior:
-                    NavigationDestinationLabelBehavior.onlyShowSelected,
-                selectedIndex: pgIndex > 4 ? subPgIndex : pgIndex,
-                destinations: destinations,
-                onDestinationSelected: (int index) {
-                  setState(
-                    () {
-                      if (ref.read(navStackProvider).last != index &&
-                          index != 2) {
-                        ref.read(navStackProvider.notifier).push(index);
-                      } else {
-                        ref.read(navStackProvider.notifier).reset();
-                      }
-                      updatePgIndex(ref, index, index);
-                    },
-                  );
-                },
+    return Scaffold(
+      key: ref.watch(scaffoldKeyProvider),
+      resizeToAvoidBottomInset: false,
+      body: pages[pgIndex],
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              child: const Text(
+                'ZenUnni',
+                style: TextStyle(color: Colors.white, fontSize: 24),
               ),
-        floatingActionButton: pgIndex == 2
-            ? FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/chat');
-                },
-                label: const Text(
-                  ' Unni',
-                  style: TextStyle(
-                    fontFamily: 'Pop',
-                    fontSize: 13.0,
-                    color: Colors.black,
-                  ),
-                ),
-                icon: const Icon(
-                  LucideIcons.message_square_dot,
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.house),
+              title: const Text('Home'),
+              selected: pgIndex == 2,
+              onTap: () {
+                _onDrawerItemTapped(2, ref);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.pencil_ruler),
+              title: const Text('Tasks'),
+              selected: pgIndex == 0,
+              onTap: () {
+                _onDrawerItemTapped(0, ref);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.grid_2x2_check),
+              title: const Text('Habit'),
+              selected: pgIndex == 1,
+              onTap: () {
+                _onDrawerItemTapped(1, ref);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.smile),
+              title: const Text('Mood'),
+              selected: pgIndex == 3,
+              onTap: () {
+                _onDrawerItemTapped(3, ref);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.timer),
+              title: const Text('Pomodoro'),
+              selected: pgIndex == 7,
+              onTap: () {
+                _onDrawerItemTapped(7, ref);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.sticky_note),
+              title: const Text('Notes'),
+              selected: pgIndex == 9,
+              onTap: () {
+                _onDrawerItemTapped(9, ref);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.trophy),
+              title: const Text('Leaderboard'),
+              selected: pgIndex == 6,
+              onTap: () {
+                _onDrawerItemTapped(6, ref);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.user),
+              title: const Text('Profile'),
+              selected: pgIndex == 4,
+              onTap: () {
+                _onDrawerItemTapped(4, ref);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: pgIndex == 2
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.pushNamed(context, '/chat');
+              },
+              label: const Text(
+                ' Unni',
+                style: TextStyle(
+                  fontFamily: 'Pop',
+                  fontSize: 13.0,
                   color: Colors.black,
                 ),
-              )
-            : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      ),
+              ),
+              icon: const Icon(
+                LucideIcons.message_square_dot,
+                color: Colors.black,
+              ),
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

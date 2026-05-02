@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/theme/text_theme.dart';
 
 // Light theme for the app
@@ -36,9 +35,7 @@ ThemeData get darkTheme {
         foregroundColor: Colors.white,
         shadowColor: Colors.orangeAccent,
         padding: const EdgeInsets.all(26),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(26),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
       ),
     ),
     appBarTheme: AppBarTheme(
@@ -62,7 +59,9 @@ ThemeData get darkTheme {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
         borderSide: const BorderSide(
-            color: Color.fromRGBO(255, 139, 44, 1), width: 2.0),
+          color: Color.fromRGBO(255, 139, 44, 1),
+          width: 2.0,
+        ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
@@ -83,44 +82,34 @@ ThemeData get darkTheme {
     ),
     navigationBarTheme: NavigationBarThemeData(
       labelTextStyle: WidgetStateProperty.all(bodySD),
-      iconTheme: WidgetStateProperty.resolveWith(
-        (states) {
-          if (states.contains(WidgetState.selected)) {
-            return const IconThemeData(color: Colors.black);
-          }
-          return const IconThemeData(color: Colors.white);
-        },
-      ),
+      iconTheme: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const IconThemeData(color: Colors.black);
+        }
+        return const IconThemeData(color: Colors.white);
+      }),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: Color.fromRGBO(255, 139, 44, 1),
     ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(
-        side: WidgetStatePropertyAll(
-          BorderSide(color: Colors.white),
-        ),
+        side: WidgetStatePropertyAll(BorderSide(color: Colors.white)),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(26),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
         ),
-        backgroundColor: WidgetStateProperty.resolveWith(
-          (states) {
-            if (states.contains(WidgetState.selected)) {
-              return const Color.fromRGBO(255, 139, 44, 1);
-            }
-            return Colors.transparent;
-          },
-        ),
-        foregroundColor: WidgetStateProperty.resolveWith(
-          (states) {
-            if (states.contains(WidgetState.selected)) {
-              return Colors.black;
-            }
-            return Colors.white;
-          },
-        ),
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const Color.fromRGBO(255, 139, 44, 1);
+          }
+          return Colors.transparent;
+        }),
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.black;
+          }
+          return Colors.white;
+        }),
       ),
     ),
     datePickerTheme: DatePickerThemeData(
@@ -148,19 +137,18 @@ ThemeData get darkTheme {
         return Colors.transparent;
       }),
       dividerColor: Colors.white,
-      headerHeadlineStyle: GoogleFonts.poppins(
+      headerHeadlineStyle: TextStyle(
+        fontFamily: 'Pop',
         color: Colors.white,
         fontSize: 26,
         fontWeight: FontWeight.bold,
       ),
-      weekdayStyle: GoogleFonts.poppins(
+      weekdayStyle: TextStyle(
+        fontFamily: 'Pop',
         color: Colors.white,
         fontSize: 18,
       ),
-      dayStyle: GoogleFonts.poppins(
-        color: Colors.white,
-        fontSize: 16,
-      ),
+      dayStyle: TextStyle(fontFamily: 'Pop', color: Colors.white, fontSize: 16),
       yearBackgroundColor: WidgetStateColor.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
           return const Color.fromRGBO(255, 139, 44, 1);
@@ -168,15 +156,14 @@ ThemeData get darkTheme {
         return Colors.transparent;
       }),
 
-      yearForegroundColor: WidgetStateProperty.resolveWith(
-        (states) {
-          if (states.contains(WidgetState.selected)) {
-            return const Color.fromRGBO(0, 0, 0, 1);
-          }
-          return const Color.fromARGB(255, 255, 255, 255);
-        },
-      ),
-      yearStyle: GoogleFonts.poppins(
+      yearForegroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const Color.fromRGBO(0, 0, 0, 1);
+        }
+        return const Color.fromARGB(255, 255, 255, 255);
+      }),
+      yearStyle: TextStyle(
+        fontFamily: 'Pop',
         fontSize: 16,
         color: Colors.white,
       ),
@@ -192,61 +179,59 @@ ThemeData get darkTheme {
       ),
     ),
     timePickerTheme: TimePickerThemeData(
-        dayPeriodTextStyle: headS,
-        dayPeriodBorderSide: BorderSide(color: Colors.white),
-        confirmButtonStyle: ButtonStyle(
-          foregroundColor: WidgetStateProperty.resolveWith((states) {
-            return const Color.fromRGBO(255, 139, 44, 1);
-          }),
-        ),
-        cancelButtonStyle: ButtonStyle(
-          foregroundColor: WidgetStateProperty.resolveWith((states) {
-            return const Color.fromRGBO(255, 139, 44, 1);
-          }),
-        ),
-        dayPeriodTextColor: WidgetStateColor.resolveWith(
-          (states) => states.contains(WidgetState.selected)
-              ? const Color.fromARGB(255, 0, 0, 0)
-              : const Color.fromARGB(255, 255, 255, 255),
-        ),
-        timeSelectorSeparatorColor: WidgetStateColor.resolveWith((states) {
-          if (states.contains(WidgetState.disabled)) {
-            return Colors.grey;
-          }
-          return Colors.white;
+      dayPeriodTextStyle: headS,
+      dayPeriodBorderSide: BorderSide(color: Colors.white),
+      confirmButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          return const Color.fromRGBO(255, 139, 44, 1);
         }),
-        hourMinuteTextColor: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
-        hourMinuteColor: Color.fromRGBO(255, 139, 44, 1),
-        dialBackgroundColor:
-            const Color.fromRGBO(32, 33, 36, 1), // Background color
-        backgroundColor:
-            const Color.fromRGBO(32, 33, 36, 1), // Background color
-        dialHandColor: Color.fromRGBO(255, 139, 44, 1),
-        dialTextColor: WidgetStateColor.resolveWith(
-          (states) => states.contains(WidgetState.selected)
-              ? Colors.white
-              : const Color.fromARGB(255, 255, 255, 255),
-        ),
-        entryModeIconColor: const Color.fromRGBO(255, 255, 255, 1),
-        dayPeriodColor: const Color.fromRGBO(255, 255, 255, 1)),
+      ),
+      cancelButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          return const Color.fromRGBO(255, 139, 44, 1);
+        }),
+      ),
+      dayPeriodTextColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? const Color.fromARGB(255, 0, 0, 0)
+            : const Color.fromARGB(255, 255, 255, 255),
+      ),
+      timeSelectorSeparatorColor: WidgetStateColor.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return Colors.grey;
+        }
+        return Colors.white;
+      }),
+      hourMinuteTextColor: Color.from(alpha: 1, red: 1, green: 1, blue: 1),
+      hourMinuteColor: Color.fromRGBO(255, 139, 44, 1),
+      dialBackgroundColor: const Color.fromRGBO(
+        32,
+        33,
+        36,
+        1,
+      ), // Background color
+      backgroundColor: const Color.fromRGBO(32, 33, 36, 1), // Background color
+      dialHandColor: Color.fromRGBO(255, 139, 44, 1),
+      dialTextColor: WidgetStateColor.resolveWith(
+        (states) => states.contains(WidgetState.selected)
+            ? Colors.white
+            : const Color.fromARGB(255, 255, 255, 255),
+      ),
+      entryModeIconColor: const Color.fromRGBO(255, 255, 255, 1),
+      dayPeriodColor: const Color.fromRGBO(255, 255, 255, 1),
+    ),
 
     popupMenuTheme: PopupMenuThemeData(
       color: Colors.white,
       labelTextStyle: WidgetStateProperty.all(
-        TextStyle(
-          fontFamily: 'Pop',
-          fontSize: 16.0,
-          color: Colors.white,
-        ),
+        TextStyle(fontFamily: 'Pop', fontSize: 16.0, color: Colors.white),
       ),
       textStyle: TextStyle(
         fontFamily: 'Pop',
         fontSize: 16.0,
         color: Colors.white,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(26),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
     ),
   );
 }
@@ -257,8 +242,12 @@ ThemeData get lightTheme {
       brightness: Brightness.light,
       primary: const Color.fromRGBO(255, 139, 44, 1), // Orange
       onPrimary: Colors.white,
-      secondary:
-          const Color.fromRGBO(255, 165, 79, 1), // Lighter shade of orange
+      secondary: const Color.fromRGBO(
+        255,
+        165,
+        79,
+        1,
+      ), // Lighter shade of orange
       onSecondary: Colors.white,
       surface: Colors.white, // Light background
       onSurface: Colors.black,
@@ -282,17 +271,13 @@ ThemeData get lightTheme {
         foregroundColor: Colors.white,
         shadowColor: Colors.orangeAccent,
         padding: const EdgeInsets.all(26),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(26),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
       ),
     ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(26),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
         ),
         backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -304,22 +289,18 @@ ThemeData get lightTheme {
       ),
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: WidgetStateProperty.resolveWith(
-        (states) {
-          if (states.contains(WidgetState.selected)) {
-            return Colors.white;
-          }
-          return Colors.black54;
-        },
-      ),
-      trackOutlineColor: WidgetStateProperty.resolveWith(
-        (states) {
-          if (states.contains(WidgetState.selected)) {
-            return Color.fromRGBO(255, 139, 44, 1);
-          }
-          return Colors.black54;
-        },
-      ),
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.white;
+        }
+        return Colors.black54;
+      }),
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Color.fromRGBO(255, 139, 44, 1);
+        }
+        return Colors.black54;
+      }),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
@@ -341,17 +322,11 @@ ThemeData get lightTheme {
       contentPadding: const EdgeInsets.all(32),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(
-          color: Colors.black54,
-          width: 2.0,
-        ),
+        borderSide: const BorderSide(color: Colors.black54, width: 2.0),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(
-          color: Colors.black54,
-          width: 2.0,
-        ),
+        borderSide: const BorderSide(color: Colors.black54, width: 2.0),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
@@ -362,17 +337,11 @@ ThemeData get lightTheme {
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 2.0,
-        ),
+        borderSide: const BorderSide(color: Colors.red, width: 2.0),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(26),
-        borderSide: const BorderSide(
-          color: Colors.red,
-          width: 2.0,
-        ),
+        borderSide: const BorderSide(color: Colors.red, width: 2.0),
       ),
       hintStyle: hint.copyWith(color: Colors.black54),
       labelStyle: hint,
@@ -392,26 +361,23 @@ ThemeData get lightTheme {
     ),
     datePickerTheme: DatePickerThemeData(
       backgroundColor: Colors.white,
-      dayForegroundColor: WidgetStateProperty.resolveWith(
-        (states) {
-          if (states.contains(WidgetState.selected)) {
-            return Colors.white;
-          } else if (states.contains(WidgetState.disabled)) {
-            return Colors.grey;
-          }
-          return Colors.black;
-        },
-      ),
+      dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.white;
+        } else if (states.contains(WidgetState.disabled)) {
+          return Colors.grey;
+        }
+        return Colors.black;
+      }),
       dividerColor: Colors.black,
-      yearForegroundColor: WidgetStateProperty.resolveWith(
-        (states) {
-          if (states.contains(WidgetState.selected)) {
-            return Colors.white;
-          }
-          return Colors.black;
-        },
-      ),
-      yearStyle: GoogleFonts.poppins(
+      yearForegroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.white;
+        }
+        return Colors.black;
+      }),
+      yearStyle: TextStyle(
+        fontFamily: 'Pop',
         fontSize: 16,
         color: Colors.black,
       ),
@@ -427,20 +393,14 @@ ThemeData get lightTheme {
       color: Colors.white,
       iconColor: Colors.black,
       labelTextStyle: WidgetStateProperty.all(
-        TextStyle(
-          fontFamily: 'Pop',
-          fontSize: 16.0,
-          color: Colors.white,
-        ),
+        TextStyle(fontFamily: 'Pop', fontSize: 16.0, color: Colors.white),
       ),
       textStyle: TextStyle(
         fontFamily: 'Pop',
         fontSize: 16.0,
         color: Colors.white,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(26),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
     ),
   );
 }
@@ -449,26 +409,30 @@ var pagePadding = const EdgeInsets.fromLTRB(26, 100, 26, 26);
 var pagePaddingWithScore = const EdgeInsets.fromLTRB(26, 50, 26, 26);
 
 var markdownStyleSheetBlack = MarkdownStyleSheet(
-  h1: GoogleFonts.poppins(
+  h1: TextStyle(
     // Heading 1
+    fontFamily: 'Pop',
     fontSize: 32.0,
     fontWeight: FontWeight.bold,
     color: Colors.black,
   ),
-  h2: GoogleFonts.poppins(
+  h2: TextStyle(
     // Heading 2
+    fontFamily: 'Pop',
     fontSize: 24.0,
     fontWeight: FontWeight.bold,
     color: Colors.black,
   ),
-  h3: GoogleFonts.poppins(
+  h3: TextStyle(
     // Heading 3
+    fontFamily: 'Pop',
     fontSize: 18.0,
     fontWeight: FontWeight.bold,
     color: Colors.black,
   ),
-  p: GoogleFonts.poppins(
+  p: TextStyle(
     // Paragraph
+    fontFamily: 'Pop',
     fontSize: 14.0,
     color: Colors.black,
   ),
@@ -490,8 +454,9 @@ var markdownStyleSheetBlack = MarkdownStyleSheet(
     color: Colors.blue,
     decoration: TextDecoration.underline,
   ),
-  code: GoogleFonts.robotoMono(
+  code: TextStyle(
     // Code block
+    fontFamily: 'Bebas',
     backgroundColor: Colors.white,
     color: Colors.black,
   ),
@@ -519,7 +484,6 @@ BoxDecoration gradientDeco() {
         // Color.fromARGB(30, 255, 63, 63),
         // Color.fromARGB(30, 234, 78, 130),
         // Color.fromARGB(30, 255, 193, 7)
-
         Color.fromARGB(40, 0, 17, 255),
         Color.fromARGB(40, 166, 0, 255),
         Color.fromARGB(40, 255, 0, 217),

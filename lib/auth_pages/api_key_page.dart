@@ -60,33 +60,35 @@ class _ApiKeyPageState extends ConsumerState<ApiKeyPage> {
   Widget build(BuildContext context) {
     final AppColors colors = ref.watch(appColorsProvider);
     return PopScope(
-        canPop: _canPop,
-        child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: const Text('API Key Integration',
-                style: TextStyle(fontFamily: 'Pop', fontSize: 24)),
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            elevation: 0,
+      canPop: _canPop,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            'API Key Integration',
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 26.0),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 26.0,
+              vertical: 52.0,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(
-                  LucideIcons.key_round,
-                  size: 80,
-                  color: colors.iconClr,
-                ),
+                Icon(LucideIcons.key_round, size: 80, color: colors.iconClr),
                 const SizedBox(height: 24),
                 Text(
                   "Bring Your Own Key (BYOK)",
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
@@ -98,20 +100,23 @@ class _ApiKeyPageState extends ConsumerState<ApiKeyPage> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () async {
-                    final url =
-                        Uri.parse('https://aistudio.google.com/app/apikey');
+                    final url = Uri.parse(
+                      'https://aistudio.google.com/app/apikey',
+                    );
                     final launched = await launchUrl(url);
                     if (!launched && mounted) {
                       showHeadsupNoti(
-                          context, ref, 'Could not open Google AI Studio');
+                        context,
+                        ref,
+                        'Could not open Google AI Studio',
+                      );
                     }
                   },
                   child: Text(
-                    "Get a free API key from Google AI Studio",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: Colors.blue),
+                    "Tap here to get your API key from Google",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.blue),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -119,6 +124,7 @@ class _ApiKeyPageState extends ConsumerState<ApiKeyPage> {
                   controller: _keyController,
                   decoration: InputDecoration(
                     hintText: "Enter your Gemini API Key",
+                    hintStyle: Theme.of(context).textTheme.bodyMedium,
                     filled: true,
                     fillColor: colors.pillClr,
                     border: OutlineInputBorder(
@@ -126,18 +132,27 @@ class _ApiKeyPageState extends ConsumerState<ApiKeyPage> {
                       borderSide: BorderSide.none,
                     ),
                     contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
+                      horizontal: 20,
+                      vertical: 20,
+                    ),
                   ),
                   obscureText: true, // Hide the key text
                 ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.16),
               ],
             ),
           ),
-          floatingActionButton: fabButton(context, () {
+        ),
+        floatingActionButton: fabButton(
+          context,
+          () {
             _saveKey();
-          }, _isLoading ? "Saving..." : "Save API Key", 28),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-        ));
+          },
+          _isLoading ? "Saving..." : "Save API Key",
+          28,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      ),
+    );
   }
 }

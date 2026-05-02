@@ -23,50 +23,69 @@ class ScoreCard extends ConsumerWidget {
 
     return Row(
       key: Key('scorecard'),
-      mainAxisAlignment: MainAxisAlignment.end,
-      spacing: 10,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        //Score
-        GestureDetector(
-          onTap: () {
-            updatePgIndex(ref, 6, 4);
-            ref.read(navStackProvider.notifier).push(4);
+        Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(LucideIcons.menu, size: 28),
+              onPressed: () {
+                final scaffoldState = ref.read(scaffoldKeyProvider).currentState;
+                if (scaffoldState != null) {
+                  if (scaffoldState.isDrawerOpen) {
+                    scaffoldState.closeDrawer();
+                  } else {
+                    scaffoldState.openDrawer();
+                  }
+                }
+              },
+            );
           },
-          child: Container(
-            padding: EdgeInsets.fromLTRB(16, 16, 26, 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(26),
-              color: colors.pillClr,
-            ),
-            child: score0 == "null"
-                ? Text(
-                    "🏆    0",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  )
-                : Text(
-                    "🏆    $score0",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-          ),
         ),
-        GestureDetector(
-          onTap: () {
-            updatePgIndex(ref, 4, 4);
-            ref.read(navStackProvider.notifier).push(4);
-          },
-          child: Container(
-            height: 56,
-            width: 56,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: gender == 0
-                    ? AssetImage(males.values.elementAt(avatar))
-                    : AssetImage(females.values.elementAt(avatar)),
+        Row(
+          spacing: 10,
+          children: [
+            //Score
+            GestureDetector(
+              onTap: () {
+                updatePgIndex(ref, 6, 4);
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(16, 16, 26, 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(26),
+                  color: colors.pillClr,
+                ),
+                child: score0 == "null"
+                    ? Text(
+                        "🏆    0",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      )
+                    : Text(
+                        "🏆    $score0",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
               ),
-              shape: BoxShape.circle,
             ),
-          ),
-        )
+            GestureDetector(
+              onTap: () {
+                updatePgIndex(ref, 4, 4);
+              },
+              child: Container(
+                height: 56,
+                width: 56,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: gender == 0
+                        ? AssetImage(males.values.elementAt(avatar))
+                        : AssetImage(females.values.elementAt(avatar)),
+                  ),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

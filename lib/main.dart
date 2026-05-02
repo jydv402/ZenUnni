@@ -1,28 +1,23 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:zen/notification/notif.dart';
+import 'notification/notif.dart';
 import 'firebase_options.dart';
-import 'package:zen/zen_barrel.dart';
+import 'zen_barrel.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 Future<void> main() async {
   // To ensure firebase plugins are correctly initialised before using it
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); // Load .env file
 
   await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform); // Initialize firebase
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Initialize firebase
   tz.initializeTimeZones();
   await NotificationService.init();
 
   // Schedule notifications for incomplete tasks on startup
   await scheduleNotificationsForIncompleteTasks();
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -37,7 +32,8 @@ class MyApp extends ConsumerWidget {
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent, // Transparent status bar
         statusBarIconBrightness: themeMode == ThemeMode.dark
-            ? Brightness.light // White icons for dark mode
+            ? Brightness
+                  .light // White icons for dark mode
             : Brightness.dark, // Black icons for light mode
       ),
     );

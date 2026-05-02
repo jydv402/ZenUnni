@@ -1,4 +1,3 @@
-//import 'package:google_fonts/google_fonts.dart';
 import 'package:zen/zen_barrel.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -113,19 +112,24 @@ class PomodoroPage extends ConsumerWidget {
           // )
         ],
       ),
-      floatingActionButton: fabButton(context, () {
-        if (duration.text.isNotEmpty &&
-            breakDuration.text.isNotEmpty &&
-            rounds.text.isNotEmpty) {
-          pomoNotifier.setTimer(
-            int.parse(duration.text),
-            int.parse(breakDuration.text),
-            int.parse(rounds.text),
-          );
-          pomoNotifier.startTimer();
-          Navigator.pushNamed(context, '/counter');
-        }
-      }, 'Start Timer', 26),
+      floatingActionButton: fabButton(
+        context,
+        () {
+          if (duration.text.isNotEmpty &&
+              breakDuration.text.isNotEmpty &&
+              rounds.text.isNotEmpty) {
+            pomoNotifier.setTimer(
+              int.parse(duration.text),
+              int.parse(breakDuration.text),
+              int.parse(rounds.text),
+            );
+            pomoNotifier.startTimer();
+            Navigator.pushNamed(context, '/counter');
+          }
+        },
+        'Start Timer',
+        26,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -139,10 +143,7 @@ class PomodoroPage extends ConsumerWidget {
   }
 
   Text _text(BuildContext context, String label) {
-    return Text(
-      label,
-      style: Theme.of(context).textTheme.headlineMedium,
-    );
+    return Text(label, style: Theme.of(context).textTheme.headlineMedium);
   }
 }
 
@@ -153,7 +154,7 @@ class CountdownScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pomo = ref.watch(pomoProvider);
 
-// 🔥 Play sound when timer reaches zero
+    // 🔥 Play sound when timer reaches zero
     if (pomo.timeRemaining == 0) {
       playPomodoroEndSound();
     }
@@ -167,8 +168,8 @@ class CountdownScreen extends ConsumerWidget {
           Text(
             pomo.isRunning
                 ? pomo.isBreak
-                    ? 'Break Session ${pomo.rounds - pomo.currentRound + 1}'
-                    : 'Focus Session ${pomo.rounds - pomo.currentRound + 1}'
+                      ? 'Break Session ${pomo.rounds - pomo.currentRound + 1}'
+                      : 'Focus Session ${pomo.rounds - pomo.currentRound + 1}'
                 : 'Session Ended',
             style: Theme.of(context).textTheme.headlineLarge,
           ),
@@ -178,10 +179,15 @@ class CountdownScreen extends ConsumerWidget {
           const SizedBox(height: 100),
         ],
       ),
-      floatingActionButton: fabButton(context, () {
-        ref.read(pomoProvider.notifier).stopTimer();
-        Navigator.pop(context);
-      }, 'Stop Timer', 26),
+      floatingActionButton: fabButton(
+        context,
+        () {
+          ref.read(pomoProvider.notifier).stopTimer();
+          Navigator.pop(context);
+        },
+        'Stop Timer',
+        26,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -190,7 +196,9 @@ class CountdownScreen extends ConsumerWidget {
     return Text(
       seconds.toString().padLeft(2, '0'), // Display time remaining
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          fontSize: MediaQuery.of(context).size.width * 0.70, height: 0.8),
+        fontSize: MediaQuery.of(context).size.width * 0.70,
+        height: 0.8,
+      ),
       textAlign: TextAlign.center,
     );
   }

@@ -180,7 +180,6 @@ class LandPage extends ConsumerWidget {
               3,
               () {
                 updatePgIndex(ref, 3, 3);
-                ref.read(navStackProvider.notifier).push(3);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 0, 4, 4),
@@ -247,7 +246,6 @@ class LandPage extends ConsumerWidget {
               2,
               () {
                 updatePgIndex(ref, 6, 4);
-                ref.read(navStackProvider.notifier).push(4);
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(4, 0, 0, 4),
@@ -308,7 +306,6 @@ class LandPage extends ConsumerWidget {
               () {
                 ref.read(selectedTabProvider.notifier).setTab(1);
                 updatePgIndex(ref, 0, 0);
-                ref.read(navStackProvider.notifier).push(0);
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(0, 4, 4, 4),
@@ -343,7 +340,6 @@ class LandPage extends ConsumerWidget {
               () {
                 ref.read(selectedTabProvider.notifier).setTab(0);
                 updatePgIndex(ref, 0, 0);
-                ref.read(navStackProvider.notifier).push(0);
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(4, 4, 0, 4),
@@ -381,7 +377,6 @@ class LandPage extends ConsumerWidget {
               1,
               () {
                 updatePgIndex(ref, 1, 1);
-                ref.read(navStackProvider.notifier).push(1);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 4, 4, 0),
@@ -415,7 +410,6 @@ class LandPage extends ConsumerWidget {
               1,
               () {
                 updatePgIndex(ref, 4, 4);
-                ref.read(navStackProvider.notifier).push(4);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(4, 4, 0, 0),
@@ -486,7 +480,6 @@ class LandPage extends ConsumerWidget {
               1,
               () {
                 updatePgIndex(ref, 7, 4);
-                ref.read(navStackProvider.notifier).push(4);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 4, 4, 0),
@@ -520,7 +513,6 @@ class LandPage extends ConsumerWidget {
               1,
               () {
                 updatePgIndex(ref, 9, 4);
-                ref.read(navStackProvider.notifier).push(4);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(4, 4, 0, 0),
