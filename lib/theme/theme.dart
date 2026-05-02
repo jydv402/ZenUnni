@@ -456,7 +456,7 @@ var markdownStyleSheetBlack = MarkdownStyleSheet(
   ),
   code: TextStyle(
     // Code block
-    fontFamily: 'Bebas',
+    fontFamily: 'Pop',
     backgroundColor: Colors.white,
     color: Colors.black,
   ),
