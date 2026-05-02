@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:lottie/lottie.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zen/zen_barrel.dart';
 
 class LandPage extends ConsumerWidget {
@@ -516,6 +518,48 @@ class LandPage extends ConsumerWidget {
               ),
             ),
           ],
+        ),
+        // Footer text
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 32, 0, 10),
+          child: Text.rich(
+            TextSpan(
+              style: TextStyle(fontFamily: "Pop", height: 1.1),
+              children: [
+                TextSpan(
+                  text: "ZenUnni",
+                  style: TextStyle(
+                    fontSize: MediaQuery.sizeOf(context).width * 0.18,
+                    fontWeight: FontWeight.bold,
+                    color: colors.footer,
+                  ),
+                ),
+                TextSpan(
+                  text: "\nFind us ",
+                  style: TextStyle(
+                    fontSize: MediaQuery.sizeOf(context).width * 0.05,
+                    fontWeight: FontWeight.w500,
+                    color: colors.footer,
+                  ),
+                ),
+                TextSpan(
+                  text: "here!",
+                  style: TextStyle(
+                    fontSize: MediaQuery.sizeOf(context).width * 0.05,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.blue.withValues(alpha: 0.45),
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(
+                        Uri.parse("https://github.com/jydv402/ZenUnni"),
+                        mode: LaunchMode.platformDefault,
+                      );
+                    },
+                ),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 85),
       ],

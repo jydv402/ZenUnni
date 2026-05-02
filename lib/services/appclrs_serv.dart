@@ -13,6 +13,7 @@ class AppColors {
   Color get toastBg => isDarkMode ? _dark.toastBg : _light.toastBg;
   Color get iconClr => isDarkMode ? _dark.iconClr : _light.iconClr;
   Color get navDrawer => isDarkMode ? _dark.navDrawer : _light.navDrawer;
+  Color get footer => isDarkMode ? _dark.footer : _light.footer;
 }
 
 // Light and Dark Colors
@@ -23,6 +24,7 @@ class LightColors {
   final Color toastBg = const Color.fromRGBO(255, 255, 255, 1); //white
   final Color iconClr = const Color.fromRGBO(0, 0, 0, 1); //black
   final Color navDrawer = const Color.fromARGB(255, 114, 114, 118);
+  final Color footer = const Color.fromARGB(225, 224, 224, 224);
 }
 
 class DarkColors {
@@ -32,6 +34,7 @@ class DarkColors {
   final Color toastBg = const Color.fromARGB(255, 23, 25, 27); // gray app bg
   final Color iconClr = const Color.fromRGBO(255, 255, 255, 1); //white
   final Color navDrawer = const Color.fromARGB(255, 104, 104, 104);
+  final Color footer = const Color.fromARGB(225, 66, 66, 66);
 }
 
 // Riverpod Provider for AppColors
