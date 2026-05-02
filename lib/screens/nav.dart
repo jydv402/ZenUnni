@@ -39,10 +39,6 @@ class _NavbarState extends ConsumerState<Navbar> {
     const AddTaskPage(), // index 9: Add task
   ];
 
-  void _onDrawerItemTapped(int index, WidgetRef ref) {
-    updatePgIndex(ref, index);
-  }
-
   @override
   Widget build(BuildContext context) {
     int pgIndex = ref.watch(pgIndexProvider);
@@ -152,7 +148,7 @@ class _NavbarState extends ConsumerState<Navbar> {
         title: Text(label),
         selected: selected,
         onTap: () {
-          _onDrawerItemTapped(pgIndex, ref);
+          updatePgIndex(ref, pgIndex);
           Navigator.pop(context);
         },
       ),

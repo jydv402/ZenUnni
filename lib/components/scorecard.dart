@@ -1,3 +1,4 @@
+import 'package:zen/components/open_app_drawer_button.dart';
 import 'package:zen/zen_barrel.dart';
 
 class ScoreCard extends ConsumerWidget {
@@ -27,29 +28,7 @@ class ScoreCard extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(26),
-              color: colors.pillClr,
-            ),
-            child: GestureDetector(
-              onTap: () {
-                final scaffoldState = ref
-                    .read(scaffoldKeyProvider)
-                    .currentState;
-                if (scaffoldState != null) {
-                  if (scaffoldState.isDrawerOpen) {
-                    scaffoldState.closeDrawer();
-                  } else {
-                    scaffoldState.openDrawer();
-                  }
-                }
-              },
-              child: Icon(LucideIcons.chevron_right, color: colors.navDrawer),
-            ),
-          ),
+          OpenAppDrawerButton(),
           Row(
             spacing: 10,
             children: [

@@ -11,6 +11,7 @@ class ChatPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final chatMsgs = ref.watch(msgProvider);
     final theme = ref.watch(themeProvider);
+    final colors = ref.watch(appColorsProvider);
 
     const msgs = {
       "Say Hi to Unni!": "Hey Unni! How's it going?",
@@ -47,23 +48,22 @@ class ChatPage extends ConsumerWidget {
                     ),
                     Text(
                       'Unni',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge
+                      style: Theme.of(context).textTheme.headlineLarge
                           ?.copyWith(
-                              fontSize: 120,
-                              color: Colors.blue.shade200,
-                              height: .8,
-                              letterSpacing: -7),
+                            fontSize: 120,
+                            color: Colors.blue.shade200,
+                            height: .8,
+                            letterSpacing: -7,
+                          ),
                     ),
                     Text(
                       'Ask me anything !',
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: theme == ThemeMode.dark
-                                    ? Colors.grey.shade400
-                                    : Colors.grey.shade600,
-                              ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            color: theme == ThemeMode.dark
+                                ? Colors.grey.shade400
+                                : Colors.grey.shade600,
+                          ),
                     ),
                     const SizedBox(height: 2),
                     SizedBox(
@@ -75,21 +75,26 @@ class ChatPage extends ConsumerWidget {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () async {
-                              ref.read(msgProvider.notifier).addMessage(
+                              ref
+                                  .read(msgProvider.notifier)
+                                  .addMessage(
                                     Message(
                                       text: msgs.values.toList()[index],
                                       isUser: true,
                                     ),
                                   );
                               final aiMsg = await ref.read(
-                                  aiResponseAdder(msgs.values.toList()[index])
-                                      .future);
+                                aiResponseAdder(
+                                  msgs.values.toList()[index],
+                                ).future,
+                              );
                               ref.read(msgProvider.notifier).addMessage(aiMsg);
                             },
                             child: Container(
                               margin: const EdgeInsets.only(left: 8),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 18),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 18,
+                              ),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: theme == ThemeMode.dark
@@ -104,9 +109,7 @@ class ChatPage extends ConsumerWidget {
                               ),
                               child: Text(
                                 msgs.keys.toList()[index],
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
+                                style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
                                       height: 0,
                                       color: theme == ThemeMode.dark
@@ -132,8 +135,10 @@ class ChatPage extends ConsumerWidget {
                       padding: const EdgeInsets.fromLTRB(26, 0, 16, 30),
                       child: Row(
                         children: [
-                          Text("Unni",
-                              style: Theme.of(context).textTheme.headlineLarge),
+                          Text(
+                            "Unni",
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          ),
                           const Spacer(),
                           //TODO: Chat history
                           IconButton(
@@ -142,6 +147,7 @@ class ChatPage extends ConsumerWidget {
                             onPressed: () {},
                             icon: Icon(
                               LucideIcons.history,
+                              color: colors.iconClr,
                             ),
                           ),
                           //TODO: Save chat
@@ -149,9 +155,7 @@ class ChatPage extends ConsumerWidget {
                             //Save the chat
                             tooltip: 'Save chat',
                             onPressed: () {},
-                            icon: Icon(
-                              LucideIcons.save,
-                            ),
+                            icon: Icon(LucideIcons.save, color: colors.iconClr),
                           ),
                         ],
                       ),
@@ -169,7 +173,9 @@ class ChatPage extends ConsumerWidget {
                         ),
                         decoration: BoxDecoration(
                           color: msg.isUser
-                              ? Colors.green.shade200 //User msg pill
+                              ? Colors
+                                    .green
+                                    .shade200 //User msg pill
                               : Colors.blue.shade200, //AI msg pill
                           borderRadius: BorderRadius.only(
                             bottomLeft: const Radius.circular(28),
@@ -184,7 +190,9 @@ class ChatPage extends ConsumerWidget {
                         ),
                         padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                         margin: const EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 8),
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
                         child: MarkdownBody(
                           selectable: true,
                           data: msg.text,
@@ -201,11 +209,7 @@ class ChatPage extends ConsumerWidget {
     );
   }
 
-  Widget fabField(
-    BuildContext context,
-    WidgetRef ref,
-    bool isEmpty,
-  ) {
+  Widget fabField(BuildContext context, WidgetRef ref, bool isEmpty) {
     final TextEditingController controller = TextEditingController();
 
     return Container(
@@ -216,9 +220,10 @@ class ChatPage extends ConsumerWidget {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.25),
-              spreadRadius: 5,
-              blurRadius: 7)
+            color: Colors.grey.withValues(alpha: 0.25),
+            spreadRadius: 5,
+            blurRadius: 7,
+          ),
         ],
       ),
       child: Row(
@@ -242,9 +247,7 @@ class ChatPage extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(
-            width: 8,
-          ),
+          const SizedBox(width: 8),
           if (!isEmpty)
             IconButton(
               tooltip: 'Clear chat',
@@ -262,10 +265,7 @@ class ChatPage extends ConsumerWidget {
                   },
                 );
               },
-              icon: const Icon(
-                LucideIcons.eraser,
-                size: 22,
-              ),
+              icon: const Icon(LucideIcons.eraser, size: 22),
             ),
           IconButton(
             tooltip: 'Send',
@@ -276,16 +276,14 @@ class ChatPage extends ConsumerWidget {
                 final userMsg = Message(text: controller.text, isUser: true);
                 ref.read(msgProvider.notifier).addMessage(userMsg);
                 //Get the AI response
-                final aiMsg =
-                    await ref.read(aiResponseAdder(controller.text).future);
+                final aiMsg = await ref.read(
+                  aiResponseAdder(controller.text).future,
+                );
                 ref.read(msgProvider.notifier).addMessage(aiMsg);
               }
               controller.clear();
             },
-            icon: const Icon(
-              LucideIcons.forward,
-              size: 22,
-            ),
+            icon: const Icon(LucideIcons.forward, size: 22),
           ),
         ],
       ),
@@ -294,13 +292,15 @@ class ChatPage extends ConsumerWidget {
 }
 
 //Menu Item in the popup menu
-ListTile menuItem(BuildContext context, WidgetRef ref, String label,
-    IconData icon, GestureTapCallback onTap) {
+ListTile menuItem(
+  BuildContext context,
+  WidgetRef ref,
+  String label,
+  IconData icon,
+  GestureTapCallback onTap,
+) {
   return ListTile(
-    title: Text(
-      label,
-      style: Theme.of(context).textTheme.labelSmall,
-    ),
+    title: Text(label, style: Theme.of(context).textTheme.labelSmall),
     leading: Icon(icon),
     onTap: onTap,
   );
