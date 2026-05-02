@@ -63,91 +63,98 @@ class _NavbarState extends ConsumerState<Navbar> {
         resizeToAvoidBottomInset: false,
         body: pages[pgIndex],
         drawer: Drawer(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(26),
+              bottomRight: Radius.circular(26),
+            ),
+          ),
           child: ListView(
-            padding: EdgeInsets.zero,
             children: [
-              DrawerHeader(
-                decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-                child: const Text(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(26, 56, 0, 16),
+                child: Text(
                   'ZenUnni',
-                  style: TextStyle(color: Colors.white, fontSize: 24),
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.house),
-                title: const Text('Home'),
-                selected: pgIndex == 0,
-                onTap: () {
-                  _onDrawerItemTapped(0, ref);
-                  Navigator.pop(context);
-                },
+
+              zenNavListTile(
+                icon: LucideIcons.house,
+                pgIndex: 0,
+                label: "Home",
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.pencil_ruler),
-                title: const Text('Tasks'),
-                selected: pgIndex == 1,
-                onTap: () {
-                  _onDrawerItemTapped(1, ref);
-                  Navigator.pop(context);
-                },
+              zenNavListTile(
+                icon: LucideIcons.pencil_ruler,
+                pgIndex: 1,
+                label: "Tasks",
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.grid_2x2_check),
-                title: const Text('Habit'),
-                selected: pgIndex == 2,
-                onTap: () {
-                  _onDrawerItemTapped(2, ref);
-                  Navigator.pop(context);
-                },
+              zenNavListTile(
+                icon: LucideIcons.grid_2x2_check,
+                pgIndex: 2,
+                label: "Habit",
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.smile),
-                title: const Text('Mood'),
-                selected: pgIndex == 3,
-                onTap: () {
-                  _onDrawerItemTapped(3, ref);
-                  Navigator.pop(context);
-                },
+              zenNavListTile(
+                icon: LucideIcons.smile,
+                pgIndex: 3,
+                label: "Mood",
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.timer),
-                title: const Text('Pomodoro'),
-                selected: pgIndex == 4,
-                onTap: () {
-                  _onDrawerItemTapped(4, ref);
-                  Navigator.pop(context);
-                },
+              zenNavListTile(
+                icon: LucideIcons.timer,
+                pgIndex: 4,
+                label: "Pomodoro",
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.sticky_note),
-                title: const Text('Notes'),
-                selected: pgIndex == 5,
-                onTap: () {
-                  _onDrawerItemTapped(5, ref);
-                  Navigator.pop(context);
-                },
+              zenNavListTile(
+                icon: LucideIcons.sticky_note,
+                pgIndex: 5,
+                label: "Notes",
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.trophy),
-                title: const Text('Leaderboard'),
-                selected: pgIndex == 6,
-                onTap: () {
-                  _onDrawerItemTapped(6, ref);
-                  Navigator.pop(context);
-                },
+              zenNavListTile(
+                icon: LucideIcons.trophy,
+                pgIndex: 6,
+                label: "Leaderboard",
               ),
-              ListTile(
-                leading: const Icon(LucideIcons.user),
-                title: const Text('Profile'),
-                selected: pgIndex == 7,
-                onTap: () {
-                  _onDrawerItemTapped(7, ref);
-                  Navigator.pop(context);
-                },
+              zenNavListTile(
+                icon: LucideIcons.user,
+                pgIndex: 7,
+                label: "Profile",
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget zenNavListTile({
+    required IconData icon,
+    required int pgIndex,
+    required String label,
+  }) {
+    final colors = ref.watch(appColorsProvider);
+    bool selected = pgIndex == ref.watch(pgIndexProvider);
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 4, 4, 0),
+      padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(22),
+          bottomRight: Radius.circular(22),
+        ),
+        color: selected ? Color.fromRGBO(255, 139, 44, 1) : Colors.transparent,
+      ),
+      child: ListTile(
+        iconColor: colors.navDrawer,
+        textColor: colors.navDrawer,
+        selectedColor: Colors.black,
+        leading: Icon(icon),
+        title: Text(label),
+        selected: selected,
+        onTap: () {
+          _onDrawerItemTapped(pgIndex, ref);
+          Navigator.pop(context);
+        },
       ),
     );
   }

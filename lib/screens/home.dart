@@ -71,10 +71,9 @@ class LandPage extends ConsumerWidget {
       children: [
         //Top score card
         Padding(
-          padding: const EdgeInsets.only(right: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: const ScoreCard(),
         ),
-        const SizedBox(height: 20),
         //Greeting text
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),

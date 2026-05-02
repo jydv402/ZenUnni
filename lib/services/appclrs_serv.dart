@@ -12,6 +12,7 @@ class AppColors {
   Color get pillClr => isDarkMode ? _dark.pillClr : _light.pillClr;
   Color get toastBg => isDarkMode ? _dark.toastBg : _light.toastBg;
   Color get iconClr => isDarkMode ? _dark.iconClr : _light.iconClr;
+  Color get navDrawer => isDarkMode ? _dark.navDrawer : _light.navDrawer;
 }
 
 // Light and Dark Colors
@@ -21,6 +22,7 @@ class LightColors {
   final Color pillClr = const Color.fromRGBO(224, 224, 224, 1); //gray 300
   final Color toastBg = const Color.fromRGBO(255, 255, 255, 1); //white
   final Color iconClr = const Color.fromRGBO(0, 0, 0, 1); //black
+  final Color navDrawer = const Color.fromARGB(255, 114, 114, 118);
 }
 
 class DarkColors {
@@ -29,12 +31,11 @@ class DarkColors {
   final Color pillClr = const Color.fromRGBO(66, 66, 66, 1); //gray 800
   final Color toastBg = const Color.fromARGB(255, 23, 25, 27); // gray app bg
   final Color iconClr = const Color.fromRGBO(255, 255, 255, 1); //white
+  final Color navDrawer = const Color.fromARGB(255, 104, 104, 104);
 }
 
 // Riverpod Provider for AppColors
-final appColorsProvider = Provider<AppColors>(
-  (ref) {
-    final themeMode = ref.watch(themeProvider);
-    return AppColors(themeMode == ThemeMode.dark);
-  },
-);
+final appColorsProvider = Provider<AppColors>((ref) {
+  final themeMode = ref.watch(themeProvider);
+  return AppColors(themeMode == ThemeMode.dark);
+});
