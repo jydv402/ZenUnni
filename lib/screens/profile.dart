@@ -108,12 +108,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: user.gender == 0
-                      ? AssetImage(
-                          males.values.elementAt(user.avatar),
-                        )
-                      : AssetImage(
-                          females.values.elementAt(user.avatar),
-                        ),
+                      ? AssetImage(males.values.elementAt(user.avatar))
+                      : AssetImage(females.values.elementAt(user.avatar)),
                 ),
               ),
             ),
@@ -133,15 +129,16 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             //   style: Theme.of(context).textTheme.Theme.of(context).textTheme.bodyMediumedium,
             //   textAlign: TextAlign.center,
             // ),
-
             div16,
 
             // Theme Toggle
             _divTxt("Theme"),
             buttonBg(
               SwitchListTile(
-                title: Text("Dark Mode",
-                    style: Theme.of(context).textTheme.bodyMedium),
+                title: Text(
+                  "Dark Mode",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 value: isDarkMode,
                 onChanged: (value) {
                   ref.read(themeProvider.notifier).toggleTheme();
@@ -153,8 +150,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             _divTxt("Account"),
             buttonBg(
               ListTile(
-                title: Text("Change account details",
-                    style: Theme.of(context).textTheme.bodyMedium),
+                title: Text(
+                  "Change account details",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 trailing: Icon(
                   LucideIcons.user_round_cog,
                   color: colors.iconClr,
@@ -163,10 +162,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UsernamePage(
-                        isUpdate: true,
-                        user: user,
-                      ),
+                      builder: (context) =>
+                          UsernamePage(isUpdate: true, user: user),
                     ),
                   );
                 },
@@ -175,12 +172,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
             buttonBg(
               ListTile(
-                title: Text("API Key Integration",
-                    style: Theme.of(context).textTheme.bodyMedium),
-                trailing: Icon(
-                  LucideIcons.key_round,
-                  color: colors.iconClr,
+                title: Text(
+                  "API Key Integration",
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
+                trailing: Icon(LucideIcons.key_round, color: colors.iconClr),
                 onTap: () {
                   Navigator.pushNamed(context, '/api_key');
                 },
@@ -188,8 +184,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ),
             buttonBg(
               ListTile(
-                title: Text("Edit personal details",
-                    style: Theme.of(context).textTheme.bodyMedium),
+                title: Text(
+                  "Edit personal details",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 trailing: Icon(
                   LucideIcons.user_round_pen,
                   color: colors.iconClr,
@@ -198,10 +196,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DescPage(
-                        isEdit: true,
-                        user: user,
-                      ),
+                      builder: (context) => DescPage(isEdit: true, user: user),
                     ),
                   );
                 },
@@ -209,12 +204,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ),
             buttonBg(
               ListTile(
-                title: Text("Logout",
-                    style: Theme.of(context).textTheme.bodyMedium),
-                trailing: Icon(
-                  LucideIcons.log_out,
-                  color: colors.iconClr,
+                title: Text(
+                  "Logout",
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
+                trailing: Icon(LucideIcons.log_out, color: colors.iconClr),
                 onTap: () {
                   showConfirmDialog(
                     context,
@@ -233,15 +227,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ),
             buttonBg(
               ListTile(
-                title: Text("Delete Account",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: Colors.red)),
-                trailing: const Icon(
-                  LucideIcons.trash_2,
-                  color: Colors.red,
+                title: Text(
+                  "Delete Account",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.red),
                 ),
+                trailing: const Icon(LucideIcons.trash_2, color: Colors.red),
                 onTap: () {
                   showConfirmDialog(
                     context,
@@ -262,10 +254,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         );
       },
       loading: () => Center(
-        child: showRunningIndicator(
-          context,
-          "Getting your profile...",
-        ),
+        child: showRunningIndicator(context, "Getting your profile..."),
       ),
       error: (err, _) => Center(child: Text("Error: $err")),
     );
@@ -274,7 +263,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Container buttonBg(Widget child) {
     final colors = ref.watch(appColorsProvider);
     return Container(
-      height: 100,
+      height: 84,
       margin: const EdgeInsets.fromLTRB(6, 3, 6, 3),
       padding: const EdgeInsets.all(10),
       alignment: Alignment.center,
@@ -289,10 +278,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Padding _divTxt(String title) {
     return Padding(
       padding: EdgeInsets.fromLTRB(26, 20, 26, 2),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
+      child: Text(title, style: Theme.of(context).textTheme.titleMedium),
     );
   }
 }

@@ -19,7 +19,7 @@ class AppColors {
 class LightColors {
   final Color mdText = const Color.fromRGBO(0, 0, 0, 1); //black
   final Color homeBgTxt = const Color.fromRGBO(245, 245, 245, 0.320);
-  final Color pillClr = const Color.fromRGBO(224, 224, 224, 1); //gray 300
+  final Color pillClr = const Color.fromARGB(84, 224, 224, 224); //gray 300
   final Color toastBg = const Color.fromRGBO(255, 255, 255, 1); //white
   final Color iconClr = const Color.fromRGBO(0, 0, 0, 1); //black
   final Color navDrawer = const Color.fromARGB(255, 114, 114, 118);
@@ -28,7 +28,7 @@ class LightColors {
 class DarkColors {
   final Color mdText = const Color.fromRGBO(255, 255, 255, 1); //white
   final Color homeBgTxt = const Color.fromRGBO(255, 255, 255, 0.080);
-  final Color pillClr = const Color.fromRGBO(66, 66, 66, 1); //gray 800
+  final Color pillClr = const Color.fromARGB(66, 66, 66, 66); //gray 800
   final Color toastBg = const Color.fromARGB(255, 23, 25, 27); // gray app bg
   final Color iconClr = const Color.fromRGBO(255, 255, 255, 1); //white
   final Color navDrawer = const Color.fromARGB(255, 104, 104, 104);
