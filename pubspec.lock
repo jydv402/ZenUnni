@@ -265,14 +265,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.15.0"
-  cross_file:
-    dependency: transitive
-    description:
-      name: cross_file
-      sha256: "28bb3ae56f117b5aec029d702a90f57d285cd975c3c5c281eaca38dbc47c5937"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.5+2"
   crypto:
     dependency: transitive
     description:
@@ -600,22 +592,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  glassmorphism:
-    dependency: "direct main"
-    description:
-      name: glassmorphism
-      sha256: c0f65ea2681d4ee6d4125b947946d983335cd44765e835cdc039894b076a6e31
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
-  glassmorphism_widgets:
-    dependency: "direct main"
-    description:
-      name: glassmorphism_widgets
-      sha256: "97cf0452afb32dea55cd4eab008cedd64869668cbe1ed140f3a276d73196c2e3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.2"
   glob:
     dependency: transitive
     description:
@@ -720,22 +696,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
-  langchain:
-    dependency: "direct main"
-    description:
-      name: langchain
-      sha256: b7035e0903953cb065734499296e66d9fa0f6e15934aa2f57389b9fb6b001aab
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.1"
-  langchain_core:
-    dependency: transitive
-    description:
-      name: langchain_core
-      sha256: fce3cd0e31dcbac80d209f6361207936a58b05506b800f13227cbe83f6e3e721
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -760,14 +720,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
-  line_icons:
-    dependency: "direct main"
-    description:
-      name: line_icons
-      sha256: "249d781d922f5437ac763d9c8f5a02cf5b499a6dc3f85e4b92e074cff0a932ab"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
   lints:
     dependency: transitive
     description:
@@ -1213,14 +1165,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.16"
-  timeline_tile_plus:
-    dependency: "direct main"
-    description:
-      name: timeline_tile_plus
-      sha256: e7e4988b8ac343f0670a8e9f593805b5be4e372510ce6f10b63d5c11444a6377
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   timezone:
     dependency: "direct main"
     description:
