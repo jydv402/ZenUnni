@@ -4,56 +4,72 @@ on:
       - release
 
 name: Build ZenUnni App
+
 jobs:
   build:
     name: Build and Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup JDK 17
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
           java-version: 17
+          distribution: 'zulu'
+          cache: 'gradle'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
-      - name: Create .env File
-        run: |
-          echo "KEY=${{ secrets.KEY }}" > .env
+      - name: Accept Android SDK licenses
+        run: yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses
 
       - name: Flutter clean
         run: flutter clean
 
       - name: Getting Dependencies
-        run: flutter pub get
-
-      - name: Upgrade Dependencies
         run: flutter pub upgrade
 
-      - name: Upgrade Dependencies Major Version
-        run: flutter pub upgrade --major-versions
-
-      - name: Getting Dependencies
-        run: flutter pub get
-
-      - name: Building APK
-        run: flutter build apk --release --split-per-abi
-      
-      - name: Renaming APK files
+      - name: Extract version from pubspec.yaml
+        id: version
         run: |
-          mv build/app/outputs/apk/release/app-armeabi-v7a-release.apk build/app/outputs/apk/release/zenunni-armeabi-v7a-${{ github.run_number }}.apk
-          mv build/app/outputs/apk/release/app-arm64-v8a-release.apk build/app/outputs/apk/release/zenunni-arm64-v8a-${{ github.run_number }}.apk
-          mv build/app/outputs/apk/release/app-x86_64-release.apk build/app/outputs/apk/release/zenunni-x86_64-${{ github.run_number }}.apk
-          
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          VERSION_NAME=$(echo $VERSION | cut -d'+' -f1)
+          VERSION_CODE=$(echo $VERSION | cut -d'+' -f2)
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+
+      - name: Decode keystore from GitHub Secret
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=keystore.jks" >> android/key.properties
+
+
+      - name: Building signed APK 
+        run: flutter build apk --release --split-per-abi
+
+      - name: Rename APK files
+        run: |
+          cd build/app/outputs/apk/release
+          mv app-armeabi-v7a-release.apk zenunni-armeabi-v7a-${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}.apk
+          mv app-arm64-v8a-release.apk zenunni-arm64-v8a-${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}.apk
+          mv app-x86_64-release.apk zenunni-x86_64-${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}.apk
 
       - name: Upload APK
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/zenunni-armeabi-v7a-${{ github.run_number }}.apk, build/app/outputs/apk/release/zenunni-arm64-v8a-${{ github.run_number }}.apk, build/app/outputs/apk/release/zenunni-x86_64-${{ github.run_number }}.apk"
-          tag: v0.0.${{ github.run_number }}
-          token: ${{ secrets.TOKEN }}
+          artifacts: "build/app/outputs/apk/release/zenunni-armeabi-v7a-${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}.apk,build/app/outputs/apk/release/zenunni-arm64-v8a-${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}.apk,build/app/outputs/apk/release/zenunni-x86_64-${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}.apk"
+          tag: ${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}
+          name: ZenUnni v${{ steps.version.outputs.version_name }}
+          token: ${{ secrets.ZENUNNI_TOKEN }}
