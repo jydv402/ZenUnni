@@ -33,7 +33,7 @@ class AIService {
         ]
       },
       'contents': history,
-      if (generationConfig != null) 'generationConfig': generationConfig,
+      'generationConfig': ?generationConfig,
     };
 
     final response = await http.post(
