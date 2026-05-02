@@ -58,7 +58,6 @@ class _HabitState extends ConsumerState<HabitPage> {
       Colors.orange.shade100
     ];
 
-    // Color selectedColor = Colors.green;
 
     //Function to update the values
     if (isEdit) {

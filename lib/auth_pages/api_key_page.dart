@@ -104,7 +104,8 @@ class _ApiKeyPageState extends ConsumerState<ApiKeyPage> {
                       'https://aistudio.google.com/app/apikey',
                     );
                     final launched = await launchUrl(url);
-                    if (!launched && mounted) {
+                    if (!context.mounted) return;
+                    if (!launched) {
                       showHeadsupNoti(
                         context,
                         ref,

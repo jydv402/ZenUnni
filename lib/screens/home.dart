@@ -27,66 +27,31 @@ class LandPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userNameAsync = ref.watch(userNameProvider);
-    final profileAsync = ref.watch(userProvider);
-    final moodAsync = ref.watch(moodProvider);
+    final userName = ref.watch(userNameProvider).value;
+    final profile = ref.watch(userProvider).value;
+    final mood = ref.watch(moodProvider).value;
 
-    return userNameAsync.when(
-      data: (userName) {
-        return profileAsync.when(
-          data: (profile) {
-            if (userName == null || profile == null) {
-              return Center(
-                child: showRunningIndicator(context, "Getting things ready"),
-              );
-            }
-            final mood = moodAsync.value;
-            return homeScreen(context, ref, userName, mood);
-          },
-          loading: () => Center(
-            child: showRunningIndicator(
-                context, "Setting things up...\nJust for you..!"),
-          ),
-          error: (e, st) => const Center(
-            child: Text("Something went wrong"),
-          ),
-        );
-      },
-      loading: () => Center(
+    if (userName == null || profile == null) {
+      return Center(
         child: showRunningIndicator(
-            context, "Setting things up...\nJust for you..!"),
-      ),
-      error: (e, st) => const Center(
-        child: Text("Something went wrong"),
-      ),
+          context,
+          "Setting things up...\nJust for you..!",
+        ),
+      );
+    }
+
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: homeScreen(context, ref, userName, mood),
     );
   }
 
-  // @override
-  // Widget build(BuildContext context, WidgetRef ref) {
-  //   final user = ref.watch(userNameProvider);
-  //   final mood = ref.watch(moodProvider);
-
-  //   return user.when(
-  //     data: (data) {
-  //       return homeScreen(context, ref, user.value, mood.value);
-  //     },
-  //     error: (error, stackTrace) {
-  //       return Center(
-  //         child: Text('Error: $error'),
-  //       );
-  //     },
-  //     loading: () {
-  //       return Center(
-  //         child: showRunningIndicator(
-  //             context, "Setting things up...\nJust for you..!"),
-  //       );
-  //     },
-  //   );
-  // }
-
   Widget homeScreen(
-      BuildContext context, WidgetRef ref, String? user, String? mood) {
+    BuildContext context,
+    WidgetRef ref,
+    String? user,
+    String? mood,
+  ) {
     final colors = ref.watch(appColorsProvider);
     //For rank card
     final rankDetails = ref.watch(rankedUserSearchProvider).value;
@@ -99,8 +64,8 @@ class LandPage extends ConsumerWidget {
     final greeting = now < 12
         ? 'Morning'
         : now < 17
-            ? 'Afternoon'
-            : 'Evening';
+        ? 'Afternoon'
+        : 'Evening';
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       children: [
@@ -116,20 +81,14 @@ class LandPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Good $greeting,",
-                  style: Theme.of(context).textTheme.headlineMedium),
+              Text(
+                "Good $greeting,",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
               Text(user!, style: Theme.of(context).textTheme.headlineLarge),
             ],
           ),
         ),
-        // Mood not added yet msg
-        // if (mood == null)
-        //   //Show add mood msg
-        //   _msgContainer(
-        //     context,
-        //     "No mood added yet, add it now? 👀",
-        //     () => updatePgIndex(ref, 5, 3),
-        //   ),
 
         Flex(
           direction: Axis.horizontal,
@@ -150,17 +109,19 @@ class LandPage extends ConsumerWidget {
                       spacing: 16,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Lottie.asset("assets/loading/ld_shapes.json",
-                            height: 80, width: 80),
+                        Lottie.asset(
+                          "assets/loading/ld_shapes.json",
+                          height: 80,
+                          width: 80,
+                        ),
                         Text(
                           "Unni",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge
+                          style: Theme.of(context).textTheme.headlineLarge
                               ?.copyWith(
-                                  fontSize: 110,
-                                  color: Colors.blue.shade200,
-                                  letterSpacing: -7),
+                                fontSize: 110,
+                                color: Colors.blue.shade200,
+                                letterSpacing: -7,
+                              ),
                         ),
                         const SizedBox(width: 2),
                       ],
@@ -179,7 +140,7 @@ class LandPage extends ConsumerWidget {
               context,
               3,
               () {
-                updatePgIndex(ref, 3, 3);
+                updatePgIndex(ref, 3);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 0, 4, 4),
@@ -194,13 +155,18 @@ class LandPage extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               spacing: 8,
                               children: [
-                                Lottie.asset(reversedMoodList["Empty"]!,
-                                    height: 120, width: 120),
-                                Text("So empty...",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium,
-                                    textAlign: TextAlign.center),
+                                Lottie.asset(
+                                  reversedMoodList["Empty"]!,
+                                  height: 120,
+                                  width: 120,
+                                ),
+                                Text(
+                                  "So empty...",
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineMedium,
+                                  textAlign: TextAlign.center,
+                                ),
                                 Text(
                                   "Add a mood now?",
                                   style: Theme.of(context).textTheme.bodySmall,
@@ -214,22 +180,25 @@ class LandPage extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               spacing: 8,
                               children: [
-                                Lottie.asset(reversedMoodList[mood]!,
-                                    height: 120, width: 120),
+                                Lottie.asset(
+                                  reversedMoodList[mood]!,
+                                  height: 120,
+                                  width: 120,
+                                ),
                                 Text.rich(
                                   TextSpan(
                                     children: [
                                       TextSpan(
                                         text: "Mood :\n",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodySmall,
                                       ),
                                       TextSpan(
                                         text: mood,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineMedium,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.headlineMedium,
                                       ),
                                     ],
                                   ),
@@ -245,7 +214,7 @@ class LandPage extends ConsumerWidget {
               context,
               2,
               () {
-                updatePgIndex(ref, 6, 4);
+                updatePgIndex(ref, 6);
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(4, 0, 0, 4),
@@ -258,8 +227,11 @@ class LandPage extends ConsumerWidget {
                     children: [
                       const SizedBox(height: 12),
                       Center(
-                        child: Lottie.asset("assets/emoji/trophy.json",
-                            height: 100, width: 100),
+                        child: Lottie.asset(
+                          "assets/emoji/trophy.json",
+                          height: 100,
+                          width: 100,
+                        ),
                       ),
                       const SizedBox(height: 14),
                       Text.rich(
@@ -270,17 +242,15 @@ class LandPage extends ConsumerWidget {
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             TextSpan(
-                              text: rankDetails?.any((element) =>
-                                          element.username == user) ==
+                              text:
+                                  rankDetails?.any(
+                                        (element) => element.username == user,
+                                      ) ==
                                       true
                                   ? "${rankDetails!.firstWhere((element) => element.username == user).rank}"
                                   : "0",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              style: Theme.of(context).textTheme.headlineMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600),
                             ),
                             TextSpan(
                               text: " / ${rankDetails?.length}",
@@ -290,10 +260,10 @@ class LandPage extends ConsumerWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
 
@@ -305,7 +275,7 @@ class LandPage extends ConsumerWidget {
               2,
               () {
                 ref.read(selectedTabProvider.notifier).setTab(1);
-                updatePgIndex(ref, 0, 0);
+                updatePgIndex(ref, 1);
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(0, 4, 4, 4),
@@ -327,7 +297,7 @@ class LandPage extends ConsumerWidget {
                           "Craft a schedule",
                           style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -339,7 +309,7 @@ class LandPage extends ConsumerWidget {
               3,
               () {
                 ref.read(selectedTabProvider.notifier).setTab(0);
-                updatePgIndex(ref, 0, 0);
+                updatePgIndex(ref, 1);
               },
               colors.pillClr,
               EdgeInsets.fromLTRB(4, 4, 0, 4),
@@ -360,10 +330,10 @@ class LandPage extends ConsumerWidget {
                           "Track your tasks",
                           style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
-                        )
+                        ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -376,7 +346,7 @@ class LandPage extends ConsumerWidget {
               context,
               1,
               () {
-                updatePgIndex(ref, 1, 1);
+                updatePgIndex(ref, 2);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 4, 4, 0),
@@ -401,7 +371,7 @@ class LandPage extends ConsumerWidget {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -409,7 +379,7 @@ class LandPage extends ConsumerWidget {
               context,
               1,
               () {
-                updatePgIndex(ref, 4, 4);
+                updatePgIndex(ref, 7);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(4, 4, 0, 0),
@@ -429,12 +399,14 @@ class LandPage extends ConsumerWidget {
                             image: DecorationImage(
                               image: profileDetails?.gender == 0
                                   ? AssetImage(
-                                      males.values
-                                          .elementAt(profileDetails!.avatar),
+                                      males.values.elementAt(
+                                        profileDetails!.avatar,
+                                      ),
                                     )
                                   : AssetImage(
-                                      females.values
-                                          .elementAt(profileDetails!.avatar),
+                                      females.values.elementAt(
+                                        profileDetails!.avatar,
+                                      ),
                                     ),
                               fit: BoxFit.cover,
                             ),
@@ -468,10 +440,7 @@ class LandPage extends ConsumerWidget {
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(10, 20, 26, 2),
-          child: Text(
-            "Extras",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          child: Text("Extras", style: Theme.of(context).textTheme.titleMedium),
         ),
         Row(
           children: [
@@ -479,7 +448,7 @@ class LandPage extends ConsumerWidget {
               context,
               1,
               () {
-                updatePgIndex(ref, 7, 4);
+                updatePgIndex(ref, 4);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(0, 4, 4, 0),
@@ -495,8 +464,10 @@ class LandPage extends ConsumerWidget {
                           height: 150,
                           width: 150,
                         ),
-                        Text("Pomodoro",
-                            style: Theme.of(context).textTheme.headlineMedium),
+                        Text(
+                          "Pomodoro",
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                         Text(
                           "Start a new\nfocus session",
                           style: Theme.of(context).textTheme.bodySmall,
@@ -504,7 +475,7 @@ class LandPage extends ConsumerWidget {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -512,7 +483,7 @@ class LandPage extends ConsumerWidget {
               context,
               1,
               () {
-                updatePgIndex(ref, 9, 4);
+                updatePgIndex(ref, 5);
               },
               colors.pillClr,
               const EdgeInsets.fromLTRB(4, 4, 0, 0),
@@ -530,8 +501,10 @@ class LandPage extends ConsumerWidget {
                           width: 120,
                         ),
                         const SizedBox(height: 18),
-                        Text("Notes",
-                            style: Theme.of(context).textTheme.headlineMedium),
+                        Text(
+                          "Notes",
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                         Text(
                           "Add a\nnew note",
                           style: Theme.of(context).textTheme.bodySmall,
@@ -539,7 +512,7 @@ class LandPage extends ConsumerWidget {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -550,9 +523,15 @@ class LandPage extends ConsumerWidget {
     );
   }
 
-  Widget _bentos(BuildContext context, int flex, GestureTapCallback onTap,
-      Color color, EdgeInsets margin, Widget child,
-      {double? height}) {
+  Widget _bentos(
+    BuildContext context,
+    int flex,
+    GestureTapCallback onTap,
+    Color color,
+    EdgeInsets margin,
+    Widget child, {
+    double? height,
+  }) {
     return Flexible(
       flex: flex,
       fit: FlexFit.tight,
@@ -561,7 +540,9 @@ class LandPage extends ConsumerWidget {
         child: Container(
           margin: margin,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(26), color: color),
+            borderRadius: BorderRadius.circular(26),
+            color: color,
+          ),
           height: height ?? 250,
           width: MediaQuery.sizeOf(context).width,
           child: child,
@@ -578,27 +559,13 @@ class LandPage extends ConsumerWidget {
         label,
         softWrap: false,
         style: TextStyle(
-            fontFamily: "Pop",
-            fontSize: 100,
-            letterSpacing: -5,
-            fontWeight: FontWeight.w600,
-            color: color),
+          fontFamily: "Pop",
+          fontSize: 100,
+          letterSpacing: -5,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
       ),
     );
   }
-
-  // GestureDetector _msgContainer(
-  //     BuildContext context, String msg, GestureTapCallback onTap) {
-  //   return GestureDetector(
-  //     onTap: onTap,
-  //     child: Container(
-  //       padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(26),
-  //         color: Colors.white30,
-  //       ),
-  //       child: Text(msg, style: Theme.of(context).textTheme.bodyMedium),
-  //     ),
-  //   );
-  // }
 }

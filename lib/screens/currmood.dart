@@ -17,9 +17,7 @@ class CurrentMood extends ConsumerWidget {
         data: (moodData) => moodData == null
             ? _moodPage(context, ref, "Empty", "Add mood", false)
             : _moodPage(context, ref, moodData, "Update mood", true),
-        error: (error, stackTrace) => Center(
-          child: Text('Error: $error'),
-        ),
+        error: (error, stackTrace) => Center(child: Text('Error: $error')),
         loading: () => Center(
           child: showRunningIndicator(context, "Loading Mood data..."),
         ),
@@ -27,22 +25,29 @@ class CurrentMood extends ConsumerWidget {
     );
   }
 
-  Widget _moodPage(BuildContext context, WidgetRef ref, String mood,
-      String label, bool moodExists) {
+  Widget _moodPage(
+    BuildContext context,
+    WidgetRef ref,
+    String mood,
+    String label,
+    bool moodExists,
+  ) {
     return ListView(
       padding: pagePaddingWithScore,
       children: [
         const ScoreCard(),
-        Text(
-          "Mood",
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
+        Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(height: 60),
         _currMoodCard(context, mood),
         const SizedBox(height: 50),
-        fabButton(context, () {
-          updatePgIndex(ref, 5, 3);
-        }, 'Update Mood', 0),
+        fabButton(
+          context,
+          () {
+            updatePgIndex(ref, 8);
+          },
+          'Update Mood',
+          0,
+        ),
         const SizedBox(height: 20),
         if (moodExists) _motivationContainer(context, mood, ref),
       ],
@@ -59,21 +64,23 @@ class CurrentMood extends ConsumerWidget {
         const SizedBox(height: 40),
         Center(
           child: Text(
-              mood == "Empty"
-                  ? "You haven't added\na mood yet.\nAdd one now?"
-                  : mood,
-              style: Theme.of(context).textTheme.headlineMedium,
-              textAlign: TextAlign.center),
-        )
+            mood == "Empty"
+                ? "You haven't added\na mood yet.\nAdd one now?"
+                : mood,
+            style: Theme.of(context).textTheme.headlineMedium,
+            textAlign: TextAlign.center,
+          ),
+        ),
       ],
     );
   }
 
   Widget _motivationContainer(
-      BuildContext context, String mood, WidgetRef ref) {
-    final motivation = ref.watch(
-      motivationalMessageProvider(mood),
-    );
+    BuildContext context,
+    String mood,
+    WidgetRef ref,
+  ) {
+    final motivation = ref.watch(motivationalMessageProvider(mood));
 
     return motivation.when(
       data: (motivationData) => _motivationCard(context, motivationData, ref),
@@ -86,11 +93,16 @@ class CurrentMood extends ConsumerWidget {
   }
 
   Widget _motivationCard(
-      BuildContext context, String motivation, WidgetRef ref) {
+    BuildContext context,
+    String motivation,
+    WidgetRef ref,
+  ) {
     final colors = ref.watch(appColorsProvider);
     final message = motivation
         .replaceAll(
-            RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'), '')
+          RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
+          '',
+        )
         .trim();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,13 +179,18 @@ class CurrentMood extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 30),
-        fabButton(context, () {
-          ref.read(msgProvider.notifier).clearMessages();
-          ref.read(msgProvider.notifier).addMessage(
-                Message(text: message, isUser: false),
-              );
-          Navigator.pushNamed(context, '/chat');
-        }, 'Continue to chat with Unni', 0),
+        fabButton(
+          context,
+          () {
+            ref.read(msgProvider.notifier).clearMessages();
+            ref
+                .read(msgProvider.notifier)
+                .addMessage(Message(text: message, isUser: false));
+            Navigator.pushNamed(context, '/chat');
+          },
+          'Continue to chat with Unni',
+          0,
+        ),
         const SizedBox(height: 50),
       ],
     );
@@ -186,17 +203,16 @@ class CurrentMood extends ConsumerWidget {
         const SizedBox(height: 50),
         Text("From Unni...", style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: 24),
-        // MarkdownBody(
-        //   data:
-        //       "Oops! I couldn't munch up a motivational message for you. Try again later.🙂",
-        //   styleSheet: markdownStyleSheetWhite,
-        // ),
+
         Text(
-            "Oops! I couldn't munch up a motivational message for you.\nTry again later. 😵",
-            style: Theme.of(context).textTheme.bodyMedium),
+          "Oops! I couldn't munch up a motivational message for you.\nTry again later. 😵",
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
         const SizedBox(height: 10),
-        Text("Psst! Checking your \ninternet connection may help...🙂",
-            style: Theme.of(context).textTheme.bodySmall),
+        Text(
+          "Psst! Checking your \ninternet connection may help...🙂",
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
       ],
     );
   }

@@ -25,21 +25,17 @@ class ScoreCard extends ConsumerWidget {
       key: Key('scorecard'),
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Builder(
-          builder: (context) {
-            return IconButton(
-              icon: const Icon(LucideIcons.menu, size: 28),
-              onPressed: () {
-                final scaffoldState = ref.read(scaffoldKeyProvider).currentState;
-                if (scaffoldState != null) {
-                  if (scaffoldState.isDrawerOpen) {
-                    scaffoldState.closeDrawer();
-                  } else {
-                    scaffoldState.openDrawer();
-                  }
-                }
-              },
-            );
+        IconButton(
+          icon: const Icon(LucideIcons.menu, size: 28),
+          onPressed: () {
+            final scaffoldState = ref.read(scaffoldKeyProvider).currentState;
+            if (scaffoldState != null) {
+              if (scaffoldState.isDrawerOpen) {
+                scaffoldState.closeDrawer();
+              } else {
+                scaffoldState.openDrawer();
+              }
+            }
           },
         ),
         Row(
@@ -48,7 +44,7 @@ class ScoreCard extends ConsumerWidget {
             //Score
             GestureDetector(
               onTap: () {
-                updatePgIndex(ref, 6, 4);
+                updatePgIndex(ref, 6);
               },
               child: Container(
                 padding: EdgeInsets.fromLTRB(16, 16, 26, 16),
@@ -69,7 +65,7 @@ class ScoreCard extends ConsumerWidget {
             ),
             GestureDetector(
               onTap: () {
-                updatePgIndex(ref, 4, 4);
+                updatePgIndex(ref, 7);
               },
               child: Container(
                 height: 56,

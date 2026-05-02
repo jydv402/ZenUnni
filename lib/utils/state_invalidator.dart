@@ -4,7 +4,6 @@ void stateInvalidator(WidgetRef ref, bool isNew) {
   // Invalidate all state providers
   if (isNew) {
     ref.invalidate(pgIndexProvider); //nav_serv.dart
-    ref.invalidate(subPgIndexProvider);
   }
   //nav_serv.dart
   ref.invalidate(scoreProvider); //gamify_serv.dart

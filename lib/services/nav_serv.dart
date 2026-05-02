@@ -8,20 +8,7 @@ final pgIndexProvider = NotifierProvider<PageNotifier, int>(PageNotifier.new);
 
 class PageNotifier extends Notifier<int> {
   @override
-  int build() => 2;
-
-  void setState(int newState) {
-    state = newState;
-  }
-}
-
-//Sub page index
-final subPgIndexProvider =
-    NotifierProvider<SubPageNotifier, int>(SubPageNotifier.new);
-
-class SubPageNotifier extends Notifier<int> {
-  @override
-  int build() => 2;
+  int build() => 0;
 
   void setState(int newState) {
     state = newState;
@@ -29,9 +16,7 @@ class SubPageNotifier extends Notifier<int> {
 }
 
 // Update Page Index
-void updatePgIndex(WidgetRef ref, int newPageIndex, int subPageIndex) {
+void updatePgIndex(WidgetRef ref, int newPageIndex) {
   // Update page index
   ref.read(pgIndexProvider.notifier).setState(newPageIndex);
-  // Update sub page index
-  ref.read(subPgIndexProvider.notifier).setState(subPageIndex);
 }

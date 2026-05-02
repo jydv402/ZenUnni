@@ -89,7 +89,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
           );
         }
 
-        updatePgIndex(ref, 3, 3);
+        updatePgIndex(ref, 3);
       }, "Add Mood", 26),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
