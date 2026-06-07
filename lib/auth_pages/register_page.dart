@@ -24,9 +24,15 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       //display error message
       // displayMessageToUser("Passwords don't match!", context);
       showConfirmDialog(
-          context, "Error", "Passwords don't match!", "Retry", Colors.red, () {
-        Navigator.pop(context);
-      });
+        context,
+        "Error",
+        "Passwords don't match!",
+        "Retry",
+        Colors.red,
+        () {
+          Navigator.pop(context);
+        },
+      );
     } else {
       //if passwords do match
       //try creating the user
@@ -42,20 +48,23 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
         } catch (e) {
           if (context.mounted) {
             // displayMessageToUser(e.toString(), context);
-            showConfirmDialog(context, "Error",
-                e.toString().replaceAll("-", " "), "Retry", Colors.red, () {
-              Navigator.pop(context);
-            });
+            showConfirmDialog(
+              context,
+              "Error",
+              e.toString().replaceAll("-", " "),
+              "Retry",
+              Colors.red,
+              () {
+                Navigator.pop(context);
+              },
+            );
           }
         }
 
         if (context.mounted) {
           //pop loading circle
           Navigator.pop(context);
-          Navigator.pushReplacementNamed(
-            context,
-            '/email_verif',
-          );
+          Navigator.pushReplacementNamed(context, '/email_verif');
         }
         // Clear fields after successful registration
         _emailController.clear();
@@ -67,13 +76,19 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
           Navigator.pop(context);
           //display error message
           // displayMessageToUser(e.code, context);
-          showConfirmDialog(context, "Error", e.code.replaceAll("-", " "),
-              "Retry", Colors.red, () {
-            Navigator.pop(context);
-            _emailController.clear();
-            _passwordController.clear();
-            _confirmPasswordController.clear();
-          });
+          showConfirmDialog(
+            context,
+            "Error",
+            e.code.replaceAll("-", " "),
+            "Retry",
+            Colors.red,
+            () {
+              Navigator.pop(context);
+              _emailController.clear();
+              _passwordController.clear();
+              _confirmPasswordController.clear();
+            },
+          );
         }
       }
     }
@@ -113,9 +128,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
           const SizedBox(height: 40),
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-            ),
+            decoration: const InputDecoration(labelText: 'Email'),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
@@ -147,31 +160,38 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Text.rich(
-              TextSpan(text: "Already have an account? ", children: [
+            TextSpan(
+              text: "Already have an account? ",
+              children: [
                 TextSpan(
-                    text: "Login",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        //navigate to login page
-                        Navigator.pushReplacementNamed(context, '/login');
-                      })
-              ]),
-              style: Theme.of(context).textTheme.headlineSmall),
+                  text: "Login",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineSmall?.copyWith(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      //navigate to login page
+                      Navigator.pushReplacementNamed(context, '/login');
+                    },
+                ),
+              ],
+            ),
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
           const SizedBox(height: 200),
         ],
       ),
-      floatingActionButton: fabButton(context, () {
-        registerUser(context);
-        FocusScope.of(context).unfocus();
-      }, "Register", 26),
+      floatingActionButton: fabButton(
+        context,
+        () {
+          registerUser(context);
+          FocusScope.of(context).unfocus();
+        },
+        "Register",
+        26,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

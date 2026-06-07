@@ -96,8 +96,10 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
         padding: pagePaddingWithScore,
         children: [
           const ScoreCard(),
-          Text(widget.taskToEdit != null ? "Edit Task" : "Add Task",
-              style: Theme.of(context).textTheme.headlineLarge),
+          Text(
+            widget.taskToEdit != null ? "Edit Task" : "Add Task",
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
           const SizedBox(height: 25),
           //Task name text field
           _dialogTextFields(context, nameController, "Task name"),
@@ -105,70 +107,80 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           //Task description text field
           _dialogTextFields(context, descController, "Task description"),
           const SizedBox(height: 30),
+
           //_isRecurringCheckBox(),
           //const SizedBox(height: 30),
-
           if (!isRecurring) ...[
             _selectedDateText(),
             const SizedBox(height: 15),
-            fabButton(context, () async {
-              DateTime? pickDate = await showDatePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2100),
-                // builder: (BuildContext context, Widget? child) {
-                //   return Theme(
-                //     data: Theme.of(context).copyWith(
-                //       textTheme: TextTheme(
-                //         headlineLarge: GoogleFonts.poppins(
-                //             fontSize: 26.0,
-                //             color: Colors.white,
-                //             fontWeight: FontWeight.bold),
-                //         labelLarge: GoogleFonts.poppins(
-                //           fontSize: 18.0,
-                //           color: Colors.white,
-                //         ),
-                //         bodyLarge: GoogleFonts.poppins(
-                //           fontSize: 16.0,
-                //           color: Colors.white,
-                //         ),
-                //       ),
-                //       colorScheme: ColorScheme.dark(
-                //         primary: Colors.blue.shade200,
-                //         surface: Colors.black, // Change the header color
-                //         onPrimary: Colors.white, // Change the header text color
-                //         onSurface: Colors.white, // Change the day text color
-                //       ),
-                //     ),
-                //     child: child!,
-                //   );
-                // },
-              );
-              if (pickDate != null) {
-                setState(() {
-                  localDate = pickDate; //saves to local variable
-                  _date = pickDate; //to save it to global variable
-                  //print("Selected date: $localDate");
-                });
-              }
-            }, "Set due date", 16),
+            fabButton(
+              context,
+              () async {
+                DateTime? pickDate = await showDatePicker(
+                  context: context,
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2100),
+                  // builder: (BuildContext context, Widget? child) {
+                  //   return Theme(
+                  //     data: Theme.of(context).copyWith(
+                  //       textTheme: TextTheme(
+                  //         headlineLarge: GoogleFonts.poppins(
+                  //             fontSize: 26.0,
+                  //             color: Colors.white,
+                  //             fontWeight: FontWeight.bold),
+                  //         labelLarge: GoogleFonts.poppins(
+                  //           fontSize: 18.0,
+                  //           color: Colors.white,
+                  //         ),
+                  //         bodyLarge: GoogleFonts.poppins(
+                  //           fontSize: 16.0,
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //       colorScheme: ColorScheme.dark(
+                  //         primary: Colors.blue.shade200,
+                  //         surface: Colors.black, // Change the header color
+                  //         onPrimary: Colors.white, // Change the header text color
+                  //         onSurface: Colors.white, // Change the day text color
+                  //       ),
+                  //     ),
+                  //     child: child!,
+                  //   );
+                  // },
+                );
+                if (pickDate != null) {
+                  setState(() {
+                    localDate = pickDate; //saves to local variable
+                    _date = pickDate; //to save it to global variable
+                    //print("Selected date: $localDate");
+                  });
+                }
+              },
+              "Set due date",
+              16,
+            ),
             const SizedBox(height: 30),
             _selectedTimeText(),
             const SizedBox(height: 15),
             //Set due time button
-            fabButton(context, () async {
-              TimeOfDay? pickTime = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-              );
-              if (pickTime != null) {
-                setState(() {
-                  localTime = pickTime; // saves to local variable
-                  _time = pickTime; // saves to global variable
-                  //print("Selected time: $localTime");
-                });
-              }
-            }, "Set due time", 16),
+            fabButton(
+              context,
+              () async {
+                TimeOfDay? pickTime = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (pickTime != null) {
+                  setState(() {
+                    localTime = pickTime; // saves to local variable
+                    _time = pickTime; // saves to global variable
+                    //print("Selected time: $localTime");
+                  });
+                }
+              },
+              "Set due time",
+              16,
+            ),
             const SizedBox(height: 30),
             Text(
               "Select task priority",
@@ -179,9 +191,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
             _dialogPrioritySelect(setState),
           ] else ...[
             _weekdaySelector(),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
 
             // from time picker
             Text(
@@ -190,15 +200,20 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
-            fabButton(context, () async {
-              TimeOfDay? picked = await showTimePicker(
-                context: context,
-                initialTime: _fromTime ?? TimeOfDay.now(),
-              );
-              if (picked != null) {
-                setState(() => _fromTime = picked);
-              }
-            }, "Set From Time", 16),
+            fabButton(
+              context,
+              () async {
+                TimeOfDay? picked = await showTimePicker(
+                  context: context,
+                  initialTime: _fromTime ?? TimeOfDay.now(),
+                );
+                if (picked != null) {
+                  setState(() => _fromTime = picked);
+                }
+              },
+              "Set From Time",
+              16,
+            ),
 
             const SizedBox(height: 20),
             //to time picker
@@ -208,63 +223,73 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 10),
-            fabButton(context, () async {
-              TimeOfDay? picked = await showTimePicker(
-                context: context,
-                initialTime: _toTime ?? TimeOfDay.now(),
-              );
-              if (picked != null) {
-                setState(() => _toTime = picked);
-              }
-            }, "Set To Time", 16),
+            fabButton(
+              context,
+              () async {
+                TimeOfDay? picked = await showTimePicker(
+                  context: context,
+                  initialTime: _toTime ?? TimeOfDay.now(),
+                );
+                if (picked != null) {
+                  setState(() => _toTime = picked);
+                }
+              },
+              "Set To Time",
+              16,
+            ),
           ],
 
           const SizedBox(height: 60),
-          fabButton(context, () {
-            if (validateTaskFields()) {
-              DateTime? dateTime;
-              if (!isRecurring && _date != null && _time != null) {
-                dateTime = DateTime(
-                  _date!.year,
-                  _date!.month,
-                  _date!.day,
-                  _time!.hour,
-                  _time!.minute,
-                );
-              }
+          fabButton(
+            context,
+            () {
+              if (validateTaskFields()) {
+                DateTime? dateTime;
+                if (!isRecurring && _date != null && _time != null) {
+                  dateTime = DateTime(
+                    _date!.year,
+                    _date!.month,
+                    _date!.day,
+                    _time!.hour,
+                    _time!.minute,
+                  );
+                }
 
-              TodoModel task = TodoModel(
-                name: nameController.text,
-                description: descController.text,
-                date: dateTime ?? DateTime.now(),
-                priority: isRecurring ? "" : _prior,
-                isDone: isDone,
-                notExpired: true,
-                isRecurring: isRecurring,
-                fromTime: _fromTime != null ? _fromTime!.format(context) : "",
-                toTime: _toTime != null ? _toTime!.format(context) : "",
-                selectedWeekdays: selectedWeekdays,
-              );
-              // print("Recurring task added: ${task.date}");
-              // print("Recurring task added: ${task.isRecurring}");
-              // print("Recurring task added: ${task.fromTime}");
-              // print("Recurring task added: ${task.toTime}");
-              // print("Recurring task added: ${task.selectedWeekdays}");
-              if (widget.taskToEdit != null) {
-                // Update existing task
-                ref.read(taskProvider.notifier).updateTask(task);
+                TodoModel task = TodoModel(
+                  name: nameController.text,
+                  description: descController.text,
+                  date: dateTime ?? DateTime.now(),
+                  priority: isRecurring ? "" : _prior,
+                  isDone: isDone,
+                  notExpired: true,
+                  isRecurring: isRecurring,
+                  fromTime: _fromTime != null ? _fromTime!.format(context) : "",
+                  toTime: _toTime != null ? _toTime!.format(context) : "",
+                  selectedWeekdays: selectedWeekdays,
+                );
+                // print("Recurring task added: ${task.date}");
+                // print("Recurring task added: ${task.isRecurring}");
+                // print("Recurring task added: ${task.fromTime}");
+                // print("Recurring task added: ${task.toTime}");
+                // print("Recurring task added: ${task.selectedWeekdays}");
+                if (widget.taskToEdit != null) {
+                  // Update existing task
+                  ref.read(taskProvider.notifier).updateTask(task);
+                } else {
+                  // Add new task
+                  ref.read(taskProvider.notifier).addTask(task);
+                  //print("Task Map: ${task.toMap()}");
+                }
+                resetDialogFields();
+                Navigator.pop(context);
+                showHeadsupNoti(context, ref, "Task saved successfully!");
               } else {
-                // Add new task
-                ref.read(taskProvider.notifier).addTask(task);
-                //print("Task Map: ${task.toMap()}");
+                showHeadsupNoti(context, ref, "Please fill in all fields!");
               }
-              resetDialogFields();
-              Navigator.pop(context);
-              showHeadsupNoti(context, ref, "Task saved successfully!");
-            } else {
-              showHeadsupNoti(context, ref, "Please fill in all fields!");
-            }
-          }, widget.taskToEdit != null ? "Update Task" : "Save Task", 0)
+            },
+            widget.taskToEdit != null ? "Update Task" : "Save Task",
+            0,
+          ),
         ],
       ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -272,16 +297,17 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
   }
 
   Widget _dialogTextFields(
-      BuildContext context, TextEditingController controller, String hintText) {
+    BuildContext context,
+    TextEditingController controller,
+    String hintText,
+  ) {
     return TextField(
       onTapOutside: (event) {
         FocusScope.of(context).unfocus();
       },
       controller: controller,
       style: Theme.of(context).textTheme.bodyMedium,
-      decoration: InputDecoration(
-        hintText: hintText,
-      ),
+      decoration: InputDecoration(hintText: hintText),
     );
   }
 
@@ -294,10 +320,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           )
         : Text(
             "No date selected currently",
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(fontStyle: FontStyle.italic),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontStyle: FontStyle.italic),
             textAlign: TextAlign.center,
           );
   }
@@ -311,10 +336,9 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           )
         : Text(
             "No time selected currently",
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall
-                ?.copyWith(fontStyle: FontStyle.italic),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontStyle: FontStyle.italic),
             textAlign: TextAlign.center,
           );
   }
@@ -325,34 +349,22 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
       child: SegmentedButton<String>(
         showSelectedIcon: false,
         style: ButtonStyle(
-          padding: WidgetStatePropertyAll(
-            EdgeInsets.fromLTRB(26, 26, 26, 26),
+          padding: WidgetStatePropertyAll(EdgeInsets.fromLTRB(26, 26, 26, 26)),
+          textStyle: WidgetStatePropertyAll(
+            Theme.of(context).textTheme.bodySmall,
           ),
-          textStyle:
-              WidgetStatePropertyAll(Theme.of(context).textTheme.bodySmall),
         ),
         segments: <ButtonSegment<String>>[
-          ButtonSegment<String>(
-            value: 'High',
-            label: Text('High'),
-          ),
-          ButtonSegment<String>(
-            value: 'Medium',
-            label: Text('Medium'),
-          ),
-          ButtonSegment<String>(
-            value: 'Low',
-            label: Text('Low'),
-          ),
+          ButtonSegment<String>(value: 'High', label: Text('High')),
+          ButtonSegment<String>(value: 'Medium', label: Text('Medium')),
+          ButtonSegment<String>(value: 'Low', label: Text('Low')),
         ],
         selected: {localPrior},
         onSelectionChanged: (Set<String> value) {
-          setState(
-            () {
-              localPrior = value.first;
-              _prior = value.first;
-            },
-          );
+          setState(() {
+            localPrior = value.first;
+            _prior = value.first;
+          });
         },
       ),
     );
@@ -414,8 +426,8 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
               child: Text(
                 weekdays[index],
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: selected ? Colors.white : Colors.black,
-                    ),
+                  color: selected ? Colors.white : Colors.black,
+                ),
               ),
             ),
           ),

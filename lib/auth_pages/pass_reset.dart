@@ -56,8 +56,12 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: resetEmailContainer(context),
-      floatingActionButton:
-          fabButton(context, () => passwordReset(), 'Reset Password', 26),
+      floatingActionButton: fabButton(
+        context,
+        () => passwordReset(),
+        'Reset Password',
+        26,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -83,9 +87,7 @@ class _PassResetPageState extends ConsumerState<PassResetPage> {
           controller: resetEmailController,
           style: Theme.of(context).textTheme.bodyMedium,
           cursorColor: Colors.white,
-          decoration: InputDecoration(
-            hintText: 'Enter your email',
-          ),
+          decoration: InputDecoration(hintText: 'Enter your email'),
         ),
       ],
     );

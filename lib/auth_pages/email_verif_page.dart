@@ -34,9 +34,7 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => const UsernamePage(
-              isUpdate: false,
-            ),
+            builder: (_) => const UsernamePage(isUpdate: false),
           ),
         );
       }
@@ -74,12 +72,21 @@ class _EmailVerifPageState extends ConsumerState<EmailVerifPage> {
           ),
           SizedBox(height: 40),
           fabButton(
-              context, () => resendVerificationEmail(), "Resend Email", 0),
+            context,
+            () => resendVerificationEmail(),
+            "Resend Email",
+            0,
+          ),
           SizedBox(height: 10),
-          fabButton(context, () {
-            FirebaseAuth.instance.signOut();
-            Navigator.pushReplacementNamed(context, '/register');
-          }, "Change Email", 0)
+          fabButton(
+            context,
+            () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacementNamed(context, '/register');
+            },
+            "Change Email",
+            0,
+          ),
         ],
       ),
     );

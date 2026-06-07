@@ -47,14 +47,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       if (mounted) {
         Navigator.pop(context); // Close loading dialog
         showConfirmDialog(
-            context, "Error", e.code.replaceAll("-", " "), "Retry", Colors.red,
-            () {
-          Navigator.pop(context);
-          _passwordController.clear();
-          setState(() {
-            _obsureText = true;
-          });
-        });
+          context,
+          "Error",
+          e.code.replaceAll("-", " "),
+          "Retry",
+          Colors.red,
+          () {
+            Navigator.pop(context);
+            _passwordController.clear();
+            setState(() {
+              _obsureText = true;
+            });
+          },
+        );
       }
     } finally {
       if (mounted) {
@@ -75,10 +80,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Login",
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
+              Text("Login", style: Theme.of(context).textTheme.headlineLarge),
               //Dark theme toggle
               toggleThemeButton(
                 () => ref.read(themeProvider.notifier).toggleTheme(),
@@ -87,14 +89,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 40,
-          ),
+          const SizedBox(height: 40),
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-            ),
+            decoration: const InputDecoration(labelText: 'Email'),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
@@ -115,9 +113,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           Text.rich(
             TextSpan(
               text: "Forgot Password?",
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.blue,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.blue),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   // navigate to password reset page
@@ -131,16 +129,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               text: "Don't have an account? ",
               children: [
                 TextSpan(
-                    text: "Register",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        // navigate to register page
-                        Navigator.pushReplacementNamed(context, '/register');
-                      })
+                  text: "Register",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineSmall?.copyWith(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      // navigate to register page
+                      Navigator.pushReplacementNamed(context, '/register');
+                    },
+                ),
               ],
             ),
             style: Theme.of(context).textTheme.bodyMedium,
@@ -148,9 +146,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           const SizedBox(height: 200),
         ],
       ),
-      floatingActionButton: fabButton(context, () {
-        loginUser();
-      }, 'Login', 26),
+      floatingActionButton: fabButton(
+        context,
+        () {
+          loginUser();
+        },
+        'Login',
+        26,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

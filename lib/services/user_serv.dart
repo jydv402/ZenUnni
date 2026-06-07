@@ -27,21 +27,20 @@ Future<void> updateUserDoc(String username, int gender, int avt) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw Exception('No authenticated user found');
 
-    await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
-      {
-        'username': username,
-        'usernameLower': username.toLowerCase(),
-        'gender': gender,
-        'avatar': avt,
-      },
-    );
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+      'username': username,
+      'usernameLower': username.toLowerCase(),
+      'gender': gender,
+      'avatar': avt,
+    });
   } catch (e) {
     throw Exception('Failed to create user document: $e');
   }
 }
 
-final userNameProvider =
-    AsyncNotifierProvider<UserNameNotifier, String?>(UserNameNotifier.new);
+final userNameProvider = AsyncNotifierProvider<UserNameNotifier, String?>(
+  UserNameNotifier.new,
+);
 
 class UserNameNotifier extends AsyncNotifier<String?> {
   @override
@@ -80,15 +79,14 @@ class UserNotifier extends AsyncNotifier<UserModel?> {
 }
 
 //Obtain all the usernames
-final existingUsersProvider = StreamProvider<List<String>>(
-  (ref) {
-    //return only the doc
-    return FirebaseFirestore.instance.collection('users').snapshots().map(
-          (snapshot) => snapshot.docs.map(
-            (doc) {
-              return doc.data()['usernameLower'] as String;
-            },
-          ).toList(),
-        );
-  },
-);
+final existingUsersProvider = StreamProvider<List<String>>((ref) {
+  //return only the doc
+  return FirebaseFirestore.instance
+      .collection('users')
+      .snapshots()
+      .map(
+        (snapshot) => snapshot.docs.map((doc) {
+          return doc.data()['usernameLower'] as String;
+        }).toList(),
+      );
+});

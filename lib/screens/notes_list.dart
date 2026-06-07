@@ -69,7 +69,7 @@ class _NotesListState extends ConsumerState<NotesList> {
                   Text(
                     "No notes found. Tap the button below to create a new note.",
                     style: Theme.of(context).textTheme.bodyMedium,
-                  )
+                  ),
                 ],
               ),
             )
@@ -107,13 +107,17 @@ class _NotesListState extends ConsumerState<NotesList> {
                       ),
                       title: Padding(
                         padding: const EdgeInsets.only(bottom: 16),
-                        child: Text(note['heading'] ?? 'Untitled',
-                            style: Theme.of(context).textTheme.headlineMedium),
+                        child: Text(
+                          note['heading'] ?? 'Untitled',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                       ),
-                      subtitle: Text(note['content'] ?? 'No content',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium),
+                      subtitle: Text(
+                        note['content'] ?? 'No content',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                       onTap: () => _openNotePage(key),
                       trailing: IconButton(
                         icon: Icon(LucideIcons.trash_2, color: colors.iconClr),
@@ -138,10 +142,7 @@ class _NotesListState extends ConsumerState<NotesList> {
         onPressed: () => _openNotePage(),
         label: const Text(
           "New Note",
-          style: TextStyle(
-            fontFamily: 'Pop',
-            fontSize: 13.0,
-          ),
+          style: TextStyle(fontFamily: 'Pop', fontSize: 13.0),
         ),
         icon: const Icon(LucideIcons.plus),
         foregroundColor: Colors.black,

@@ -69,7 +69,10 @@ class _DescPageState extends ConsumerState<DescPage> {
               await saveUserDesc(about, freeTime, bedtime);
               if (context.mounted) {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/nav', (_) => false);
+                  context,
+                  '/nav',
+                  (_) => false,
+                );
               }
             }
           } else {
@@ -92,9 +95,7 @@ class _DescPageState extends ConsumerState<DescPage> {
       minLines: null,
       maxLines: null,
       style: Theme.of(context).textTheme.bodyMedium,
-      decoration: InputDecoration(
-        labelText: hintText,
-      ),
+      decoration: InputDecoration(labelText: hintText),
     );
   }
 }

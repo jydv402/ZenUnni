@@ -56,12 +56,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
               ? rankView(filteredUsers)
               : searchView(filteredUsers);
         },
-        error: (err, stack) => Center(
-          child: Text("Error:$err"),
-        ),
-        loading: () => Center(
-          child: showRunningIndicator(context, "Loading..."),
-        ),
+        error: (err, stack) => Center(child: Text("Error:$err")),
+        loading: () =>
+            Center(child: showRunningIndicator(context, "Loading...")),
       ),
       floatingActionButton: searchTextField(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -77,9 +74,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.25),
-              spreadRadius: 5,
-              blurRadius: 7)
+            color: Colors.grey.withValues(alpha: 0.25),
+            spreadRadius: 5,
+            blurRadius: 7,
+          ),
         ],
       ),
       child: Row(
@@ -188,9 +186,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
             ),
           );
         } else if (index == 2 || index == 3) {
-          return const SizedBox(
-            height: 60,
-          );
+          return const SizedBox(height: 60);
         } else {
           final user = users[index - 1];
           return rankListCards(user);
@@ -223,10 +219,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const ScoreCard(),
-          Text(
-            'Leaderboard',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
+          Text('Leaderboard', style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 26),
         ],
       ),
@@ -234,16 +227,17 @@ class _SearchState extends ConsumerState<ConnectPage> {
   }
 
   Positioned rankCard(
-      double top,
-      double right,
-      double left,
-      double dp,
-      double fSize,
-      String rank,
-      String path,
-      String username,
-      String score,
-      bool isUser) {
+    double top,
+    double right,
+    double left,
+    double dp,
+    double fSize,
+    String rank,
+    String path,
+    String username,
+    String score,
+    bool isUser,
+  ) {
     final colors = ref.watch(appColorsProvider);
     final theme = ref.watch(themeProvider);
     return Positioned(
@@ -259,9 +253,8 @@ class _SearchState extends ConsumerState<ConnectPage> {
                 message: username,
                 enableFeedback: true,
                 textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color:
-                          theme == ThemeMode.dark ? Colors.black : Colors.white,
-                    ),
+                  color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+                ),
                 padding: const EdgeInsets.fromLTRB(26, 16, 26, 16),
                 decoration: BoxDecoration(
                   color: colors.mdText,
@@ -271,10 +264,11 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                        color: isUser
-                            ? Color.fromRGBO(255, 140, 43, 1)
-                            : Colors.transparent,
-                        width: 4),
+                      color: isUser
+                          ? Color.fromRGBO(255, 140, 43, 1)
+                          : Colors.transparent,
+                      width: 4,
+                    ),
                   ),
                   child: Image.asset(
                     path,
@@ -296,9 +290,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                   child: Text(
                     rank,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: fSize,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      fontSize: fSize,
+                    ),
                   ),
                 ),
               ),
@@ -307,21 +301,15 @@ class _SearchState extends ConsumerState<ConnectPage> {
           const SizedBox(height: 4),
           Text(
             username,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontSize: 18,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineMedium?.copyWith(fontSize: 18),
             overflow: TextOverflow.ellipsis,
             softWrap: false,
           ),
           if (isUser)
-            Text(
-              '[You]',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          Text(
-            "$score pts",
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+            Text('[You]', style: Theme.of(context).textTheme.bodySmall),
+          Text("$score pts", style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );
@@ -335,8 +323,8 @@ class _SearchState extends ConsumerState<ConnectPage> {
       message: user.username,
       enableFeedback: true,
       textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: theme == ThemeMode.dark ? Colors.black : Colors.white,
-          ),
+        color: theme == ThemeMode.dark ? Colors.black : Colors.white,
+      ),
       padding: const EdgeInsets.fromLTRB(26, 16, 26, 16),
       decoration: BoxDecoration(
         color: colors.mdText,
@@ -348,10 +336,11 @@ class _SearchState extends ConsumerState<ConnectPage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(26),
           border: Border.all(
-              color: user.isUser == true
-                  ? Color.fromRGBO(255, 140, 43, 1)
-                  : Colors.transparent,
-              width: 2),
+            color: user.isUser == true
+                ? Color.fromRGBO(255, 140, 43, 1)
+                : Colors.transparent,
+            width: 2,
+          ),
           color: colors.pillClr,
         ),
         child: Stack(
@@ -362,10 +351,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
               left: 22,
               child: Text(
                 "${user.rank}",
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             //User details
@@ -390,10 +379,9 @@ class _SearchState extends ConsumerState<ConnectPage> {
                       overflow: TextOverflow.ellipsis,
                       TextSpan(
                         text: "${user.username} ",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(fontSize: 22),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.headlineMedium?.copyWith(fontSize: 22),
                         children: [
                           TextSpan(
                             text: user.isUser == true ? '[You]' : '',

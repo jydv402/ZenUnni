@@ -20,12 +20,12 @@ void showHeadsupNoti(BuildContext context, WidgetRef ref, String message) {
       child: ToastCard(
         shadowColor: Colors.transparent,
         color: colors.toastBg,
-        leading: Image.asset('assets/icon/heads_${theme == ThemeMode.dark}.png',
-            width: 20, height: 20),
-        title: Text(
-          message,
-          style: Theme.of(context).textTheme.bodyMedium,
+        leading: Image.asset(
+          'assets/icon/heads_${theme == ThemeMode.dark}.png',
+          width: 20,
+          height: 20,
         ),
+        title: Text(message, style: Theme.of(context).textTheme.bodyMedium),
       ),
     ),
   ).show(context);

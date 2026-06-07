@@ -18,19 +18,20 @@ class TodoModel {
   bool notExpired;
   final Function(bool?)? onChanged;
   //constructor
-  TodoModel(
-      {required this.name,
-      required this.description,
-      required this.date,
-      required this.priority,
-      required this.isDone,
-      required this.isRecurring,
-      required this.fromTime,
-      required this.toTime,
-      required this.selectedWeekdays,
-      this.oldname,
-      this.onChanged,
-      required this.notExpired});
+  TodoModel({
+    required this.name,
+    required this.description,
+    required this.date,
+    required this.priority,
+    required this.isDone,
+    required this.isRecurring,
+    required this.fromTime,
+    required this.toTime,
+    required this.selectedWeekdays,
+    this.oldname,
+    this.onChanged,
+    required this.notExpired,
+  });
 
   // Convert TimeOfDay to String
   static String timeOfDayToString(TimeOfDay time) {
@@ -87,15 +88,16 @@ class TodoModel {
     bool? isRecurring,
   }) {
     return TodoModel(
-        name: name ?? this.name,
-        description: description ?? this.description,
-        date: date ?? this.date,
-        priority: priority ?? this.priority,
-        isDone: isDone ?? this.isDone,
-        isRecurring: isRecurring ?? this.isRecurring,
-        fromTime: fromTime ?? this.fromTime,
-        toTime: toTime ?? this.toTime,
-        selectedWeekdays: selectedWeekdays ?? this.selectedWeekdays,
-        notExpired: notExpired);
+      name: name ?? this.name,
+      description: description ?? this.description,
+      date: date ?? this.date,
+      priority: priority ?? this.priority,
+      isDone: isDone ?? this.isDone,
+      isRecurring: isRecurring ?? this.isRecurring,
+      fromTime: fromTime ?? this.fromTime,
+      toTime: toTime ?? this.toTime,
+      selectedWeekdays: selectedWeekdays ?? this.selectedWeekdays,
+      notExpired: notExpired,
+    );
   }
 }

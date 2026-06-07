@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'zenunni-dac3d.firebasestorage.app',
     measurementId: 'G-3ST94ELQ27',
   );
-
 }

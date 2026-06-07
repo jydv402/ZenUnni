@@ -44,20 +44,22 @@ class _MoodPageState extends ConsumerState<MoodPage> {
           Center(
             child: Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Text("${_currentMoodIndex + 1}/${moodList.length}",
-                  style: Theme.of(context).textTheme.bodyMedium),
+              child: Text(
+                "${_currentMoodIndex + 1}/${moodList.length}",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
           ),
           const SizedBox(height: 50),
           SliderTheme(
             data: SliderThemeData(
-                trackHeight: 50,
-                activeTickMarkColor: Colors.black,
-                inactiveTickMarkColor: Colors.white,
-                activeTrackColor: const Color.fromRGBO(255, 139, 44, 1),
-                inactiveTrackColor: Colors.black,
-                thumbColor:
-                    _currentMoodIndex == 0 ? Colors.white : Colors.black),
+              trackHeight: 50,
+              activeTickMarkColor: Colors.black,
+              inactiveTickMarkColor: Colors.white,
+              activeTrackColor: const Color.fromRGBO(255, 139, 44, 1),
+              inactiveTrackColor: Colors.black,
+              thumbColor: _currentMoodIndex == 0 ? Colors.white : Colors.black,
+            ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
               child: Slider(
@@ -76,21 +78,28 @@ class _MoodPageState extends ConsumerState<MoodPage> {
           const SizedBox(height: 80),
         ],
       ),
-      floatingActionButton: fabButton(context, () async {
-        await ref.read(moodAddProvider(
-          moodList.values.elementAt(_currentMoodIndex),
-        ).future);
-
-        if (context.mounted) {
-          showHeadsupNoti(
-            context,
-            ref,
-            "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}",
+      floatingActionButton: fabButton(
+        context,
+        () async {
+          await ref.read(
+            moodAddProvider(
+              moodList.values.elementAt(_currentMoodIndex),
+            ).future,
           );
-        }
 
-        updatePgIndex(ref, 3);
-      }, "Add Mood", 26),
+          if (context.mounted) {
+            showHeadsupNoti(
+              context,
+              ref,
+              "Successfully added mood as ${moodList.values.elementAt(_currentMoodIndex)}",
+            );
+          }
+
+          updatePgIndex(ref, 3);
+        },
+        "Add Mood",
+        26,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

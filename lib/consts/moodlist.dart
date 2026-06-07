@@ -24,5 +24,5 @@ const Map<String, String> reversedMoodList = {
   "Overwhelmed": "assets/emoji/overwhelmed.json",
   "Tired": "assets/emoji/tired.json",
   "Sick": "assets/emoji/sick.json",
-  "Empty": "assets/emoji/empty.json"
+  "Empty": "assets/emoji/empty.json",
 };

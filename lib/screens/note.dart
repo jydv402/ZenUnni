@@ -45,8 +45,12 @@ class _NotePageState extends ConsumerState<NotePage> {
       return;
     }
     final newId = noteId ?? DateTime.now().millisecondsSinceEpoch;
-    await _notesService.saveNote(newId, _headingController.text.trim(),
-        _contentController.text.trim(), username);
+    await _notesService.saveNote(
+      newId,
+      _headingController.text.trim(),
+      _contentController.text.trim(),
+      username,
+    );
     if (mounted) {
       Navigator.pop(context, true);
     }
@@ -74,10 +78,10 @@ class _NotePageState extends ConsumerState<NotePage> {
                 contentPadding: EdgeInsets.fromLTRB(26, 0, 26, 0),
                 hintText: 'Note Heading...',
                 hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: theme == ThemeMode.dark
-                          ? Colors.white38
-                          : Colors.black45,
-                    ),
+                  color: theme == ThemeMode.dark
+                      ? Colors.white38
+                      : Colors.black45,
+                ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
                 focusedErrorBorder: InputBorder.none,
@@ -118,10 +122,7 @@ class _NotePageState extends ConsumerState<NotePage> {
         },
         label: const Text(
           "Save Note",
-          style: TextStyle(
-            fontFamily: 'Pop',
-            fontSize: 13.0,
-          ),
+          style: TextStyle(fontFamily: 'Pop', fontSize: 13.0),
         ),
         icon: const Icon(LucideIcons.save),
         foregroundColor: Colors.black,

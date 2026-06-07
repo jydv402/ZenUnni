@@ -6,13 +6,14 @@ class SearchModel {
   int? rank;
   bool? isUser;
 
-  SearchModel(
-      {required this.username,
-      required this.score,
-      this.gender = 0,
-      this.avatar = 0,
-      this.rank,
-      this.isUser});
+  SearchModel({
+    required this.username,
+    required this.score,
+    this.gender = 0,
+    this.avatar = 0,
+    this.rank,
+    this.isUser,
+  });
 
   factory SearchModel.fromMap(Map<String, dynamic> map) {
     return SearchModel(

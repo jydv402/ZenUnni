@@ -27,11 +27,11 @@ class ScheduleItem {
   }
 
   Map<String, dynamic> toJson() => {
-        'taskName': taskName,
-        'startTime': startTime.toIso8601String(),
-        'endTime': endTime.toIso8601String(),
-        'duration': duration,
-        'priority': priority,
-        'due_date': dueDate.toIso8601String(),
-      };
+    'taskName': taskName,
+    'startTime': startTime.toIso8601String(),
+    'endTime': endTime.toIso8601String(),
+    'duration': duration,
+    'priority': priority,
+    'due_date': dueDate.toIso8601String(),
+  };
 }

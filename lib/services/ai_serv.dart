@@ -14,9 +14,10 @@ class AIService {
   AIService();
 
   Future<String> _generateContent(
-      String systemPrompt,
-      List<Map<String, dynamic>> history,
-      Map<String, dynamic>? generationConfig) async {
+    String systemPrompt,
+    List<Map<String, dynamic>> history,
+    Map<String, dynamic>? generationConfig,
+  ) async {
     final apiKey = await _storage.read(key: 'gemini_api_key');
     if (apiKey == null || apiKey.isEmpty) {
       debugPrint('Error: Gemini API Key is missing from Secure Storage.');
@@ -24,13 +25,14 @@ class AIService {
     }
 
     final url = Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=$apiKey');
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=$apiKey',
+    );
 
     final body = {
       'systemInstruction': {
         'parts': [
-          {'text': systemPrompt}
-        ]
+          {'text': systemPrompt},
+        ],
       },
       'contents': history,
       'generationConfig': ?generationConfig,
@@ -55,7 +57,8 @@ class AIService {
   }
 
   Future<String> getMotivationalMessage(String mood, String username) async {
-    final systemPrompt = '''
+    final systemPrompt =
+        '''
     You are Unni, a motivational assistant. Your primary goal is to uplift and inspire $username based on their current mood.
 
     When $username expresses their mood, provide positive, fun, and encouraging messages tailored to their emotional state. Keep your responses concise (under 200 words) and impactful.
@@ -78,23 +81,31 @@ class AIService {
     final userPrompt =
         'The user is feeling $mood. Provide a motivational message or advice.';
 
-    return _generateContent(systemPrompt, [
-      {
-        'role': 'user',
-        'parts': [
-          {'text': userPrompt}
-        ]
-      }
-    ], {
-      'temperature': 0.8,
-    });
+    return _generateContent(
+      systemPrompt,
+      [
+        {
+          'role': 'user',
+          'parts': [
+            {'text': userPrompt},
+          ],
+        },
+      ],
+      {'temperature': 0.8},
+    );
   }
 
-  Future<String> unniChat(String message, List history, String username,
-      String about, String mood) async {
+  Future<String> unniChat(
+    String message,
+    List history,
+    String username,
+    String about,
+    String mood,
+  ) async {
     final DateTime now = DateTime.now();
 
-    final systemPrompt = """
+    final systemPrompt =
+        """
     You are Unni, a warm, uplifting AI assistant here to **motivate, inspire, and support** users. Your goal is to make every interaction **positive, engaging, and meaningful** based on the user’s mood and message.  
 
     To enhance your messages, include relevant quotes, practical advice, and powerful affirmations perfectly and neatly formatted including emojis, newlines, italic and bold characters. 
@@ -128,8 +139,8 @@ class AIService {
       convertedHistory.add({
         'role': msg.isUser ? 'user' : 'model',
         'parts': [
-          {'text': msg.text}
-        ]
+          {'text': msg.text},
+        ],
       });
     }
 
@@ -137,8 +148,8 @@ class AIService {
     convertedHistory.add({
       'role': 'user',
       'parts': [
-        {'text': message}
-      ]
+        {'text': message},
+      ],
     });
 
     return _generateContent(systemPrompt, convertedHistory, {
@@ -147,10 +158,15 @@ class AIService {
   }
 
   Future<String> schedGenerator(
-      String userTasks, String about, String freeTime, String bedTime) async {
+    String userTasks,
+    String about,
+    String freeTime,
+    String bedTime,
+  ) async {
     final now = DateTime.now();
 
-    final systemPrompt = """
+    final systemPrompt =
+        """
     You are Unni, an intelligent and organized AI assistant specializing in **realistic and efficient scheduling** based on the user's tasks, priorities, and availability. Your goal is to create a balanced schedule that respects the user's **free time, bedtime, and logical sequencing** while prioritizing important tasks.  
 
     ## **User Input:**  
@@ -199,17 +215,17 @@ class AIService {
     Ensure the response strictly follows the format, with no additional explanations.
     """;
 
-    return _generateContent(systemPrompt, [
-      {
-        'role': 'user',
-        'parts': [
-          {'text': "Task List: \n$userTasks"}
-        ]
-      }
-    ], {
-      'temperature': 0.3,
-      'topP': 0.9,
-      'topK': 50,
-    });
+    return _generateContent(
+      systemPrompt,
+      [
+        {
+          'role': 'user',
+          'parts': [
+            {'text': "Task List: \n$userTasks"},
+          ],
+        },
+      ],
+      {'temperature': 0.3, 'topP': 0.9, 'topK': 50},
+    );
   }
 }

@@ -8,7 +8,8 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   static Future<void> onDidReceiveNotification(
-      NotificationResponse notificationResponse) async {
+    NotificationResponse notificationResponse,
+  ) async {
     //TODO: handle notification interaction
   }
 
@@ -25,9 +26,9 @@ class NotificationService {
     //combine android and ios initialization settings
     const InitializationSettings initializationSettings =
         InitializationSettings(
-      android: androidInitializationSettings,
-      iOS: iOSInitializationSettings,
-    );
+          android: androidInitializationSettings,
+          iOS: iOSInitializationSettings,
+        );
 
     //Initialize the plugin with the specified settings
     await flutterLocalNotificationsPlugin.initialize(
@@ -39,16 +40,22 @@ class NotificationService {
     //request notification permission for android
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.requestNotificationsPermission();
   }
 
   //show an instant notification
   static Future<void> showInstantNotification(String title, String body) async {
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: AndroidNotificationDetails("channel_ID", "channel_Name",
-            importance: Importance.high, priority: Priority.high),
-        iOS: DarwinNotificationDetails());
+      android: AndroidNotificationDetails(
+        "channel_ID",
+        "channel_Name",
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+      iOS: DarwinNotificationDetails(),
+    );
     await flutterLocalNotificationsPlugin.show(
       id: 0,
       title: title,
@@ -59,20 +66,30 @@ class NotificationService {
 
   //show a schedule notification
   static Future<void> sheduleNotification(
-      int id, String title, String body, DateTime scheduledDate) async {
+    int id,
+    String title,
+    String body,
+    DateTime scheduledDate,
+  ) async {
     if (scheduledDate.isAfter(DateTime.now())) {
       const NotificationDetails platformChannelSpecifics = NotificationDetails(
-          android: AndroidNotificationDetails("channel_ID", "channel_Name",
-              importance: Importance.high, priority: Priority.high),
-          iOS: DarwinNotificationDetails());
+        android: AndroidNotificationDetails(
+          "channel_ID",
+          "channel_Name",
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(),
+      );
       await flutterLocalNotificationsPlugin.zonedSchedule(
-          id: id,
-          title: title,
-          body: body, //add notif id
-          scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
-          notificationDetails: platformChannelSpecifics,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          matchDateTimeComponents: DateTimeComponents.dateAndTime);
+        id: id,
+        title: title,
+        body: body, //add notif id
+        scheduledDate: tz.TZDateTime.from(scheduledDate, tz.local),
+        notificationDetails: platformChannelSpecifics,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.dateAndTime,
+      );
     }
   }
 }

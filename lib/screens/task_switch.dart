@@ -10,8 +10,9 @@ class SelectedTabNotifier extends Notifier<int> {
 }
 
 //Provider for page switching
-final selectedTabProvider =
-    NotifierProvider<SelectedTabNotifier, int>(SelectedTabNotifier.new);
+final selectedTabProvider = NotifierProvider<SelectedTabNotifier, int>(
+  SelectedTabNotifier.new,
+);
 
 class TaskPage extends ConsumerStatefulWidget {
   const TaskPage({super.key});
@@ -74,14 +75,17 @@ class TaskPageState extends ConsumerState<TaskPage> {
         child: selectedTab == 0 ? todoListPage() : schedulePage(),
       ),
       floatingActionButton: selectedTab == 0
-          ? fabButton(context, () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddTaskPage(),
-                ),
-              );
-            }, "Add New Tasks", 26)
+          ? fabButton(
+              context,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddTaskPage()),
+                );
+              },
+              "Add New Tasks",
+              26,
+            )
           : FloatingActionButton(
               onPressed: () {},
               child: schedulePopUp(context, tasks.value ?? []),
@@ -121,10 +125,9 @@ class TaskPageState extends ConsumerState<TaskPage> {
           title,
           style: isSelected
               ? Theme.of(context).textTheme.headlineLarge
-              : Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(color: Colors.grey),
+              : Theme.of(
+                  context,
+                ).textTheme.headlineMedium?.copyWith(color: Colors.grey),
         ),
       ),
     );
@@ -135,9 +138,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
     final taskList = ref.watch(taskProvider);
     return taskList.when(
       data: (tasks) => _taskListView(tasks),
-      loading: () => Center(
-        child: showRunningIndicator(context, "Loading Todo data..."),
-      ),
+      loading: () =>
+          Center(child: showRunningIndicator(context, "Loading Todo data...")),
       error: (error, stack) => Center(
         child: Text(
           'Error: $error',
@@ -160,10 +162,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const ScoreCard(),
-                _tabSwitcher(),
-              ],
+              children: [const ScoreCard(), _tabSwitcher()],
             ),
           );
         } else if (index == tasks.length + 1) {
@@ -185,23 +184,26 @@ class TaskPageState extends ConsumerState<TaskPage> {
                   children: [
                     task.notExpired
                         ? task.isDone
-                            ? Text(
-                                "Task Completed",
-                                style: bodyM.copyWith(
+                              ? Text(
+                                  "Task Completed",
+                                  style: bodyM.copyWith(
                                     color: Colors.grey,
-                                    fontStyle: FontStyle.italic),
-                              )
-                            : Text(
-                                "Task Pending",
-                                style: bodyM.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                )
+                              : Text(
+                                  "Task Pending",
+                                  style: bodyM.copyWith(
                                     color: Colors.grey,
-                                    fontStyle: FontStyle.italic),
-                              )
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                )
                         : Text(
                             "Task Expired",
                             style: bodyM.copyWith(
-                                color: Colors.grey,
-                                fontStyle: FontStyle.italic),
+                              color: Colors.grey,
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                     const Spacer(),
                     IconButton(
@@ -243,40 +245,45 @@ class TaskPageState extends ConsumerState<TaskPage> {
                     task.notExpired
                         ? Checkbox(
                             value: task.isDone,
-                            side:
-                                const BorderSide(color: Colors.white, width: 2),
+                            side: const BorderSide(
+                              color: Colors.white,
+                              width: 2,
+                            ),
                             activeColor: Colors.white,
                             overlayColor: WidgetStatePropertyAll(Colors.white),
                             focusColor: Colors.white,
                             checkColor: Colors.black,
                             onChanged: (bool? value) {
                               final updatedTask = TodoModel(
-                                  name: task.name,
-                                  description: task.description,
-                                  date: task.date,
-                                  priority: task.priority,
-                                  isDone: value ?? false,
-                                  notExpired: task.notExpired,
-                                  isRecurring: task.isRecurring,
-                                  fromTime: task.fromTime,
-                                  toTime: task.toTime,
-                                  selectedWeekdays: task.selectedWeekdays,
-                                  oldname: task.oldname);
+                                name: task.name,
+                                description: task.description,
+                                date: task.date,
+                                priority: task.priority,
+                                isDone: value ?? false,
+                                notExpired: task.notExpired,
+                                isRecurring: task.isRecurring,
+                                fromTime: task.fromTime,
+                                toTime: task.toTime,
+                                selectedWeekdays: task.selectedWeekdays,
+                                oldname: task.oldname,
+                              );
                               ref
                                   .read(taskProvider.notifier)
                                   .updateTask(updatedTask);
                               if (task.priority == "High") {
-                                ref.read(scoreIncrementProvider(
-                                    value! ? 25 : -25)); // High priority score
+                                ref.read(
+                                  scoreIncrementProvider(value! ? 25 : -25),
+                                ); // High priority score
                                 score = 25;
                               } else if (task.priority == "Medium") {
-                                ref.read(scoreIncrementProvider(value!
-                                    ? 15
-                                    : -15)); // Medium priority score
+                                ref.read(
+                                  scoreIncrementProvider(value! ? 15 : -15),
+                                ); // Medium priority score
                                 score = 15;
                               } else {
-                                ref.read(scoreIncrementProvider(
-                                    value! ? 10 : -10)); // Low priority score
+                                ref.read(
+                                  scoreIncrementProvider(value! ? 10 : -10),
+                                ); // Low priority score
                                 score = 10;
                               }
                               if (value) {
@@ -302,8 +309,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
                   style: !task.notExpired
                       ? taskExpiredHeadM
                       : task.isDone
-                          ? taskCompletedHeadM
-                          : headMD,
+                      ? taskCompletedHeadM
+                      : headMD,
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -311,8 +318,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
                   style: !task.notExpired
                       ? taskExpiredHeadS
                       : task.isDone
-                          ? taskCompletedHeadS
-                          : headSD,
+                      ? taskCompletedHeadS
+                      : headSD,
                 ),
                 const SizedBox(height: 26),
                 Text(
@@ -320,8 +327,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
                   style: !task.notExpired
                       ? taskExpiredBodyS
                       : task.isDone
-                          ? taskCompletedBodyS
-                          : bodySD,
+                      ? taskCompletedBodyS
+                      : bodySD,
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -329,8 +336,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
                   style: !task.notExpired
                       ? taskExpiredBodyS
                       : task.isDone
-                          ? taskCompletedBodyS
-                          : bodySD,
+                      ? taskCompletedBodyS
+                      : bodySD,
                 ),
                 const SizedBox(height: 10),
                 Text.rich(
@@ -341,22 +348,22 @@ class TaskPageState extends ConsumerState<TaskPage> {
                         style: !task.notExpired
                             ? taskExpiredBodyS
                             : task.isDone
-                                ? taskCompletedBodyS
-                                : bodySD,
+                            ? taskCompletedBodyS
+                            : bodySD,
                       ),
                       TextSpan(
                         text: task.priority,
                         style: !task.notExpired
                             ? taskExpiredBodyS
                             : task.isDone
-                                ? taskCompletedBodyS
-                                : bodySD.copyWith(
-                                    color: task.priority == "High"
-                                        ? Colors.red
-                                        : task.priority == "Medium"
-                                            ? Colors.yellow
-                                            : Colors.green,
-                                  ),
+                            ? taskCompletedBodyS
+                            : bodySD.copyWith(
+                                color: task.priority == "High"
+                                    ? Colors.red
+                                    : task.priority == "Medium"
+                                    ? Colors.yellow
+                                    : Colors.green,
+                              ),
                       ),
                     ],
                   ),
@@ -371,9 +378,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
 
   Widget schedulePage() {
     final tasks = ref.watch(taskProvider);
-    final schedule = ref.watch(
-      scheduleProvider(tasks.value ?? []),
-    );
+    final schedule = ref.watch(scheduleProvider(tasks.value ?? []));
     return schedule.when(
       data: (scheduleItems) {
         return _scheduleListView(scheduleItems);
@@ -396,10 +401,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const ScoreCard(),
-                _tabSwitcher(),
-              ],
+              children: [const ScoreCard(), _tabSwitcher()],
             ),
           );
         } else if (index == scheduleItems.length + 1) {
@@ -434,8 +436,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
           height: contHt < 180
               ? 200
               : contHt > 600
-                  ? 600
-                  : contHt,
+              ? 600
+              : contHt,
           width: 40,
           decoration: BoxDecoration(
             color: colors.pillClr,
@@ -458,8 +460,8 @@ class TaskPageState extends ConsumerState<TaskPage> {
             item.duration ~/ 60 == 0
                 ? '${item.duration % 60} mins'
                 : item.duration % 60 == 0
-                    ? '${item.duration ~/ 60} hrs'
-                    : '${item.duration ~/ 60} hrs\n${item.duration % 60} mins',
+                ? '${item.duration ~/ 60} hrs'
+                : '${item.duration ~/ 60} hrs\n${item.duration % 60} mins',
             style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.center,
           ),
@@ -495,17 +497,17 @@ class TaskPageState extends ConsumerState<TaskPage> {
                 TextSpan(
                   text: item.priority,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: item.priority == "High"
-                            ? Colors.red
-                            : item.priority == "Medium"
-                                ? Colors.yellow
-                                : Colors.green,
-                      ),
+                    color: item.priority == "High"
+                        ? Colors.red
+                        : item.priority == "Medium"
+                        ? Colors.yellow
+                        : Colors.green,
+                  ),
                 ),
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -519,12 +521,14 @@ class TaskPageState extends ConsumerState<TaskPage> {
         _tabSwitcher(),
         const SizedBox(height: 75),
         Text(
-            "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
-            style: Theme.of(context).textTheme.headlineMedium),
+          "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
         const SizedBox(height: 10),
         Text(
-            "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
-            style: Theme.of(context).textTheme.bodySmall),
+          "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
         // const SizedBox(height: 10),
         // Text("Error: $error", style: Theme.of(context).textTheme.bodySmall),
       ],
@@ -554,10 +558,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DescPage(
-                    isEdit: true,
-                    user: user,
-                  ),
+                  builder: (context) => DescPage(isEdit: true, user: user),
                 ),
               );
             },

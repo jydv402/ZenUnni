@@ -9,22 +9,18 @@ class Message {
 
   Message({required this.text, required this.isUser});
 
-  Map<String, dynamic> toJson() => {
-        'text': text,
-        'isUser': isUser,
-      };
+  Map<String, dynamic> toJson() => {'text': text, 'isUser': isUser};
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
-        text: json['text'] as String,
-        isUser: json['isUser'] as bool,
-      );
+  factory Message.fromJson(Map<String, dynamic> json) =>
+      Message(text: json['text'] as String, isUser: json['isUser'] as bool);
 }
 
 final JsonStore _jsonStore = JsonStore();
 const String _chatHistoryKey = 'chat_history';
 
-final msgProvider =
-    NotifierProvider<MessageNotifier, List<Message>>(MessageNotifier.new);
+final msgProvider = NotifierProvider<MessageNotifier, List<Message>>(
+  MessageNotifier.new,
+);
 
 class MessageNotifier extends Notifier<List<Message>> {
   @override
@@ -60,20 +56,31 @@ class MessageNotifier extends Notifier<List<Message>> {
   }
 }
 
-final aiResponseAdder = FutureProvider.family<Message, String>(
-  (ref, msg) async {
-    final chatMsgs = ref.watch(msgProvider);
-    final user = ref.watch(userProvider);
-    final mood = ref.watch(moodProvider);
+final aiResponseAdder = FutureProvider.family<Message, String>((
+  ref,
+  msg,
+) async {
+  final chatMsgs = ref.watch(msgProvider);
+  final user = ref.watch(userProvider);
+  final mood = ref.watch(moodProvider);
 
-    final aiResponse = await ref.read(aiServiceProvider).unniChat(msg, chatMsgs,
-        user.value?.username ?? '', user.value?.about ?? '', mood.value ?? '');
+  final aiResponse = await ref
+      .read(aiServiceProvider)
+      .unniChat(
+        msg,
+        chatMsgs,
+        user.value?.username ?? '',
+        user.value?.about ?? '',
+        mood.value ?? '',
+      );
 
-    return Message(
-        text: aiResponse
-            .replaceAll(
-                RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'), '')
-            .trim(),
-        isUser: false);
-  },
-);
+  return Message(
+    text: aiResponse
+        .replaceAll(
+          RegExp(r'AIChatMessage{|content: |\n,|toolCalls: \[\],\n}'),
+          '',
+        )
+        .trim(),
+    isUser: false,
+  );
+});

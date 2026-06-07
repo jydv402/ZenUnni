@@ -28,27 +28,25 @@ class _ManualSchedEditState extends ConsumerState<ManualSchedEdit> {
 
     final storedSchedule = await _jsonStore.getItem(scheduleKey);
     if (storedSchedule != null) {
-      setState(
-        () {
-          _scheduleController.text = const JsonEncoder.withIndent('  ')
-              .convert(storedSchedule['schedule']);
-          _isLoading = false;
-        },
-      );
+      setState(() {
+        _scheduleController.text = const JsonEncoder.withIndent(
+          '  ',
+        ).convert(storedSchedule['schedule']);
+        _isLoading = false;
+      });
     } else {
-      setState(
-        () {
-          _scheduleController.text = "No saved schedule found.";
-          _isLoading = false;
-        },
-      );
+      setState(() {
+        _scheduleController.text = "No saved schedule found.";
+        _isLoading = false;
+      });
     }
   }
 
   Future<void> _saveSchedule() async {
     try {
-      final List<dynamic> updatedSchedule =
-          jsonDecode(_scheduleController.text);
+      final List<dynamic> updatedSchedule = jsonDecode(
+        _scheduleController.text,
+      );
       await _jsonStore.setItem(scheduleKey, {'schedule': updatedSchedule});
 
       if (mounted) {
@@ -79,16 +77,17 @@ class _ManualSchedEditState extends ConsumerState<ManualSchedEdit> {
           _isLoading
               ? Center(
                   child: showRunningIndicator(
-                      context, "Loading Saved Schedule..."),
+                    context,
+                    "Loading Saved Schedule...",
+                  ),
                 )
               : TextField(
                   onTapOutside: (event) {
                     FocusScope.of(context).unfocus();
                   },
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(height: 2),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(height: 2),
                   controller: _scheduleController,
                   maxLines: null,
                   decoration: const InputDecoration(
@@ -99,8 +98,12 @@ class _ManualSchedEditState extends ConsumerState<ManualSchedEdit> {
           const SizedBox(height: 135),
         ],
       ),
-      floatingActionButton:
-          fabButton(context, () => _saveSchedule(), "Save Schedule", 26),
+      floatingActionButton: fabButton(
+        context,
+        () => _saveSchedule(),
+        "Save Schedule",
+        26,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

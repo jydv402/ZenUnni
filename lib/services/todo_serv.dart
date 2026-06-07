@@ -22,8 +22,9 @@ class TaskNotifier extends StreamNotifier<List<TodoModel>> {
         final data = doc.data();
         return TodoModel.fromMap(
           data,
-          ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now())
-              .isAfter(DateTime.now()),
+          ((data['date'] as Timestamp?)?.toDate() ?? DateTime.now()).isAfter(
+            DateTime.now(),
+          ),
         );
       }).toList();
     }
@@ -58,16 +59,18 @@ class TaskNotifier extends StreamNotifier<List<TodoModel>> {
         .doc(auth.currentUser?.uid)
         .collection('task');
 
-    final querySnapshot =
-        await taskDoc.where('task', isEqualTo: task.oldname).get();
+    final querySnapshot = await taskDoc
+        .where('task', isEqualTo: task.oldname)
+        .get();
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
       await taskDoc.doc(docId).update(task.toMap());
 
       if (!task.isRecurring && task.date.isAfter(DateTime.now())) {
-        final notificationTime =
-            task.date.subtract(const Duration(minutes: 10));
+        final notificationTime = task.date.subtract(
+          const Duration(minutes: 10),
+        );
         if (notificationTime.isAfter(DateTime.now())) {
           await NotificationService.sheduleNotification(
             taskDoc.id.hashCode,
@@ -87,8 +90,9 @@ class TaskNotifier extends StreamNotifier<List<TodoModel>> {
         .doc(auth.currentUser?.uid)
         .collection('task');
 
-    final querySnapshot =
-        await taskDoc.where('task', isEqualTo: task.name).get();
+    final querySnapshot = await taskDoc
+        .where('task', isEqualTo: task.name)
+        .get();
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
@@ -137,8 +141,9 @@ class RecurringTaskNotifier extends StreamNotifier<List<TodoModel>> {
         .doc(auth.currentUser?.uid)
         .collection('task');
 
-    final querySnapshot =
-        await taskDoc.where('task', isEqualTo: task.oldname).get();
+    final querySnapshot = await taskDoc
+        .where('task', isEqualTo: task.oldname)
+        .get();
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
@@ -153,8 +158,9 @@ class RecurringTaskNotifier extends StreamNotifier<List<TodoModel>> {
         .doc(auth.currentUser?.uid)
         .collection('task');
 
-    final querySnapshot =
-        await taskDoc.where('task', isEqualTo: task.name).get();
+    final querySnapshot = await taskDoc
+        .where('task', isEqualTo: task.name)
+        .get();
 
     if (querySnapshot.docs.isNotEmpty) {
       final docId = querySnapshot.docs.first.id;
@@ -165,8 +171,8 @@ class RecurringTaskNotifier extends StreamNotifier<List<TodoModel>> {
 
 final recurringTaskProvider =
     StreamNotifierProvider<RecurringTaskNotifier, List<TodoModel>>(() {
-  return RecurringTaskNotifier();
-});
+      return RecurringTaskNotifier();
+    });
 
 //to get the incomplete tasks to schedule notifications
 Future<void> scheduleNotificationsForIncompleteTasks() async {

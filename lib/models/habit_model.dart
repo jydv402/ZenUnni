@@ -31,22 +31,23 @@ class HabitModel {
       habitName: map['habitName'] ?? '',
       color: map['color'] ?? '',
       createdAt: (map['createdAt'] as Timestamp).toDate(),
-      completedDates:
-          (map['completedDates'] as Map<String, dynamic>? ?? {}).map(
-        (key, value) {
-          final date = DateTime.parse(key);
-          return MapEntry(
-              DateTime(date.year, date.month, date.day), value as bool);
-        },
-      ),
+      completedDates: (map['completedDates'] as Map<String, dynamic>? ?? {})
+          .map((key, value) {
+            final date = DateTime.parse(key);
+            return MapEntry(
+              DateTime(date.year, date.month, date.day),
+              value as bool,
+            );
+          }),
     );
   }
 
-  HabitModel copyWith(
-      {String? habitName,
-      String? color,
-      DateTime? createdAt,
-      Map<DateTime, bool>? completedDates}) {
+  HabitModel copyWith({
+    String? habitName,
+    String? color,
+    DateTime? createdAt,
+    Map<DateTime, bool>? completedDates,
+  }) {
     return HabitModel(
       habitName: habitName ?? this.habitName,
       color: color ?? this.color,

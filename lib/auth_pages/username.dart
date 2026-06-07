@@ -61,9 +61,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
             maxLength: 16,
             controller: userNameController,
             style: Theme.of(context).textTheme.bodyMedium,
-            decoration: const InputDecoration(
-              labelText: 'Username',
-            ),
+            decoration: const InputDecoration(labelText: 'Username'),
           ),
           const SizedBox(height: 30),
 
@@ -86,12 +84,10 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
             ],
             selected: gender,
             onSelectionChanged: (Set<int> value) {
-              setState(
-                () {
-                  gender = value;
-                  slctdAvt = null; // Reset avatar selection when gender changes
-                },
-              );
+              setState(() {
+                gender = value;
+                slctdAvt = null; // Reset avatar selection when gender changes
+              });
             },
           ),
 
@@ -118,11 +114,9 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
               final isSelected = slctdAvt == index;
               return GestureDetector(
                 onTap: () {
-                  setState(
-                    () {
-                      slctdAvt = index;
-                    },
-                  );
+                  setState(() {
+                    slctdAvt = index;
+                  });
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -142,36 +136,49 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
           const SizedBox(height: 80),
         ],
       ),
-      floatingActionButton: fabButton(context, () async {
-        String username = userNameController.text.trim();
+      floatingActionButton: fabButton(
+        context,
+        () async {
+          String username = userNameController.text.trim();
 
-        if (username.isNotEmpty &&
-            !isUpdate &&
-            !existingUsers.contains(username.toLowerCase())) {
-          stateInvalidator(ref, true);
-          if (slctdAvt == null) {
-            showHeadsupNoti(context, ref, "Please pick an avatar.");
-            return;
+          if (username.isNotEmpty &&
+              !isUpdate &&
+              !existingUsers.contains(username.toLowerCase())) {
+            stateInvalidator(ref, true);
+            if (slctdAvt == null) {
+              showHeadsupNoti(context, ref, "Please pick an avatar.");
+              return;
+            }
+            await createUserDoc(
+              username,
+              gender.contains(0) ? 0 : 1,
+              slctdAvt!,
+            );
+            if (context.mounted) {
+              Navigator.pushNamed(context, '/desc');
+            }
+          } else if (username.isNotEmpty &&
+              isUpdate &&
+              !existingUsers.contains(username.toLowerCase())) {
+            stateInvalidator(ref, false);
+            await updateUserDoc(
+              username,
+              gender.contains(0) ? 0 : 1,
+              slctdAvt!,
+            );
+            if (context.mounted) {
+              Navigator.pop(context);
+              showHeadsupNoti(context, ref, "Profile updated successfully.");
+            }
+          } else if (existingUsers.contains(username.toLowerCase())) {
+            showHeadsupNoti(context, ref, "Username already exists.");
+          } else {
+            showHeadsupNoti(context, ref, "Please enter a username.");
           }
-          await createUserDoc(username, gender.contains(0) ? 0 : 1, slctdAvt!);
-          if (context.mounted) {
-            Navigator.pushNamed(context, '/desc');
-          }
-        } else if (username.isNotEmpty &&
-            isUpdate &&
-            !existingUsers.contains(username.toLowerCase())) {
-          stateInvalidator(ref, false);
-          await updateUserDoc(username, gender.contains(0) ? 0 : 1, slctdAvt!);
-          if (context.mounted) {
-            Navigator.pop(context);
-            showHeadsupNoti(context, ref, "Profile updated successfully.");
-          }
-        } else if (existingUsers.contains(username.toLowerCase())) {
-          showHeadsupNoti(context, ref, "Username already exists.");
-        } else {
-          showHeadsupNoti(context, ref, "Please enter a username.");
-        }
-      }, isUpdate ? 'Update Profile' : 'Continue', 26),
+        },
+        isUpdate ? 'Update Profile' : 'Continue',
+        26,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

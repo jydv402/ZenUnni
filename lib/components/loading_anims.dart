@@ -7,13 +7,8 @@ void showLoadingDialog(BuildContext context, String heading) {
     context: context,
     builder: (context) {
       return SimpleDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(26),
-        ),
-        title: Text(
-          heading,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+        title: Text(heading, style: Theme.of(context).textTheme.headlineMedium),
         children: [
           Center(
             child: Lottie.asset(
@@ -33,11 +28,7 @@ Column showRunningIndicator(BuildContext context, String message) {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Lottie.asset(
-        "assets/loading/ld_shapes.json",
-        height: 100,
-        width: 100,
-      ),
+      Lottie.asset("assets/loading/ld_shapes.json", height: 100, width: 100),
       const SizedBox(height: 20),
       Text(
         message,
