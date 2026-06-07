@@ -72,7 +72,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
     final themeMode = ref.watch(themeProvider);
-    final colors = ref.watch(appColorsProvider);
     final isDarkMode = themeMode == ThemeMode.dark;
     const div16 = SizedBox(height: 16);
     return userState.when(
@@ -133,122 +132,94 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
             // Theme Toggle
             _divTxt("Theme"),
-            buttonBg(
-              SwitchListTile(
-                title: Text(
-                  "Dark Mode",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                value: isDarkMode,
-                onChanged: (value) {
-                  ref.read(themeProvider.notifier).toggleTheme();
-                },
-              ),
+            customSettingsButton(
+              text: "Dark Mode",
+              icon: isDarkMode ? LucideIcons.moon : LucideIcons.sun,
+              onChanged: () {
+                ref.read(themeProvider.notifier).toggleTheme();
+              },
             ),
 
             // Account Settings
             _divTxt("Account"),
-            buttonBg(
-              ListTile(
-                title: Text(
-                  "Change account details",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                trailing: Icon(
-                  LucideIcons.user_round_cog,
-                  color: colors.iconClr,
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          UsernamePage(isUpdate: true, user: user),
-                    ),
-                  );
-                },
-              ),
+            customSettingsButton(
+              text: "Change account details",
+              icon: LucideIcons.user_round_cog,
+              isLast: false,
+              onChanged: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        UsernamePage(isUpdate: true, user: user),
+                  ),
+                );
+              },
             ),
 
-            buttonBg(
-              ListTile(
-                title: Text(
-                  "API Key Integration",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                trailing: Icon(LucideIcons.key_round, color: colors.iconClr),
-                onTap: () {
-                  Navigator.pushNamed(context, '/api_key');
-                },
-              ),
+            customSettingsButton(
+              text: "API Key Integration",
+              icon: LucideIcons.key_round,
+              isFirst: false,
+              isLast: false,
+              onChanged: () {
+                Navigator.pushNamed(context, '/api_key');
+              },
             ),
-            buttonBg(
-              ListTile(
-                title: Text(
-                  "Edit personal details",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                trailing: Icon(
-                  LucideIcons.user_round_pen,
-                  color: colors.iconClr,
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DescPage(isEdit: true, user: user),
-                    ),
-                  );
-                },
-              ),
+            customSettingsButton(
+              text: "Edit personal details",
+              icon: LucideIcons.user_round_pen,
+              isFirst: false,
+              isLast: false,
+              onChanged: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DescPage(isEdit: true, user: user),
+                  ),
+                );
+              },
             ),
-            buttonBg(
-              ListTile(
-                title: Text(
+            customSettingsButton(
+              text: "Logout",
+              icon: LucideIcons.log_out,
+              isFirst: false,
+              isLast: false,
+              onChanged: () {
+                showConfirmDialog(
+                  context,
+                  "Logout?",
+                  "Are you sure you want to logout?",
                   "Logout",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                trailing: Icon(LucideIcons.log_out, color: colors.iconClr),
-                onTap: () {
-                  showConfirmDialog(
-                    context,
-                    "Logout?",
-                    "Are you sure you want to logout?",
-                    "Logout",
-                    Colors.red,
-                    () {
-                      Navigator.of(context).pop();
-                      logoutUser(context, ref);
-                      stateInvalidator(ref, true);
-                    },
-                  );
-                },
-              ),
+                  Colors.red,
+                  () {
+                    Navigator.of(context).pop();
+                    logoutUser(context, ref);
+                    stateInvalidator(ref, true);
+                  },
+                );
+              },
             ),
-            buttonBg(
-              ListTile(
-                title: Text(
-                  "Delete Account",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: Colors.red),
-                ),
-                trailing: const Icon(LucideIcons.trash_2, color: Colors.red),
-                onTap: () {
-                  showConfirmDialog(
-                    context,
-                    "Delete Account?",
-                    "Are you sure you want to permanently delete your account? This cannot be undone.",
-                    "Delete",
-                    Colors.red,
-                    () {
-                      Navigator.of(context).pop();
-                      deleteUser(context, ref);
-                      stateInvalidator(ref, true);
-                    },
-                  );
-                },
-              ),
+            customSettingsButton(
+              text: "Delete Account",
+              icon: LucideIcons.trash_2,
+              textColor: Colors.red,
+              iconColor: Colors.red,
+              isFirst: false,
+              onChanged: () {
+                showConfirmDialog(
+                  context,
+                  "Delete Account?",
+                  "Are you sure you want to permanently delete your account? This cannot be undone.",
+                  "Delete",
+                  Colors.red,
+                  () {
+                    Navigator.of(context).pop();
+                    deleteUser(context, ref);
+                    stateInvalidator(ref, true);
+                  },
+                );
+              },
             ),
           ],
         );
@@ -260,18 +231,54 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     );
   }
 
-  Container buttonBg(Widget child) {
+  Widget customSettingsButton({
+    required String text,
+    required IconData icon,
+    required VoidCallback onChanged,
+    Color? textColor,
+    Color? iconColor,
+    bool isFirst = true,
+    bool isLast = true,
+  }) {
     final colors = ref.watch(appColorsProvider);
-    return Container(
-      height: 84,
-      margin: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-      padding: const EdgeInsets.all(10),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(32),
+    final borderRadius = BorderRadius.only(
+      topLeft: .circular(isFirst ? 24 : 6),
+      topRight: .circular(isFirst ? 24 : 6),
+      bottomLeft: .circular(isLast ? 24 : 6),
+      bottomRight: .circular(isLast ? 24 : 6),
+    );
+    final padding = EdgeInsets.fromLTRB(6, isFirst ? 4 : 2, 6, isLast ? 4 : 2);
+
+    return Padding(
+      padding: padding,
+      child: Material(
         color: colors.pillClr,
+        borderRadius: borderRadius,
+        child: InkWell(
+          borderRadius: borderRadius,
+          onTap: onChanged,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 84),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              spacing: 16,
+              children: [
+                Expanded(
+                  child: Text(
+                    text,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: textColor),
+                  ),
+                ),
+                Icon(icon, color: iconColor ?? colors.iconClr),
+              ],
+            ),
+          ),
+        ),
       ),
-      child: child,
     );
   }
 

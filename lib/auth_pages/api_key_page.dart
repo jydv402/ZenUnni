@@ -99,6 +99,14 @@ class _ApiKeyPageState extends ConsumerState<ApiKeyPage> {
                 ),
                 const SizedBox(height: 16),
                 TextButton(
+                  style: ButtonStyle(
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(120),
+                        side: const BorderSide(color: Colors.blue),
+                      ),
+                    ),
+                  ),
                   onPressed: () async {
                     final url = Uri.parse(
                       'https://aistudio.google.com/app/apikey',
@@ -123,9 +131,10 @@ class _ApiKeyPageState extends ConsumerState<ApiKeyPage> {
                 const SizedBox(height: 32),
                 TextField(
                   controller: _keyController,
+                  style: Theme.of(context).textTheme.bodyMedium,
+
                   decoration: InputDecoration(
                     hintText: "Enter your Gemini API Key",
-                    hintStyle: Theme.of(context).textTheme.bodyMedium,
                     filled: true,
                     fillColor: colors.pillClr,
                     border: OutlineInputBorder(

@@ -4,18 +4,20 @@ import 'package:delightful_toast/delight_toast.dart';
 import 'package:zen/zen_barrel.dart';
 
 void showHeadsupNoti(BuildContext context, WidgetRef ref, String message) {
-  final colors = ref.watch(appColorsProvider);
-  final theme = ref.watch(themeProvider);
+  final colors = ref.read(appColorsProvider);
+  final theme = ref.read(themeProvider);
+  final textStyle = Theme.of(context).textTheme.bodyMedium;
+
   return DelightToastBar(
     position: DelightSnackbarPosition.top,
     autoDismiss: true,
-    builder: (context) => Container(
-      margin: EdgeInsets.fromLTRB(16, 20, 16, 0),
-      padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+    builder: (toastContext) => Container(
+      margin: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         color: colors.toastBg,
-        border: Border.all(color: Color.fromRGBO(255, 140, 43, 1)),
+        border: Border.all(color: const Color.fromRGBO(255, 140, 43, 1)),
       ),
       child: ToastCard(
         shadowColor: Colors.transparent,
@@ -25,7 +27,7 @@ void showHeadsupNoti(BuildContext context, WidgetRef ref, String message) {
           width: 20,
           height: 20,
         ),
-        title: Text(message, style: Theme.of(context).textTheme.bodyMedium),
+        title: Text(message, style: textStyle),
       ),
     ),
   ).show(context);
