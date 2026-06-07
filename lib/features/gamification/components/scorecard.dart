@@ -1,4 +1,3 @@
-import 'package:zen/components/open_app_drawer_button.dart';
 import 'package:zen/zen_barrel.dart';
 
 class ScoreCard extends ConsumerWidget {

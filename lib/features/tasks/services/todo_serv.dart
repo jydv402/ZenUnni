@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:zen/zen_barrel.dart';
-import 'package:zen/notification/notif.dart';
 
 final editProvider = Provider<TodoModel?>((ref) => null);
 

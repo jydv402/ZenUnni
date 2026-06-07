@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:zen/models/user_model.dart';
+import 'package:zen/zen_barrel.dart';
 
 Future<void> createUserDoc(String username, int? gender, int? avt) async {
   try {

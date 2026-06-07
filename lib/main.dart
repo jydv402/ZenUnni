@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'notification/notif.dart';
 import 'firebase_options.dart';
 import 'zen_barrel.dart';
 import 'package:timezone/data/latest.dart' as tz;
