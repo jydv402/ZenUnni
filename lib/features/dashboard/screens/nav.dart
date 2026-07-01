@@ -140,17 +140,20 @@ class _NavbarState extends ConsumerState<Navbar> {
         ),
         color: selected ? Color.fromRGBO(255, 139, 44, 1) : Colors.transparent,
       ),
-      child: ListTile(
-        iconColor: colors.navDrawer,
-        textColor: colors.navDrawer,
-        selectedColor: Colors.black,
-        leading: Icon(icon),
-        title: Text(label),
-        selected: selected,
-        onTap: () {
-          updatePgIndex(ref, pgIndex);
-          Navigator.pop(context);
-        },
+      child: Material(
+        color: Colors.transparent,
+        child: ListTile(
+          iconColor: colors.navDrawer,
+          textColor: colors.navDrawer,
+          selectedColor: Colors.black,
+          leading: Icon(icon),
+          title: Text(label),
+          selected: selected,
+          onTap: () {
+            updatePgIndex(ref, pgIndex);
+            Navigator.pop(context);
+          },
+        ),
       ),
     );
   }

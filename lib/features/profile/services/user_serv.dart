@@ -77,15 +77,16 @@ class UserNotifier extends AsyncNotifier<UserModel?> {
   }
 }
 
-//Obtain all the usernames
-final existingUsersProvider = StreamProvider<List<String>>((ref) {
-  //return only the doc
-  return FirebaseFirestore.instance
-      .collection('users')
-      .snapshots()
-      .map(
-        (snapshot) => snapshot.docs.map((doc) {
-          return doc.data()['usernameLower'] as String;
-        }).toList(),
-      );
-});
+// Check if a username is already taken (on-demand)
+Future<bool> checkIfUsernameExists(String username) async {
+  try {
+    final query = await FirebaseFirestore.instance
+        .collection('users')
+        .where('usernameLower', isEqualTo: username.toLowerCase())
+        .limit(1)
+        .get();
+    return query.docs.isNotEmpty;
+  } catch (e) {
+    throw Exception('Failed to check username: $e');
+  }
+}

@@ -2,13 +2,33 @@ import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zen/zen_barrel.dart';
 
-class ChatPage extends ConsumerWidget {
-  ChatPage({super.key});
-
-  final ScrollController _scrollController = ScrollController();
+class ChatPage extends ConsumerStatefulWidget {
+  const ChatPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends ConsumerState<ChatPage> {
+  late final ScrollController _scrollController;
+  late final TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final chatMsgs = ref.watch(msgProvider);
     final theme = ref.watch(themeProvider);
     final colors = ref.watch(appColorsProvider);
@@ -142,7 +162,6 @@ class ChatPage extends ConsumerWidget {
                           const Spacer(),
                           //TODO: Chat history
                           IconButton(
-                            //Show history of the chat
                             tooltip: 'Chat history',
                             onPressed: () {},
                             icon: Icon(
@@ -152,7 +171,6 @@ class ChatPage extends ConsumerWidget {
                           ),
                           //TODO: Save chat
                           IconButton(
-                            //Save the chat
                             tooltip: 'Save chat',
                             onPressed: () {},
                             icon: Icon(LucideIcons.save, color: colors.iconClr),
@@ -203,15 +221,13 @@ class ChatPage extends ConsumerWidget {
                   }
                 },
               ),
-        floatingActionButton: fabField(context, ref, chatMsgs.isEmpty),
+        floatingActionButton: fabField(chatMsgs.isEmpty),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }
 
-  Widget fabField(BuildContext context, WidgetRef ref, bool isEmpty) {
-    final TextEditingController controller = TextEditingController();
-
+  Widget fabField(bool isEmpty) {
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -230,7 +246,7 @@ class ChatPage extends ConsumerWidget {
         children: [
           Expanded(
             child: TextField(
-              controller: controller,
+              controller: _textController,
               maxLines: null,
               minLines: 1,
               cursorColor: Colors.black,
@@ -271,17 +287,16 @@ class ChatPage extends ConsumerWidget {
             tooltip: 'Send',
             padding: const EdgeInsets.all(0),
             onPressed: () async {
-              if (controller.text.isNotEmpty) {
+              final text = _textController.text.trim();
+              if (text.isNotEmpty) {
+                _textController.clear();
                 //Add the message to the state
-                final userMsg = Message(text: controller.text, isUser: true);
+                final userMsg = Message(text: text, isUser: true);
                 ref.read(msgProvider.notifier).addMessage(userMsg);
                 //Get the AI response
-                final aiMsg = await ref.read(
-                  aiResponseAdder(controller.text).future,
-                );
+                final aiMsg = await ref.read(aiResponseAdder(text).future);
                 ref.read(msgProvider.notifier).addMessage(aiMsg);
               }
-              controller.clear();
             },
             icon: const Icon(LucideIcons.forward, size: 22),
           ),

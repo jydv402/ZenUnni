@@ -80,7 +80,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
               () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddTaskPage()),
+                  MaterialPageRoute(builder: (context) => const AddTaskPage()),
                 );
               },
               "Add New Tasks",
@@ -220,7 +220,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
                           },
                         );
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         LucideIcons.trash_2,
                         color: Colors.white,
                         size: 22,
@@ -236,7 +236,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
                           ),
                         );
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         LucideIcons.square_pen,
                         size: 22,
                         color: Colors.white,
@@ -250,7 +250,9 @@ class TaskPageState extends ConsumerState<TaskPage> {
                               width: 2,
                             ),
                             activeColor: Colors.white,
-                            overlayColor: WidgetStatePropertyAll(Colors.white),
+                            overlayColor: const WidgetStatePropertyAll(
+                              Colors.white,
+                            ),
                             focusColor: Colors.white,
                             checkColor: Colors.black,
                             onChanged: (bool? value) {
@@ -408,13 +410,98 @@ class TaskPageState extends ConsumerState<TaskPage> {
           return const SizedBox(height: 140);
         } else {
           final item = scheduleItems[index - 1];
-          return scheduleCard(item);
+          return ScheduleCardWidget(item: item);
         }
       },
     );
   }
 
-  Widget scheduleCard(ScheduleItem item) {
+  Widget _scheduleFailListView(BuildContext context, error) {
+    return ListView(
+      shrinkWrap: true,
+      padding: pagePaddingWithScore,
+      children: [
+        const ScoreCard(),
+        _tabSwitcher(),
+        const SizedBox(height: 75),
+        Text(
+          "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: 10),
+        Text(
+          "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
+    );
+  }
+
+  Widget schedulePopUp(BuildContext context, List<TodoModel> tasks) {
+    final user = ref.watch(userProvider).value;
+    return PopupMenuButton<int>(
+      popUpAnimationStyle: AnimationStyle(
+        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 300),
+        reverseCurve: Curves.easeInOut,
+        reverseDuration: const Duration(milliseconds: 200),
+      ),
+      offset: const Offset(-60, -130),
+      icon: const Icon(LucideIcons.plus),
+      itemBuilder: (context) => <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          value: 0,
+          child: menuItem(
+            context,
+            ref,
+            "Edit Available Time",
+            LucideIcons.pen,
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DescPage(isEdit: true, user: user),
+                ),
+              );
+            },
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 1,
+          child: menuItem(
+            context,
+            ref,
+            "Edit Schedule",
+            LucideIcons.pencil,
+            () {
+              Navigator.pushNamed(context, '/man_sched');
+            },
+          ),
+        ),
+        PopupMenuItem<int>(
+          value: 2,
+          child: menuItem(
+            context,
+            ref,
+            "Regenerate Schedule",
+            LucideIcons.refresh_ccw,
+            () {
+              clearScheduleData(ref, tasks);
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ScheduleCardWidget extends ConsumerWidget {
+  final ScheduleItem item;
+  const ScheduleCardWidget({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = ref.watch(appColorsProvider);
     final contHt = item.duration.toDouble() * 1.5;
     return Stack(
@@ -506,87 +593,6 @@ class TaskPageState extends ConsumerState<TaskPage> {
                 ),
               ],
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _scheduleFailListView(BuildContext context, error) {
-    return ListView(
-      shrinkWrap: true,
-      padding: pagePaddingWithScore,
-      children: [
-        const ScoreCard(),
-        _tabSwitcher(),
-        const SizedBox(height: 75),
-        Text(
-          "Oops! I couldn't generate a schedule for you.\nTry again later. 😵",
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-        const SizedBox(height: 10),
-        Text(
-          "Psst! Checking your \ninternet connection may help...🙂.\nOr is your Task list empty..?🙄",
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        // const SizedBox(height: 10),
-        // Text("Error: $error", style: Theme.of(context).textTheme.bodySmall),
-      ],
-    );
-  }
-
-  Widget schedulePopUp(BuildContext context, List<TodoModel> tasks) {
-    final user = ref.watch(userProvider).value;
-    return PopupMenuButton<int>(
-      popUpAnimationStyle: AnimationStyle(
-        curve: Curves.easeInOut,
-        duration: Duration(milliseconds: 300),
-        reverseCurve: Curves.easeInOut,
-        reverseDuration: Duration(milliseconds: 200),
-      ),
-      offset: const Offset(-60, -130),
-      icon: Icon(LucideIcons.plus),
-      itemBuilder: (context) => <PopupMenuEntry<int>>[
-        PopupMenuItem<int>(
-          value: 0,
-          child: menuItem(
-            context,
-            ref,
-            "Edit Available Time",
-            LucideIcons.pen,
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DescPage(isEdit: true, user: user),
-                ),
-              );
-            },
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 1,
-          child: menuItem(
-            context,
-            ref,
-            "Edit Schedule",
-            LucideIcons.pencil,
-            () {
-              Navigator.pushNamed(context, '/man_sched');
-            },
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 2,
-          child: menuItem(
-            context,
-            ref,
-            "Regenerate Schedule",
-            LucideIcons.refresh_ccw,
-            () {
-              clearScheduleData(ref, tasks);
-              Navigator.pop(context);
-            },
           ),
         ),
       ],

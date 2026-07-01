@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:zen/zen_barrel.dart';
 
 class ConnectPage extends ConsumerStatefulWidget {
@@ -9,24 +10,32 @@ class ConnectPage extends ConsumerStatefulWidget {
 
 class _SearchState extends ConsumerState<ConnectPage> {
   final searchNameController = TextEditingController();
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    searchNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final String searchQuery = searchNameController.text.toLowerCase();
-    final searchResults = ref.watch(rankedUserSearchProvider);
+    final searchQuery = ref.watch(userSearchQueryProvider);
+    final isSearching = searchQuery.isNotEmpty;
+
+    // Watch either query search results or top 50 ranked leaderboard
+    final searchResults = ref.watch(
+      isSearching ? userSearchResultsProvider : rankedUserSearchProvider,
+    );
     final colors = ref.watch(appColorsProvider);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: searchResults.when(
         data: (users) {
-          final filteredUsers = users.where((user) {
-            final username = user.username.toLowerCase();
-            return username.contains(searchQuery);
-          }).toList();
-
-          //If no users found
-          if (filteredUsers.isEmpty) {
+          // If no users found
+          if (users.isEmpty) {
             return ListView(
               children: [
                 header(),
@@ -52,9 +61,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
             );
           }
 
-          return searchQuery.isEmpty
-              ? rankView(filteredUsers)
-              : searchView(filteredUsers);
+          return !isSearching ? rankView(users) : searchView(users);
         },
         error: (err, stack) => Center(child: Text("Error:$err")),
         loading: () =>
@@ -85,7 +92,10 @@ class _SearchState extends ConsumerState<ConnectPage> {
           Expanded(
             child: TextField(
               onChanged: (value) {
-                setState(() {});
+                // Debounce search update to avoid slamming Firestore queries
+                _debounce = Timer(const Duration(milliseconds: 500), () {
+                  ref.read(userSearchQueryProvider.notifier).setQuery(value);
+                });
               },
               controller: searchNameController,
               maxLines: null,
@@ -130,10 +140,8 @@ class _SearchState extends ConsumerState<ConnectPage> {
               fit: StackFit.loose,
               clipBehavior: Clip.none,
               children: [
-                //rankCard(double top, double right, double left, double dp, double fSize, String rank, String username, String score)
-                //Rank 1
+                // Rank 1
                 if (users.isNotEmpty)
-                  // Check if list contains at least 1 element
                   rankCard(
                     0,
                     0,
@@ -148,9 +156,8 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     users[0].score.toString(),
                     users[0].isUser ?? false,
                   ),
-                //Rank 2
+                // Rank 2
                 if (users.length > 1)
-                  // Check if list contains at least 2 elements
                   rankCard(
                     100,
                     MediaQuery.of(context).size.width - 80 - 28,
@@ -165,9 +172,8 @@ class _SearchState extends ConsumerState<ConnectPage> {
                     users[1].score.toString(),
                     users[1].isUser ?? false,
                   ),
-                //Rank 3
+                // Rank 3
                 if (users.length > 2)
-                  // Check if list contains at least 3 elements
                   rankCard(
                     100,
                     28,
@@ -350,7 +356,7 @@ class _SearchState extends ConsumerState<ConnectPage> {
               top: 38,
               left: 22,
               child: Text(
-                "${user.rank}",
+                (user.rank ?? 0) > 0 ? "${user.rank}" : "-",
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

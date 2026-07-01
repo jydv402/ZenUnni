@@ -9,17 +9,17 @@ class UsernamePage extends ConsumerStatefulWidget {
   ConsumerState<UsernamePage> createState() => _UsernamePageState();
 }
 
-final TextEditingController userNameController = TextEditingController();
-Set<int> gender = {0};
-int? slctdAvt;
-
 class _UsernamePageState extends ConsumerState<UsernamePage> {
   late final bool isUpdate;
+  late final TextEditingController userNameController;
+  Set<int> gender = {0};
+  int? slctdAvt;
 
   @override
   void initState() {
     super.initState();
     isUpdate = widget.isUpdate ?? false;
+    userNameController = TextEditingController();
     if (isUpdate == true) {
       userNameController.text = widget.user?.username ?? '';
       gender = {widget.user?.gender ?? 0};
@@ -28,22 +28,15 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
   }
 
   @override
+  void dispose() {
+    userNameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final username = ref.watch(userNameProvider);
-
-    //Get all the existing users
-    final existingUsers = List.from(
-      ref.watch(existingUsersProvider).value ?? [],
-    );
-
-    // Remove the username from existing users
-    existingUsers.removeWhere(
-      (user) => user.toString().toLowerCase() == username.value?.toLowerCase(),
-    );
-
-    //print(existingUsers);
-
     final avatars = gender.contains(0) ? males : females;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: ListView(
@@ -123,7 +116,7 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
                     borderRadius: BorderRadius.circular(100),
                     border: Border.all(
                       color: isSelected
-                          ? Color.fromRGBO(255, 140, 43, 1)
+                          ? const Color.fromRGBO(255, 140, 43, 1)
                           : Colors.transparent,
                       width: 5,
                     ),
@@ -141,14 +134,26 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
         () async {
           String username = userNameController.text.trim();
 
-          if (username.isNotEmpty &&
-              !isUpdate &&
-              !existingUsers.contains(username.toLowerCase())) {
-            stateInvalidator(ref, true);
-            if (slctdAvt == null) {
-              showHeadsupNoti(context, ref, "Please pick an avatar.");
+          if (username.isEmpty) {
+            showHeadsupNoti(context, ref, "Please enter a username.");
+            return;
+          }
+          if (slctdAvt == null) {
+            showHeadsupNoti(context, ref, "Please pick an avatar.");
+            return;
+          }
+
+          // Perform uniqueness check on-demand
+          final isTaken = await checkIfUsernameExists(username);
+
+          if (!context.mounted) return;
+
+          if (!isUpdate) {
+            if (isTaken) {
+              showHeadsupNoti(context, ref, "Username already exists.");
               return;
             }
+            stateInvalidator(ref, true);
             await createUserDoc(
               username,
               gender.contains(0) ? 0 : 1,
@@ -157,9 +162,14 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
             if (context.mounted) {
               Navigator.pushNamed(context, '/desc');
             }
-          } else if (username.isNotEmpty &&
-              isUpdate &&
-              !existingUsers.contains(username.toLowerCase())) {
+          } else {
+            // Update mode
+            final currentUsername = widget.user?.username;
+            if (username.toLowerCase() != currentUsername?.toLowerCase() &&
+                isTaken) {
+              showHeadsupNoti(context, ref, "Username already exists.");
+              return;
+            }
             stateInvalidator(ref, false);
             await updateUserDoc(
               username,
@@ -170,10 +180,6 @@ class _UsernamePageState extends ConsumerState<UsernamePage> {
               Navigator.pop(context);
               showHeadsupNoti(context, ref, "Profile updated successfully.");
             }
-          } else if (existingUsers.contains(username.toLowerCase())) {
-            showHeadsupNoti(context, ref, "Username already exists.");
-          } else {
-            showHeadsupNoti(context, ref, "Please enter a username.");
           }
         },
         isUpdate ? 'Update Profile' : 'Continue',

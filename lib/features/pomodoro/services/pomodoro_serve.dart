@@ -6,7 +6,12 @@ class PomodoroNotifier extends Notifier<PomodoroState> {
   Timer? _timer;
 
   @override
-  PomodoroState build() => PomodoroState();
+  PomodoroState build() {
+    ref.onDispose(() {
+      _timer?.cancel();
+    });
+    return PomodoroState();
+  }
 
   void setTimer(int duration, int breakDuration, int rounds) {
     state = state.copyWith(

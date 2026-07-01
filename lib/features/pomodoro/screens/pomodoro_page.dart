@@ -6,24 +6,41 @@ void playPomodoroEndSound() async {
   await player.play(AssetSource('sounds/timer.mp3'));
 }
 
-class PomodoroPage extends ConsumerWidget {
+class PomodoroPage extends ConsumerStatefulWidget {
   const PomodoroPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final pomo = ref.watch(pomoProvider);
+  ConsumerState<PomodoroPage> createState() => _PomodoroPageState();
+}
+
+class _PomodoroPageState extends ConsumerState<PomodoroPage> {
+  late final TextEditingController duration;
+  late final TextEditingController breakDuration;
+  late final TextEditingController rounds;
+
+  @override
+  void initState() {
+    super.initState();
+    final pomo = ref.read(pomoProvider);
+    duration = TextEditingController(text: pomo.duration.toString());
+    breakDuration = TextEditingController(text: pomo.breakDuration.toString());
+    rounds = TextEditingController(text: pomo.rounds.toString());
+  }
+
+  @override
+  void dispose() {
+    duration.dispose();
+    breakDuration.dispose();
+    rounds.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final pomoNotifier = ref.read(pomoProvider.notifier);
     const space8 = SizedBox(height: 8);
     const space32 = SizedBox(height: 32);
     const space50 = SizedBox(height: 50);
-
-    TextEditingController duration = TextEditingController();
-    TextEditingController breakDuration = TextEditingController();
-    TextEditingController rounds = TextEditingController();
-
-    duration.text = pomo.duration.toString();
-    breakDuration.text = pomo.breakDuration.toString();
-    rounds.text = pomo.rounds.toString();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -47,69 +64,7 @@ class PomodoroPage extends ConsumerWidget {
           _text(context, "Number of rounds : "),
           space8,
           _pomoField(context, rounds),
-          // space50,
-          // fabButton(() {
-          //   if (duration.text.isNotEmpty &&
-          //       breakDuration.text.isNotEmpty &&
-          //       rounds.text.isNotEmpty) {
-          //     pomoNotifier.setTimer(int.parse(duration.text),
-          //         int.parse(breakDuration.text), int.parse(rounds.text),);
-          //     pomoNotifier.startTimer();
-          //     Navigator.pushNamed(context, '/counter');
-          //   }
-          // }, 'Reset', 0),
-          // space16,
-          // fabButton(() {
-          //   if (duration.text.isNotEmpty &&
-          //       breakDuration.text.isNotEmpty &&
-          //       rounds.text.isNotEmpty) {
-          //     pomoNotifier.setTimer(int.parse(duration.text),
-          //         int.parse(breakDuration.text), int.parse(rounds.text),);
-          //     pomoNotifier.startTimer();
-          //     Navigator.pushNamed(context, '/counter');
-          //   }
-          // }, 'Start Timer', 0),
           space50,
-          // Row(
-          //   spacing: 8,
-          //   children: [
-          //     Flexible(
-          //       flex: 1,
-          //       child: SizedBox(
-          //         width: double.infinity,
-          //         child: ElevatedButton(
-          //           style: ElevatedButton.styleFrom(
-          //               backgroundColor: Colors.red[400]),
-          //           onPressed: () {
-          //             pomoNotifier.resetTimer();
-          //           },
-          //           child: Text('Reset'),
-          //         ),
-          //       ),
-          //     ),
-          //     Flexible(
-          //       flex: 1,
-          //       child: SizedBox(
-          //         width: double.infinity,
-          //         child: ElevatedButton(
-          //           onPressed: () {
-          //             if (duration.text.isNotEmpty &&
-          //                 breakDuration.text.isNotEmpty &&
-          //                 rounds.text.isNotEmpty) {
-          //               pomoNotifier.setTimer(
-          //                   int.parse(duration.text),
-          //                   int.parse(breakDuration.text),
-          //                   int.parse(rounds.text),);
-          //               pomoNotifier.startTimer();
-          //               Navigator.pushNamed(context, '/counter');
-          //             }
-          //           },
-          //           child: Text('Start Timer'),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // )
         ],
       ),
       floatingActionButton: fabButton(
@@ -134,7 +89,7 @@ class PomodoroPage extends ConsumerWidget {
     );
   }
 
-  TextField _pomoField(BuildContext context, TextEditingController controller) {
+  Widget _pomoField(BuildContext context, TextEditingController controller) {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
@@ -154,7 +109,7 @@ class CountdownScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pomo = ref.watch(pomoProvider);
 
-    // 🔥 Play sound when timer reaches zero
+    // Play sound when timer reaches zero
     if (pomo.timeRemaining == 0) {
       playPomodoroEndSound();
     }
