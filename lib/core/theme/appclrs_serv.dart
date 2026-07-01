@@ -14,6 +14,7 @@ class AppColors {
   Color get iconClr => isDarkMode ? _dark.iconClr : _light.iconClr;
   Color get navDrawer => isDarkMode ? _dark.navDrawer : _light.navDrawer;
   Color get footer => isDarkMode ? _dark.footer : _light.footer;
+  Color get accntOrange => Color(0xFFFF8B2C);
 }
 
 // Light and Dark Colors

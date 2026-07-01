@@ -21,7 +21,7 @@ class OpenAppDrawerButton extends ConsumerWidget {
           borderRadius: BorderRadius.circular(26),
           color: colors.pillClr,
         ),
-        child: Icon(LucideIcons.chevron_right, color: colors.navDrawer),
+        child: Icon(LucideIcons.chevron_right, color: colors.mdText),
       ),
     );
   }

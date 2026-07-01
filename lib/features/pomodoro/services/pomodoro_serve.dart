@@ -27,6 +27,7 @@ class PomodoroNotifier extends Notifier<PomodoroState> {
   }
 
   void startTimer() {
+    _timer?.cancel();
     state = state.copyWith(isRunning: true);
 
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
