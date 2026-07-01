@@ -151,7 +151,6 @@ class TaskPageState extends ConsumerState<TaskPage> {
 
   // Task List
   Widget _taskListView(List<TodoModel> tasks) {
-    int score = 0;
     return ListView.builder(
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
@@ -162,7 +161,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [const ScoreCard(), _tabSwitcher()],
+              children: [const TopBar(), _tabSwitcher()],
             ),
           );
         } else if (index == tasks.length + 1) {
@@ -272,33 +271,11 @@ class TaskPageState extends ConsumerState<TaskPage> {
                               ref
                                   .read(taskProvider.notifier)
                                   .updateTask(updatedTask);
-                              if (task.priority == "High") {
-                                ref.read(
-                                  scoreIncrementProvider(value! ? 25 : -25),
-                                ); // High priority score
-                                score = 25;
-                              } else if (task.priority == "Medium") {
-                                ref.read(
-                                  scoreIncrementProvider(value! ? 15 : -15),
-                                ); // Medium priority score
-                                score = 15;
-                              } else {
-                                ref.read(
-                                  scoreIncrementProvider(value! ? 10 : -10),
-                                ); // Low priority score
-                                score = 10;
-                              }
-                              if (value) {
+                              if (value ?? false) {
                                 showHeadsupNoti(
                                   context,
                                   ref,
-                                  "Hurray! Task Completed.\n$score Points Earned",
-                                );
-                              } else {
-                                showHeadsupNoti(
-                                  context,
-                                  ref,
-                                  "Oops! Lost $score Points",
+                                  "Hurray! Task Completed.",
                                 );
                               }
                             },
@@ -403,7 +380,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
             padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [const ScoreCard(), _tabSwitcher()],
+              children: [const TopBar(), _tabSwitcher()],
             ),
           );
         } else if (index == scheduleItems.length + 1) {
@@ -421,7 +398,7 @@ class TaskPageState extends ConsumerState<TaskPage> {
       shrinkWrap: true,
       padding: pagePaddingWithScore,
       children: [
-        const ScoreCard(),
+        const TopBar(),
         _tabSwitcher(),
         const SizedBox(height: 75),
         Text(

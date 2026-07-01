@@ -88,7 +88,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const ScoreCard(),
+                  const TopBar(),
                   Text(
                     "Profile",
                     style: Theme.of(context).textTheme.headlineLarge,

@@ -63,6 +63,7 @@ export 'features/habits/services/habit_serv.dart';
 // features/mood
 export 'features/mood/screens/mood.dart';
 export 'features/mood/screens/currmood.dart';
+export 'features/mood/screens/mood_history.dart';
 export 'features/mood/services/mood_serv.dart';
 
 // features/notes
@@ -81,12 +82,8 @@ export 'features/tasks/screens/sched_edit.dart';
 export 'features/tasks/screens/task_switch.dart';
 export 'features/tasks/models/todo_model.dart';
 export 'features/tasks/models/schedule_model.dart';
-export 'features/tasks/models/search_model.dart';
 export 'features/tasks/services/todo_serv.dart';
 export 'features/tasks/services/schedule_serv.dart';
-export 'features/tasks/services/search_serv.dart';
 
 // features/gamification
-export 'features/gamification/screens/leaderboard.dart';
-export 'features/gamification/components/scorecard.dart';
-export 'features/gamification/services/gamify_serve.dart';
+export 'core/components/topbar.dart';

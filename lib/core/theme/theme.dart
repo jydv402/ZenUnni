@@ -31,7 +31,7 @@ ThemeData get darkTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color.fromRGBO(255, 139, 44, 1),
+        backgroundColor: Color(0xFFFF8B2C),
         foregroundColor: Colors.white,
         shadowColor: Colors.orangeAccent,
         padding: const EdgeInsets.all(26),

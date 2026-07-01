@@ -33,10 +33,10 @@ class _NavbarState extends ConsumerState<Navbar> {
     const CurrentMood(), // index 3: Mood
     const PomodoroPage(), // index 4: Pomodoro
     const NotesList(), // index 5: Notes list
-    const ConnectPage(), // index 6: Leaderboard
-    const ProfilePage(), // index 7: Profile
-    const MoodPage(), // index 8: Add mood
-    const AddTaskPage(), // index 9: Add task
+    const ProfilePage(), // index 6: Profile
+    const MoodPage(), // index 7: Add mood
+    const AddTaskPage(), // index 8: Add task
+    const MoodHistoryPage(), // index 9: Mood logs history
   ];
 
   @override
@@ -106,13 +106,8 @@ class _NavbarState extends ConsumerState<Navbar> {
                 label: "Notes",
               ),
               zenNavListTile(
-                icon: LucideIcons.trophy,
-                pgIndex: 6,
-                label: "Leaderboard",
-              ),
-              zenNavListTile(
                 icon: LucideIcons.user,
-                pgIndex: 7,
+                pgIndex: 6,
                 label: "Profile",
               ),
             ],
@@ -128,7 +123,15 @@ class _NavbarState extends ConsumerState<Navbar> {
     required String label,
   }) {
     final colors = ref.watch(appColorsProvider);
-    bool selected = pgIndex == ref.watch(pgIndexProvider);
+    final currentPgIndex = ref.watch(pgIndexProvider);
+    bool selected = pgIndex == currentPgIndex;
+
+    // Highlight parent tiles for sub-pages
+    if (pgIndex == 3 && (currentPgIndex == 7 || currentPgIndex == 9)) {
+      selected = true;
+    } else if (pgIndex == 1 && currentPgIndex == 8) {
+      selected = true;
+    }
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 4, 4, 0),

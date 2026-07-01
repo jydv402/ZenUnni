@@ -47,7 +47,7 @@ class _PomodoroPageState extends ConsumerState<PomodoroPage> {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          const ScoreCard(),
+          const TopBar(),
           Text(
             'Pomodoro Timer',
             style: Theme.of(context).textTheme.headlineLarge,
@@ -119,7 +119,7 @@ class CountdownScreen extends ConsumerWidget {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          const ScoreCard(),
+          const TopBar(),
           Text(
             pomo.isRunning
                 ? pomo.isBreak

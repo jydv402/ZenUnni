@@ -60,7 +60,7 @@ class _NotesListState extends ConsumerState<NotesList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const ScoreCard(),
+                  const TopBar(),
                   Text(
                     "Notes",
                     style: Theme.of(context).textTheme.headlineLarge,
@@ -79,16 +79,15 @@ class _NotesListState extends ConsumerState<NotesList> {
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return Padding(
-                    padding: const EdgeInsets.fromLTRB(26, 0, 26, 0),
+                    padding: const EdgeInsets.fromLTRB(26, 0, 26, 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const ScoreCard(),
+                        const TopBar(),
                         Text(
                           "Notes",
                           style: Theme.of(context).textTheme.headlineLarge,
                         ),
-                        const SizedBox(height: 16),
                       ],
                     ),
                   );

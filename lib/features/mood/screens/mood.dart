@@ -19,7 +19,7 @@ class _MoodPageState extends ConsumerState<MoodPage> {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          const ScoreCard(),
+          const TopBar(),
           Text(
             "How are you\nfeeling today?",
             style: Theme.of(context).textTheme.headlineLarge,
@@ -31,6 +31,8 @@ class _MoodPageState extends ConsumerState<MoodPage> {
               moodList.keys.elementAt(_currentMoodIndex),
               height: 200,
               width: 200,
+              frameRate: FrameRate(30),
+              renderCache: RenderCache.raster,
             ),
           ),
           const SizedBox(height: 30),

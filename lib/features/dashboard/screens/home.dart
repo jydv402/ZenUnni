@@ -41,7 +41,7 @@ class LandPage extends ConsumerWidget {
         //Top score card
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: ScoreCard(),
+          child: TopBar(),
         ),
         //Greeting text
         Padding(
@@ -62,21 +62,21 @@ class LandPage extends ConsumerWidget {
           direction: Axis.horizontal,
           children: [ChatBentoCard(margin: EdgeInsets.fromLTRB(0, 0, 0, 8))],
         ),
-        //1st row
+        // 1st row: Mood and Mood Logs
         const Row(
           children: [
             MoodBentoCard(margin: EdgeInsets.fromLTRB(0, 0, 4, 4)),
-            RankBentoCard(margin: EdgeInsets.fromLTRB(4, 0, 0, 4)),
+            MoodLogsBentoCard(margin: EdgeInsets.fromLTRB(4, 0, 0, 4)),
           ],
         ),
-        //2nd row
+        // Row with Schedule and Tasks
         const Row(
           children: [
             ScheduleBentoCard(margin: EdgeInsets.fromLTRB(0, 4, 4, 4)),
             TasksBentoCard(margin: EdgeInsets.fromLTRB(4, 4, 0, 4)),
           ],
         ),
-
+        // Row with Habits and Profile
         const Row(
           children: [
             HabitsBentoCard(margin: EdgeInsets.fromLTRB(0, 4, 4, 0)),
@@ -102,9 +102,12 @@ class LandPage extends ConsumerWidget {
               children: [
                 TextSpan(
                   text: "ZenUnni",
+
                   style: TextStyle(
-                    fontSize: MediaQuery.sizeOf(context).width * 0.18,
-                    fontWeight: FontWeight.bold,
+                    fontFamily: "Pop",
+                    fontSize: MediaQuery.sizeOf(context).width * 0.22,
+                    letterSpacing: -5,
+                    fontWeight: FontWeight.w600,
                     color: colors.footer,
                   ),
                 ),
@@ -245,6 +248,8 @@ class ChatBentoCard extends ConsumerWidget {
                   "assets/loading/ld_shapes.json",
                   height: 80,
                   width: 80,
+                  frameRate: FrameRate(30),
+                  renderCache: RenderCache.raster,
                 ),
                 Text(
                   "Unni",
@@ -292,6 +297,8 @@ class MoodBentoCard extends ConsumerWidget {
                           reversedMoodList["Empty"]!,
                           height: 120,
                           width: 120,
+                          frameRate: FrameRate(30),
+                          renderCache: RenderCache.raster,
                         ),
                         Text(
                           "So empty...",
@@ -315,6 +322,8 @@ class MoodBentoCard extends ConsumerWidget {
                           reversedMoodList[mood]!,
                           height: 120,
                           width: 120,
+                          frameRate: FrameRate(30),
+                          renderCache: RenderCache.raster,
                         ),
                         Text.rich(
                           TextSpan(
@@ -342,55 +351,48 @@ class MoodBentoCard extends ConsumerWidget {
   }
 }
 
-class RankBentoCard extends ConsumerWidget {
+class MoodLogsBentoCard extends ConsumerWidget {
   final EdgeInsets margin;
-  const RankBentoCard({super.key, required this.margin});
+  const MoodLogsBentoCard({super.key, required this.margin});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = ref.watch(appColorsProvider);
-    final rankAsync = ref.watch(currentUserRankProvider);
 
     return BentoCard(
       flex: 2,
-      onTap: () => updatePgIndex(ref, 6),
+      onTap: () => updatePgIndex(ref, 9),
       color: colors.pillClr,
       margin: margin,
       child: Stack(
         children: [
-          BentoBgText(left: -25, label: "Rank", color: colors.homeBgTxt),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 12),
-              Center(
-                child: Lottie.asset(
-                  "assets/emoji/trophy.json",
-                  height: 100,
-                  width: 100,
+          BentoBgText(left: -20, label: "Logs", color: colors.homeBgTxt),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 12),
+                Center(
+                  child: Lottie.asset(
+                    "assets/emoji/sparkle.json",
+                    height: 100,
+                    width: 100,
+                    reverse: true,
+                    frameRate: FrameRate(30),
+                    renderCache: RenderCache.raster,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 14),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Rank :\n",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    TextSpan(
-                      text: rankAsync.when(
-                        data: (rank) => "$rank",
-                        loading: () => "...",
-                        error: (error, stack) => "0",
-                      ),
-                      style: Theme.of(context).textTheme.headlineMedium
-                          ?.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ],
+                const SizedBox(height: 14),
+                Text(
+                  "Mood Logs",
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
-              ),
-            ],
+                Text(
+                  "View history",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -425,6 +427,8 @@ class ScheduleBentoCard extends ConsumerWidget {
                   "assets/emoji/magic.json",
                   height: 120,
                   width: 120,
+                  frameRate: FrameRate(30),
+                  renderCache: RenderCache.raster,
                 ),
                 Text(
                   "Craft a schedule",
@@ -467,6 +471,8 @@ class TasksBentoCard extends ConsumerWidget {
                   "assets/emoji/rocket.json",
                   height: 120,
                   width: 120,
+                  frameRate: FrameRate(30),
+                  renderCache: RenderCache.raster,
                 ),
                 Text(
                   "Track your tasks",
@@ -521,7 +527,13 @@ class HabitsBentoCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 6),
-                Lottie.asset(habitStatus[0], height: 120, width: 120),
+                Lottie.asset(
+                  habitStatus[0],
+                  height: 120,
+                  width: 120,
+                  frameRate: FrameRate(30),
+                  renderCache: RenderCache.raster,
+                ),
                 const SizedBox(height: 18),
                 Text(
                   habitStatus[1],
@@ -548,7 +560,7 @@ class ProfileBentoCard extends ConsumerWidget {
     if (profileDetails == null) return const SizedBox.shrink();
     return BentoCard(
       flex: 1,
-      onTap: () => updatePgIndex(ref, 7),
+      onTap: () => updatePgIndex(ref, 6),
       color: colors.pillClr,
       margin: margin,
       child: Stack(
@@ -620,7 +632,13 @@ class PomodoroBentoCard extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Lottie.asset("assets/emoji/pomo.json", height: 150, width: 150),
+                Lottie.asset(
+                  "assets/emoji/pomo.json",
+                  height: 150,
+                  width: 150,
+                  frameRate: FrameRate(30),
+                  renderCache: RenderCache.raster,
+                ),
                 Text(
                   "Pomodoro",
                   style: Theme.of(context).textTheme.headlineMedium,
@@ -659,7 +677,13 @@ class NotesBentoCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 18),
-                Lottie.asset("assets/emoji/note.json", height: 120, width: 120),
+                Lottie.asset(
+                  "assets/emoji/note.json",
+                  height: 120,
+                  width: 120,
+                  frameRate: FrameRate(30),
+                  renderCache: RenderCache.raster,
+                ),
                 const SizedBox(height: 18),
                 Text(
                   "Notes",

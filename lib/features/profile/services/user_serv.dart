@@ -12,7 +12,6 @@ Future<void> createUserDoc(String username, int? gender, int? avt) async {
       'usernameLower': username.toLowerCase(),
       'email': user.email,
       'createdAt': FieldValue.serverTimestamp(),
-      'score': 0,
       'gender': gender ?? 0,
       'avatar': avt ?? 0,
     }, SetOptions(merge: true));

@@ -95,7 +95,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
       body: ListView(
         padding: pagePaddingWithScore,
         children: [
-          const ScoreCard(),
+          const TopBar(),
           Text(
             widget.taskToEdit != null ? "Edit Task" : "Add Task",
             style: Theme.of(context).textTheme.headlineLarge,

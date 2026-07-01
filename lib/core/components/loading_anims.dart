@@ -15,6 +15,8 @@ void showLoadingDialog(BuildContext context, String heading) {
               "assets/loading/ld_face.json",
               height: 200,
               width: 200,
+              frameRate: FrameRate(30),
+              renderCache: RenderCache.raster,
             ),
           ),
         ],
@@ -28,7 +30,13 @@ Column showRunningIndicator(BuildContext context, String message) {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Lottie.asset("assets/loading/ld_shapes.json", height: 100, width: 100),
+      Lottie.asset(
+        "assets/loading/ld_shapes.json",
+        height: 100,
+        width: 100,
+        frameRate: FrameRate(30),
+        renderCache: RenderCache.raster,
+      ),
       const SizedBox(height: 20),
       Text(
         message,

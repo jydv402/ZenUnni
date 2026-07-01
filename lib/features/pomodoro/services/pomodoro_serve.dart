@@ -64,9 +64,6 @@ class PomodoroNotifier extends Notifier<PomodoroState> {
         isBreak: true,
         timeRemaining: state.breakDuration * 60,
       );
-
-      // Increment score
-      ref.read(scoreIncrementProvider(20));
     }
   }
 }

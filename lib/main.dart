@@ -58,7 +58,6 @@ class MyApp extends ConsumerWidget {
         '/counter': (context) => const CountdownScreen(),
         '/habit': (context) => const HabitPage(),
         '/profile': (context) => const ProfilePage(),
-        '/leader': (context) => const ConnectPage(),
         '/pass_reset': (context) => const PassResetPage(),
         '/email_verif': (context) => const EmailVerifPage(),
         '/add_todo': (context) => const AddTaskPage(),

@@ -73,3 +73,31 @@ final motivationalMessageProvider = FutureProvider.family<String, String>((
       .read(aiServiceProvider)
       .getMotivationalMessage(mood, username.value ?? 'user');
 });
+
+class MoodLog {
+  final String mood;
+  final DateTime updatedOn;
+
+  MoodLog({required this.mood, required this.updatedOn});
+
+  factory MoodLog.fromMap(Map<String, dynamic> data) {
+    return MoodLog(
+      mood: data['mood'] as String? ?? 'Empty',
+      updatedOn: (data['updatedOn'] as Timestamp?)?.toDate() ?? DateTime.now(),
+    );
+  }
+}
+
+final moodLogsProvider = StreamProvider<List<MoodLog>>((ref) {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final uid = auth.currentUser?.uid;
+  if (uid == null) return Stream.value([]);
+  
+  return FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .collection('mood')
+      .orderBy('updatedOn', descending: true)
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((doc) => MoodLog.fromMap(doc.data())).toList());
+});

@@ -159,7 +159,7 @@ class _HabitState extends ConsumerState<HabitPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const ScoreCard(),
+                const TopBar(),
                 Text(
                   'Habits',
                   style: Theme.of(context).textTheme.headlineLarge,
@@ -248,25 +248,11 @@ class HabitItemCard extends ConsumerWidget {
                   if (updatedCompletedDates.containsKey(dateOnly) &&
                       updatedCompletedDates[dateOnly] == true) {
                     //Habit unchecked
-                    //Increment score
-                    ref.read(scoreIncrementProvider(-10));
-                    //Show heads up
-                    showHeadsupNoti(
-                      context,
-                      ref,
-                      "Oops! You missed a habit.\n10 points deducted.",
-                    );
+                    showHeadsupNoti(context, ref, "Oops! You missed a habit.");
                     updatedCompletedDates[dateOnly] = false;
                   } else {
                     //Habit completed
-                    //Increment score
-                    ref.read(scoreIncrementProvider(10));
-                    //Show heads up
-                    showHeadsupNoti(
-                      context,
-                      ref,
-                      "Great job! Keep it going.\n10 points added.",
-                    );
+                    showHeadsupNoti(context, ref, "Great job! Keep it going.");
                     //Update completed dates
                     updatedCompletedDates[dateOnly] = true;
                   }

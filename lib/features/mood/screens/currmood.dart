@@ -35,7 +35,7 @@ class CurrentMood extends ConsumerWidget {
     return ListView(
       padding: pagePaddingWithScore,
       children: [
-        const ScoreCard(),
+        const TopBar(),
         Text("Mood", style: Theme.of(context).textTheme.headlineLarge),
         const SizedBox(height: 60),
         _currMoodCard(context, mood),
@@ -43,9 +43,18 @@ class CurrentMood extends ConsumerWidget {
         fabButton(
           context,
           () {
-            updatePgIndex(ref, 8);
+            updatePgIndex(ref, 7);
           },
-          'Update Mood',
+          moodExists ? 'Update Mood' : 'Add Mood',
+          0,
+        ),
+        const SizedBox(height: 16),
+        fabButton(
+          context,
+          () {
+            updatePgIndex(ref, 9);
+          },
+          'Mood Logs',
           0,
         ),
         const SizedBox(height: 20),
@@ -59,7 +68,13 @@ class CurrentMood extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
-          child: Lottie.asset(reversedMoodList[mood]!, height: 200, width: 200),
+          child: Lottie.asset(
+            reversedMoodList[mood]!,
+            height: 200,
+            width: 200,
+            frameRate: FrameRate(30),
+            renderCache: RenderCache.raster,
+          ),
         ),
         const SizedBox(height: 40),
         Center(

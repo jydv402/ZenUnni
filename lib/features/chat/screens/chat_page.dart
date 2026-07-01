@@ -65,6 +65,8 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       alignment: Alignment.center,
                       height: 160,
                       width: 160,
+                      frameRate: FrameRate(30),
+                      renderCache: RenderCache.raster,
                     ),
                     Text(
                       'Unni',
